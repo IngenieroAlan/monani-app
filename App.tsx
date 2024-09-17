@@ -1,10 +1,13 @@
+import { NavigationContainer } from "@react-navigation/native";
 import { PaperProvider } from "react-native-paper";
-import { HomeView } from "./src/views/Home";
+import { Navigator } from "./src/navigation/Navigator";
 
 export default function App() {
   return (
-    <PaperProvider>
-      <HomeView/>
-    </PaperProvider>
+    <NavigationContainer>
+      <PaperProvider>
+        <Navigator />
+      </PaperProvider>
+    </NavigationContainer>
   );
 }

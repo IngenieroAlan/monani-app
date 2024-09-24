@@ -18,7 +18,16 @@ const BottomTabsStack = () => {
         }}
       />
       <Tab.Screen
-        name="Guardado"
+        name="Prod.lechera"
+        component={HomeView}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Icon source="train-car" color={color} size={24} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Ganancias"
         component={HomeView}
         options={{
           tabBarIcon: ({ color }) => (
@@ -27,7 +36,7 @@ const BottomTabsStack = () => {
         }}
       />
       <Tab.Screen
-        name="Eventos"
+        name="Notificaciones"
         component={HomeView}
         options={{
           tabBarIcon: ({ color }) => (

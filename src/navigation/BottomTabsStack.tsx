@@ -1,7 +1,8 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
-import { HomeView } from '../views/Home';
 import { Icon } from 'react-native-paper';
+import { HomeView } from '../views/home/Home';
+import { MilkProductionView } from '../views/milkProduction/MilkProduction';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -19,7 +20,7 @@ const BottomTabsStack = () => {
       />
       <Tab.Screen
         name="Prod.lechera"
-        component={HomeView}
+        component={MilkProductionView}
         options={{
           tabBarIcon: ({ color }) => (
             <Icon source="train-car" color={color} size={24} />

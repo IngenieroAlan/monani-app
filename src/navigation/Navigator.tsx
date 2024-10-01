@@ -29,6 +29,7 @@ export const Navigator = () => {
         options={{
           headerShown: true,
           headerTitle: "Información general",
+          presentation: "modal",
         }} />
     </Stack.Navigator>
   );

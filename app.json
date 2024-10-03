@@ -18,10 +18,22 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.monaniapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "@morrowdigital/watermelondb-expo-plugin",
+        {
+          "disableJsi": true
+        }
+      ],
+      [
+        "expo-build-properties"
+      ]
+    ]
   }
 }

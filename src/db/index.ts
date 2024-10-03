@@ -22,7 +22,7 @@ const adapter = new SQLiteAdapter({
   schema,
   // migrations,
   dbName: 'monani',
-  jsi: true,
+  jsi: false,
 
   onSetUpError: (error) => {
     console.log(error)

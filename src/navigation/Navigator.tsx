@@ -23,14 +23,14 @@ export const Navigator = () => {
       }}
     >
       <Stack.Screen name="BottomTabsStack" component={BottomTabsStack} />
-      <Stack.Screen
+     {/*  <Stack.Screen
         name="AddCattle"
         component={AddCattleView}
         options={{
           headerShown: true,
           headerTitle: "Información general",
           presentation: "modal",
-        }} />
+        }} /> */}
     </Stack.Navigator>
   );
 };

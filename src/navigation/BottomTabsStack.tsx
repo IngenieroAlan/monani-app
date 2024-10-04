@@ -1,79 +1,56 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
-import { FAB, Icon } from 'react-native-paper';
+import { Icon } from 'react-native-paper';
 import { HomeView } from '../views/home/Home';
 import { MilkProductionView } from '../views/milkProduction/MilkProduction';
-import { StyleSheet, View } from 'react-native';
-import { type StackNavigation } from "./Navigator";
-
-interface HomeScreenProps {
-  navigation: StackNavigation;
-}
+import LivestockStack from './stacks/LivestockStack';
+import { MilkProductionStack } from './stacks/MilkProductionStack';
+import { EarningsStack } from './stacks/EarningsStack';
+import { NotificationsStack } from './stacks/NotificationsStack';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const BottomTabsStack: React.FC<HomeScreenProps> = ({navigation}) => {
-
-  const handleOnNavigate = () => navigation.navigate("AddCattle");
-
+const BottomTabsStack = () => {
   return (
-    <View style={{ flex: 1 }}>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Ganado"
-          component={HomeView}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <Icon source="account-group-outline" color={color} size={24} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Prod.lechera"
-          component={MilkProductionView}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <Icon source="train-car" color={color} size={24} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Ganancias"
-          component={HomeView}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <Icon source="bookmark-outline" color={color} size={24} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Notificaciones"
-          component={HomeView}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <Icon source="bell-outline" color={color} size={24} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-      <FAB
-        style={styles.fab}
-        size='small'
-        icon="plus"
-        label='Añadir ganado'
-        onPress={handleOnNavigate}
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Ganado"
+        component={LivestockStack}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Icon source="cow" color={color} size={24} />
+          ),
+        }}
       />
-    </View>
+      <Tab.Screen
+        name="Prod.lechera"
+        component={MilkProductionStack}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Icon source="beer-outline" color={color} size={24} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Ganancias"
+        component={EarningsStack}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Icon source="cash-multiple" color={color} size={24} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Notificaciones"
+        component={NotificationsStack}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Icon source="bell-outline" color={color} size={24} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 8,
-    bottom: 80,
-  },
-});
 
 export default BottomTabsStack;

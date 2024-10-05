@@ -1,8 +1,6 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 import { Icon } from 'react-native-paper';
-import { HomeView } from '../views/home/Home';
-import { MilkProductionView } from '../views/milkProduction/MilkProduction';
 import LivestockStack from './stacks/LivestockStack';
 import { MilkProductionStack } from './stacks/MilkProductionStack';
 import { EarningsStack } from './stacks/EarningsStack';
@@ -44,8 +42,9 @@ const BottomTabsStack = () => {
         name="Notificaciones"
         component={NotificationsStack}
         options={{
+          tabBarBadge: 3,
           tabBarIcon: ({ color }) => (
-            <Icon source="bell-outline" color={color} size={24} />
+            <Icon source="bell-outline" color={color} size={24} ></Icon>
           ),
         }}
       />

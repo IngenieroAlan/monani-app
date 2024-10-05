@@ -1,11 +1,14 @@
 import React from 'react'
-import { View } from 'react-native'
+import { SafeAreaView, View } from 'react-native'
 import { Text } from 'react-native-paper'
+import mainStyles from '../../styles/main'
 
 export const NotificationsView = () => {
   return (
-    <View style={{flex:1}}>
+    <SafeAreaView style={mainStyles.container}>
+      <View style={mainStyles.container}>
         <Text>NotificationsView</Text>
-    </View>
+      </View>
+    </SafeAreaView>
   )
 }

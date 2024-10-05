@@ -13,7 +13,7 @@ const Stack = createStackNavigator<LivestockStackParams>();
 const LivestockStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="HomeView" component={HomeView} />
+      <Stack.Screen name="HomeView" options={{ headerShown: false }} component={HomeView} />
       <Stack.Screen name="AddCattleView" component={AddCattleView} />
     </Stack.Navigator>
   );

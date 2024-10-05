@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { ScrollView, StyleSheet, View } from "react-native"
 import { Button, Checkbox, Divider, List, Searchbar, Text, TextInput } from "react-native-paper"
+import { colors } from "../../utils/colors"
 
 export const AddCattleView = () => {
     const [text, setText] = useState<any>('')
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
     scrollContainer: {
         flex: 1,
         minHeight: '100%',
+        backgroundColor: colors.background
     },
     container: {
         flex: 1,

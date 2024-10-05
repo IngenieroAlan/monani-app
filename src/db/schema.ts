@@ -2,12 +2,13 @@ import { appSchema, tableSchema } from '@nozbe/watermelondb'
 import { TableName } from './types'
 
 export default appSchema({
-  version: 1,
+  version: 4,
   tables: [
     tableSchema({
       name: TableName.FEEDS,
       columns: [
         { name: 'name', type: 'string' },
+        { name: 'feed_type', type: 'string' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -89,7 +90,7 @@ export default appSchema({
       columns: [
         { name: 'cattle_id', type: 'string' },
         { name: 'medication_id', type: 'string' },
-        { name: 'date', type: 'number' },
+        { name: 'next_dose', type: 'number' },
         { name: 'doses_per_year', type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
@@ -134,9 +135,8 @@ export default appSchema({
     tableSchema({
       name: TableName.CATTLE_SALES,
       columns: [
-        { name: 'weight_report_id', type: 'string' },
+        { name: 'cattle_id', type: 'string' },
         { name: 'total', type: 'number' },
-        { name: 'cattle_weight', type: 'number' },
         { name: 'date', type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }

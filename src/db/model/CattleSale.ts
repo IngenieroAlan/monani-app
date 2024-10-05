@@ -1,13 +1,13 @@
 import { Model, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, readonly } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../types'
-import WeightReport from './WeightReport'
+import Cattle from './Cattle'
 
 class CattleSale extends Model {
   static table = TableName.CATTLE_SALES
 
   static associations = {
-    [TableName.WEIGHT_REPORTS]: { type: 'belongs_to' as const, key: 'weight_report_id' }
+    [TableName.CATTLE]: { type: 'belongs_to' as const, key: 'cattle_id' }
   }
 
   @readonly @date('created_at') createdAt!: Date
@@ -15,9 +15,8 @@ class CattleSale extends Model {
 
   @date('date') date!: Date
   @field('total') total!: number
-  @field('cattle_weight') cattleWeight!: number
 
-  @immutableRelation(TableName.WEIGHT_REPORTS, 'weight_report_id') weightReport!: Relation<WeightReport>
+  @immutableRelation(TableName.WEIGHT_REPORTS, 'cattle_id') cattle!: Relation<Cattle>
 }
 
 export default CattleSale

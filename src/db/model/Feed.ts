@@ -1,6 +1,7 @@
-import { Model } from '@nozbe/watermelondb'
-import { date, readonly, text } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../types'
+import { Model, Relation } from '@nozbe/watermelondb'
+import { children, date, field, readonly, text } from '@nozbe/watermelondb/decorators'
+import { FeedType, TableName } from '../types'
+import DietFeed from './DietFeed'
 
 class Feed extends Model {
   static table = TableName.FEEDS
@@ -13,6 +14,9 @@ class Feed extends Model {
   @readonly @date('updated_at') updatedAt!: Date
 
   @text('name') name!: string
+  @field('feed_type') feedType!: FeedType
+
+  @children(TableName.DIET_FEED) dietFeed!: Relation<DietFeed>
 }
 
 export default Feed

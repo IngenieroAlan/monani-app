@@ -1,5 +1,5 @@
-import { Model, Relation } from '@nozbe/watermelondb'
-import { children, date, field, readonly } from '@nozbe/watermelondb/decorators'
+import { Model, Q, Relation } from '@nozbe/watermelondb'
+import { children, date, field, lazy, readonly } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../types'
 import MilkReport from './MilkReport'
 import MilkSale from './MilkSale'
@@ -21,7 +21,12 @@ class MilkProduction extends Model {
   @field('is_sold') isSold!: boolean
 
   @children(TableName.MILK_REPORTS) reports!: Relation<MilkReport>
-  @children(TableName.MILK_SALES) sale!: Relation<MilkSale>
+  @children(TableName.MILK_SALES) saleRelation!: Relation<MilkSale>
+
+  @lazy
+  sale = this.collections
+    .get(TableName.MILK_SALES)
+    .query(Q.where('milk_production_id', this.id))
 }
 
 export default MilkProduction

@@ -6,7 +6,7 @@ import MedicationSchedule from './MedicationSchedule'
 class Medication extends Model {
   static table = TableName.MEDICATIONS
 
-  static association = {
+  static associations = {
     [TableName.MEDICATION_SCHEDULES]: { type: 'has_many' as const, foreignKey: 'medication_id' }
   }
 

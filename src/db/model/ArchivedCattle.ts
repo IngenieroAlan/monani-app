@@ -6,7 +6,7 @@ import Cattle from './Cattle'
 class ArchivedCattle extends Model {
   static table = TableName.ARCHIVED_CATTLE
 
-  static associoations = {
+  static associations = {
     [TableName.CATTLE]: { type: 'belongs_to' as const, key: 'cattle_id' }
   }
 

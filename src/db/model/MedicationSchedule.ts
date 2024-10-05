@@ -1,5 +1,5 @@
 import { Model, Relation } from '@nozbe/watermelondb'
-import { date, field, immutableRelation, readonly, relation } from '@nozbe/watermelondb/decorators'
+import { date, immutableRelation, readonly, relation, text } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../types'
 import Cattle from './Cattle'
 import Medication from './Medication'
@@ -15,8 +15,8 @@ class MedicationSchedule extends Model {
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @date('date') date!: Date
-  @field('doses_per_year') dosesPerYear!: number
+  @date('next_dose') nextDose!: Date
+  @text('doses_per_year') dosesPerYear!: number
 
   @relation(TableName.MEDICATIONS, 'medication_id') medication!: Relation<Medication>
 

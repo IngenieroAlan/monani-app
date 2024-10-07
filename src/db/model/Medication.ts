@@ -1,7 +1,9 @@
 import { Model, Relation } from '@nozbe/watermelondb'
 import { children, date, field, readonly, text } from '@nozbe/watermelondb/decorators'
-import { MedicationType, TableName } from '../types'
+import { TableName } from '../schema'
 import MedicationSchedule from './MedicationSchedule'
+
+export type MedicationType = 'Desparasitante' | 'Vitaminas' | 'Suplemento mineral' | 'Otro'
 
 class Medication extends Model {
   static table = TableName.MEDICATIONS

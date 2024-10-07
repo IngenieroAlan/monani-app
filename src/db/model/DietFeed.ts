@@ -1,8 +1,10 @@
 import { Model, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, readonly, relation } from '@nozbe/watermelondb/decorators'
-import { FeedProportion, TableName } from '../types'
+import { TableName } from '../schema'
 import Diet from './Diet'
 import Feed from './Feed'
+
+export type FeedProportion = 'Fija' | 'Por porcentaje'
 
 class DietFeed extends Model {
   static table = TableName.DIET_FEED

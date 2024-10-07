@@ -1,6 +1,6 @@
 import { Model, Relation } from '@nozbe/watermelondb'
-import { date, immutableRelation, readonly, text } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../types'
+import { date, field, immutableRelation, readonly, text } from '@nozbe/watermelondb/decorators'
+import { TableName } from '../schema'
 import Cattle from './Cattle'
 
 class WeightReport extends Model {
@@ -13,8 +13,11 @@ class WeightReport extends Model {
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @date('date') date!: Date
+  @date('weighed_at') weighedAt!: Date
   @text('weight') weight!: number
+  @field('weight_difference') weightDifference!: number
+  @field('days_passed') daysPassed!: number
+  @field('avg_daily_gain') avgDailyGain!: number
 
   @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
 }

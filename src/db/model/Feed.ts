@@ -1,7 +1,9 @@
 import { Model, Relation } from '@nozbe/watermelondb'
 import { children, date, field, readonly, text } from '@nozbe/watermelondb/decorators'
-import { FeedType, TableName } from '../types'
+import { TableName } from '../schema'
 import DietFeed from './DietFeed'
+
+export type FeedType = 'Alimento' | 'Concentrado de engorda' | 'Concentrado lechero'
 
 class Feed extends Model {
   static table = TableName.FEEDS

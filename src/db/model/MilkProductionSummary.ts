@@ -2,14 +2,13 @@ import { Model } from '@nozbe/watermelondb'
 import { date, field, readonly } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 
-class Genealogy extends Model {
-  static table = TableName.GENEALOGY
+class MilkProductionSummary extends Model {
+  static table = TableName.MILK_PRODUCTION_SUMMARY
 
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @field('mother_id') motherId!: string
-  @field('offspring_id') offspringId!: string
+  @field('total_production') totalProduction!: number
 }
 
-export default Genealogy
+export default MilkProductionSummary

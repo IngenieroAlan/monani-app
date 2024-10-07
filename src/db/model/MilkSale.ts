@@ -1,6 +1,6 @@
 import { Model, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, readonly } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../types'
+import { TableName } from '../schema'
 import MilkProduction from './MilkProduction'
 
 class MilkSale extends Model {
@@ -13,8 +13,8 @@ class MilkSale extends Model {
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @date('date') date!: Date
-  @field('total') total!: number
+  @date('sold_at') soldAt!: Date
+  @field('sold_by') soldBy!: number
   @field('liters') liters!: number
 
   @immutableRelation(TableName.MILK_PRODUCTIONS, 'milk_production_id') milkProduction!: Relation<MilkProduction>

@@ -1,8 +1,10 @@
 import { Model, Q, Relation } from '@nozbe/watermelondb'
 import { children, date, field, lazy, readonly, text } from '@nozbe/watermelondb/decorators'
-import { MatterProportion, TableName } from '../types'
+import { TableName } from '../schema'
 import Cattle from './Cattle'
 import DietFeed from './DietFeed'
+
+export type MatterProportion = 'Procentaje de peso' | 'Fija' | 'Sin definir'
 
 class Diet extends Model {
   static table = TableName.DIETS
@@ -25,7 +27,7 @@ class Diet extends Model {
 
   @lazy
   cattle = this.collections
-    .get(TableName.CATTLE)
+    .get<Cattle>(TableName.CATTLE)
     .query(Q.where('diet_id', this.id))
 }
 

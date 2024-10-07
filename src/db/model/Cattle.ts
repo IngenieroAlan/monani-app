@@ -1,19 +1,22 @@
 import { Model, Q, Relation } from '@nozbe/watermelondb'
-import { children, date, field, immutableRelation, lazy, readonly, text } from '@nozbe/watermelondb/decorators'
-import { CattleStatus, ProductionType, TableName } from '../types'
-import ArchivedCattle from './ArchivedCattle'
+import { children, date, field, immutableRelation, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
+import { TableName } from '../schema'
+import CattleArchive from './CattleArchive'
+import CattleSale from './CattleSale'
 import Diet from './Diet'
 import MedicationSchedule from './MedicationSchedule'
 import MilkReport from './MilkReport'
 import WeightReport from './WeightReport'
-import CattleSale from './CattleSale'
+
+export type ProductionType = 'Lechera' | 'De carne'
+export type CattleStatus = 'Gestante' | 'En producción' | 'De reemplazo' | 'De deshecho'
 
 class Cattle extends Model {
   static table = TableName.CATTLE
 
   static associations = {
     [TableName.DIETS]: { type: 'belongs_to' as const, key: 'diet_id' },
-    [TableName.ARCHIVED_CATTLE]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
+    [TableName.CATTLE_ARCHIVES]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
     [TableName.MEDICATION_SCHEDULES]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
     [TableName.WEIGHT_REPORTS]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
     [TableName.MILK_REPORTS]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
@@ -28,9 +31,9 @@ class Cattle extends Model {
   @text('tag_cattle_number') tagCattleNumber!: string
   @text('weight') weight!: number
   @text('quarantine_days_left') quarantineDaysLeft?: number
-  @date('entry_date') entryDate!: Date
-  @date('birth_date') birthDate!: Date
-  @date('pregnancy_date') pregnancyDate?: Date
+  @date('admitted_at') admittedAt!: Date
+  @date('born_at') bornAt!: Date
+  @date('pregnant_at') pregnantAt?: Date
   @field('production_type') productionType!: ProductionType
   @field('cattle_status') cattleStatus!: CattleStatus
   @field('is_active') isActive!: boolean
@@ -44,17 +47,31 @@ class Cattle extends Model {
   @children(TableName.MILK_REPORTS) milkReports!: Relation<MilkReport>
 
   @children(TableName.CATTLE_SALES) cattleSalesRelation!: Relation<CattleSale>
-  @children(TableName.ARCHIVED_CATTLE) archivedCattleRelation!: Relation<ArchivedCattle>
+  @children(TableName.CATTLE_ARCHIVES) archivedCattleRelation!: Relation<CattleArchive>
 
   @lazy
-  cattleSale = this.collections
-    .get(TableName.CATTLE_SALES)
+  sale = this.collections
+    .get<CattleSale>(TableName.CATTLE_SALES)
     .query(Q.where('cattle_id', this.id))
 
   @lazy
-  archivedCattle = this.collections
-    .get(TableName.ARCHIVED_CATTLE)
+  archive = this.collections
+    .get<CattleArchive>(TableName.CATTLE_ARCHIVES)
     .query(Q.where('cattle_id', this.id))
+
+  @writer
+  async sell(soldBy: number) {
+    await this.batch(
+      this.prepareUpdate(cattle => {
+        cattle.isActive = false,
+        cattle.isSold = true
+      }),
+      this.collections.get<CattleSale>(TableName.CATTLE_SALES).prepareCreate(cattleSale => {
+        cattleSale.soldBy = soldBy
+        cattleSale.soldAt = new Date()
+      })
+    )
+  }
 }
 
 export default Cattle

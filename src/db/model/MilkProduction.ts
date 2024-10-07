@@ -1,6 +1,6 @@
 import { Model, Q, Relation } from '@nozbe/watermelondb'
 import { children, date, field, lazy, readonly } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../types'
+import { TableName } from '../schema'
 import MilkReport from './MilkReport'
 import MilkSale from './MilkSale'
 
@@ -15,9 +15,9 @@ class MilkProduction extends Model {
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @date('date') date!: Date
+  @date('produced_at') producedAt!: Date
   @field('liters') liters!: number
-  @field('current_session') currentSession!: number
+  @field('production_number') productionNumber!: number
   @field('is_sold') isSold!: boolean
 
   @children(TableName.MILK_REPORTS) reports!: Relation<MilkReport>
@@ -25,7 +25,7 @@ class MilkProduction extends Model {
 
   @lazy
   sale = this.collections
-    .get(TableName.MILK_SALES)
+    .get<MilkSale>(TableName.MILK_SALES)
     .query(Q.where('milk_production_id', this.id))
 }
 

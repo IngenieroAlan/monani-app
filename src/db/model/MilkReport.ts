@@ -1,6 +1,6 @@
 import { Model, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, readonly } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../types'
+import { TableName } from '../schema'
 import Cattle from './Cattle'
 import MilkProduction from './MilkProduction'
 
@@ -15,9 +15,9 @@ class MilkReport extends Model {
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @date('date') date!: Date
+  @date('reported_at') reportedAt!: Date
   @field('liters') liters!: number
-  @field('session_number') sessionNumber!: number
+  @field('liters_difference') litersDifference!: number
 
   @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
   @immutableRelation(TableName.MILK_PRODUCTIONS, 'milk_production_id') milkProduction!: Relation<MilkProduction>

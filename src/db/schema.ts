@@ -12,7 +12,7 @@ export enum TableName {
   WEIGHT_REPORTS = 'weight_reports',
   MILK_PRODUCTIONS = 'milk_productions',
   MILK_REPORTS = 'milk_reports',
-  MILK_PRODUCTION_SUMMARY = 'milk_production_SUMMARY',
+  MILK_PRODUCTION_SUMMARY = 'milk_production_summary',
   MONTHLY_MILK_PRODUCTION = 'monthly_milk_production',
   CATTLE_SALES = 'cattle_sales',
   MILK_SALES = 'milk_sales',

@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { HomeView } from '../../views/home/Home';
-import { AddCattleView } from '../../views/addCattle/addCattle';
+import { AddCattleView } from '../../views/addCattle/AddCattle';
 
 export type LivestockStackParams = {
   HomeView: undefined;

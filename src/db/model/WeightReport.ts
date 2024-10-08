@@ -17,7 +17,7 @@ class WeightReport extends Model {
   @text('weight') weight!: number
   @field('weight_difference') weightDifference!: number
   @field('days_passed') daysPassed!: number
-  @field('avg_daily_gain') avgDailyGain!: number
+  @field('avg_daily_difference') avgDailyDifference!: number
 
   @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
 }

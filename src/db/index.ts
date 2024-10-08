@@ -20,7 +20,7 @@ import MilkSale from './model/MilkSale'
 import MonthlyMilkProduction from './model/MonthlyMilkProduction'
 import Notification from './model/Notification'
 import WeightReport from './model/WeightReport'
-import schema from './schema'
+import schema, { TableName } from './schema'
 
 const adapter = new SQLiteAdapter({
   schema,
@@ -56,5 +56,44 @@ const database = new Database({
     Notification
   ]
 })
+
+export const resetDatabase = async () => {
+  await database.write(async () => {
+    await database.unsafeResetDatabase()
+  })
+}
+
+export const initializeDatabase = async () => {
+  const milkProductionSummaryExists = await database
+    .get<MilkProductionSummary>(TableName.MILK_PRODUCTION_SUMMARY)
+    .query()
+    .fetchCount()
+  const earningsSummaryExists = await database
+    .get<EarningsSummary>(TableName.EARNINGS_SUMMARY)
+    .query()
+    .fetchCount()
+
+  if (!milkProductionSummaryExists) {
+    await database.write(async () => {
+      await database
+        .get<MilkProductionSummary>(TableName.MILK_PRODUCTION_SUMMARY)
+        .create(milkProductionSummary => {
+          milkProductionSummary.totalProduction = 0
+        })
+    })
+  }
+
+  if (!earningsSummaryExists) {
+    await database.write(async () => {
+      await database
+        .get<EarningsSummary>(TableName.EARNINGS_SUMMARY)
+        .create(earningsSummary => {
+          earningsSummary.totalEarnings = 0
+          earningsSummary.totalCattleSales = 0
+          earningsSummary.totalMilkSales = 0
+        })
+    })
+  }
+}
 
 export default database

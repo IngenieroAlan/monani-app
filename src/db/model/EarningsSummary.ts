@@ -8,9 +8,9 @@ class EarningsSummary extends Model {
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @field('year') year!: number
-  @field('month') month!: number
-  @field('liters') liters!: number
+  @field('total_earnings') totalEarnings!: number
+  @field('total_cattle_sales') totalCattleSales!: number
+  @field('total_milk_sales') totalMilkSales!: number
 }
 
 export default EarningsSummary

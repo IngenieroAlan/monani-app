@@ -123,7 +123,7 @@ export default appSchema({
         { name: 'weight', type: 'number' },
         { name: 'weight_difference', type: 'number' },
         { name: 'days_passed', type: 'number' },
-        { name: 'avg_daily_gain', type: 'number' },
+        { name: 'avg_daily_difference', type: 'number' },
         { name: 'weighed_at', type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
@@ -155,7 +155,9 @@ export default appSchema({
     tableSchema({
       name: TableName.MILK_PRODUCTION_SUMMARY,
       columns: [
-        { name: 'total_production', type: 'number' }
+        { name: 'total_production', type: 'number' },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' }
       ]
     }),
     tableSchema({
@@ -164,6 +166,8 @@ export default appSchema({
         { name: 'year', type: 'number' },
         { name: 'month', type: 'number' },
         { name: 'liters', type: 'number' },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' }
       ]
     }),
     tableSchema({
@@ -193,6 +197,8 @@ export default appSchema({
         { name: 'total_earnings', type: 'number' },
         { name: 'total_cattle_sales', type: 'number' },
         { name: 'total_milk_sales', type: 'number' },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' }
       ]
     }),
     tableSchema({
@@ -202,6 +208,8 @@ export default appSchema({
         { name: 'total_earnings', type: 'number' },
         { name: 'total_cattle_sales', type: 'number' },
         { name: 'total_milk_sales', type: 'number' },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' }
       ]
     }),
     tableSchema({

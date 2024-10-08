@@ -1,3 +1,4 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useState } from "react"
 import { ScrollView, StyleSheet, View } from "react-native"
 import { Button, Checkbox, Divider, List, Searchbar, Text, TextInput } from "react-native-paper"
@@ -5,9 +6,10 @@ import { DatePickerInput } from "react-native-paper-dates"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import Cattle, { CattleStatus, ProductionType } from "../../db/model/Cattle"
 import Genealogy from "../../db/model/Genealogy"
-import { colors } from "../../utils/colors"
+import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
 
-export const AddCattleView = () => {
+type Props = NativeStackScreenProps<AddCattleStackParams, 'CattleForm'>;
+export const CattleForm = ({ navigation, route }: Props) => {
     const [cattle, setCattle] = useState<Partial<Cattle>>({
         name: '',
         weight: undefined,
@@ -165,7 +167,11 @@ export const AddCattleView = () => {
                         icon="arrow-right"
                         mode="contained-tonal"
                         style={{ marginTop: 20 }}
-                        onPress={() => null}>
+                        onPress={() => navigation.navigate('FeedForm', {
+                            cattle: cattle,
+                            genealogy: genealogy,
+                            inQuarantine: inQuarantine
+                        })}>
                         Siguiente
                     </Button>
                 </View>
@@ -177,8 +183,7 @@ export const AddCattleView = () => {
 const styles = StyleSheet.create({
     scrollContainer: {
         flex: 1,
-        minHeight: '100%',
-        backgroundColor: colors.background,
+        minHeight: '100%'
     },
     container: {
         flex: 1,

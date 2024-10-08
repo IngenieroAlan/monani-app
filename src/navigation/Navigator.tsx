@@ -7,7 +7,6 @@ import BottomTabsStack from "./BottomTabsStack";
 export type RootStackParams = {
   HomeView: undefined;
   BottomTabsStack: undefined;
-  AddCattle: undefined;
 };
 
 export type StackNavigation = NavigationProp<RootStackParams>;

@@ -4,18 +4,15 @@ import { StyleSheet, View } from "react-native";
 import { FAB, Text } from "react-native-paper";
 import { PaperModal } from "../../components/PaperModal";
 import mainStyles from "../../styles/main";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
 import { LivestockStackParams } from '../../navigation/stacks/LivestockStack';
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-type ScreenNavigationProp = StackNavigationProp<LivestockStackParams>;
+type ScreenNavigationProp = NativeStackScreenProps<LivestockStackParams>;
 
-export const HomeView = () => {
-  const navigator = useNavigation<ScreenNavigationProp>();
-  const handleOnNavigate = () => navigator.navigate('AddCattleView');
+export const HomeView = ({ navigation }: ScreenNavigationProp) => {
   return (
     <View style={mainStyles.container}>
-      <Text variant="titleLarge" style={{color:'#000'}}>Hola papu!</Text>
+      <Text variant="titleLarge" style={{ color: '#000' }}>Hola papu!</Text>
       <PaperModal content="Hola usuario" btnText="Presioname" />
       <StatusBar style="auto" />
       <FAB
@@ -23,7 +20,7 @@ export const HomeView = () => {
         size='small'
         icon="plus"
         label='Añadir ganado'
-        onPress={handleOnNavigate}
+        onPress={() => navigation.navigate('AddCattleStack')}
       />
     </View>
   );
@@ -31,9 +28,8 @@ export const HomeView = () => {
 const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
-    margin: 16,
     right: 8,
-    bottom: 80,
+    bottom: 8,
   },
 });
 

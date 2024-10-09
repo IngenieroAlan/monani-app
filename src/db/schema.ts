@@ -146,7 +146,6 @@ export default appSchema({
         { name: 'cattle_id', type: 'string' },
         { name: 'milk_production_id', type: 'string' },
         { name: 'liters', type: 'number' },
-        { name: 'liters_difference', type: 'number' },
         { name: 'reported_at', type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }

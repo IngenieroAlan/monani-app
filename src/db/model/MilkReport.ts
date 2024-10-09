@@ -17,10 +17,9 @@ class MilkReport extends Model {
 
   @date('reported_at') reportedAt!: Date
   @field('liters') liters!: number
-  @field('liters_difference') litersDifference!: number
 
   @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
-  @immutableRelation(TableName.MILK_PRODUCTIONS, 'milk_production_id') milkProduction!: Relation<MilkProduction>
+  @immutableRelation(TableName.MILK_PRODUCTIONS, 'milk_production_id')milkProduction!: Relation<MilkProduction>
 }
 
 export default MilkReport

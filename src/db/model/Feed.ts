@@ -18,7 +18,7 @@ class Feed extends Model {
   @text('name') name!: string
   @field('feed_type') feedType!: FeedType
 
-  @children(TableName.DIET_FEED) dietFeed!: Relation<DietFeed>
+  @children(TableName.DIET_FEED) diets!: Relation<DietFeed>
 }
 
 export default Feed

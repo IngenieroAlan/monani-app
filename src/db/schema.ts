@@ -37,8 +37,9 @@ export default appSchema({
       name: TableName.DIETS,
       columns: [
         { name: 'water_amount', type: 'number' },
-        { name: 'matter_amount', type: 'number' },
         { name: 'matter_proportion', type: 'string' }, // Porcentaje de peso | Fija | Sin definir
+        { name: 'matter_amount', type: 'number', isOptional: true },
+        { name: 'percentage', type: 'number', isOptional: true },
         { name: 'is_concentrate_excluded', type: 'boolean' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
@@ -47,10 +48,11 @@ export default appSchema({
     tableSchema({
       name: TableName.DIET_FEED,
       columns: [
+        { name: 'diet_id', type: 'string' },
         { name: 'feed_id', type: 'string' },
         { name: 'feed_proportion', type: 'string' }, // Fija | Por procentaje
-        { name: 'amount', type: 'number' },
-        { name: 'diet_id', type: 'string' },
+        { name: 'feed_amount', type: 'number' },
+        { name: 'percentage', type: 'number', isOptional: true },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -61,17 +63,17 @@ export default appSchema({
         { name: 'name', type: 'string', isOptional: true },
         { name: 'tag_id', type: 'string', isIndexed: true },
         { name: 'tag_cattle_number', type: 'string' },
-        { name: 'admitted_at', type: 'number' },
         { name: 'weight', type: 'number' },
-        { name: 'born_at', type: 'number' },
         { name: 'production_type', type: 'string' }, // Lechera | De carne
         { name: 'cattle_status', type: 'string' }, // Gestante | En producción | De reemplazo | De deshecho
         { name: 'pregnant_at', type: 'number', isOptional: true },
-        { name: 'quarantine_days_left', type: 'number', isOptional: true },
-        { name: 'diet_id', type: 'string' },
         { name: 'is_active', type: 'boolean' },
         { name: 'is_archived', type: 'boolean' },
         { name: 'is_sold', type: 'boolean' },
+        { name: 'quarantine_days_left', type: 'number', isOptional: true },
+        { name: 'diet_id', type: 'string' },
+        { name: 'born_at', type: 'number' },
+        { name: 'admitted_at', type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -183,7 +185,6 @@ export default appSchema({
       name: TableName.MILK_SALES,
       columns: [
         { name: 'milk_production_id', type: 'string' },
-        { name: 'liters', type: 'number' },
         { name: 'sold_by', type: 'number' },
         { name: 'sold_at', type: 'number' },
         { name: 'created_at', type: 'number' },

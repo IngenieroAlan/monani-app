@@ -18,7 +18,8 @@ class Diet extends Model {
   @readonly @date('updated_at') updatedAt!: Date
 
   @text('water_amount') waterAmount!: number
-  @field('matter_amount') matterAmount!: number
+  @text('matter_amount') matterAmount?: number
+  @text('percentage') percentage?: number
   @field('matter_proportion') matterProportion!: MatterProportion
   @field('is_concentrate_excluded') isConcentrateExcluded!: boolean
 

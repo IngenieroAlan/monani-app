@@ -11,7 +11,7 @@ class Notification extends Model {
   @date('event_at') eventAt!: Date
   @field('title') title!: string
   @field('description') description!: string
-  @field('icon_name') iconName!: string
+  @field('icon_name') iconName?: string
   @field('is_marked_as_read') isMarkedAsRead!: boolean
 }
 

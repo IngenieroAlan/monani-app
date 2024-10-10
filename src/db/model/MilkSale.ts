@@ -15,7 +15,6 @@ class MilkSale extends Model {
 
   @date('sold_at') soldAt!: Date
   @field('sold_by') soldBy!: number
-  @field('liters') liters!: number
 
   @immutableRelation(TableName.MILK_PRODUCTIONS, 'milk_production_id') milkProduction!: Relation<MilkProduction>
 }

@@ -1,8 +1,8 @@
 import { DirtyRaw } from '@nozbe/watermelondb'
 import { getMonth, getYear } from 'date-fns'
 import database from '..'
-import MilkProductionSummary from '../model/MilkProductionSummary'
-import MonthlyMilkProduction from '../model/MonthlyMilkProduction'
+import MilkProductionSummary from '../models/MilkProductionSummary'
+import MonthlyMilkProduction from '../models/MonthlyMilkProduction'
 import { TableName } from '../schema'
 
 const MonthlyMilkProductionSeeeder = async (milkProductionRecords: DirtyRaw[]) => {

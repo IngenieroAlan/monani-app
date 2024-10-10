@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker/.'
 import database from '..'
-import Cattle from '../model/Cattle'
-import Genealogy from '../model/Genealogy'
+import Cattle from '../models/Cattle'
+import Genealogy from '../models/Genealogy'
 import { TableName } from '../schema'
 
 type GenealogyRecord = { mother_id: string; offspring_id: string }

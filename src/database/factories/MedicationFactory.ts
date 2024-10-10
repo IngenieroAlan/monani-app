@@ -1,4 +1,4 @@
-import { MedicationType } from '../model/Medication'
+import { MedicationType } from '../models/Medication'
 
 const medications: { name: string, medication_type: MedicationType }[] = [
   { name: 'Albendazol', medication_type: 'Desparasitante' },

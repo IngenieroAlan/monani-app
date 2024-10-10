@@ -1,8 +1,8 @@
 import { DirtyRaw, Q } from '@nozbe/watermelondb'
 import database from '..'
-import Cattle from '../model/Cattle'
-import MilkProduction from '../model/MilkProduction'
-import MilkReport from '../model/MilkReport'
+import Cattle from '../models/Cattle'
+import MilkProduction from '../models/MilkProduction'
+import MilkReport from '../models/MilkReport'
 import { TableName } from '../schema'
 
 const MilkReportSeeder = async (litersPerProduction: number[][]) => {

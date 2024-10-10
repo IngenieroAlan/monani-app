@@ -4,8 +4,8 @@ import { ScrollView, StyleSheet, View } from "react-native"
 import { Button, Checkbox, Divider, List, Searchbar, Text, TextInput } from "react-native-paper"
 import { DatePickerInput } from "react-native-paper-dates"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import Cattle, { CattleStatus, ProductionType } from "../../db/model/Cattle"
-import Genealogy from "../../db/model/Genealogy"
+import Cattle, { CattleStatus, ProductionType } from "../../database/models/Cattle"
+import Genealogy from "../../database/models/Genealogy"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
 
 type Props = NativeStackScreenProps<AddCattleStackParams, 'CattleForm'>;

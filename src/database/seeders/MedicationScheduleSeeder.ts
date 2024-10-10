@@ -1,9 +1,9 @@
 import { faker } from '@faker-js/faker/.'
 import { DirtyRaw } from '@nozbe/watermelondb'
 import database from '..'
-import Cattle from '../model/Cattle'
-import Medication from '../model/Medication'
-import MedicationSchedule from '../model/MedicationSchedule'
+import Cattle from '../models/Cattle'
+import Medication from '../models/Medication'
+import MedicationSchedule from '../models/MedicationSchedule'
 import { TableName } from '../schema'
 
 let NUM_OF_RECORDS = 0

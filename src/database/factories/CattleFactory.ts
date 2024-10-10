@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { DirtyRaw } from '@nozbe/watermelondb'
 import { subMonths, subYears } from 'date-fns'
-import { CattleStatus, ProductionType } from '../model/Cattle'
+import { CattleStatus, ProductionType } from '../models/Cattle'
 
 const PROBABILITY_OF_NAME = 0.3
 const PROBABILITY_OF_PREGNANCY = 0.2

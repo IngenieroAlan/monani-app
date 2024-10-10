@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import Cattle from "../../db/model/Cattle";
-import Genealogy from "../../db/model/Genealogy";
+import Cattle from "../../database/models/Cattle";
+import Genealogy from "../../database/models/Genealogy";
 import { CattleForm } from '../../views/addCattle/CattleForm';
 import { FeedForm } from "../../views/addCattle/FeedForm";
 

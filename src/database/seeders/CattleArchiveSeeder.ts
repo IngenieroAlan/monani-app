@@ -1,8 +1,8 @@
 import { DirtyRaw, Q } from '@nozbe/watermelondb'
 import database from '..'
 import CattleArchiveFactory from '../factories/CattleArchiveFactory'
-import Cattle from '../model/Cattle'
-import CattleArchive from '../model/CattleArchive'
+import Cattle from '../models/Cattle'
+import CattleArchive from '../models/CattleArchive'
 import { TableName } from '../schema'
 
 const NUM_OF_RECORDS = 5

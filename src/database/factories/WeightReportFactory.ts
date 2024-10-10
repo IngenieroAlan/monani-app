@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker/.'
 import { DirtyRaw } from '@nozbe/watermelondb'
 import { differenceInDays, subWeeks } from 'date-fns'
-import Cattle from '../model/Cattle'
+import Cattle from '../models/Cattle'
 
 const MIN_WEIGHT_FACTOR = 0.97
 const MAX_WEIGHT_FACTOR = 1.01

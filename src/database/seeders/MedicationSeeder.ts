@@ -1,6 +1,6 @@
 import database from '..'
 import medications from '../factories/MedicationFactory'
-import Medication from '../model/Medication'
+import Medication from '../models/Medication'
 import { TableName } from '../schema'
 
 const MedicationSeeder = async () => {

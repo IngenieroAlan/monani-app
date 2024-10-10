@@ -1,8 +1,8 @@
 import database from '..'
 import CattleFactory from '../factories/CattleFactory'
 import DietFactory from '../factories/DietFactory'
-import Cattle from '../model/Cattle'
-import Diet from '../model/Diet'
+import Cattle from '../models/Cattle'
+import Diet from '../models/Diet'
 import { TableName } from '../schema'
 
 const NUM_OF_RECORDS = 40

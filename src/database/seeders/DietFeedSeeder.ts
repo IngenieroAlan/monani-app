@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker/.'
 import { DirtyRaw } from '@nozbe/watermelondb'
 import database from '..'
-import { ProductionType } from '../model/Cattle'
-import Diet from '../model/Diet'
-import DietFeed from '../model/DietFeed'
-import Feed from '../model/Feed'
+import { ProductionType } from '../models/Cattle'
+import Diet from '../models/Diet'
+import DietFeed from '../models/DietFeed'
+import Feed from '../models/Feed'
 import { TableName } from '../schema'
 
 // Solo dios se acuerda de cómo funciona esto.

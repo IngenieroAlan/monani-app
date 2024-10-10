@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { MatterProportion } from '../model/Diet'
+import { MatterProportion } from '../models/Diet'
 
 const MIN_MATTER_AMOUNT = 14
 const MAX_MATTER_AMOUNT = 25

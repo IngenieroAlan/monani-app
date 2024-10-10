@@ -1,8 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { PaperProvider } from 'react-native-paper'
 import { es, registerTranslation } from 'react-native-paper-dates'
-import { initializeDatabase, resetDatabase } from './src/db'
-import seedDatabase from './src/db/seeders/seeder'
+import { initializeDatabase, resetDatabase } from './src/database'
+import seedDatabase from './src/database/seeders/seeder'
 import { Navigator } from './src/navigation/Navigator'
 
 const setDatabase = async () => {
@@ -13,7 +13,7 @@ const setDatabase = async () => {
 
 export default function App() {
   registerTranslation('es', es)
-  // setDatabase()
+  setDatabase()
 
   return (
     <NavigationContainer>

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { subMonths } from 'date-fns'
-import { ArchiveReason } from '../model/CattleArchive'
+import { ArchiveReason } from '../models/CattleArchive'
 
 const PROBABILITY_OF_NOTES = 0.5
 

@@ -1,6 +1,6 @@
 import database from '..'
 import feeds from '../factories/FeedFactory'
-import Feed from '../model/Feed'
+import Feed from '../models/Feed'
 import { TableName } from '../schema'
 
 const FeedSeeder = async () => {

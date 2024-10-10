@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker/.'
 import { DirtyRaw } from '@nozbe/watermelondb'
 import database from '..'
 import WeightReportFactory from '../factories/WeightReportFactory'
-import Cattle from '../model/Cattle'
-import WeightReport from '../model/WeightReport'
+import Cattle from '../models/Cattle'
+import WeightReport from '../models/WeightReport'
 import { TableName } from '../schema'
 
 const MIN_NUM_OF_RECORDS = 10

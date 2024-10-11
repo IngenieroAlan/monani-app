@@ -1,3 +1,4 @@
+import { Provider } from "react-redux"
 import { CattleProvider } from '@/context/CattleProvider'
 import database, { initializeDatabase, resetDatabase } from '@/database'
 import seedDatabase from '@/database/seeders/seeder'
@@ -6,6 +7,7 @@ import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { NavigationContainer } from '@react-navigation/native'
 import { PaperProvider } from 'react-native-paper'
 import { es, registerTranslation } from 'react-native-paper-dates'
+import {store} from "./src/redux/store/store"
 
 interface Props {
   children: JSX.Element | JSX.Element[]
@@ -22,15 +24,17 @@ export default function App() {
   setDatabase()
 
   return (
-    <DatabaseProvider database={database}>
-      <NavigationContainer>
-        <PaperProvider>
-          <AppState>
-            <Navigator />
-          </AppState>
-        </PaperProvider>
-      </NavigationContainer>
-    </DatabaseProvider>
+    <Provider store={store}>
+      <DatabaseProvider database={database}>
+        <NavigationContainer>
+          <PaperProvider>
+            <AppState>
+              <Navigator />
+            </AppState>
+          </PaperProvider>
+        </NavigationContainer>
+      </DatabaseProvider>
+    </Provider>
   )
 }
 

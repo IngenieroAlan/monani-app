@@ -2,12 +2,21 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ScrollView, StyleSheet, View } from "react-native"
 import { Button } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
+import Feed from "../../database/models/Feed"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
-import { colors } from "../../utils/colors"
 
 type Props = NativeStackScreenProps<AddCattleStackParams, 'FeedForm'>;
 export const FeedForm = ({ navigation, route }: Props) => {
     const { cattle, genealogy, inQuarantine } = route.params
+
+    // TODO: Fetch feeds from db
+    const feeds: Partial<Feed>[] = [
+        { id: '1', name: 'Alfalfa', feedType: 'Alimento'},
+        { id: '2', name: 'Concentrado', feedType: 'Concentrado de engorda' },
+        { id: '3', name: 'Concentrado lechero', feedType: 'Concentrado lechero'},
+    ]
+    
+
     return (
         <SafeAreaProvider>
             <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={{ flexGrow: 1 }}>

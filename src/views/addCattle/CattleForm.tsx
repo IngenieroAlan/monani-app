@@ -47,14 +47,14 @@ export const CattleForm = ({ navigation, route }: Props) => {
                 <View style={styles.container}>
                     <Text variant="titleLarge">Datos Generales</Text>
                     <TextInput
-                        label={'Nombre'}
+                        label={cattle.name ? cattle.name : 'Nombre'}
                         placeholder='Nombre'
                         mode='outlined'
                         value={cattle.name}
                         onChange={text => handleChange('name', text)}
                     />
                     <TextInput
-                        label={'Numero identificador'}
+                        label={cattle.tagId ? cattle.tagId : 'Numero identificador'}
                         placeholder='Numero identificador'
                         mode='outlined'
                         keyboardType="numeric"
@@ -62,7 +62,7 @@ export const CattleForm = ({ navigation, route }: Props) => {
                         onChange={text => handleChange('tagId', text)}
                     />
                     <TextInput
-                        label={'Numero de vaca'}
+                        label={cattle.tagCattleNumber ? cattle.tagCattleNumber : 'Numero de vaca'}
                         placeholder='Numero de vaca'
                         mode='outlined'
                         keyboardType="numeric"
@@ -82,7 +82,7 @@ export const CattleForm = ({ navigation, route }: Props) => {
 
                     <Text variant="titleLarge">Datos de biológicos</Text>
                     <TextInput
-                        label={'Peso'}
+                        label={cattle.weight ? cattle.weight.toString() : 'Peso'}
                         placeholder='Peso'
                         mode='outlined'
                         keyboardType="numeric"
@@ -154,7 +154,7 @@ export const CattleForm = ({ navigation, route }: Props) => {
                         }}
                     />
                     <TextInput
-                        label={'Días de cuarentena'}
+                        label={cattle.quarantineDaysLeft ? cattle.quarantineDaysLeft.toString() : 'Días de cuarentena'}
                         placeholder='Días de cuarentena'
                         mode='outlined'
                         disabled={!inQuarantine}

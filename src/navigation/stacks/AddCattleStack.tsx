@@ -20,9 +20,16 @@ const Stack = createStackNavigator<AddCattleStackParams>();
 
 const AddCattleStack = () => {
     return (
+        
         <Stack.Navigator>
             <Stack.Screen name="CattleForm" options={{ title: 'Información' }} component={CattleForm} />
-            <Stack.Screen name="FeedForm" options={{ title: 'Dieta' }} component={FeedForm} />
+            <Stack.Screen
+                name="FeedForm"
+                options={{
+                    title: 'Dieta',
+                    headerRight: () => null
+                }}
+                component={FeedForm} />
         </Stack.Navigator>
     );
 };

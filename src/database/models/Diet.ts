@@ -4,7 +4,7 @@ import { TableName } from '../schema'
 import Cattle from './Cattle'
 import DietFeed from './DietFeed'
 
-export type MatterProportion = 'Procentaje de peso' | 'Fija' | 'Sin definir'
+export type MatterProportion = 'Porcentaje de peso' | 'Fija' | 'Sin definir'
 
 class Diet extends Model {
   static table = TableName.DIETS

@@ -1,13 +1,14 @@
+import { CattleProvider } from '@/context/CattleProvider'
+import database, { initializeDatabase, resetDatabase } from '@/database'
+import seedDatabase from '@/database/seeders/seeder'
+import { Navigator } from '@/navigation/Navigator'
+import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { NavigationContainer } from '@react-navigation/native'
 import { PaperProvider } from 'react-native-paper'
 import { es, registerTranslation } from 'react-native-paper-dates'
-import { initializeDatabase, resetDatabase } from './src/database'
-import seedDatabase from './src/database/seeders/seeder'
-import { Navigator } from './src/navigation/Navigator'
-import { CattleProvider } from './src/context/CattleProvider'
 
 interface Props {
-  children: JSX.Element | JSX.Element[];
+  children: JSX.Element | JSX.Element[]
 }
 
 const setDatabase = async () => {
@@ -21,13 +22,15 @@ export default function App() {
   setDatabase()
 
   return (
-    <NavigationContainer>
-      <PaperProvider>
-        <AppState>
-          <Navigator />
-        </AppState>
-      </PaperProvider>
-    </NavigationContainer>
+    <DatabaseProvider database={database}>
+      <NavigationContainer>
+        <PaperProvider>
+          <AppState>
+            <Navigator />
+          </AppState>
+        </PaperProvider>
+      </NavigationContainer>
+    </DatabaseProvider>
   )
 }
 
@@ -36,5 +39,5 @@ const AppState = ({ children }: Props) => {
     <CattleProvider>
       {children}
     </CattleProvider>
-  );
-};
+  )
+}

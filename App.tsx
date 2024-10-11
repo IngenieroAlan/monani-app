@@ -4,6 +4,11 @@ import { es, registerTranslation } from 'react-native-paper-dates'
 import { initializeDatabase, resetDatabase } from './src/database'
 import seedDatabase from './src/database/seeders/seeder'
 import { Navigator } from './src/navigation/Navigator'
+import { CattleProvider } from './src/context/CattleProvider'
+
+interface Props {
+  children: JSX.Element | JSX.Element[];
+}
 
 const setDatabase = async () => {
   await resetDatabase()
@@ -18,8 +23,18 @@ export default function App() {
   return (
     <NavigationContainer>
       <PaperProvider>
-        <Navigator />
+        <AppState>
+          <Navigator />
+        </AppState>
       </PaperProvider>
     </NavigationContainer>
   )
 }
+
+const AppState = ({ children }: Props) => {
+  return (
+    <CattleProvider>
+      {children}
+    </CattleProvider>
+  );
+};

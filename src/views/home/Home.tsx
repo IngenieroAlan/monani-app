@@ -1,35 +1,86 @@
-import React from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
-import { FAB, Text } from "react-native-paper";
-import { PaperModal } from "../../components/PaperModal";
-import mainStyles from "../../styles/main";
-import { LivestockStackParams } from '../../navigation/stacks/LivestockStack';
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import CattleList from '@/components/home/CattleList'
+import { LivestockStackParams } from '@/navigation/stacks/LivestockStack'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { StatusBar } from 'expo-status-bar'
+import React, { useCallback, useRef, useState } from 'react'
+import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
+import { AnimatedFAB, Appbar, FAB, useTheme } from 'react-native-paper'
 
-type ScreenNavigationProp = NativeStackScreenProps<LivestockStackParams>;
+type ScreenNavigationProp = NativeStackScreenProps<LivestockStackParams>
 
 export const HomeView = ({ navigation }: ScreenNavigationProp) => {
-  return (
-    <View style={mainStyles.container}>
-      <Text variant="titleLarge" style={{ color: '#000' }}>Hola papu!</Text>
-      <PaperModal content="Hola usuario" btnText="Presioname" />
-      <StatusBar style="auto" />
-      <FAB
-        style={styles.fab}
-        size='small'
-        icon="plus"
-        label='Añadir ganado'
-        onPress={() => navigation.navigate('AddCattleStack')}
-      />
-    </View>
-  );
-};
-const styles = StyleSheet.create({
-  fab: {
-    position: 'absolute',
-    right: 8,
-    bottom: 8,
-  },
-});
+  const theme = useTheme()
 
+  const lastScrollPosition = useRef(0)
+  const flatListRef = useRef<FlatList>(null)
+  const [isFabExtended, setIsFabExtended] = useState(true)
+  const [isScrollAtTop, setIsScrollAtTop] = useState(false)
+
+  const onScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const currentScrollPosition = Math.floor(e.nativeEvent.contentOffset.y) ?? 0
+
+    if (currentScrollPosition > lastScrollPosition.current) {
+      setIsFabExtended(false)
+    } else if (currentScrollPosition < lastScrollPosition.current) {
+      setIsFabExtended(true)
+    }
+
+    lastScrollPosition.current = currentScrollPosition
+    setIsScrollAtTop(currentScrollPosition > 0)
+  }, [])
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.surface
+      }}
+    >
+      <StatusBar />
+      <Appbar.Header>
+        <Appbar.Content title='Monani' />
+        <Appbar.Action
+          icon='magnify'
+          onPress={() => {}}
+        />
+        <Appbar.Action
+          icon='hammer-screwdriver'
+          onPress={() => {}}
+        />
+      </Appbar.Header>
+      <CattleList
+        onScroll={onScroll}
+        ref={flatListRef}
+      />
+      <View style={styles.fabsContainer}>
+        <FAB
+          visible={isScrollAtTop}
+          size='small'
+          icon='chevron-up'
+          variant='secondary'
+          onPress={() => flatListRef.current?.scrollToOffset({ animated: true, offset: 0 })}
+        />
+        <View style={{ flexDirection: 'row' }}>
+          <AnimatedFAB
+            style={{ position: 'relative' }}
+            extended={isFabExtended}
+            icon='plus'
+            label='Añadir'
+            onPress={() => navigation.navigate('AddCattleStack')}
+          />
+        </View>
+      </View>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  fabsContainer: {
+    position: 'absolute',
+    alignItems: 'flex-end',
+    gap: 24,
+    right: 16,
+    bottom: 16
+  }
+})

@@ -1,6 +1,12 @@
+import { ArchiveReason } from "@/database/models/CattleArchive";
+import { MatterProportion } from "@/database/models/Diet";
+import { FeedProportion } from "@/database/models/DietFeed";
+import { FeedType } from "@/database/models/Feed";
+import { MedicationType } from "@/database/models/Medication";
 import { CattleStatus, ProductionType } from "../database/models/Cattle";
 
 export interface Cattle {
+    cattleId: string;
     name: string | undefined;
     tagId: string;
     tagCattleNumber: string;
@@ -14,36 +20,60 @@ export interface Cattle {
     isActive: boolean;
     isArchived: boolean;
     isSold: boolean;
+    dietId: string;
 }
-
-interface Diet {
+interface CattleArchive {
     cattleId: string;
-    name: string;
-    type: string;
-    quantity: number;
+    notes: string | undefined;
+    archivedAt: Date;
+    reason: ArchiveReason;
 }
-
+interface CattleSale {
+    cattleId: string;
+    soldBy: number;
+    soldAt: Date;
+}
+interface Diet {
+    dietId: string;
+    waterAmount: number;
+    matterAmount: number | undefined;
+    percentage: number | undefined;
+    matterProportion: MatterProportion;
+    isConcentrateExcluded: boolean;
+}
 interface DietFeed {
     dietId: string;
     feedId: string;
     feedAmount: number;
-    percentage: string;
-    feedProportion: string;
+    percentage: number | undefined;
+    feedProportion: FeedProportion;
 }
-
+interface Feed {
+    feedId: string;
+    name: string;
+    feedType: FeedType;
+}
 interface Genealogy {
     motherId: string;
     offSpringId: string;
 }
-
+interface Medication {
+    medicationId: string;
+    name: string;
+    medicationType: MedicationType;
+}
 interface MedicationSchedule {
     cattleId: string;
     medicationId: string;
-    administeredAt: Date;
-    dose: number;
-    frequency: number;
+    nextDoseAt: Date;
+    dosesPerYear: number;
 }
-
+interface MilkReport {
+    cattleId: string;
+    milkProductionId: string;
+    reportedAt: Date;
+    liters: number;
+}
 interface WeightReport {
     cattleId: string;
     weight: number;
@@ -51,23 +81,4 @@ interface WeightReport {
     daysPassed: number;
     avgDailyDifference: number;
     weighedAt: Date;
-}
-
-interface MilkReport {
-    cattleId: string;
-    milkProductionId: string;
-    liters: number;
-    reportedAt: Date;
-}
-
-interface CattleSale {
-    cattleId: string;
-    soldBy: number;
-    soldAt: Date;
-}
-
-interface CattleArchive {
-    cattleId: string;
-    archivedBy: number;
-    archivedAt: Date;
 }

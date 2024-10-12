@@ -11,7 +11,6 @@ type ScreenNavigationProp = NativeStackScreenProps<LivestockStackParams>
 
 export const HomeView = ({ navigation }: ScreenNavigationProp) => {
   const theme = useTheme()
-
   const lastScrollPosition = useRef(0)
   const flatListRef = useRef<FlatList>(null)
   const [isFabExtended, setIsFabExtended] = useState(true)
@@ -42,14 +41,14 @@ export const HomeView = ({ navigation }: ScreenNavigationProp) => {
         <Appbar.Content title='Monani' />
         <Appbar.Action
           icon='magnify'
-          onPress={() => {}}
+          onPress={() => navigation.navigate('SearchCattleView')}
         />
         <Appbar.Action
           icon='hammer-screwdriver'
           onPress={() => {}}
         />
       </Appbar.Header>
-      <CattleList
+      <CattleList // TODO: Implement infinite scroll and paginate query results. (VirtualizedList)
         onScroll={onScroll}
         ref={flatListRef}
       />

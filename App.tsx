@@ -3,9 +3,10 @@ import database, { initializeDatabase, resetDatabase } from '@/database'
 import seedDatabase from '@/database/seeders/seeder'
 import { Navigator } from '@/navigation/Navigator'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
-import { NavigationContainer } from '@react-navigation/native'
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
 import { useCallback, useEffect, useState } from 'react'
+import { useColorScheme } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { es, registerTranslation } from 'react-native-paper-dates'
 import { Provider } from 'react-redux'
@@ -24,6 +25,7 @@ const setDatabase = async () => {
 SplashScreen.preventAutoHideAsync()
 
 export default function App() {
+  const scheme = useColorScheme()
   const [appIsReady, setAppIsReady] = useState(false)
 
   useEffect(() => {
@@ -46,7 +48,10 @@ export default function App() {
   return (
     <Provider store={store}>
       <DatabaseProvider database={database}>
-        <NavigationContainer onReady={onLayoutRootView}>
+        <NavigationContainer
+          onReady={onLayoutRootView}
+          theme={scheme === 'dark' ? DarkTheme : DefaultTheme} // To prevent white flashes while navigating.
+        >
           <PaperProvider>
             <AppState>
               <Navigator />

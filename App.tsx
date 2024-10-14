@@ -5,6 +5,7 @@ import { Navigator } from '@/navigation/Navigator'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
+import { enableMapSet } from 'immer'
 import { useCallback, useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
@@ -22,6 +23,7 @@ const setDatabase = async () => {
   await seedDatabase()
 }
 
+enableMapSet()
 SplashScreen.preventAutoHideAsync()
 
 export default function App() {

@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { bottomSheetReducer, homeCattleListQueryReducer, homeStatusFilterReducer, uiReducer } from '../slices'
+import { bottomSheetReducer, homeCattleListQueryReducer, homeFiltersReducer, uiReducer } from '../slices'
 
 export const store = configureStore({
   reducer: {
     ui: uiReducer,
     bottomSheet: bottomSheetReducer,
-    homeStatusFilter: homeStatusFilterReducer,
+    homeFilters: homeFiltersReducer,
     homeCattleListQuery: homeCattleListQueryReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })

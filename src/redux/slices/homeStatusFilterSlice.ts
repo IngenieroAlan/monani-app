@@ -1,30 +1,40 @@
-import { CattleStatus } from '@/database/models/Cattle'
+import { CattleStatus, ProductionType } from '@/database/models/Cattle'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-type HomeStatusFilterState = {
-  filters: Set<CattleStatus>
+type HomeFiltersState = {
+  cattleStatusFilter: Set<CattleStatus>
+  productionTypeFilter: ProductionType | null
 }
 
-const initialState: HomeStatusFilterState = {
-  filters: new Set()
+const initialState: HomeFiltersState = {
+  cattleStatusFilter: new Set(),
+  productionTypeFilter: null
 }
 
-const homeStatusFilterSlice = createSlice({
-  name: 'homeStatusFilter',
+const homeFiltersSlice = createSlice({
+  name: 'homeFilters',
   initialState,
   reducers: {
-    setFilter: (state, action: PayloadAction<CattleStatus>) => {
-      state.filters.add(action.payload)
+    setCattleStatusFilter: (state, action: PayloadAction<CattleStatus>) => {
+      state.cattleStatusFilter.add(action.payload)
     },
-    removeFilter: (state, action: PayloadAction<CattleStatus>) => {
-      state.filters.delete(action.payload)
+    removeCattleStatusFilter: (state, action: PayloadAction<CattleStatus>) => {
+      state.cattleStatusFilter.delete(action.payload)
     },
-    removeAll: (state) => {
-      state.filters.clear()
+    clearCattleStatusFilter: (state) => {
+      state.cattleStatusFilter.clear()
+    },
+    setProductionTypeFilter: (state, filter: PayloadAction<ProductionType | null>) => {
+      state.productionTypeFilter = filter.payload
     }
   }
 })
 
-export const { setFilter, removeFilter, removeAll } = homeStatusFilterSlice.actions
+export const {
+  setCattleStatusFilter,
+  removeCattleStatusFilter,
+  clearCattleStatusFilter,
+  setProductionTypeFilter
+} = homeFiltersSlice.actions
 
-export default homeStatusFilterSlice.reducer
+export default homeFiltersSlice.reducer

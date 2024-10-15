@@ -1,8 +1,8 @@
 import Cattle from '@/database/models/Cattle'
 import { TableName } from '@/database/schema'
 import { open } from '@/redux/slices/bottomSheetSlice'
-import { removeOneOfCattleStatusBind } from '@/redux/slices/homeCattleListQuerySlice'
-import { removeAll } from '@/redux/slices/homeStatusFilterSlice'
+import { removeBind } from '@/redux/slices/homeCattleListQuerySlice'
+import { clearCattleStatusFilter, setProductionTypeFilter } from '@/redux/slices/homeStatusFilterSlice'
 import { RootState } from '@/redux/store/store'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase, withObservables } from '@nozbe/watermelondb/react'
@@ -44,25 +44,26 @@ const ListEmptyComponent = ({ isFetching }: { isFetching: boolean }) => {
 }
 const ListHeaderComponent = memo(() => {
   const dispatch = useDispatch()
-  const statusFilters = useSelector((state: RootState) => state.homeStatusFilter.filters)
+  const statusFilter = useSelector((state: RootState) => state.homeFilters.cattleStatusFilter)
+  const productionFilter = useSelector((state: RootState) => state.homeFilters.productionTypeFilter)
 
   return (
     <View style={styles.chipsContainer}>
       <FilterChip
-        filters={new Set()}
+        filters={productionFilter === null ? [] : [productionFilter]}
         mode='outlined'
-        onPress={() => dispatch(open('homeStatusFilter'))}
-        onClose={() => dispatch(removeAll())}
+        onPress={() => dispatch(open('homeProductionFilter'))}
+        onClose={() => dispatch(setProductionTypeFilter(null))}
       >
         Producción
       </FilterChip>
       <FilterChip
-        filters={statusFilters}
+        filters={[...statusFilter]}
         mode='outlined'
         onPress={() => dispatch(open('homeStatusFilter'))}
         onClose={() => {
-          dispatch(removeAll())
-          dispatch(removeOneOfCattleStatusBind())
+          dispatch(clearCattleStatusFilter())
+          dispatch(removeBind('oneOfCattleStatus'))
         }}
       >
         Estado

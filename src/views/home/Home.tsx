@@ -1,3 +1,4 @@
+import BottomSheetStatusFilter from '@/components/home/BottomSheetStatusFilter'
 import CattleList from '@/components/home/CattleList'
 import { LivestockStackParams } from '@/navigation/stacks/LivestockStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -30,47 +31,50 @@ export const HomeView = ({ navigation }: ScreenNavigationProp) => {
   }, [])
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.surface
-      }}
-    >
-      <StatusBar />
-      <Appbar.Header>
-        <Appbar.Content title='Monani' />
-        <Appbar.Action
-          icon='magnify'
-          onPress={() => navigation.navigate('SearchCattleView')}
-        />
-        <Appbar.Action
-          icon='hammer-screwdriver'
-          onPress={() => {}}
-        />
-      </Appbar.Header>
-      <CattleList // TODO: Implement infinite scroll and paginate query results. (VirtualizedList)
-        onScroll={onScroll}
-        ref={flatListRef}
-      />
-      <View style={styles.fabsContainer}>
-        <FAB
-          visible={isScrollAtTop}
-          size='small'
-          icon='chevron-up'
-          variant='secondary'
-          onPress={() => flatListRef.current?.scrollToOffset({ animated: true, offset: 0 })}
-        />
-        <View style={{ flexDirection: 'row' }}>
-          <AnimatedFAB
-            style={{ position: 'relative' }}
-            extended={isFabExtended}
-            icon='plus'
-            label='Añadir'
-            onPress={() => navigation.navigate('AddCattleStack')}
+    <>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: theme.colors.surface
+        }}
+      >
+        <StatusBar />
+        <Appbar.Header>
+          <Appbar.Content title='Monani' />
+          <Appbar.Action
+            icon='magnify'
+            onPress={() => navigation.navigate('SearchCattleView')}
           />
+          <Appbar.Action
+            icon='hammer-screwdriver'
+            onPress={() => {}}
+          />
+        </Appbar.Header>
+        <CattleList // TODO: Implement infinite scroll and paginate query results. (VirtualizedList)
+          onScroll={onScroll}
+          ref={flatListRef}
+        />
+        <View style={styles.fabsContainer}>
+          <FAB
+            visible={isScrollAtTop}
+            size='small'
+            icon='chevron-up'
+            variant='secondary'
+            onPress={() => flatListRef.current?.scrollToOffset({ animated: true, offset: 0 })}
+          />
+          <View style={{ flexDirection: 'row' }}>
+            <AnimatedFAB
+              style={{ position: 'relative' }}
+              extended={isFabExtended}
+              icon='plus'
+              label='Añadir'
+              onPress={() => navigation.navigate('AddCattleStack')}
+            />
+          </View>
         </View>
       </View>
-    </View>
+      <BottomSheetStatusFilter />
+    </>
   )
 }
 

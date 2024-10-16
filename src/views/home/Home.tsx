@@ -48,7 +48,7 @@ export const HomeView = ({ navigation }: ScreenNavigationProp) => {
           />
           <Appbar.Action
             icon='hammer-screwdriver'
-            onPress={() => {}}
+            onPress={() => navigation.navigate('ResourcesStack')}
           />
         </Appbar.Header>
         <CattleList // TODO: Implement infinite scroll and paginate query results. (VirtualizedList)

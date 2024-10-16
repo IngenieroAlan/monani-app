@@ -1,14 +1,16 @@
 import SearchCattle from '@/views/home/SearchCattle'
 import { NavigationProp } from '@react-navigation/native'
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import BottomTabsStack from './BottomTabsStack'
+import ResourcesStack from './stacks/ResourcesStack'
 
 export type RootStackParams = {
   HomeView: undefined
   BottomTabsStack: undefined
+  ResourcesStack: undefined
   SearchCattleView: undefined
 }
 
@@ -29,9 +31,10 @@ export const Navigator = () => {
         <Stack.Screen
           name='SearchCattleView'
           component={SearchCattle}
-          options={{
-            cardStyleInterpolator: CardStyleInterpolators.forScaleFromCenterAndroid
-          }}
+        />
+        <Stack.Screen
+          name='ResourcesStack'
+          component={ResourcesStack}
         />
       </Stack.Navigator>
     </View>

@@ -7,6 +7,7 @@ export type LivestockStackParams = {
   HomeView: undefined
   AddCattleStack: undefined
   SearchCattleView: undefined
+  ResourcesStack: undefined
 }
 
 const Stack = createStackNavigator<LivestockStackParams>()

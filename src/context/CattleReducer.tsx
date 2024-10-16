@@ -1,29 +1,30 @@
-import { Cattle } from "../interfaces/cattleInterfaces";
+import { Cattle, Genealogy } from "../interfaces/cattleInterfaces";
 
 export interface CattleState {
-    //Tus estados
-    cattle:Cattle;
+  cattle: Cattle;
+  genealogy: Genealogy;
 }
 
-type CattlesAction =
-    | {
-        type: 'action'
-        payload: {
-            cattle: Cattle,
-        },
-    }
+export type CattlesAction =
+  | {
+    type: 'save_cattle_information',
+    payload: {
+      cattle: Cattle,
+      genealogy: Genealogy,
+    },
+  }
 
-    export const cattlesReducer = (state: CattleState, action: CattlesAction): CattleState => {
-        switch (action.type) {
-          case 'action':
-            return {
-              ...state,
-              cattle: action.payload.cattle,
-            };
-          default:
-            return {
-              ...state,
-            };
-        }
+export const cattlesReducer = (state: CattleState, action: CattlesAction): CattleState => {
+  switch (action.type) {
+    case 'save_cattle_information':
+      return {
+        ...state,
+        cattle: action.payload.cattle,
+        genealogy: action.payload.genealogy,
       };
-      
+    default:
+      return {
+        ...state,
+      };
+  }
+};

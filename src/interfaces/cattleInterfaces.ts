@@ -5,13 +5,13 @@ import { FeedType } from "@/database/models/Feed";
 import { MedicationType } from "@/database/models/Medication";
 import { CattleStatus, ProductionType } from "../database/models/Cattle";
 
-export interface Cattle {
+interface Cattle {
     cattleId: string;
     name: string | undefined;
     tagId: string;
     tagCattleNumber: string;
     weight: number;
-    quarantineDaysLeft: number;
+    quarantineDaysLeft: number | undefined;
     admittedAt: Date;
     bornAt: Date;
     pregnantAt: Date | undefined;
@@ -55,7 +55,7 @@ interface Feed {
 }
 interface Genealogy {
     motherId: string;
-    offSpringId: string;
+    offspringId: string;
 }
 interface Medication {
     medicationId: string;
@@ -81,4 +81,18 @@ interface WeightReport {
     daysPassed: number;
     avgDailyDifference: number;
     weighedAt: Date;
+}
+
+export type {
+    Cattle,
+    CattleArchive,
+    CattleSale,
+    Diet,
+    DietFeed,
+    Feed,
+    Genealogy,
+    Medication,
+    MedicationSchedule,
+    MilkReport,
+    WeightReport
 }

@@ -13,7 +13,7 @@ interface AddCattleProps {
 
 export type AddCattleStackParams = {
     CattleForm: AddCattleProps | undefined;
-    FeedForm: AddCattleProps;
+    FeedForm: AddCattleProps | undefined;
 }
 
 const Stack = createStackNavigator<AddCattleStackParams>();

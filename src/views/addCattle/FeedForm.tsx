@@ -4,18 +4,20 @@ import { Button } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import Feed from "../../database/models/Feed"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
+import { useContext } from "react"
+import { CattleContext } from "@/context/CattleContext"
 
 type Props = NativeStackScreenProps<AddCattleStackParams, 'FeedForm'>;
 export const FeedForm = ({ navigation, route }: Props) => {
-    const { cattle, genealogy, inQuarantine } = route.params
+    const { cattle, genealogy } = useContext(CattleContext)
 
     // TODO: Fetch feeds from db
     const feeds: Partial<Feed>[] = [
-        { id: '1', name: 'Alfalfa', feedType: 'Alimento'},
+        { id: '1', name: 'Alfalfa', feedType: 'Alimento' },
         { id: '2', name: 'Concentrado', feedType: 'Concentrado de engorda' },
-        { id: '3', name: 'Concentrado lechero', feedType: 'Concentrado lechero'},
+        { id: '3', name: 'Concentrado lechero', feedType: 'Concentrado lechero' },
     ]
-    
+
 
     return (
         <SafeAreaProvider>
@@ -26,11 +28,7 @@ export const FeedForm = ({ navigation, route }: Props) => {
                     <Button
                         icon="arrow-left"
                         mode="contained-tonal"
-                        onPress={() => navigation.navigate('CattleForm', {
-                            cattle: cattle,
-                            genealogy: genealogy,
-                            inQuarantine: inQuarantine
-                        })}
+                        onPress={() => navigation.navigate('CattleForm')}
                     >
                         Atras
                     </Button>

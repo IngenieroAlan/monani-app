@@ -1,24 +1,48 @@
 import React, { useReducer, useState } from 'react'
-import { CattleContext } from './CattleContext';
+import { CattleContext, CattleDispatchContext } from './CattleContext';
 import { CattleState, cattlesReducer } from './CattleReducer';
+import { CattleStatus, ProductionType } from '@/database/models/Cattle';
 interface Props {
-    children: JSX.Element | JSX.Element[];
+  children: JSX.Element | JSX.Element[];
+}
+
+const CattleInitialState: CattleState = {
+  cattle: {
+    cattleId: '',
+    name: '',
+    weight: 0,
+    bornAt: new Date,
+    tagId: '',
+    tagCattleNumber: '',
+    admittedAt: new Date,
+    cattleStatus: '' as CattleStatus,
+    productionType: '' as ProductionType,
+    quarantineDaysLeft: 0,
+    pregnantAt: new Date,
+    isActive: false,
+    isArchived: false,
+    isSold: false,
+    dietId: '',
+  },
+
+  genealogy: {
+    motherId: '',
+    offspringId: '',
   }
 
-  const CattleInitialState: CattleState = {
-    //Tu estado inicial
-    cattle:{algo:""}
-  };
-export const CattleProvider = ({children}:Props) => {
-    const [state, dispatch] = useReducer(cattlesReducer, CattleInitialState);
-    //Tu logica
+
+};
+export const CattleProvider = ({ children }: Props) => {
+  const [state, dispatch] = useReducer(cattlesReducer, CattleInitialState);
+
   return (
     <CattleContext.Provider value={{
-        ...state,
-        //Tu logica aqui va tambien
-      }}>
+      ...state,
+    }}>
+      <CattleDispatchContext.Provider value={dispatch}>
         {children}
-      </CattleContext.Provider>
-  
+      </CattleDispatchContext.Provider>
+    </CattleContext.Provider>
+
   )
 }

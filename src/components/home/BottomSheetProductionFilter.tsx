@@ -42,13 +42,17 @@ const ListItemFilter = memo((props: ListItemFilterProps) => {
     )
   }, [props.iconName])
 
+  const onPress = useCallback(() => {
+    dispatch(setProductionTypeFilter(props.filter))
+  }, [props.filter])
+
   return (
     <List.Item
       style={{ paddingStart: 16 }}
       title={props.title}
       right={right}
       left={left}
-      onPress={() => dispatch(setProductionTypeFilter(props.filter))}
+      onPress={onPress}
     />
   )
 })
@@ -57,15 +61,12 @@ const BottomSheetProductionFilter = () => {
   const dispatch = useDispatch()
   const index = useSelector((state: RootState) => state.bottomSheet['homeProductionFilter'] ?? -1)
   const productionFilter = useSelector((state: RootState) => state.homeFilters.productionTypeFilter)
-  const eqProductionTypeBind = useSelector((state: RootState) => state.homeCattleListQuery.whereBinds.eqProductionType)
 
   const onChange = useCallback(
     (i: number) => {
       if (i !== -1) return
 
-      if (eqProductionTypeBind !== productionFilter) {
-        dispatch(setEqProductionTypeBind(productionFilter))
-      }
+      dispatch(setEqProductionTypeBind(productionFilter))
     },
     [productionFilter]
   )

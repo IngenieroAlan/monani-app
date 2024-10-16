@@ -68,18 +68,20 @@ const BottomSheetStatusFilter = () => {
   )
 
   // OnChange triggers slightly faster than onClose.
-  const onChange = useCallback((i: number) => {
-    if (i !== -1) return
+  const onChange = useCallback(
+    (i: number) => {
+      if (i !== -1) return
 
-    const filters = [...statusFilter]
-    const bindClone = oneOfCattleStatusBind.slice()
+      const filters = [...statusFilter]
+      const bindClone = oneOfCattleStatusBind.slice()
 
-    // If filters selected and already fetched are equals, don't fetch again.
-    if (filters.sort().join(' ') !== bindClone.sort().join(' ')) {
-      dispatch(setOneOfCattleStatusBind(filters))
-    }
-
-  }, [statusFilter, oneOfCattleStatusBind])
+      // If filters selected and already fetched are equals, don't fetch again.
+      if (filters.sort().join(' ') !== bindClone.sort().join(' ')) {
+        dispatch(setOneOfCattleStatusBind(filters))
+      }
+    },
+    [statusFilter, oneOfCattleStatusBind]
+  )
 
   return (
     <MBottomSheet

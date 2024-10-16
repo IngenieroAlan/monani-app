@@ -1,3 +1,4 @@
+import BottomSheetProductionFilter from '@/components/home/BottomSheetProductionFilter'
 import BottomSheetStatusFilter from '@/components/home/BottomSheetStatusFilter'
 import CattleList from '@/components/home/CattleList'
 import { LivestockStackParams } from '@/navigation/stacks/LivestockStack'
@@ -74,6 +75,7 @@ export const HomeView = ({ navigation }: ScreenNavigationProp) => {
         </View>
       </View>
       <BottomSheetStatusFilter />
+      <BottomSheetProductionFilter />
     </>
   )
 }

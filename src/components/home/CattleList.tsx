@@ -1,7 +1,7 @@
 import Cattle from '@/database/models/Cattle'
 import { TableName } from '@/database/schema'
 import { open } from '@/redux/slices/bottomSheetSlice'
-import { removeBind } from '@/redux/slices/homeCattleListQuerySlice'
+import { setEqProductionTypeBind, setOneOfCattleStatusBind } from '@/redux/slices/homeCattleListQuerySlice'
 import { clearCattleStatusFilter, setProductionTypeFilter } from '@/redux/slices/homeStatusFilterSlice'
 import { RootState } from '@/redux/store/store'
 import { Q } from '@nozbe/watermelondb'
@@ -53,7 +53,10 @@ const ListHeaderComponent = memo(() => {
         filters={productionFilter === null ? [] : [productionFilter]}
         mode='outlined'
         onPress={() => dispatch(open('homeProductionFilter'))}
-        onClose={() => dispatch(setProductionTypeFilter(null))}
+        onClose={() => {
+          dispatch(setProductionTypeFilter(null))
+          dispatch(setEqProductionTypeBind(null))
+        }}
       >
         Producción
       </FilterChip>
@@ -63,7 +66,7 @@ const ListHeaderComponent = memo(() => {
         onPress={() => dispatch(open('homeStatusFilter'))}
         onClose={() => {
           dispatch(clearCattleStatusFilter())
-          dispatch(removeBind('oneOfCattleStatus'))
+          dispatch(setOneOfCattleStatusBind([]))
         }}
       >
         Estado
@@ -117,16 +120,21 @@ const CattleList = (
   const oneOfCattleStatusBind = useSelector(
     (state: RootState) => state.homeCattleListQuery.whereBinds.oneOfCattleStatus
   )
+  const eqProductionTypeBind = useSelector((state: RootState) => state.homeCattleListQuery.whereBinds.eqProductionType)
   const [cattleList, setCattleList] = useState<Cattle[]>([])
   const isFetching = useRef(false)
 
   useEffect(() => {
     const fetchCattle = async () => {
       isFetching.current = true
+
       const queries = [Q.where('is_active', true)]
 
       if (oneOfCattleStatusBind.length > 0) {
         queries.push(Q.where('cattle_status', Q.oneOf(oneOfCattleStatusBind)))
+      }
+      if (eqProductionTypeBind !== null) {
+        queries.push(Q.where('production_type', eqProductionTypeBind))
       }
 
       setCattleList(await database.collections.get<Cattle>(TableName.CATTLE).query(queries).fetch())
@@ -136,7 +144,7 @@ const CattleList = (
 
     setCattleList([])
     fetchCattle()
-  }, [database, oneOfCattleStatusBind])
+  }, [database, oneOfCattleStatusBind, eqProductionTypeBind])
 
   return (
     <FlatList

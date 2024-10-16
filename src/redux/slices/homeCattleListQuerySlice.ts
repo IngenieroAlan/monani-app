@@ -4,16 +4,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 type HomeCattleListQueryState = {
   whereBinds: {
     oneOfCattleStatus: CattleStatus[]
-    eqProductionType: ProductionType[]
+    eqProductionType: ProductionType | null
   }
 }
 
 const initialState: HomeCattleListQueryState = {
   whereBinds: {
     oneOfCattleStatus: [],
-    eqProductionType: []
+    eqProductionType: null
   }
-} 
+}
 
 const homeCattleListQuerySlice = createSlice({
   name: 'homeCattleListQuery',
@@ -22,19 +22,12 @@ const homeCattleListQuerySlice = createSlice({
     setOneOfCattleStatusBind: (state, bind: PayloadAction<CattleStatus[]>) => {
       state.whereBinds.oneOfCattleStatus = bind.payload
     },
-    setEqProductionTypeBind: (state, bind: PayloadAction<ProductionType>) => {
-      state.whereBinds.eqProductionType = [bind.payload]
-    },
-    removeBind: (state, bind: PayloadAction<keyof HomeCattleListQueryState['whereBinds']>) => {
-      state.whereBinds[bind.payload] = []
-    },
+    setEqProductionTypeBind: (state, bind: PayloadAction<ProductionType | null>) => {
+      state.whereBinds.eqProductionType = bind.payload
+    }
   }
 })
 
-export const {
-  setOneOfCattleStatusBind,
-  setEqProductionTypeBind,
-  removeBind
-} = homeCattleListQuerySlice.actions
+export const { setOneOfCattleStatusBind, setEqProductionTypeBind } = homeCattleListQuerySlice.actions
 
 export default homeCattleListQuerySlice.reducer

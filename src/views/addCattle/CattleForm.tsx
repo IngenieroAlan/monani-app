@@ -64,148 +64,148 @@ export const CattleForm = ({ navigation, route }: Props) => {
     }
 
     const handleNext = () => {
-        if (!validateForm()) return
+        // if (!validateForm()) return
 
-        dispatch({ type: 'save_cattle_information', payload: { cattle: currentCattle as Cattle, genealogy: genealogy as Genealogy } })
+        // dispatch({ type: 'save_cattle_information', payload: { cattle: currentCattle as Cattle, genealogy: genealogy as Genealogy } })
 
         navigation.navigate('FeedForm')
     }
 
     return (
         <SafeAreaProvider>
-            <ScrollView style={{
-                flex: 1,
-                minHeight: '100%',
-                backgroundColor: theme.colors.surface
-            }} >
-                <View style={{
-                    flex: 1,
-                    padding: 16,
-                    gap: 10,
+            <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
+                <ScrollView style={{
+                    flexGrow: 1,
                     backgroundColor: theme.colors.surface
-                }}>
-                    <Text variant="titleLarge">Datos Generales</Text>
-                    <TextInput
-                        label={'Nombre'}
-                        mode='outlined'
-                        value={currentCattle.name}
-                        onChange={text => handleChange('name', text)}
-                    />
-                    <TextInput
-                        label={'Numero identificador'}
-                        mode='outlined'
-                        keyboardType="numeric"
-                        value={currentCattle.tagId}
-                        onChange={text => handleChange('tagId', text)}
-                    />
-                    <TextInput
-                        label={'Numero de vaca'}
-                        mode='outlined'
-                        keyboardType="numeric"
-                        value={currentCattle.tagCattleNumber}
-                        onChange={text => handleChange('tagCattleNumber', text)}
-                    />
-                    <DatePickerInput
-                        locale="es"
-                        label="Fecha de ingreso"
-                        value={currentCattle.admittedAt}
-                        onChange={(d) => setCattle({ ...currentCattle, admittedAt: d })}
-                        inputMode="start"
-                        mode="outlined"
-                    />
-
-                    <Divider style={{ marginVertical: 10 }} />
-
-                    <Text variant="titleLarge">Datos de biológicos</Text>
-                    <TextInput
-                        label={'Peso'}
-                        mode='outlined'
-                        keyboardType="numeric"
-                        value={currentCattle.weight?.toString()}
-                        onChange={text => handleChange('weight', parseFloat(text.type))}
-                    />
-                    <DatePickerInput
-                        locale="es"
-                        label="Fecha de nacimiento"
-                        value={currentCattle.bornAt}
-                        onChange={(d) => setCattle({ ...currentCattle, bornAt: d })}
-                        inputMode="start"
-                        mode="outlined"
-                    />
-
-                    <Divider style={{ marginVertical: 10 }} />
-
-                    <Text variant="titleLarge">Estado productivo</Text>
-                    <List.Accordion
-                        title="Estado"
-                        description={currentCattle.cattleStatus}
-                        expanded={isCattleSExpanded}
-                        onPress={() => setCattleSExpanded(!isCattleSExpanded)}
-                    >
-                        <List.Item title="Gestante" onPress={() => handleChange('cattleStatus', 'Gestante')} />
-                        <List.Item title="Producción" onPress={() => handleChange('cattleStatus', 'Producción')} />
-                        <List.Item title="De reemplazo" onPress={() => handleChange('cattleStatus', 'De remplazo')} />
-                        <List.Item title="De desecho" onPress={() => handleChange('cattleStatus', 'De desecho')} />
-                    </List.Accordion>
-
-                    {currentCattle.cattleStatus === 'Gestante' &&
+                }} >
+                    <View style={{
+                        flex: 1,
+                        padding: 16,
+                        gap: 10,
+                        backgroundColor: theme.colors.surface
+                    }}>
+                        <Text variant="titleLarge">Datos Generales</Text>
+                        <TextInput
+                            label={'Nombre'}
+                            mode='outlined'
+                            value={currentCattle.name}
+                            onChange={text => handleChange('name', text)}
+                        />
+                        <TextInput
+                            label={'Numero identificador'}
+                            mode='outlined'
+                            keyboardType="numeric"
+                            value={currentCattle.tagId}
+                            onChange={text => handleChange('tagId', text)}
+                        />
+                        <TextInput
+                            label={'Numero de vaca'}
+                            mode='outlined'
+                            keyboardType="numeric"
+                            value={currentCattle.tagCattleNumber}
+                            onChange={text => handleChange('tagCattleNumber', text)}
+                        />
                         <DatePickerInput
                             locale="es"
-                            label="Fecha de gestación"
-                            value={currentCattle.pregnantAt}
-                            onChange={(d) => setCattle({ ...currentCattle, pregnantAt: d })}
+                            label="Fecha de ingreso"
+                            value={currentCattle.admittedAt}
+                            onChange={(d) => setCattle({ ...currentCattle, admittedAt: d })}
                             inputMode="start"
                             mode="outlined"
                         />
-                    }
 
-                    <List.Accordion
-                        title="Tipo de producción"
-                        description={currentCattle.productionType}
-                        expanded={isProdTypeExpanded}
-                        onPress={() => setProdTypeExpanded(!isProdTypeExpanded)}
-                    >
-                        <List.Item title="Producción lechera" onPress={() => handleChange('productionType', 'Producción lechera')} />
-                        <List.Item title="Producción de carne" onPress={() => handleChange('productionType', 'Producción de carne')} />
-                    </List.Accordion>
+                        <Divider style={{ marginVertical: 10 }} />
+
+                        <Text variant="titleLarge">Datos de biológicos</Text>
+                        <TextInput
+                            label={'Peso'}
+                            mode='outlined'
+                            keyboardType="numeric"
+                            value={currentCattle.weight?.toString()}
+                            onChange={text => handleChange('weight', parseFloat(text.type))}
+                        />
+                        <DatePickerInput
+                            locale="es"
+                            label="Fecha de nacimiento"
+                            value={currentCattle.bornAt}
+                            onChange={(d) => setCattle({ ...currentCattle, bornAt: d })}
+                            inputMode="start"
+                            mode="outlined"
+                        />
+
+                        <Divider style={{ marginVertical: 10 }} />
+
+                        <Text variant="titleLarge">Estado productivo</Text>
+                        <List.Accordion
+                            title="Estado"
+                            description={currentCattle.cattleStatus}
+                            expanded={isCattleSExpanded}
+                            onPress={() => setCattleSExpanded(!isCattleSExpanded)}
+                        >
+                            <List.Item title="Gestante" onPress={() => handleChange('cattleStatus', 'Gestante')} />
+                            <List.Item title="Producción" onPress={() => handleChange('cattleStatus', 'Producción')} />
+                            <List.Item title="De reemplazo" onPress={() => handleChange('cattleStatus', 'De remplazo')} />
+                            <List.Item title="De desecho" onPress={() => handleChange('cattleStatus', 'De desecho')} />
+                        </List.Accordion>
+
+                        {currentCattle.cattleStatus === 'Gestante' &&
+                            <DatePickerInput
+                                locale="es"
+                                label="Fecha de gestación"
+                                value={currentCattle.pregnantAt}
+                                onChange={(d) => setCattle({ ...currentCattle, pregnantAt: d })}
+                                inputMode="start"
+                                mode="outlined"
+                            />
+                        }
+
+                        <List.Accordion
+                            title="Tipo de producción"
+                            description={currentCattle.productionType}
+                            expanded={isProdTypeExpanded}
+                            onPress={() => setProdTypeExpanded(!isProdTypeExpanded)}
+                        >
+                            <List.Item title="Producción lechera" onPress={() => handleChange('productionType', 'Producción lechera')} />
+                            <List.Item title="Producción de carne" onPress={() => handleChange('productionType', 'Producción de carne')} />
+                        </List.Accordion>
 
 
-                    <Divider style={{ marginVertical: 10 }} />
+                        <Divider style={{ marginVertical: 10 }} />
 
-                    <Text variant="titleLarge">Genealogía</Text>
-                    <Searchbar
-                        placeholder='No. identenficador de la madre'
-                        value={genealogy.motherId ? genealogy.motherId : ''}
-                        onChangeText={text => setGenealogy({ ...genealogy, motherId: text })}
-                    />
+                        <Text variant="titleLarge">Genealogía</Text>
+                        <Searchbar
+                            placeholder='No. identenficador de la madre'
+                            value={genealogy.motherId ? genealogy.motherId : ''}
+                            onChangeText={text => setGenealogy({ ...genealogy, motherId: text })}
+                        />
 
-                    <Divider style={{ marginVertical: 10 }} />
+                        <Divider style={{ marginVertical: 10 }} />
 
-                    <Checkbox.Item
-                        label="En cuarentena"
-                        status={inQuarantine ? 'checked' : 'unchecked'}
-                        onPress={() => {
-                            setQuarantine(!inQuarantine);
-                        }}
-                    />
-                    <TextInput
-                        label={'Días de cuarentena'}
-                        mode='outlined'
-                        disabled={!inQuarantine}
-                        keyboardType="numeric"
-                        value={currentCattle.quarantineDaysLeft?.toString()}
-                        onChange={text => handleChange('quarantineDaysLeft', parseFloat(text.type))}
-                    />
-
-                    <Button
-                        icon="arrow-right"
-                        mode="contained-tonal"
-                        style={{ marginTop: 20 }}
-                        onPress={handleNext}>
-                        Siguiente
-                    </Button>
-                </View>
-            </ScrollView>
+                        <Checkbox.Item
+                            label="En cuarentena"
+                            status={inQuarantine ? 'checked' : 'unchecked'}
+                            onPress={() => {
+                                setQuarantine(!inQuarantine);
+                            }}
+                        />
+                        <TextInput
+                            label={'Días de cuarentena'}
+                            mode='outlined'
+                            disabled={!inQuarantine}
+                            keyboardType="numeric"
+                            value={currentCattle.quarantineDaysLeft?.toString()}
+                            onChange={text => handleChange('quarantineDaysLeft', parseFloat(text.type))}
+                        />
+                    </View>
+                </ScrollView> 
+                <Button
+                    icon="arrow-right"
+                    mode="elevated"
+                    style={{ alignSelf: 'flex-end', marginHorizontal: 16, marginVertical: 10 }}
+                    onPress={handleNext}>
+                    Siguiente
+                </Button>
+            </View>
         </SafeAreaProvider>
     )
 }

@@ -27,14 +27,14 @@ export const FeedForm = ({ navigation, route }: Props) => {
                 <View style={styles.navigationButtons}>
                     <Button
                         icon="arrow-left"
-                        mode="contained-tonal"
+                        mode="elevated"
                         onPress={() => navigation.navigate('CattleForm')}
                     >
                         Atras
                     </Button>
                     <Button
                         icon="arrow-right"
-                        mode="contained-tonal"
+                        mode="elevated"
                         onPress={() => null}
                     >
                         Siguiente

@@ -4,6 +4,8 @@ import { Button, Text, TextInput } from 'react-native-paper';
 import mainStyles from '../../styles/main';
 import { useForm } from '@/hooks/useForm';
 import { CustomTextInput } from '@/components/CustomTextInput';
+import { NotificationsList } from '@/components/NotificationsList';
+import { Notification } from '@/interfaces/notificationsInterfaces';
 
 const initialForm = {
   name: "",
@@ -12,6 +14,15 @@ const initialForm = {
 const formHelpers = {
   name: "El campo del nombre es requerido",
 };
+
+const notificationsData: Notification[] = [{
+  id: 1,
+  eventAt: new Date,
+  title: "Dia de parto",
+  description: "La vaca con no. 6603 tiene un parto programado para hoy.",
+  iconName: "baby-bottle-outline",
+  isMarkedAsRead: false
+}]
 
 
 export const NotificationsView = () => {
@@ -28,6 +39,7 @@ export const NotificationsView = () => {
         <Button
           onPress={onResetForm}
         >Reset</Button>
+        <NotificationsList day='Hoy' dayNotifications={notificationsData} />
       </View>
     </SafeAreaView>
   );

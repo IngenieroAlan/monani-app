@@ -1,13 +1,12 @@
+import { CattleContext, CattleDispatchContext } from "@/context/CattleContext"
+import { Cattle, Genealogy } from "@/interfaces/cattleInterfaces"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useContext, useState } from "react"
-import { ScrollView, StyleSheet, View } from "react-native"
+import { ScrollView, View } from "react-native"
 import { Button, Checkbox, Divider, List, Searchbar, Text, TextInput, useTheme } from "react-native-paper"
 import { DatePickerInput } from "react-native-paper-dates"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { CattleStatus, ProductionType } from "../../database/models/Cattle"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
-import { Cattle, Genealogy } from "@/interfaces/cattleInterfaces"
-import { CattleContext, CattleDispatchContext } from "@/context/CattleContext"
 
 type Props = NativeStackScreenProps<AddCattleStackParams, 'CattleForm'>;
 export const CattleForm = ({ navigation, route }: Props) => {
@@ -197,7 +196,7 @@ export const CattleForm = ({ navigation, route }: Props) => {
                             onChange={text => handleChange('quarantineDaysLeft', parseFloat(text.type))}
                         />
                     </View>
-                </ScrollView> 
+                </ScrollView>
                 <Button
                     icon="arrow-right"
                     mode="elevated"

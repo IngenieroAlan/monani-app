@@ -1,23 +1,21 @@
-import { CattleContext } from "@/context/CattleContext"
+import { RootStackParams } from "@/navigation/Navigator"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useContext } from "react"
 import { ScrollView, StyleSheet, View } from "react-native"
 import { Button } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import Feed from "../../database/models/Feed"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
 
-type Props = NativeStackScreenProps<AddCattleStackParams, 'FeedForm'>;
-export const FeedForm = ({ navigation, route }: Props) => {
-    const { cattle, genealogy } = useContext(CattleContext)
+type StackParams = AddCattleStackParams & RootStackParams;
+type Props = NativeStackScreenProps<StackParams, 'MedicationsForm'>;
+export const MedicationsForm = ({ navigation, route }: Props) => {
 
-    // TODO: Fetch feeds from db
-    const feeds: Partial<Feed>[] = [
-        { id: '1', name: 'Alfalfa', feedType: 'Alimento' },
-        { id: '2', name: 'Concentrado', feedType: 'Concentrado de engorda' },
-        { id: '3', name: 'Concentrado lechero', feedType: 'Concentrado lechero' },
-    ]
+    // TODO: Fetch medications from db
 
+    const handleSave = () => {
+        // TODO: Save cattle to db
+
+        navigation.navigate('HomeView');
+    }
 
     return (
         <SafeAreaProvider>
@@ -33,11 +31,11 @@ export const FeedForm = ({ navigation, route }: Props) => {
                         Atras
                     </Button>
                     <Button
-                        icon="arrow-right"
+                        icon="content-save-outline"
                         mode="elevated"
-                        onPress={() => navigation.navigate('MedicationsForm')}
+                        onPress={handleSave}
                     >
-                        Siguiente
+                        Guardar
                     </Button>
                 </View>
             </ScrollView>

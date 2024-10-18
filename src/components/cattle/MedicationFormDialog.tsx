@@ -1,10 +1,10 @@
 import { View } from "react-native";
 import { Text } from "react-native-paper";
 
-export default function FeedFormDialog() {
+export default function MedicationsFormDialog() {
     return (
         <View>
-            <Text>FeedFormDialog</Text>
+            <Text>MedicationsFormDialog</Text>
         </View>
     )
 }

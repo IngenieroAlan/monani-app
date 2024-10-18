@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-type SnackbarState = {
+type UiVisibilityState = {
   [key: string]: boolean
 }
 
-const initialState: SnackbarState = {}
+const initialState: UiVisibilityState = {}
 
-const snackbarSlice = createSlice({
-  name: 'snackbar',
+const uiVisibilitySlice = createSlice({
+  name: 'uiVisibility',
   initialState,
   reducers: {
     show: (state, action: PayloadAction<string>) => {
@@ -15,10 +15,11 @@ const snackbarSlice = createSlice({
     },
     hide: (state, action: PayloadAction<string>) => {
       state[action.payload] = false
-    }
+    },
+    reset: () => initialState
   }
 })
 
-export const { show, hide } = snackbarSlice.actions
+export const { show, hide, reset } = uiVisibilitySlice.actions
 
-export default snackbarSlice.reducer
+export default uiVisibilitySlice.reducer

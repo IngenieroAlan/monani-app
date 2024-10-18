@@ -3,8 +3,8 @@ import {
   bottomSheetReducer,
   homeCattleListQueryReducer,
   homeFiltersReducer,
-  snackbarReducer,
-  uiReducer
+  uiReducer,
+  uiVisibilityReducer
 } from '../slices'
 
 export const store = configureStore({
@@ -13,7 +13,7 @@ export const store = configureStore({
     bottomSheet: bottomSheetReducer,
     homeFilters: homeFiltersReducer,
     homeCattleListQuery: homeCattleListQueryReducer,
-    snackbar: snackbarReducer
+    uiVisibility: uiVisibilityReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 })

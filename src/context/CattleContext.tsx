@@ -1,11 +1,13 @@
 import { createContext, Dispatch } from "react";
-import { Cattle, Diet, Feed, Genealogy } from "../interfaces/cattleInterfaces";
+import { Cattle, Diet, DietFeed, Genealogy } from "../interfaces/cattleInterfaces";
 import { CattlesAction } from "./CattleReducer";
 
 type CattleContextProps = {
   //Tus Props
   cattle: Cattle;
   genealogy: Genealogy;
+  diet: Diet;
+  dietFeeds: DietFeed[];
 }
 
 type TasksDispatchContext = {

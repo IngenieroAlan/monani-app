@@ -67,7 +67,6 @@ export const NotificationsView = () => {
           name='name'
           label="Nombre"
           helperText={formHelpers.name}
-          rules={{ required: true }}
           control={control}
           errors={errors.name}
           more={{ autoCapitalize: "none" }} />

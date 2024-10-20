@@ -1,20 +1,20 @@
 import React from 'react';
-import { Control, Controller, FieldError, FieldValues } from "react-hook-form";
+import { Control, Controller, FieldError, FieldPath, FieldValues } from "react-hook-form";
 import { View, ViewProps } from 'react-native';
 import { HelperText, TextInput, TextInputProps } from 'react-native-paper';
 
-interface Props {
+interface Props<T extends FieldValues> {
     label: string;
     helperText: string;
     placeholder?: string;
-    control: Control<FieldValues | any>;
+    control: Control<T>;
     more?: TextInputProps;
-    name: string;
+    name: FieldPath<T>;
     errors: FieldError | undefined;
     containerStyle?: ViewProps;
 }
 
-export const CustomTextInput = ({ name, label, placeholder = "", errors, helperText, control, containerStyle, more }: Props) => {
+export const CustomTextInput = <T extends FieldValues>({ name, label, placeholder = "", errors, helperText, control, containerStyle, more }: Props<T>) => {
     return (
         <View style={containerStyle}>
             <Controller

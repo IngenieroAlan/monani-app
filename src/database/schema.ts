@@ -31,7 +31,8 @@ export default appSchema({
         { name: 'feed_type', type: 'string' }, // Alimento | Concentrado de engorda | Concentrado lechero
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
-      ]
+      ],
+      unsafeSql: (sql) => sql.replace('"name",', '"name" collate nocase,')
     }),
     tableSchema({
       name: TableName.DIETS,

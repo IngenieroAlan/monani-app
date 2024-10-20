@@ -5,19 +5,32 @@ import { RootState } from '@/redux/store/store'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDatabase } from '@nozbe/watermelondb/react'
-import { Controller, useForm } from 'react-hook-form'
-import { View } from 'react-native'
-import { Button, Dialog, Menu, Portal, useTheme } from 'react-native-paper'
+import { useForm } from 'react-hook-form'
+import { Keyboard, View } from 'react-native'
+import { Button, Dialog, Portal, useTheme } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
 import { z } from 'zod'
 import { CustomTextInput } from '../CustomTextInput'
 import DismissDialog, { DISMISS_DIALOG_ID } from '../DismissDialog'
-import Dropdown from '../Dropdown'
-
-type FeedFields = z.infer<typeof FeedSchema>
+import MDropdown, { DropdownOption } from '../MDropdown'
 
 export const CREATE_FEED_DIALOG_ID = 'createFeedDialog'
-const dropdownOptions: FeedType[] = ['Alimento', 'Concentrado lechero', 'Concentrado de engorda']
+type FeedFields = z.infer<typeof FeedSchema>
+
+const dropdownOptions: DropdownOption<FeedType>[] = [
+  {
+    label: 'Alimento',
+    value: 'Alimento'
+  },
+  {
+    label: 'Concentrado lechero',
+    value: 'Concentrado lechero'
+  },
+  {
+    label: 'Concentrado de engorda',
+    value: 'Concentrado de engorda'
+  }
+]
 
 const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) => void }) => {
   const theme = useTheme()
@@ -39,6 +52,8 @@ const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) =>
   })
 
   const dismissChanges = () => {
+    Keyboard.dismiss()
+
     dispatch(hide(CREATE_FEED_DIALOG_ID))
     reset()
   }
@@ -76,34 +91,25 @@ const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) =>
         <Dialog.Content>
           <View style={{ gap: 16 }}>
             <CustomTextInput
-              label='Nombre*'
-              helperText={errors.name?.message ? errors.name?.message : ''}
-              errors={errors.name}
               name='name'
               control={control}
+              label='Nombre*'
+              errors={errors.name}
+              helperText={errors.name?.message ? errors.name?.message : ''}
               more={{
+                autoFocus: !isDirty,
                 theme: { colors: { background: theme.colors.elevation.level3 } }
               }}
             />
-            <Controller
+            <MDropdown
               name='feedType'
               control={control}
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <Dropdown
-                    value={value}
-                    label='Tipo de alimento*'
-                    error={errors.feedType?.message}
-                    options={dropdownOptions}
-                    renderOption={({ item }) => (
-                      <Menu.Item
-                        title={item}
-                        onPress={() => onChange(item)}
-                      />
-                    )}
-                    textInputProps={{ theme: { colors: { background: theme.colors.elevation.level3 } } }}
-                  />
-                )
+              label='Tipo de alimento*'
+              options={dropdownOptions}
+              error={errors.feedType !== undefined}
+              errroMessage={errors.feedType?.message}
+              theme={{
+                colors: { background: theme.colors.elevation.level3 }
               }}
             />
           </View>

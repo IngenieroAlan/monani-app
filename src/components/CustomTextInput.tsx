@@ -1,38 +1,48 @@
 import { colors } from '@/utils/colors';
 import React from 'react'
-import { View } from 'react-native';
-import { HelperText, HelperTextProps, TextInput, TextInputProps } from 'react-native-paper'
+import { View, ViewProps } from 'react-native';
+import { HelperText, TextInput, TextInputProps } from 'react-native-paper'
+import { Control, Controller, FieldError, FieldValues, RegisterOptions } from "react-hook-form"
 
 interface Props {
     label: string;
-    formValue: string;
-    field: string;
     helperText: string;
-    helperType?: "error" | "info";
     placeholder?: string;
-    onChange: (value: any, field: any) => void;
-    validation?: () => boolean;
+    control: Control<FieldValues | any>;
+    rules: Omit<RegisterOptions<FieldValues, string>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled">;
     more?: TextInputProps;
-    //helperMore?: HelperTextProps;
+    name: string;
+    errors: FieldError | undefined;
+    containerStyle?: ViewProps;
 }
 
-export const CustomTextInput = ({ label, formValue, placeholder = "", field, helperText, helperType = "error", more, validation, onChange }: Props) => {
+export const CustomTextInput = ({ name, label, placeholder = "", errors, helperText, control, rules, containerStyle, more }: Props) => {
     return (
-        <View>
-            <TextInput
-                label={label}
-                value={formValue}
-                textColor={colors.input.main}
-                onChangeText={(value) => onChange(value, field)}
-                placeholder={placeholder}
-                placeholderTextColor={colors.input.placeHolder}
-                mode="outlined"
-                error={validation ? !validation() : formValue.trim() === ""}
-                {...more}
+        <View style={containerStyle}>
+            <Controller
+                control={control}
+                rules={rules}
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        label={label}
+                        value={value}
+                        onBlur={onBlur}
+                        textColor={colors.input.main}
+                        onChangeText={onChange}
+                        placeholder={placeholder}
+                        placeholderTextColor={colors.input.placeHolder}
+                        mode="outlined"
+                        error={errors && true}
+                        {...more}
+                    />)}
+                name={name}
             />
-            <HelperText type={helperType} visible={validation ? !validation() : formValue.trim() === ""} >
-                {helperText}
-            </HelperText>
+            {
+                errors && <HelperText type="error" visible >
+                    {helperText}
+                </HelperText>
+            }
+
         </View>
     )
 }

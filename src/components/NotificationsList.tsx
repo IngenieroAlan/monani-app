@@ -2,7 +2,6 @@ import { Notification } from '@/interfaces/notificationsInterfaces';
 import { colors } from '@/utils/colors';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react'
-import { View } from 'react-native';
 import { IconButton, List, Menu, Icon } from 'react-native-paper';
 import { Navigator } from '../navigation/Navigator';
 

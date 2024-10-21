@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Button, Text, useTheme } from 'react-native-paper';
 import mainStyles from '../../styles/main';
 import { CustomTextInput } from '@/components/CustomTextInput';
 import { NotificationsList } from '@/components/NotificationsList';
@@ -8,6 +8,11 @@ import { Notification } from '@/interfaces/notificationsInterfaces';
 import { es } from 'date-fns/locale'
 import { formatDistance, subDays } from 'date-fns';
 import { useForm } from 'react-hook-form';
+import { useDatabase } from '@nozbe/watermelondb/react';
+import { endLoading, startLoading } from '@/redux/slices/ui';
+import { getNotifications } from '@/redux/slices/notificationsSlice';
+import { RootState } from '@/redux/store/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 
 
 const notificationsData: Notification[] = [
@@ -41,6 +46,17 @@ const formHelpers = {
 };
 
 export const NotificationsView = () => {
+  const theme = useTheme();
+  const database = useDatabase();
+  const dispatch = useAppDispatch();
+  const { notifications } = useAppSelector((state: RootState) => state.notifications);
+  const { isLoading } = useAppSelector((state: RootState) => state.ui);
+
+  useEffect(() => {
+    dispatch(startLoading());
+  }, [dispatch])
+
+
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: ""
@@ -58,6 +74,11 @@ export const NotificationsView = () => {
     generateDates();
   }, [generateDates])
 
+  useEffect(() => {
+    dispatch(getNotifications(database));
+  }, [dispatch])
+
+
 
   return (
     <SafeAreaView style={mainStyles.container}>
@@ -70,9 +91,16 @@ export const NotificationsView = () => {
           control={control}
           errors={errors.name}
           more={{ autoCapitalize: "none" }} />
-          <Button onPress={handleSubmit(onSubmit)} >Submit</Button>
+        <Button onPress={handleSubmit(onSubmit)} >Submit</Button>
+        {/*
+          Fix notification design
+          show notifications by day
+        */}
+        {
+          isLoading ? <Text variant='bodySmall'>Aquí va un skeleton</Text> : <NotificationsList day='Hoy' dayNotifications={notifications} />
+        }
 
-        <NotificationsList day='Hoy' dayNotifications={notificationsData} />
+
       </View>
     </SafeAreaView>
   );

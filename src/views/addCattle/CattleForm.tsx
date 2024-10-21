@@ -3,7 +3,7 @@ import { Cattle, Genealogy } from "@/interfaces/cattleInterfaces"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useContext, useState } from "react"
 import { ScrollView, View } from "react-native"
-import { Button, Checkbox, Divider, List, Searchbar, Text, TextInput, useTheme } from "react-native-paper"
+import { Appbar, Button, Checkbox, Divider, List, Searchbar, Text, TextInput, useTheme } from "react-native-paper"
 import { DatePickerInput } from "react-native-paper-dates"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
@@ -67,10 +67,14 @@ export const CattleForm = ({ navigation, route }: Props) => {
 
         // dispatch({ type: 'save_cattle_information', payload: { cattle: currentCattle as Cattle, genealogy: genealogy as Genealogy } })
 
-        navigation.navigate('FeedForm')
+        navigation.navigate('Diet')
     }
 
-    return (
+    return (<>
+        <Appbar.Header>
+            <Appbar.BackAction onPress={navigation.goBack} />
+            <Appbar.Content title='Información' />
+        </Appbar.Header>
         <SafeAreaProvider>
             <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
                 <ScrollView style={{
@@ -206,5 +210,5 @@ export const CattleForm = ({ navigation, route }: Props) => {
                 </Button>
             </View>
         </SafeAreaProvider>
-    )
+    </>)
 }

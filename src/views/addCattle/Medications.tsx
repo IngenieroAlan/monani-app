@@ -1,13 +1,12 @@
 import { RootStackParams } from "@/navigation/Navigator"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ScrollView, StyleSheet, View } from "react-native"
-import { Button } from "react-native-paper"
+import { Appbar, Button } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
 
-type StackParams = AddCattleStackParams & RootStackParams;
-type Props = NativeStackScreenProps<StackParams, 'MedicationsForm'>;
-export const MedicationsForm = ({ navigation, route }: Props) => {
+type Props = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Medications'>;
+export const Medications = ({ navigation }: Props) => {
 
     // TODO: Fetch medications from db
 
@@ -17,7 +16,12 @@ export const MedicationsForm = ({ navigation, route }: Props) => {
         navigation.navigate('HomeView');
     }
 
-    return (
+    return (<>
+        <Appbar.Header>
+            <Appbar.BackAction onPress={() => navigation.navigate('HomeView')} />
+            <Appbar.Content title='Medicación' />
+            <Appbar.Action icon="plus" onPress={() => navigation.navigate('MedicationsForm')} />
+        </Appbar.Header>
         <SafeAreaProvider>
             <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
                 <View style={styles.container}>
@@ -40,6 +44,7 @@ export const MedicationsForm = ({ navigation, route }: Props) => {
                 </View>
             </ScrollView>
         </SafeAreaProvider>
+    </>
     )
 }
 

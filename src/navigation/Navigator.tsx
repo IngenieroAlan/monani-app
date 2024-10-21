@@ -5,11 +5,13 @@ import React from 'react'
 import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import BottomTabsStack from './BottomTabsStack'
+import AddCattleStack from './stacks/AddCattleStack'
 import ResourcesStack from './stacks/ResourcesStack'
 
 export type RootStackParams = {
   HomeView: undefined
   BottomTabsStack: undefined
+  AddCattleStack: undefined
   ResourcesStack: undefined
   SearchCattleView: undefined
 }
@@ -31,6 +33,10 @@ export const Navigator = () => {
         <Stack.Screen
           name='SearchCattleView'
           component={SearchCattle}
+        />
+        <Stack.Screen
+          name='AddCattleStack'
+          component={AddCattleStack}
         />
         <Stack.Screen
           name='ResourcesStack'

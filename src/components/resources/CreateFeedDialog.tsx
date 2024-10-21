@@ -5,6 +5,7 @@ import { RootState } from '@/redux/store/store'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDatabase } from '@nozbe/watermelondb/react'
+import { memo, useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Keyboard, View } from 'react-native'
 import { Button, Dialog, Portal, useTheme } from 'react-native-paper'
@@ -13,6 +14,8 @@ import { z } from 'zod'
 import { CustomTextInput } from '../CustomTextInput'
 import DismissDialog, { DISMISS_DIALOG_ID } from '../DismissDialog'
 import MDropdown, { DropdownOption } from '../MDropdown'
+import { DISMISS_SNACKBAR_ID } from '../SnackbarContainer'
+import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
 
 export const CREATE_FEED_DIALOG_ID = 'createFeedDialog'
 type FeedFields = z.infer<typeof FeedSchema>
@@ -41,6 +44,7 @@ const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) =>
     control,
     handleSubmit,
     reset,
+    clearErrors,
     formState: { errors, isDirty, isSubmitting, isValid }
   } = useForm<FeedFields>({
     defaultValues: {
@@ -51,19 +55,23 @@ const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) =>
     mode: 'onTouched'
   })
 
-  const dismissChanges = () => {
+  useEffect(() => {
+    createFeedVisible && clearErrors()
+  }, [createFeedVisible])
+
+  const dismissChanges = useCallback(() => {
     Keyboard.dismiss()
 
-    dispatch(hide(CREATE_FEED_DIALOG_ID))
     reset()
-  }
+    dispatch(hide(CREATE_FEED_DIALOG_ID))
+  }, [])
 
-  const showDismissDialog = () => {
+  const showDismissDialog = useCallback(() => {
     dispatch(hide(CREATE_FEED_DIALOG_ID))
     dispatch(show(DISMISS_DIALOG_ID))
-  }
+  }, [])
 
-  const onSubmit = async (data: FeedFields) => {
+  const onSubmit = useCallback(async (data: FeedFields) => {
     await database.write(async () => {
       await database.collections.get<Feed>(TableName.FEEDS).create((feed) => {
         feed.name = data.name
@@ -72,13 +80,13 @@ const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) =>
     })
 
     dismissChanges()
-    dispatch(show('feedStoredSnackbar'))
+    dispatch(show(ResourcesSnackbarId.STORED_FEED))
 
     // Refresh feeds list.
     setFetchFeeds(true)
-  }
+  }, [])
 
-  console.log('Rendering dialog')
+  console.log('Rendering create dialog.')
 
   return (
     <Portal>
@@ -125,6 +133,7 @@ const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) =>
         </Dialog.Actions>
       </Dialog>
       <DismissDialog
+        snackbarOnDismiss
         onConfirm={dismissChanges}
         onCancel={() => dispatch(show(CREATE_FEED_DIALOG_ID))}
       />
@@ -132,4 +141,4 @@ const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) =>
   )
 }
 
-export default CreateFeedDialog
+export default memo(CreateFeedDialog)

@@ -1,12 +1,13 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit'
 import {
   bottomSheetReducer,
   homeCattleListQueryReducer,
   homeFiltersReducer,
   notificationsReducer,
+  resourcesReducer,
   uiReducer,
-  uiVisibilityReducer,
-} from "../slices";
+  uiVisibilityReducer
+} from '../slices'
 
 const store = configureStore({
   reducer: {
@@ -16,13 +17,13 @@ const store = configureStore({
     homeCattleListQuery: homeCattleListQueryReducer,
     uiVisibility: uiVisibilityReducer,
     notifications: notificationsReducer,
+    resources: resourcesReducer
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
-});
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
+})
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof store.getState>
 
 export type AppDispatch = typeof store.dispatch
 
-export default store;
+export default store

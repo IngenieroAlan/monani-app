@@ -1,12 +1,13 @@
-import { hide } from '@/redux/slices/uiVisibilitySlice'
+import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import { useCallback } from 'react'
 import { Button, Dialog, Text } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
+import { DISMISS_SNACKBAR_ID } from './SnackbarContainer'
 
 export const DISMISS_DIALOG_ID = 'dismissDialog'
 
-const DismissDialog = (props: { onConfirm?: () => void; onCancel?: () => void }) => {
+const DismissDialog = (props: { snackbarOnDismiss?: boolean; onConfirm?: () => void; onCancel?: () => void }) => {
   const dispatch = useDispatch()
   const visible = useSelector((state: RootState) => state.uiVisibility[DISMISS_DIALOG_ID])
 
@@ -19,6 +20,7 @@ const DismissDialog = (props: { onConfirm?: () => void; onCancel?: () => void })
   const onConfirm = useCallback(() => {
     if (props.onConfirm) props.onConfirm()
 
+    props.snackbarOnDismiss && dispatch(show(DISMISS_SNACKBAR_ID))
     dispatch(hide(DISMISS_DIALOG_ID))
   }, [props.onConfirm])
 

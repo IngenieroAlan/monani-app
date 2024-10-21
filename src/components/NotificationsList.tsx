@@ -1,9 +1,9 @@
-import { Notification } from '@/interfaces/notificationsInterfaces';
 import { colors } from '@/utils/colors';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react'
 import { IconButton, List, Menu, Icon } from 'react-native-paper';
 import { Navigator } from '../navigation/Navigator';
+import Notification from '@/database/models/Notification';
 
 const MenuItems = [
     {

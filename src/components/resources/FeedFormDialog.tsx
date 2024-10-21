@@ -14,10 +14,9 @@ import { z } from 'zod'
 import { CustomTextInput } from '../CustomTextInput'
 import DismissDialog, { DISMISS_DIALOG_ID } from '../DismissDialog'
 import MDropdown, { DropdownOption } from '../MDropdown'
-import { DISMISS_SNACKBAR_ID } from '../SnackbarContainer'
 import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
 
-export const CREATE_FEED_DIALOG_ID = 'createFeedDialog'
+export const FEED_FORM_DIALOG_ID = 'feedFormDialog'
 type FeedFields = z.infer<typeof FeedSchema>
 
 const dropdownOptions: DropdownOption<FeedType>[] = [
@@ -35,11 +34,11 @@ const dropdownOptions: DropdownOption<FeedType>[] = [
   }
 ]
 
-const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) => void }) => {
+const FeedFormDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) => void }) => {
   const theme = useTheme()
   const database = useDatabase()
   const dispatch = useDispatch()
-  const createFeedVisible = useSelector((state: RootState) => state.uiVisibility[CREATE_FEED_DIALOG_ID])
+  const createFeedVisible = useSelector((state: RootState) => state.uiVisibility[FEED_FORM_DIALOG_ID])
   const {
     control,
     handleSubmit,
@@ -63,11 +62,11 @@ const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) =>
     Keyboard.dismiss()
 
     reset()
-    dispatch(hide(CREATE_FEED_DIALOG_ID))
+    dispatch(hide(FEED_FORM_DIALOG_ID))
   }, [])
 
   const showDismissDialog = useCallback(() => {
-    dispatch(hide(CREATE_FEED_DIALOG_ID))
+    dispatch(hide(FEED_FORM_DIALOG_ID))
     dispatch(show(DISMISS_DIALOG_ID))
   }, [])
 
@@ -135,10 +134,10 @@ const CreateFeedDialog = ({ setFetchFeeds }: { setFetchFeeds: (bool: boolean) =>
       <DismissDialog
         snackbarOnDismiss
         onConfirm={dismissChanges}
-        onCancel={() => dispatch(show(CREATE_FEED_DIALOG_ID))}
+        onCancel={() => dispatch(show(FEED_FORM_DIALOG_ID))}
       />
     </Portal>
   )
 }
 
-export default memo(CreateFeedDialog)
+export default memo(FeedFormDialog)

@@ -1,4 +1,4 @@
-import CreateFeedDialog, { CREATE_FEED_DIALOG_ID } from '@/components/resources/CreateFeedDialog'
+import FeedFormDialog, { FEED_FORM_DIALOG_ID } from '@/components/resources/FeedFormDialog'
 import FeedsList from '@/components/resources/FeedsList'
 import ResourcesSnackbarContainer from '@/components/resources/ResourcesSnackbarContainer'
 import { reset, show } from '@/redux/slices/uiVisibilitySlice'
@@ -36,10 +36,11 @@ const Feeds = () => {
           icon='plus'
           label='Añadir'
           extended={true}
-          onPress={() => dispatch(show(CREATE_FEED_DIALOG_ID))}
+          onPress={() => dispatch(show(FEED_FORM_DIALOG_ID))}
         />
       </View>
-      <CreateFeedDialog setFetchFeeds={setFetchFeeds} />
+      <FeedFormDialog setFetchFeeds={setFetchFeeds} />
+      {/* Delete and edit dialogs in FeedsList. */}
       <ResourcesSnackbarContainer />
     </>
   )

@@ -8,6 +8,7 @@ import MedicationScheduleSeeder from './MedicationScheduleSeeder'
 import MedicationSeeder from './MedicationSeeder'
 import MilkProductionSeeder from './MilkProductionSeeder'
 import MilkSaleSeeder from './MilkSaleSeeder'
+import NotificationSeeder from './NotificationSeeder'
 import WeightReportSeeder from './WeightReportSeeder'
 
 async function seedDatabase() {
@@ -22,6 +23,7 @@ async function seedDatabase() {
   await MilkProductionSeeder()
   await MilkSaleSeeder()
   await GenealogySeeder()
+  await NotificationSeeder()
 }
 
 export default seedDatabase

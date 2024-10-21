@@ -4,16 +4,20 @@ import EditFeedDialog from '@/components/resources/feeds/EditFeedDialog'
 import FeedsList from '@/components/resources/feeds/FeedsList'
 import ResourcesSnackbarContainer from '@/components/resources/feeds/ResourcesSnackbarContainer'
 import { useAppDispatch } from '@/hooks/useRedux'
+import useScrollFab from '@/hooks/useScrollFab'
 import { reset, show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
 import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
 
 const Feeds = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
+  const flatListRef = useRef<FlatList>(null)
+  const { onScroll, isFabExtended } = useScrollFab()
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => dispatch(reset()))
@@ -28,12 +32,15 @@ const Feeds = () => {
           <Appbar.BackAction onPress={navigation.goBack} />
           <Appbar.Content title='Alimentos' />
         </Appbar.Header>
-        <FeedsList />
+        <FeedsList
+          ref={flatListRef}
+          onScroll={onScroll}
+        />
         <AnimatedFAB
           style={styles.animatedFab}
           icon='plus'
           label='Añadir'
-          extended={true}
+          extended={isFabExtended}
           onPress={() => dispatch(show(CREATE_FEED_DIALOG_ID))}
         />
       </View>

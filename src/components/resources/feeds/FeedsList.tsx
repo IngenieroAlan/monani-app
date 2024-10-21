@@ -7,8 +7,8 @@ import { show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase, withObservables } from '@nozbe/watermelondb/react'
-import { memo, useEffect, useRef, useState } from 'react'
-import { View } from 'react-native'
+import { forwardRef, memo, Ref, useEffect, useRef, useState } from 'react'
+import { NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -98,7 +98,10 @@ const ListItem = memo(
   ))
 )
 
-const FeedsList = () => {
+const FeedsList = (
+  { onScroll }: { onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => void },
+  ref: Ref<FlatList>
+) => {
   const database = useDatabase()
   const dispatch = useAppDispatch()
   const fetchFeeds = useAppSelector((state: RootState) => state.resources.fetchFeeds)
@@ -126,20 +129,20 @@ const FeedsList = () => {
   }, [])
 
   return (
-    <>
-      <FlatList
-        data={feeds}
-        renderItem={({ item }) => (
-          <ListItem
-            feed={item}
-            feedsCount={feedsCount.current}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-        ListFooterComponent={() => <View style={{ height: 88 }} />}
-      />
-    </>
+    <FlatList
+      ref={ref}
+      onScroll={onScroll}
+      data={feeds}
+      renderItem={({ item }) => (
+        <ListItem
+          feed={item}
+          feedsCount={feedsCount.current}
+        />
+      )}
+      keyExtractor={(item) => item.id}
+      ListFooterComponent={() => <View style={{ height: 88 }} />}
+    />
   )
 }
 
-export default FeedsList
+export default forwardRef(FeedsList)

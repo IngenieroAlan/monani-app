@@ -1,11 +1,12 @@
 import BottomSheetProductionFilter from '@/components/home/BottomSheetProductionFilter'
 import BottomSheetStatusFilter from '@/components/home/BottomSheetStatusFilter'
 import CattleList from '@/components/home/CattleList'
+import useScrollFab from '@/hooks/useScrollFab'
 import { LivestockStackParams } from '@/navigation/stacks/LivestockStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
-import React, { useCallback, useRef, useState } from 'react'
-import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View } from 'react-native'
+import React, { useRef } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { AnimatedFAB, Appbar, FAB, useTheme } from 'react-native-paper'
 
@@ -13,23 +14,8 @@ type ScreenNavigationProp = NativeStackScreenProps<LivestockStackParams>
 
 export const HomeView = ({ navigation }: ScreenNavigationProp) => {
   const theme = useTheme()
-  const lastScrollPosition = useRef(0)
   const flatListRef = useRef<FlatList>(null)
-  const [isFabExtended, setIsFabExtended] = useState(true)
-  const [isScrollAtTop, setIsScrollAtTop] = useState(false)
-
-  const onScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const currentScrollPosition = Math.floor(e.nativeEvent.contentOffset.y) ?? 0
-
-    if (currentScrollPosition > lastScrollPosition.current) {
-      setIsFabExtended(false)
-    } else if (currentScrollPosition < lastScrollPosition.current) {
-      setIsFabExtended(true)
-    }
-
-    lastScrollPosition.current = currentScrollPosition
-    setIsScrollAtTop(currentScrollPosition > 0)
-  }, [])
+  const { isFabExtended, isScrollAtTop, onScroll } = useScrollFab()
 
   return (
     <>

@@ -4,6 +4,7 @@ import { HomeView } from '../../views/home/Home'
 
 export type LivestockStackParams = {
   HomeView: undefined
+  AddCattleStack: undefined
   SearchCattleView: undefined
   ResourcesStack: undefined
 }

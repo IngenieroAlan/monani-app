@@ -1,31 +1,30 @@
 import DietFeed from '@/database/models/DietFeed'
 import Feed from '@/database/models/Feed'
 import { TableName } from '@/database/schema'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { setFetchFeeds, setSelectedFeed } from '@/redux/slices/resourcesSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
+import { RootState } from '@/redux/store/store'
 import { Q } from '@nozbe/watermelondb'
-import { useDatabase } from '@nozbe/watermelondb/react'
+import { useDatabase, withObservables } from '@nozbe/watermelondb/react'
 import { memo, useEffect, useRef, useState } from 'react'
 import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useDispatch } from 'react-redux'
-import DeleteFeedDialog, { DELETE_FEED_DIALOG_ID } from './DeleteFeedDialog'
+import { DELETE_FEED_DIALOG_ID } from './DeleteFeedDialog'
+import { EDIT_FEED_DIALOG_ID } from './EditFeedDialog'
 import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
 
 type FeedsCount = { feed_id: string }
 
-const ListItemMenu = memo(({
-  feed,
-  feedsCount,
-  setSelectedFeed
-}: {
-  feed: Feed
-  feedsCount: FeedsCount[]
-  setSelectedFeed: (feed?: Feed) => void
-}) => {
+const observeFeed = withObservables(['feed'], ({ feed }: { feed: Feed }) => ({
+  feed
+}))
+
+const ListItemMenu = ({ feed, feedsCount }: { feed: Feed; feedsCount: FeedsCount[] }) => {
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const insets = useSafeAreaInsets()
   const [canDelete, setCanDelete] = useState(true)
   const [menuVisible, setMenuVisible] = useState(false)
@@ -52,7 +51,11 @@ const ListItemMenu = memo(({
       <Menu.Item
         title='Editar'
         leadingIcon='pencil-outline'
-        onPress={() => {}}
+        onPress={() => {
+          dispatch(setSelectedFeed(feed))
+          dispatch(show(EDIT_FEED_DIALOG_ID))
+          setMenuVisible(false)
+        }}
       />
       <Menu.Item
         theme={{ colors: { onSurface: canDelete ? theme.colors.onSurface : theme.colors.onSurfaceDisabled } }}
@@ -70,55 +73,45 @@ const ListItemMenu = memo(({
             return
           }
 
-          setSelectedFeed(feed)
+          dispatch(setSelectedFeed(feed))
           dispatch(show(DELETE_FEED_DIALOG_ID))
           setMenuVisible(false)
         }}
       />
     </Menu>
   )
-})
+}
 
 const ListItem = memo(
-  ({
-    feed,
-    feedsCount,
-    setSelectedFeed
-  }: {
-    feed: Feed
-    feedsCount: FeedsCount[]
-    setSelectedFeed: (feed?: Feed) => void
-  }) => {
-    return (
-      <List.Item
-        style={{ paddingVertical: 2, paddingRight: 8 }}
-        title={feed.name}
-        description={feed.feedType}
-        right={() => (
-          <ListItemMenu
-            feed={feed}
-            feedsCount={feedsCount}
-            setSelectedFeed={setSelectedFeed}
-          />
-        )}
-      />
-    )
-  }
+  observeFeed(({ feed, feedsCount }: { feed: Feed; feedsCount: FeedsCount[] }) => (
+    <List.Item
+      style={{ paddingVertical: 2, paddingRight: 8 }}
+      title={feed.name}
+      description={feed.feedType}
+      right={() => (
+        <ListItemMenu
+          feed={feed}
+          feedsCount={feedsCount}
+        />
+      )}
+    />
+  ))
 )
 
-const FeedsList = ({ fetchFeeds, setFetchFeeds }: { fetchFeeds: boolean; setFetchFeeds: (bool: boolean) => void }) => {
+const FeedsList = () => {
   const database = useDatabase()
+  const dispatch = useAppDispatch()
+  const fetchFeeds = useAppSelector((state: RootState) => state.resources.fetchFeeds)
   const [feeds, setFeeds] = useState<Feed[]>([])
   const feedsCount = useRef<FeedsCount[]>([])
-  const [selectedFeed, setSelectedFeed] = useState<Feed>() // State lifted up
 
   useEffect(() => {
     const fetchFeeds = async () => {
       setFeeds(await database.collections.get<Feed>(TableName.FEEDS).query(Q.sortBy('name', Q.asc)).fetch())
+      dispatch(setFetchFeeds(false))
     }
 
     fetchFeeds()
-    setFetchFeeds(false)
   }, [fetchFeeds])
 
   useEffect(() => {
@@ -140,19 +133,13 @@ const FeedsList = ({ fetchFeeds, setFetchFeeds }: { fetchFeeds: boolean; setFetc
           <ListItem
             feed={item}
             feedsCount={feedsCount.current}
-            setSelectedFeed={setSelectedFeed}
           />
         )}
         keyExtractor={(item) => item.id}
         ListFooterComponent={() => <View style={{ height: 88 }} />}
       />
-
-      <DeleteFeedDialog
-        feed={selectedFeed}
-        setFetchFeeds={setFetchFeeds}
-      />
     </>
   )
 }
 
-export default memo(FeedsList)
+export default FeedsList

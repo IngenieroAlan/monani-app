@@ -1,18 +1,19 @@
-import FeedFormDialog, { FEED_FORM_DIALOG_ID } from '@/components/resources/FeedFormDialog'
+import CreateFeedDialog, { CREATE_FEED_DIALOG_ID } from '@/components/resources/CreateFeedDialog'
+import DeleteFeedDialog from '@/components/resources/DeleteFeedDialog'
+import EditFeedDialog from '@/components/resources/EditFeedDialog'
 import FeedsList from '@/components/resources/FeedsList'
 import ResourcesSnackbarContainer from '@/components/resources/ResourcesSnackbarContainer'
+import { useAppDispatch } from '@/hooks/useRedux'
 import { reset, show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
-import { useDispatch } from 'react-redux'
 
 const Feeds = () => {
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigation = useNavigation()
-  const [fetchFeeds, setFetchFeeds] = useState(false) // State lifted up.
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => dispatch(reset()))
@@ -27,20 +28,20 @@ const Feeds = () => {
           <Appbar.BackAction onPress={navigation.goBack} />
           <Appbar.Content title='Alimentos' />
         </Appbar.Header>
-        <FeedsList
-          fetchFeeds={fetchFeeds}
-          setFetchFeeds={setFetchFeeds}
-        />
+        <FeedsList />
         <AnimatedFAB
           style={styles.animatedFab}
           icon='plus'
           label='Añadir'
           extended={true}
-          onPress={() => dispatch(show(FEED_FORM_DIALOG_ID))}
+          onPress={() => dispatch(show(CREATE_FEED_DIALOG_ID))}
         />
       </View>
-      <FeedFormDialog setFetchFeeds={setFetchFeeds} />
-      {/* Delete and edit dialogs in FeedsList. */}
+
+      <CreateFeedDialog />
+      <EditFeedDialog />
+      <DeleteFeedDialog />
+
       <ResourcesSnackbarContainer />
     </>
   )

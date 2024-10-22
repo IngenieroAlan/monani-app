@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setFetchFeeds, setSelectedFeed } from '@/redux/slices/resourcesSlice'
+import { setSelectedFeed, updateFeed } from '@/redux/slices/resourcesSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import FeedSchema from '@/validationSchemas/FeedSchema'
@@ -59,18 +59,18 @@ const EditFeedDialog = () => {
   const onSubmit = useCallback(
     async (data: FeedFields) => {
       await database.write(async () => {
-        await selectedFeed?.update((feed) => {
+        const oldName = selectedFeed!.name
+
+        const updatedFeed = await selectedFeed!.update((feed) => {
           feed.name = data.name
           feed.feedType = data.feedType
         })
 
+        dispatch(updateFeed({ oldName: oldName, new: updatedFeed }))
         dispatch(show(ResourcesSnackbarId.UPDATED_FEED))
       })
 
       dismissChanges()
-
-      // Refresh feeds list.
-      dispatch(setFetchFeeds(true))
     },
     [selectedFeed]
   )

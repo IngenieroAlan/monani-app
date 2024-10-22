@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setFetchFeeds } from '@/redux/slices/resourcesSlice'
+import { deleteFeed } from '@/redux/slices/resourcesSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import { useDatabase } from '@nozbe/watermelondb/react'
@@ -23,7 +23,7 @@ const DeleteFeedDialog = () => {
       await selectedFeed?.destroyPermanently()
     })
 
-    dispatch(setFetchFeeds(true))
+    dispatch(deleteFeed(selectedFeed!))
     setIsDeleting(false)
 
     dispatch(hide(DELETE_FEED_DIALOG_ID))

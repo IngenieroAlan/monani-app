@@ -1,7 +1,7 @@
 import Feed from '@/database/models/Feed'
 import { TableName } from '@/database/schema'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setFetchFeeds } from '@/redux/slices/resourcesSlice'
+import { addFeed } from '@/redux/slices/resourcesSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import FeedSchema from '@/validationSchemas/FeedSchema'
@@ -25,20 +25,19 @@ const CreateFeedDialog = () => {
   const database = useDatabase()
   const dispatch = useAppDispatch()
   const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[CREATE_FEED_DIALOG_ID])
-  const { control, handleSubmit, reset, clearErrors, formState } = useForm<FeedFields>({
+  const { control, handleSubmit, reset, formState } = useForm<FeedFields>({
     defaultValues: {
       name: '',
       feedType: undefined
     },
     resolver: zodResolver(FeedSchema),
-    mode: 'onTouched'
+    mode: 'onChange'
   })
   const { isDirty, isValid, isSubmitting } = formState
 
   const dismissChanges = useCallback(() => {
     Keyboard.dismiss()
 
-    clearErrors()
     reset()
     dispatch(hide(CREATE_FEED_DIALOG_ID))
   }, [])
@@ -55,13 +54,11 @@ const CreateFeedDialog = () => {
         feed.feedType = data.feedType
       })
 
+      dispatch(addFeed(newFeed))
       dispatch(show(ResourcesSnackbarId.STORED_FEED))
     })
 
     dismissChanges()
-
-    // Refresh feeds list.
-    dispatch(setFetchFeeds(true))
   }, [])
 
   return (

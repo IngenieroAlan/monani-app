@@ -2,12 +2,12 @@ import DietFeed from '@/database/models/DietFeed'
 import Feed from '@/database/models/Feed'
 import { TableName } from '@/database/schema'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setFetchFeeds, setSelectedFeed } from '@/redux/slices/resourcesSlice'
+import { setFeeds, setSelectedFeed } from '@/redux/slices/resourcesSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase, withObservables } from '@nozbe/watermelondb/react'
-import { forwardRef, memo, Ref, useEffect, useRef, useState } from 'react'
+import { forwardRef, memo, Ref, useEffect, useState } from 'react'
 import { NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
@@ -83,46 +83,48 @@ const ListItemMenu = ({ feed, feedsCount }: { feed: Feed; feedsCount: FeedsCount
 }
 
 const ListItem = memo(
-  observeFeed(({ feed, feedsCount }: { feed: Feed; feedsCount: FeedsCount[] }) => (
-    <List.Item
-      style={{ paddingVertical: 2, paddingRight: 8 }}
-      title={feed.name}
-      description={feed.feedType}
-      right={() => (
-        <ListItemMenu
-          feed={feed}
-          feedsCount={feedsCount}
-        />
-      )}
-    />
-  ))
+  observeFeed(({ feed, feedsCount }: { feed: Feed; feedsCount: FeedsCount[] }) => {
+    return (
+      <List.Item
+        style={{ paddingVertical: 2, paddingRight: 8 }}
+        title={feed.name}
+        description={feed.feedType}
+        right={() => (
+          <ListItemMenu
+            feed={feed}
+            feedsCount={feedsCount}
+          />
+        )}
+      />
+    )
+  })
 )
 
 const FeedsList = (
-  { onScroll }: { onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => void },
-  ref: Ref<FlatList>
+  { onScroll }: { onScroll?: (e: NativeSyntheticEvent<NativeScrollEvent>) => void },
+  ref?: Ref<FlatList>
 ) => {
   const database = useDatabase()
   const dispatch = useAppDispatch()
-  const fetchFeeds = useAppSelector((state: RootState) => state.resources.fetchFeeds)
-  const [feeds, setFeeds] = useState<Feed[]>([])
-  const feedsCount = useRef<FeedsCount[]>([])
+  const [feedsCount, setFeedsCount] = useState<FeedsCount[]>([])
+  const feeds = useAppSelector((state: RootState) => state.resources.feeds)
 
   useEffect(() => {
     const fetchFeeds = async () => {
-      setFeeds(await database.collections.get<Feed>(TableName.FEEDS).query(Q.sortBy('name', Q.asc)).fetch())
-      dispatch(setFetchFeeds(false))
+      dispatch(setFeeds(await database.collections.get<Feed>(TableName.FEEDS).query(Q.sortBy('name', Q.asc)).fetch()))
     }
 
-    fetchFeeds()
-  }, [fetchFeeds])
+    if (feeds.length === 0) fetchFeeds()
+  }, [feeds])
 
   useEffect(() => {
     const fetchCount = async () => {
-      feedsCount.current = (await database.collections
-        .get<DietFeed>(TableName.DIET_FEED)
-        .query(Q.unsafeSqlQuery('SELECT feed_id from diet_feed GROUP BY feed_id'))
-        .unsafeFetchRaw()) as FeedsCount[]
+      setFeedsCount(
+        await database.collections
+          .get<DietFeed>(TableName.DIET_FEED)
+          .query(Q.unsafeSqlQuery('SELECT feed_id from diet_feed GROUP BY feed_id'))
+          .unsafeFetchRaw()
+      )
     }
 
     fetchCount()
@@ -136,7 +138,7 @@ const FeedsList = (
       renderItem={({ item }) => (
         <ListItem
           feed={item}
-          feedsCount={feedsCount.current}
+          feedsCount={feedsCount}
         />
       )}
       keyExtractor={(item) => item.id}
@@ -145,4 +147,4 @@ const FeedsList = (
   )
 }
 
-export default forwardRef(FeedsList)
+export default memo(forwardRef(FeedsList))

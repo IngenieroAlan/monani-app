@@ -4,6 +4,7 @@ import {
   feedsReducer,
   homeCattleListQueryReducer,
   homeFiltersReducer,
+  medicationsReducer,
   notificationsReducer,
   uiReducer,
   uiVisibilityReducer
@@ -17,7 +18,8 @@ const store = configureStore({
     homeCattleListQuery: homeCattleListQueryReducer,
     uiVisibility: uiVisibilityReducer,
     notifications: notificationsReducer,
-    feeds: feedsReducer
+    feeds: feedsReducer,
+    medications: medicationsReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 })

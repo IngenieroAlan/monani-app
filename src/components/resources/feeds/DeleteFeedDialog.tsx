@@ -1,8 +1,8 @@
+import useFeeds from '@/hooks/collections/useFeeds'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { deleteFeed } from '@/redux/slices/resourcesSlice'
+import { removeFeed } from '@/redux/slices/feedsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
-import { useDatabase } from '@nozbe/watermelondb/react'
 import { useCallback, useState } from 'react'
 import { Button, Dialog, Portal, Text } from 'react-native-paper'
 import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
@@ -10,22 +10,18 @@ import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
 export const DELETE_FEED_DIALOG_ID = 'deleteFeedDialog'
 
 const DeleteFeedDialog = () => {
-  const database = useDatabase()
   const dispatch = useAppDispatch()
+  const { deleteFeed } = useFeeds()
   const [isDeleting, setIsDeleting] = useState(false)
-  const selectedFeed = useAppSelector((state: RootState) => state.resources.selectedFeed)
+  const selectedFeed = useAppSelector((state: RootState) => state.feeds.selectedFeed)
   const deleteFeedVisible = useAppSelector((state: RootState) => state.uiVisibility[DELETE_FEED_DIALOG_ID])
 
   const onDelete = useCallback(async () => {
     setIsDeleting(true)
-
-    await database.write(async () => {
-      await selectedFeed?.destroyPermanently()
-    })
-
-    dispatch(deleteFeed(selectedFeed!))
+    await deleteFeed(selectedFeed!)
     setIsDeleting(false)
 
+    dispatch(removeFeed(selectedFeed!))
     dispatch(hide(DELETE_FEED_DIALOG_ID))
     dispatch(show(ResourcesSnackbarId.DELETED_FEED))
   }, [selectedFeed])

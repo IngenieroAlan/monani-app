@@ -1,14 +1,12 @@
 import Feed from '@/database/models/Feed'
-import { TableName } from '@/database/schema'
+import useFeeds from '@/hooks/collections/useFeeds'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setFeeds, setSelectedFeed } from '@/redux/slices/resourcesSlice'
+import { setFeeds, setSelectedFeed } from '@/redux/slices/feedsSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
-import { Q } from '@nozbe/watermelondb'
-import { useDatabase, withObservables } from '@nozbe/watermelondb/react'
+import { withObservables } from '@nozbe/watermelondb/react'
 import { forwardRef, memo, Ref, useEffect, useState } from 'react'
-import { NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import { FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DELETE_FEED_DIALOG_ID } from './DeleteFeedDialog'
@@ -98,13 +96,13 @@ const FeedsList = (
   { onScroll }: { onScroll?: (e: NativeSyntheticEvent<NativeScrollEvent>) => void },
   ref?: Ref<FlatList>
 ) => {
-  const database = useDatabase()
   const dispatch = useAppDispatch()
-  const feeds = useAppSelector((state: RootState) => state.resources.feeds)
+  const feeds = useAppSelector((state: RootState) => state.feeds.records)
+  const { getFeeds } = useFeeds()
 
   useEffect(() => {
     const fetchFeeds = async () => {
-      dispatch(setFeeds(await database.collections.get<Feed>(TableName.FEEDS).query(Q.sortBy('name', Q.asc)).fetch()))
+      dispatch(setFeeds(await getFeeds()))
     }
 
     if (feeds.length === 0) fetchFeeds()

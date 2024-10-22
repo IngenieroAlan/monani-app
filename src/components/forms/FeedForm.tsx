@@ -7,7 +7,8 @@ import { z } from 'zod'
 import { CustomTextInput } from '../CustomTextInput'
 import MDropdown, { DropdownOption } from '../MDropdown'
 
-type FeedFields = z.infer<typeof FeedSchema>
+export type FeedFields = z.infer<typeof FeedSchema>
+
 const dropdownOptions: DropdownOption<FeedType>[] = [
   {
     label: 'Alimento',

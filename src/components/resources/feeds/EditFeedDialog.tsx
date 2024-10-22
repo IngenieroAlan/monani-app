@@ -1,29 +1,27 @@
+import useFeeds from '@/hooks/collections/useFeeds'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setSelectedFeed, updateFeed } from '@/redux/slices/resourcesSlice'
+import { modifyFeed, setSelectedFeed } from '@/redux/slices/feedsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useDatabase } from '@nozbe/watermelondb/react'
 import { memo, useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Keyboard } from 'react-native'
 import { Button, Dialog, Portal } from 'react-native-paper'
-import { z } from 'zod'
 import DismissDialog from '../../DismissDialog'
-import FeedForm from '../../forms/FeedForm'
+import FeedForm, { FeedFields } from '../../forms/FeedForm'
 import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
 
 export const EDIT_FEED_DIALOG_ID = 'editFeedDialog'
 
-type FeedFields = z.infer<typeof FeedSchema>
 const DISMISS_DIALOG_ID = 'editFeedDismissDialog'
 
 const EditFeedDialog = () => {
-  const database = useDatabase()
   const dispatch = useAppDispatch()
+  const { updateFeed } = useFeeds()
   const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[EDIT_FEED_DIALOG_ID])
-  const selectedFeed = useAppSelector((state: RootState) => state.resources.selectedFeed)
+  const selectedFeed = useAppSelector((state: RootState) => state.feeds.selectedFeed)
   const { control, handleSubmit, reset, clearErrors, formState } = useForm<FeedFields>({
     defaultValues: {
       name: selectedFeed?.name ? selectedFeed.name : '',
@@ -44,7 +42,7 @@ const EditFeedDialog = () => {
 
   const dismissChanges = useCallback(() => {
     Keyboard.dismiss()
-    dispatch(setSelectedFeed(undefined))
+    dispatch(setSelectedFeed())
 
     clearErrors()
     reset()
@@ -58,17 +56,11 @@ const EditFeedDialog = () => {
 
   const onSubmit = useCallback(
     async (data: FeedFields) => {
-      await database.write(async () => {
-        const oldName = selectedFeed!.name
+      const oldName = selectedFeed!.name
+      const updatedFeed = await updateFeed(selectedFeed!, data)
 
-        const updatedFeed = await selectedFeed!.update((feed) => {
-          feed.name = data.name
-          feed.feedType = data.feedType
-        })
-
-        dispatch(updateFeed({ oldName: oldName, new: updatedFeed }))
-        dispatch(show(ResourcesSnackbarId.UPDATED_FEED))
-      })
+      dispatch(modifyFeed({ oldName: oldName, new: updatedFeed }))
+      dispatch(show(ResourcesSnackbarId.UPDATED_FEED))
 
       dismissChanges()
     },

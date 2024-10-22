@@ -1,29 +1,25 @@
-import Feed from '@/database/models/Feed'
-import { TableName } from '@/database/schema'
+import useFeeds from '@/hooks/collections/useFeeds'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { addFeed } from '@/redux/slices/resourcesSlice'
+import { addFeed } from '@/redux/slices/feedsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useDatabase } from '@nozbe/watermelondb/react'
 import { memo, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { Keyboard } from 'react-native'
 import { Button, Dialog, Portal } from 'react-native-paper'
-import { z } from 'zod'
 import DismissDialog from '../../DismissDialog'
-import FeedForm from '../../forms/FeedForm'
+import FeedForm, { FeedFields } from '../../forms/FeedForm'
 import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
 
 export const CREATE_FEED_DIALOG_ID = 'createFeedDialog'
 
 const DISMISS_DIALOG_ID = 'createFeedDismissDialog'
-type FeedFields = z.infer<typeof FeedSchema>
 
 const CreateFeedDialog = () => {
-  const database = useDatabase()
   const dispatch = useAppDispatch()
+  const { createFeed } = useFeeds()
   const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[CREATE_FEED_DIALOG_ID])
   const { control, handleSubmit, reset, formState } = useForm<FeedFields>({
     defaultValues: {
@@ -48,16 +44,9 @@ const CreateFeedDialog = () => {
   }, [])
 
   const onSubmit = useCallback(async (data: FeedFields) => {
-    await database.write(async () => {
-      const newFeed = await database.collections.get<Feed>(TableName.FEEDS).create((feed) => {
-        feed.name = data.name
-        feed.feedType = data.feedType
-      })
+    dispatch(addFeed(await createFeed(data)))
 
-      dispatch(addFeed(newFeed))
-      dispatch(show(ResourcesSnackbarId.STORED_FEED))
-    })
-
+    dispatch(show(ResourcesSnackbarId.STORED_FEED))
     dismissChanges()
   }, [])
 

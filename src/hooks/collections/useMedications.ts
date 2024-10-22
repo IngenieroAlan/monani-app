@@ -12,7 +12,6 @@ const useMedications = () => {
       .get<Medication>(TableName.MEDICATIONS)
       .query(Q.sortBy('name', Q.asc))
       .fetch()
-
   }
 
   const createMedication = async (data: MedicationFields) => {
@@ -28,9 +27,16 @@ const useMedications = () => {
     return createdMedication
   }
 
+  const deleteMedication = async (medication: Medication) => {
+    await database.write(async () => {
+      await medication.destroyPermanently()
+    })
+  }
+
   return {
     getMedications,
-    createMedication
+    createMedication,
+    deleteMedication
   }
 }
 

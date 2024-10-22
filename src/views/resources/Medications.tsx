@@ -1,6 +1,7 @@
 import CreateMedicationDialog, {
   CREATE_MEDICATION_DIALOG_ID
 } from '@/components/resources/medications/CreateMedicationDialog'
+import DeleteMedicationDialog from '@/components/resources/medications/DeleteMedicationDialog'
 import MedicationsList from '@/components/resources/medications/MedicationsList'
 import MedicationsSnackbarContainer from '@/components/resources/medications/MedicationsSnackbarContainer'
 import { useAppDispatch } from '@/hooks/useRedux'
@@ -38,6 +39,7 @@ const Medications = () => {
       />
 
       <CreateMedicationDialog />
+      <DeleteMedicationDialog />
 
       <MedicationsSnackbarContainer />
     </View>

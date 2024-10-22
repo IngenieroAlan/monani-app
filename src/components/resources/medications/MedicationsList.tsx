@@ -1,13 +1,16 @@
 import Medication from '@/database/models/Medication'
 import useMedications from '@/hooks/collections/useMedications'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setMedications } from '@/redux/slices/medicationsSlice'
+import { setMedications, setSelectedMedication } from '@/redux/slices/medicationsSlice'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { forwardRef, memo, Ref, useEffect, useState } from 'react'
 import { FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { DELETE_MEDICATION_DIALOG_ID } from './DeleteMedicationDialog'
+import { MedicationsSnackbarId } from './MedicationsSnackbarContainer'
 
 const observeMedtication = withObservables(['medication'], ({ medication }: { medication: Medication }) => ({
   medication
@@ -45,7 +48,7 @@ const ListItemMenu = ({ medication }: { medication: Medication }) => {
         title='Editar'
         leadingIcon='pencil-outline'
         onPress={() => {
-          // dispatch(setSelectedFeed(feed))
+          dispatch(setSelectedMedication(medication))
           // dispatch(show(EDIT_FEED_DIALOG_ID))
           setMenuVisible(false)
         }}
@@ -62,12 +65,12 @@ const ListItemMenu = ({ medication }: { medication: Medication }) => {
         )}
         onPress={() => {
           if (!canDelete) {
-            // dispatch(show(ResourcesSnackbarId.FEED_IN_USE))
+            dispatch(show(MedicationsSnackbarId.MEDICATION_IN_USE))
             return
           }
 
-          // dispatch(setSelectedFeed(feed))
-          // dispatch(show(DELETE_FEED_DIALOG_ID))
+          dispatch(setSelectedMedication(medication))
+          dispatch(show(DELETE_MEDICATION_DIALOG_ID))
           setMenuVisible(false)
         }}
       />

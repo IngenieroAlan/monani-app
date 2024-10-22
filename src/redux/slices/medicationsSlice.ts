@@ -24,10 +24,17 @@ const medicationsSlice = createSlice({
       })
 
       index === -1 ? state.records.push(action.payload) : state.records.splice(index, 0, action.payload)
+    },
+    removeMedication: (state, action: PayloadAction<Medication>) => {
+      const index = state.records.findIndex((item) => item.id === action.payload.id)
+      state.records.splice(index, 1)
+    },
+    setSelectedMedication: (state, action: PayloadAction<Medication | undefined>) => {
+      state.selectedMedication = action.payload
     }
   }
 })
 
-export const { setMedications, addMedication } = medicationsSlice.actions
+export const { setMedications, addMedication, removeMedication, setSelectedMedication } = medicationsSlice.actions
 
 export default medicationsSlice.reducer

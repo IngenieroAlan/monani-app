@@ -106,7 +106,8 @@ export default appSchema({
         { name: 'medication_type', type: 'string' }, // Desparasitante | Vitaminas | Suplemento mineral | Otro
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
-      ]
+      ],
+      unsafeSql: (sql) => sql.replace('"name",', '"name" collate nocase,')
     }),
     tableSchema({
       name: TableName.MEDICATION_SCHEDULES,

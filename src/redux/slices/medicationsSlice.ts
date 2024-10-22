@@ -25,6 +25,30 @@ const medicationsSlice = createSlice({
 
       index === -1 ? state.records.push(action.payload) : state.records.splice(index, 0, action.payload)
     },
+    modifyMedication: (state, action: PayloadAction<{ oldName: string; new: Medication }>) => {
+      const { oldName, new: newMedication } = action.payload
+      const index = state.records.findIndex((item) => item.id === newMedication.id)
+      const newName = newMedication.name.toLowerCase()
+
+      if (oldName.toLowerCase() === newName) return
+
+      state.records.splice(index, 1)
+      let newIndex = -1
+
+      if (newName.localeCompare(oldName) < 0) {
+        newIndex = state.records.findIndex((item) => {
+          return item.name.toLowerCase().localeCompare(newName) > 0
+        })
+      } else {
+        newIndex = state.records.slice(index).findIndex((item) => {
+          return item.name.toLowerCase().localeCompare(newName) > 0
+        })
+
+        if (newIndex !== -1) newIndex += index
+      }
+
+      newIndex === -1 ? state.records.push(newMedication) : state.records.splice(newIndex, 0, newMedication)
+    },
     removeMedication: (state, action: PayloadAction<Medication>) => {
       const index = state.records.findIndex((item) => item.id === action.payload.id)
       state.records.splice(index, 1)
@@ -35,6 +59,12 @@ const medicationsSlice = createSlice({
   }
 })
 
-export const { setMedications, addMedication, removeMedication, setSelectedMedication } = medicationsSlice.actions
+export const {
+  setMedications,
+  addMedication,
+  modifyMedication,
+  removeMedication,
+  setSelectedMedication
+} = medicationsSlice.actions
 
 export default medicationsSlice.reducer

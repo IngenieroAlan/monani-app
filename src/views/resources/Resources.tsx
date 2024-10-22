@@ -35,12 +35,12 @@ const Resources = ({ navigation }: ScreenNavigationProp) => {
     <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
       <StatusBar />
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.BackAction onPress={navigation.goBack} />
         <Appbar.Content title='Recursos' />
       </Appbar.Header>
       <ListItem
         title='Alimentos'
-        iconName='grass'
+        iconName='silverware'
         onPress={() => navigation.navigate('FeedsView')}
       />
       <Divider horizontalInset />

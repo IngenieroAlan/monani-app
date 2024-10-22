@@ -10,6 +10,7 @@ import { FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from 'react-n
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DELETE_MEDICATION_DIALOG_ID } from './DeleteMedicationDialog'
+import { EDIT_MEDICATION_DIALOG_ID } from './EditMedicationDialog'
 import { MedicationsSnackbarId } from './MedicationsSnackbarContainer'
 
 const observeMedtication = withObservables(['medication'], ({ medication }: { medication: Medication }) => ({
@@ -49,7 +50,7 @@ const ListItemMenu = ({ medication }: { medication: Medication }) => {
         leadingIcon='pencil-outline'
         onPress={() => {
           dispatch(setSelectedMedication(medication))
-          // dispatch(show(EDIT_FEED_DIALOG_ID))
+          dispatch(show(EDIT_MEDICATION_DIALOG_ID))
           setMenuVisible(false)
         }}
       />

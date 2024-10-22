@@ -30,7 +30,6 @@ const EditFeedDialog = () => {
     resolver: zodResolver(FeedSchema),
     mode: 'onTouched'
   })
-
   const { isDirty, isValid, isSubmitting } = formState
 
   useEffect(() => {

@@ -27,6 +27,17 @@ const useMedications = () => {
     return createdMedication
   }
 
+  const updateMedication = async (medicationToUpdate: Medication, data: MedicationFields) => {
+    const updatedMedication = await database.write(async () => {
+      return medicationToUpdate.update(medication => {
+        medication.name = data.name
+        medication.medicationType = data.medicationType
+      })
+    })
+
+    return updatedMedication
+  }
+
   const deleteMedication = async (medication: Medication) => {
     await database.write(async () => {
       await medication.destroyPermanently()
@@ -36,6 +47,7 @@ const useMedications = () => {
   return {
     getMedications,
     createMedication,
+    updateMedication,
     deleteMedication
   }
 }

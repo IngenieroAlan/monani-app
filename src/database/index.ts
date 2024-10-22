@@ -1,5 +1,6 @@
 import { Database } from '@nozbe/watermelondb'
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
+import { randomUUID } from 'expo-crypto'
 // import migrations from './model/migrations'
 
 import AnnualEarnings from './models/AnnualEarnings'
@@ -21,6 +22,7 @@ import MonthlyMilkProduction from './models/MonthlyMilkProduction'
 import Notification from './models/Notification'
 import WeightReport from './models/WeightReport'
 import schema, { TableName } from './schema'
+import { setGenerator } from '@nozbe/watermelondb/utils/common/randomId'
 
 const adapter = new SQLiteAdapter({
   schema,
@@ -56,6 +58,8 @@ const database = new Database({
     Notification
   ]
 })
+
+setGenerator(() => randomUUID())
 
 export const resetDatabase = async () => {
   await database.write(async () => {

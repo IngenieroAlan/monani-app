@@ -3,6 +3,7 @@ import { children, date, field, lazy, readonly, text } from '@nozbe/watermelondb
 import { TableName } from '../schema'
 import Cattle from './Cattle'
 import DietFeed from './DietFeed'
+import Feed from './Feed'
 
 export type MatterProportion = 'Porcentaje de peso' | 'Fija' | 'Sin definir'
 
@@ -24,12 +25,16 @@ class Diet extends Model {
   @field('is_concentrate_excluded') isConcentrateExcluded!: boolean
 
   @children(TableName.CATTLE) cattleRelation!: Relation<Cattle>
-  @children(TableName.DIET_FEED) feeds!: Relation<DietFeed>
 
   @lazy
   cattle = this.collections
     .get<Cattle>(TableName.CATTLE)
     .query(Q.where('diet_id', this.id))
+  
+  @lazy
+  feeds = this.collections
+    .get<Feed>(TableName.FEEDS)
+    .query(Q.on(TableName.DIET_FEED, 'diet_id', this.id))
 }
 
 export default Diet

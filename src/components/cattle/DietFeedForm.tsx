@@ -70,13 +70,13 @@ export default function DietFeedForm({ navigation, feeds }: DietFeedFormProps) {
                 onBlur={() => setSearchBarFocused(false)}
             />
 
-            {searchBarFocused && (
+            {/* {searchBarFocused && (
                 
                 // <SearchFeedList searchPhrase={searchQuery} data={feeds} setClicked={() => {
                 //     // and close the search bar
                 //     setSearchBarFocused(false)
                 //  }} />
-            )}
+            )} */}
 
             <MDropdown
                 name='feedProportion'

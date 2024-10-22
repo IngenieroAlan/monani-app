@@ -5,7 +5,7 @@ import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import { useCallback, useState } from 'react'
 import { Button, Dialog, Portal, Text } from 'react-native-paper'
-import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
+import { FeedsSnackbarId } from './FeedsSnackbarContainer'
 
 export const DELETE_FEED_DIALOG_ID = 'deleteFeedDialog'
 
@@ -23,7 +23,7 @@ const DeleteFeedDialog = () => {
 
     dispatch(removeFeed(selectedFeed!))
     dispatch(hide(DELETE_FEED_DIALOG_ID))
-    dispatch(show(ResourcesSnackbarId.DELETED_FEED))
+    dispatch(show(FeedsSnackbarId.DELETED_FEED))
   }, [selectedFeed])
 
   return (

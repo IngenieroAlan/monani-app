@@ -2,7 +2,7 @@ import CreateFeedDialog, { CREATE_FEED_DIALOG_ID } from '@/components/resources/
 import DeleteFeedDialog from '@/components/resources/feeds/DeleteFeedDialog'
 import EditFeedDialog from '@/components/resources/feeds/EditFeedDialog'
 import FeedsList from '@/components/resources/feeds/FeedsList'
-import ResourcesSnackbarContainer from '@/components/resources/feeds/ResourcesSnackbarContainer'
+import FeedsSnackbarContainer from '@/components/resources/feeds/FeedsSnackbarContainer'
 import { useAppDispatch } from '@/hooks/useRedux'
 import useScrollFab from '@/hooks/useScrollFab'
 import { reset, show } from '@/redux/slices/uiVisibilitySlice'
@@ -48,7 +48,7 @@ const Feeds = () => {
       <EditFeedDialog />
       <DeleteFeedDialog />
 
-      <ResourcesSnackbarContainer />
+      <FeedsSnackbarContainer />
     </>
   )
 }

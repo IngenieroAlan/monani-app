@@ -11,7 +11,7 @@ import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DELETE_FEED_DIALOG_ID } from './DeleteFeedDialog'
 import { EDIT_FEED_DIALOG_ID } from './EditFeedDialog'
-import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
+import { FeedsSnackbarId } from './FeedsSnackbarContainer'
 
 const observeFeed = withObservables(['feed'], ({ feed }: { feed: Feed }) => ({
   feed
@@ -66,7 +66,7 @@ const ListItemMenu = ({ feed }: { feed: Feed }) => {
         )}
         onPress={() => {
           if (!canDelete) {
-            dispatch(show(ResourcesSnackbarId.FEED_IN_USE))
+            dispatch(show(FeedsSnackbarId.FEED_IN_USE))
             return
           }
 

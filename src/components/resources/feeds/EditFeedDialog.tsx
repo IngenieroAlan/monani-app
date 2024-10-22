@@ -11,7 +11,7 @@ import { Keyboard } from 'react-native'
 import { Button, Dialog, Portal } from 'react-native-paper'
 import DismissDialog from '../../DismissDialog'
 import FeedForm, { FeedFields } from '../../forms/FeedForm'
-import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
+import { FeedsSnackbarId } from './FeedsSnackbarContainer'
 
 export const EDIT_FEED_DIALOG_ID = 'editFeedDialog'
 
@@ -60,7 +60,7 @@ const EditFeedDialog = () => {
       const updatedFeed = await updateFeed(selectedFeed!, data)
 
       dispatch(modifyFeed({ oldName: oldName, new: updatedFeed }))
-      dispatch(show(ResourcesSnackbarId.UPDATED_FEED))
+      dispatch(show(FeedsSnackbarId.UPDATED_FEED))
 
       dismissChanges()
     },

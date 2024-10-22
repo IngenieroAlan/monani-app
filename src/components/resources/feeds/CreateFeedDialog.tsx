@@ -11,7 +11,7 @@ import { Keyboard } from 'react-native'
 import { Button, Dialog, Portal } from 'react-native-paper'
 import DismissDialog from '../../DismissDialog'
 import FeedForm, { FeedFields } from '../../forms/FeedForm'
-import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
+import { FeedsSnackbarId } from './FeedsSnackbarContainer'
 
 export const CREATE_FEED_DIALOG_ID = 'createFeedDialog'
 
@@ -46,7 +46,7 @@ const CreateFeedDialog = () => {
   const onSubmit = useCallback(async (data: FeedFields) => {
     dispatch(addFeed(await createFeed(data)))
 
-    dispatch(show(ResourcesSnackbarId.STORED_FEED))
+    dispatch(show(FeedsSnackbarId.STORED_FEED))
     dismissChanges()
   }, [])
 

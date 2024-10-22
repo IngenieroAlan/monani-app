@@ -1,4 +1,3 @@
-import DietFeed from '@/database/models/DietFeed'
 import Feed from '@/database/models/Feed'
 import { TableName } from '@/database/schema'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
@@ -16,13 +15,11 @@ import { DELETE_FEED_DIALOG_ID } from './DeleteFeedDialog'
 import { EDIT_FEED_DIALOG_ID } from './EditFeedDialog'
 import { ResourcesSnackbarId } from './ResourcesSnackbarContainer'
 
-type FeedsCount = { feed_id: string }
-
 const observeFeed = withObservables(['feed'], ({ feed }: { feed: Feed }) => ({
   feed
 }))
 
-const ListItemMenu = ({ feed, feedsCount }: { feed: Feed; feedsCount: FeedsCount[] }) => {
+const ListItemMenu = ({ feed }: { feed: Feed }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const insets = useSafeAreaInsets()
@@ -30,10 +27,12 @@ const ListItemMenu = ({ feed, feedsCount }: { feed: Feed; feedsCount: FeedsCount
   const [menuVisible, setMenuVisible] = useState(false)
 
   useEffect(() => {
-    const index = feedsCount.findIndex((item) => item.feed_id === feed.id)
-
-    setCanDelete(index === -1)
-  }, [feed, feedsCount])
+    const fetchDiets = async () => {
+      const diets = await feed.diets
+      setCanDelete(diets.length === 0)
+    }
+    fetchDiets()
+  }, [feed])
 
   return (
     <Menu
@@ -83,18 +82,13 @@ const ListItemMenu = ({ feed, feedsCount }: { feed: Feed; feedsCount: FeedsCount
 }
 
 const ListItem = memo(
-  observeFeed(({ feed, feedsCount }: { feed: Feed; feedsCount: FeedsCount[] }) => {
+  observeFeed(({ feed }: { feed: Feed }) => {
     return (
       <List.Item
         style={{ paddingVertical: 2, paddingRight: 8 }}
         title={feed.name}
         description={feed.feedType}
-        right={() => (
-          <ListItemMenu
-            feed={feed}
-            feedsCount={feedsCount}
-          />
-        )}
+        right={() => <ListItemMenu feed={feed} />}
       />
     )
   })
@@ -106,7 +100,6 @@ const FeedsList = (
 ) => {
   const database = useDatabase()
   const dispatch = useAppDispatch()
-  const [feedsCount, setFeedsCount] = useState<FeedsCount[]>([])
   const feeds = useAppSelector((state: RootState) => state.resources.feeds)
 
   useEffect(() => {
@@ -117,30 +110,12 @@ const FeedsList = (
     if (feeds.length === 0) fetchFeeds()
   }, [feeds])
 
-  useEffect(() => {
-    const fetchCount = async () => {
-      setFeedsCount(
-        await database.collections
-          .get<DietFeed>(TableName.DIET_FEED)
-          .query(Q.unsafeSqlQuery('SELECT feed_id from diet_feed GROUP BY feed_id'))
-          .unsafeFetchRaw()
-      )
-    }
-
-    fetchCount()
-  }, [])
-
   return (
     <FlatList
       ref={ref}
       onScroll={onScroll}
       data={feeds}
-      renderItem={({ item }) => (
-        <ListItem
-          feed={item}
-          feedsCount={feedsCount}
-        />
-      )}
+      renderItem={({ item }) => <ListItem feed={item} />}
       keyExtractor={(item) => item.id}
       ListFooterComponent={() => <View style={{ height: 88 }} />}
     />

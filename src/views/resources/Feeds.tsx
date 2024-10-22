@@ -8,8 +8,7 @@ import useScrollFab from '@/hooks/useScrollFab'
 import { reset, show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
 import { useEffect, useRef } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import { FlatList, StyleSheet, View } from 'react-native'
 import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
 
 const Feeds = () => {

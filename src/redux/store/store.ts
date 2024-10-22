@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import {
   bottomSheetReducer,
+  feedsReducer,
   homeCattleListQueryReducer,
   homeFiltersReducer,
   notificationsReducer,
-  resourcesReducer,
   uiReducer,
   uiVisibilityReducer
 } from '../slices'
@@ -17,7 +17,7 @@ const store = configureStore({
     homeCattleListQuery: homeCattleListQueryReducer,
     uiVisibility: uiVisibilityReducer,
     notifications: notificationsReducer,
-    resources: resourcesReducer
+    feeds: feedsReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 })

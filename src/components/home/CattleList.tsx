@@ -1,11 +1,11 @@
 import Cattle from '@/database/models/Cattle'
-import { TableName } from '@/database/schema'
+import useCattle from '@/hooks/collections/useCattle'
 import { open } from '@/redux/slices/bottomSheetSlice'
 import { setEqProductionTypeBind, setOneOfCattleStatusBind } from '@/redux/slices/homeCattleListQuerySlice'
 import { clearCattleStatusFilter, setProductionTypeFilter } from '@/redux/slices/homeStatusFilterSlice'
 import { RootState } from '@/redux/store/store'
 import { Q } from '@nozbe/watermelondb'
-import { useDatabase, withObservables } from '@nozbe/watermelondb/react'
+import { withObservables } from '@nozbe/watermelondb/react'
 import React, { forwardRef, memo, Ref, useEffect, useRef, useState } from 'react'
 import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
@@ -116,7 +116,7 @@ const CattleList = (
   { onScroll }: { onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => void },
   ref: Ref<FlatList>
 ) => {
-  const database = useDatabase()
+  const { getCattle } = useCattle()
   const oneOfCattleStatusBind = useSelector(
     (state: RootState) => state.homeCattleListQuery.whereBinds.oneOfCattleStatus
   )
@@ -137,14 +137,14 @@ const CattleList = (
         queries.push(Q.where('production_type', eqProductionTypeBind))
       }
 
-      setCattleList(await database.collections.get<Cattle>(TableName.CATTLE).query(queries).fetch())
+      setCattleList(await getCattle(queries))
 
       isFetching.current = false
     }
 
     setCattleList([])
     fetchCattle()
-  }, [database, oneOfCattleStatusBind, eqProductionTypeBind])
+  }, [oneOfCattleStatusBind, eqProductionTypeBind])
 
   return (
     <FlatList

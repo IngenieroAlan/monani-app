@@ -1,7 +1,7 @@
-import { Model, Relation } from '@nozbe/watermelondb'
-import { children, date, field, readonly, text } from '@nozbe/watermelondb/decorators'
+import { Model, Q } from '@nozbe/watermelondb'
+import { date, field, lazy, readonly, text } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
-import MedicationSchedule from './MedicationSchedule'
+import Cattle from './Cattle'
 
 export type MedicationType = 'Desparasitante' | 'Vitaminas' | 'Suplemento mineral' | 'Otro'
 
@@ -18,7 +18,10 @@ class Medication extends Model {
   @text('name') name!: string
   @field('medication_type') medicationType!: MedicationType
 
-  @children(TableName.MEDICATION_SCHEDULES) schedules!: Relation<MedicationSchedule>
+  @lazy
+  cattle = this.collections
+    .get<Cattle>(TableName.CATTLE)
+    .query(Q.on(TableName.MEDICATION_SCHEDULES, 'medication_id', this.id))
 }
 
 export default Medication

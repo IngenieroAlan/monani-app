@@ -4,7 +4,7 @@ import { TableName } from '../schema'
 import CattleArchive from './CattleArchive'
 import CattleSale from './CattleSale'
 import Diet from './Diet'
-import MedicationSchedule from './MedicationSchedule'
+import Medication from './Medication'
 import MilkReport from './MilkReport'
 import WeightReport from './WeightReport'
 
@@ -42,7 +42,6 @@ class Cattle extends Model {
 
   @immutableRelation(TableName.DIETS, 'diet_id') diet!: Relation<Diet>
 
-  @children(TableName.MEDICATION_SCHEDULES) medicationSchedules!: Relation<MedicationSchedule>
   @children(TableName.WEIGHT_REPORTS) weightReports!: Relation<WeightReport>
   @children(TableName.MILK_REPORTS) milkReports!: Relation<MilkReport>
 
@@ -58,6 +57,11 @@ class Cattle extends Model {
   archive = this.collections
     .get<CattleArchive>(TableName.CATTLE_ARCHIVES)
     .query(Q.where('cattle_id', this.id))
+
+  @lazy
+  medications = this.collections
+    .get<Medication>(TableName.MEDICATIONS)
+    .query(Q.on(TableName.MEDICATION_SCHEDULES, 'cattle_id', this.id))
 
   @writer
   async sell(soldBy: number) {

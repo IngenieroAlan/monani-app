@@ -1,5 +1,5 @@
 import { Model, Relation } from '@nozbe/watermelondb'
-import { date, field, immutableRelation, readonly, text } from '@nozbe/watermelondb/decorators'
+import { date, field, immutableRelation, readonly, text, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
 
@@ -20,6 +20,15 @@ class CattleArchive extends Model {
   @field('reason') reason!: ArchiveReason
 
   @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
+
+  @writer
+  async updateArchive({ reason, archivedAt, notes }: { reason: ArchiveReason; archivedAt: Date; notes?: string }) {
+    await this.update((record) => {
+      record.reason = reason
+      record.archivedAt = archivedAt
+      record.notes = notes
+    })
+  }
 }
 
 export default CattleArchive

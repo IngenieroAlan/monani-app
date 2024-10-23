@@ -1,9 +1,13 @@
 import { colors } from '@/utils/colors';
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IconButton, List, Menu, Icon } from 'react-native-paper';
 import { Navigator } from '../navigation/Navigator';
 import Notification from '@/database/models/Notification';
+import { useAppDispatch } from '../hooks/useRedux';
+import { deleteNotification, getNotifications, markAsReadNoti } from '@/redux/slices/notificationsSlice';
+import { useDatabase } from '@nozbe/watermelondb/react';
+import { Database } from '@nozbe/watermelondb';
 
 const MenuItems = [
     {
@@ -22,12 +26,14 @@ interface Props {
 }
 
 export const NotificationsList = ({ day, dayNotifications }: Props) => {
+    const database = useDatabase();
+
     return (
         <List.Section>
             <List.Subheader>{day}</List.Subheader>
             {
-                dayNotifications.map((dayNotification) => (
-                    <NotificationItemList key={dayNotification.id} dayNotification={dayNotification} />
+                dayNotifications && dayNotifications.map((dayNotification) => (
+                    <NotificationItemList key={dayNotification.id} database={database} dayNotification={dayNotification} />
                 ))
             }
         </List.Section>
@@ -36,14 +42,23 @@ export const NotificationsList = ({ day, dayNotifications }: Props) => {
 
 interface itemProps {
     dayNotification: Notification;
+    database: Database;
 }
-export const NotificationItemList = ({ dayNotification }: itemProps) => {
+export const NotificationItemList = ({ dayNotification, database }: itemProps) => {
+    const dispatch = useAppDispatch();
     const [visible, setVisible] = useState(false);
     const navigator = useNavigation();
     const onPress = () => {
-        console.log("se presiono");
-        dayNotification.isMarkedAsRead = true;
-        //navigator.navigate();
+        dispatch(markAsReadNoti(dayNotification));
+        //navigator.navigate('notificationsDetails');
+    }
+    const onMarkAsRead = () => {
+        dispatch(markAsReadNoti(dayNotification));
+        setVisible(false);
+    }
+    const onDelete = () => {
+        dispatch(deleteNotification(database, dayNotification));
+        setVisible(false);
     }
     return (
         <List.Item
@@ -53,10 +68,9 @@ export const NotificationItemList = ({ dayNotification }: itemProps) => {
                     : colors.notification.default,
             }}
             onPress={onPress}
-            contentStyle={{ width: "80%" }}
             title={dayNotification.title}
             description={dayNotification.description}
-            left={() => <List.Icon icon={dayNotification.iconName!} style={{ width: "10%" }} color={colors.icons.main} />}
+            left={() => <List.Icon icon={dayNotification.iconName!} style={{ width: "15%" }} color={colors.icons.main} />}
             right={() =>
                 <Menu
                     anchorPosition='bottom'
@@ -64,8 +78,8 @@ export const NotificationItemList = ({ dayNotification }: itemProps) => {
                     onDismiss={() => setVisible(false)}
                     anchor={<IconButton icon={"dots-vertical"} size={24} iconColor={colors.icons.main} onPress={() => setVisible(true)} />}
                 >
-                    <Menu.Item title="Marcar como leído" leadingIcon="checkbox-outline" onPress={() => { dayNotification.isMarkedAsRead = true }} />
-                    <Menu.Item title="Eliminar" leadingIcon="trash-can-outline" onPress={() => { dayNotification.isMarkedAsRead = false }} />
+                    <Menu.Item title="Marcar como leído" leadingIcon="checkbox-outline" onPress={onMarkAsRead} />
+                    <Menu.Item title="Eliminar" leadingIcon="trash-can-outline" onPress={onDelete} />
                 </Menu>
             }
         />

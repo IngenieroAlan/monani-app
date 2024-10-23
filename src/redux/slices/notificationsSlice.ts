@@ -1,8 +1,9 @@
 import Notification from "@/database/models/Notification";
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
 import { endLoading, startLoading } from "./ui";
-import { Database } from "@nozbe/watermelondb";
+import { Database, Q } from "@nozbe/watermelondb";
 import { TableName } from "@/database/schema";
+import database from "@/database";
 
 interface NotificationState {
   selectedNotification: number | null;
@@ -33,24 +34,24 @@ const notificationsSlice = createSlice({
       );
       state.notifications[index] = payload;
     },
-    deleteNotification(state, { payload }) {
+    deleteNotificationFromList(state, { payload }) {
       state.notifications = state.notifications.filter(
-        (notification) => notification.id !== payload
+        (notification) => notification.id !== payload.id
       );
     },
   },
 });
 
 export const getNotifications = (database: Database) => {
-    return async (dispatch: Dispatch) => {
-      dispatch(startLoading());
-      try {
-        const results = await database.collections
-          .get<Notification>(TableName.NOTIFICATIONS)
-          .query()
-          .fetch();
-  
-        /* const notifications = results.map(notification => ({
+  return async (dispatch: Dispatch) => {
+    dispatch(startLoading());
+    try {
+      const results = await database.collections
+        .get<Notification>(TableName.NOTIFICATIONS)
+        .query()
+        .fetch();
+
+      /* const notifications = results.map(notification => ({
           id: notification.id,
           title: notification.title,
           description: notification.description,
@@ -58,16 +59,18 @@ export const getNotifications = (database: Database) => {
           isMarkedAsRead: notification.isMarkedAsRead,
           iconName: notification.iconName,
         })); */
-  
-        dispatch(setNotifications(results));
-      } catch (err) {
-        console.error('Error fetching notifications:', err);
-      } finally {
-        dispatch(endLoading());
-      }
-    };
+
+      dispatch(setNotifications(results));
+      setTimeout(() => {}, 2000);
+      dispatch(endLoading());
+    } catch (err) {
+      console.error("Error fetching notifications:", err);
+    } finally {
+      dispatch(endLoading());
+    }
   };
-  
+};
+
 export const addNewNotification = (database: Database, data: Notification) => {
   return async (dispatch: Dispatch) => {
     dispatch(startLoading());
@@ -86,20 +89,19 @@ export const addNewNotification = (database: Database, data: Notification) => {
   };
 };
 
-export const deleteNotificationById = (database: Database, id: number) => {
+export const deleteNotification = (
+  database: Database,
+  notification: Notification
+) => {
   return async (dispatch: Dispatch) => {
-    dispatch(startLoading());
-    try {
-      const result = database.collections
-        .get<Notification>(TableName.NOTIFICATIONS)
-        .find(id + "");
-      (await result).destroyPermanently();
-      dispatch(deleteNotification(result));
-      dispatch(endLoading());
-    } catch (err) {
-      console.log(err);
-      dispatch(endLoading());
-    }
+    await notification.deleteNoti();
+    dispatch(deleteNotificationFromList(notification));
+  };
+};
+export const markAsReadNoti = (notification: Notification) => {
+  return async (dispatch: Dispatch) => {
+    notification.markAsRead();
+    replaceNotification(notification);
   };
 };
 
@@ -108,7 +110,7 @@ export const {
   setNotifications,
   addNotification,
   replaceNotification,
-  deleteNotification,
+  deleteNotificationFromList,
 } = notificationsSlice.actions;
 
 export default notificationsSlice.reducer;

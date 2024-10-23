@@ -1,5 +1,5 @@
 import { Model, Relation } from '@nozbe/watermelondb'
-import { date, field, immutableRelation, readonly, relation, text } from '@nozbe/watermelondb/decorators'
+import { date, field, immutableRelation, readonly, relation } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Diet from './Diet'
 import Feed from './Feed'
@@ -17,8 +17,8 @@ class DietFeed extends Model {
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @text('feed_amount') feedAmount!: number
-  @text('percentage') percentage?: number
+  @field('feed_amount') feedAmount!: number
+  @field('percentage') percentage?: number
   @field('feed_proportion') feedProportion!: FeedProportion
 
   @relation(TableName.FEEDS, 'feed_id') feed!: Relation<Feed>

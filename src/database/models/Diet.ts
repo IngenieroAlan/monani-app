@@ -1,8 +1,7 @@
 import { Model, Q, Relation } from '@nozbe/watermelondb'
-import { children, date, field, lazy, readonly, text } from '@nozbe/watermelondb/decorators'
+import { children, date, field, lazy, readonly } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
-import DietFeed from './DietFeed'
 import Feed from './Feed'
 
 export type MatterProportion = 'Porcentaje de peso' | 'Fija' | 'Sin definir'
@@ -18,9 +17,9 @@ class Diet extends Model {
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @text('water_amount') waterAmount!: number
-  @text('matter_amount') matterAmount?: number
-  @text('percentage') percentage?: number
+  @field('water_amount') waterAmount!: number
+  @field('matter_amount') matterAmount?: number
+  @field('percentage') percentage?: number
   @field('matter_proportion') matterProportion!: MatterProportion
   @field('is_concentrate_excluded') isConcentrateExcluded!: boolean
 

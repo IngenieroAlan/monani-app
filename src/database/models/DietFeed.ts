@@ -1,5 +1,5 @@
 import { Model, Relation } from '@nozbe/watermelondb'
-import { date, field, immutableRelation, readonly, relation } from '@nozbe/watermelondb/decorators'
+import { date, field, immutableRelation, readonly, relation, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Diet from './Diet'
 import Feed from './Feed'
@@ -24,6 +24,11 @@ class DietFeed extends Model {
   @relation(TableName.FEEDS, 'feed_id') feed!: Relation<Feed>
 
   @immutableRelation(TableName.DIETS, 'diet_id') diet!: Relation<Diet>
+
+  @writer
+  async delete() {
+    await this.destroyPermanently()
+  }
 }
 
 export default DietFeed

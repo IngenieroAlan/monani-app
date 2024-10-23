@@ -1,8 +1,8 @@
 import { Model, Q, Relation } from '@nozbe/watermelondb'
-import { children, date, field, lazy, readonly } from '@nozbe/watermelondb/decorators'
+import { children, date, field, lazy, readonly, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
-import Feed from './Feed'
+import DietFeed from './DietFeed'
 
 export type MatterProportion = 'Porcentaje de peso' | 'Fija' | 'Sin definir'
 
@@ -25,6 +25,7 @@ class Diet extends Model {
 
   @children(TableName.CATTLE) cattleRelation!: Relation<Cattle>
 
+
   @lazy
   cattle = this.collections
     .get<Cattle>(TableName.CATTLE)
@@ -32,8 +33,37 @@ class Diet extends Model {
   
   @lazy
   feeds = this.collections
-    .get<Feed>(TableName.FEEDS)
-    .query(Q.on(TableName.DIET_FEED, 'diet_id', this.id))
+    .get<DietFeed>(TableName.DIET_FEED)
+    .query(Q.where('diet_id', this.id))
+
+  @writer
+  async updateDiet({
+    waterAmount,
+    matterAmount,
+    percentage,
+    matterProportion,
+    isConcentrateExcluded
+  }: {
+    waterAmount: number
+    matterAmount?: number
+    percentage?: number
+    matterProportion: MatterProportion
+    isConcentrateExcluded: boolean
+  }) {
+    await this.update((record) => {
+      record.waterAmount = waterAmount
+      record.matterAmount = matterAmount
+      record.percentage = percentage
+      record.matterProportion = matterProportion
+      record.isConcentrateExcluded = isConcentrateExcluded
+    })
+  }
+
+  @writer
+  async delete() {
+    await this.feeds.destroyAllPermanently()
+    await this.destroyPermanently()
+  }
 }
 
 export default Diet

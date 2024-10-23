@@ -6,7 +6,7 @@ import AnnualEarnings from './AnnualEarnings'
 import CattleArchive, { ArchiveReason } from './CattleArchive'
 import CattleSale from './CattleSale'
 import Diet from './Diet'
-import Medication from './Medication'
+import MedicationSchedule from './MedicationSchedule'
 import MilkReport from './MilkReport'
 import WeightReport from './WeightReport'
 
@@ -61,9 +61,9 @@ class Cattle extends Model {
     .query(Q.where('cattle_id', this.id))
 
   @lazy
-  medications = this.collections
-    .get<Medication>(TableName.MEDICATIONS)
-    .query(Q.on(TableName.MEDICATION_SCHEDULES, 'cattle_id', this.id))
+  medicationSchedules = this.collections
+    .get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
+    .query(Q.where('cattle_id', this.id))
 
   @writer
   async setQuarantine(days: number) {
@@ -98,7 +98,7 @@ class Cattle extends Model {
    * totalEarnings and totalCattleSales, otherwise it creates a new entry.
    */
   @writer
-  async sell(soldBy: number, soldAt: Date = new Date()) {
+  async sell({ soldBy, soldAt }: { soldBy: number, soldAt: Date }) {
     const year = getYear(soldAt)
 
     const annualEarnings = (await this.collections
@@ -142,7 +142,16 @@ class Cattle extends Model {
 
   @writer
   async delete() {
+    if (this.isSold) throw new Error("Can't delete a cattle that has been sold.")
+
+    await this.medicationSchedules.destroyAllPermanently()
+    
+    if (this.isArchived) await this.archive.destroyAllPermanently()
+
     await this.destroyPermanently()
+
+    const diet = await this.diet
+    await this.callWriter(() => diet.delete())
   }
 }
 

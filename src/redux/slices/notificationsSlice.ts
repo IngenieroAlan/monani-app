@@ -6,13 +6,15 @@ import { TableName } from "@/database/schema";
 import database from "@/database";
 
 interface NotificationState {
-  selectedNotification: number | null;
+  selectedNotification: string | null;
   notifications: Notification[];
+  notificationsCount: number;
 }
 
 const initialState: NotificationState = {
   selectedNotification: null,
   notifications: [],
+  notificationsCount: 0,
 };
 
 const notificationsSlice = createSlice({
@@ -21,6 +23,9 @@ const notificationsSlice = createSlice({
   reducers: {
     setSelectedNotification(state, action) {
       state.selectedNotification = action.payload;
+    },
+    setNotificationsCount(state, action) {
+      state.notificationsCount = action.payload;
     },
     setNotifications(state, action) {
       state.notifications = action.payload;
@@ -50,16 +55,6 @@ export const getNotifications = (database: Database) => {
         .get<Notification>(TableName.NOTIFICATIONS)
         .query()
         .fetch();
-
-      /* const notifications = results.map(notification => ({
-          id: notification.id,
-          title: notification.title,
-          description: notification.description,
-          eventAt: notification.eventAt,
-          isMarkedAsRead: notification.isMarkedAsRead,
-          iconName: notification.iconName,
-        })); */
-
       dispatch(setNotifications(results));
       setTimeout(() => {}, 2000);
       dispatch(endLoading());
@@ -108,6 +103,7 @@ export const markAsReadNoti = (notification: Notification) => {
 export const {
   setSelectedNotification,
   setNotifications,
+  setNotificationsCount,
   addNotification,
   replaceNotification,
   deleteNotificationFromList,

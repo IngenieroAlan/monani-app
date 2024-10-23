@@ -1,4 +1,3 @@
-import useFeeds from '@/hooks/collections/useFeeds'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { removeFeed } from '@/redux/slices/feedsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
@@ -11,14 +10,13 @@ export const DELETE_FEED_DIALOG_ID = 'deleteFeedDialog'
 
 const DeleteFeedDialog = () => {
   const dispatch = useAppDispatch()
-  const { deleteFeed } = useFeeds()
   const [isDeleting, setIsDeleting] = useState(false)
   const selectedFeed = useAppSelector((state: RootState) => state.feeds.selectedFeed)
   const deleteFeedVisible = useAppSelector((state: RootState) => state.uiVisibility[DELETE_FEED_DIALOG_ID])
 
   const onDelete = useCallback(async () => {
     setIsDeleting(true)
-    await deleteFeed(selectedFeed!)
+    await selectedFeed?.delete()
     setIsDeleting(false)
 
     dispatch(removeFeed(selectedFeed!))

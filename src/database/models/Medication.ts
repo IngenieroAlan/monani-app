@@ -1,5 +1,5 @@
 import { Model, Q } from '@nozbe/watermelondb'
-import { date, field, lazy, readonly, text } from '@nozbe/watermelondb/decorators'
+import { date, field, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
 
@@ -22,6 +22,11 @@ class Medication extends Model {
   cattle = this.collections
     .get<Cattle>(TableName.CATTLE)
     .query(Q.on(TableName.MEDICATION_SCHEDULES, 'medication_id', this.id))
+
+  @writer
+  async delete() {
+    await this.destroyPermanently()
+  }
 }
 
 export default Medication

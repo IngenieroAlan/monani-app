@@ -1,4 +1,3 @@
-import useMedications from '@/hooks/collections/useMedications'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { removeMedication, setSelectedMedication } from '@/redux/slices/medicationsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
@@ -11,14 +10,13 @@ export const DELETE_MEDICATION_DIALOG_ID = 'deleteMedicationDialog'
 
 const DeleteMedicationDialog = () => {
   const dispatch = useAppDispatch()
-  const { deleteMedication } = useMedications()
   const [isDeleting, setIsDeleting] = useState(false)
   const selectedMedication = useAppSelector((state: RootState) => state.medications.selectedMedication)
   const visible = useAppSelector((state: RootState) => state.uiVisibility[DELETE_MEDICATION_DIALOG_ID])
 
   const onDelete = useCallback(async () => {
     setIsDeleting(true)
-    await deleteMedication(selectedMedication!)
+    await selectedMedication?.delete()
     setIsDeleting(false)
 
     dispatch(removeMedication(selectedMedication!))

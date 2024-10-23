@@ -2,6 +2,9 @@ import { Model } from '@nozbe/watermelondb'
 import { date, field, readonly } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 
+// Deprecated. Do not use.
+// TODO: Remove table and model.
+
 class EarningsSummary extends Model {
   static table = TableName.EARNINGS_SUMMARY
 

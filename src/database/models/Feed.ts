@@ -1,5 +1,5 @@
 import { Model, Q } from '@nozbe/watermelondb'
-import { date, field, lazy, readonly, text } from '@nozbe/watermelondb/decorators'
+import { date, field, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Diet from './Diet'
 
@@ -22,6 +22,11 @@ class Feed extends Model {
   diets = this.collections
     .get<Diet>(TableName.DIETS)
     .query(Q.on(TableName.DIET_FEED, 'feed_id', this.id))
+
+  @writer
+  async delete() {
+    this.destroyPermanently()
+  }
 }
 
 export default Feed

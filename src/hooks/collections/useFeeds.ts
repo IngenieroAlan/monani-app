@@ -38,17 +38,10 @@ const useFeeds = () => {
     return updatedFeed
   }
 
-  const deleteFeed = async (feed: Feed) => {
-    await database.write(async () => {
-      await feed.destroyPermanently()
-    })
-  }
-
   return {
     getFeeds,
     createFeed,
-    updateFeed,
-    deleteFeed
+    updateFeed
   }
 }
 

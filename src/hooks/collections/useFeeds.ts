@@ -27,21 +27,9 @@ const useFeeds = () => {
     return createdFeed
   }
 
-  const updateFeed = async (feedToUpdate: Feed, data: FeedFields) => {
-    const updatedFeed = await database.write(async () => {
-      return feedToUpdate.update(feed => {
-        feed.name = data.name
-        feed.feedType = data.feedType
-      })
-    })
-
-    return updatedFeed
-  }
-
   return {
     getFeeds,
-    createFeed,
-    updateFeed
+    createFeed
   }
 }
 

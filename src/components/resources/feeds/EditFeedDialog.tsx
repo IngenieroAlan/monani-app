@@ -1,4 +1,3 @@
-import useFeeds from '@/hooks/collections/useFeeds'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { modifyFeed, setSelectedFeed } from '@/redux/slices/feedsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
@@ -19,7 +18,6 @@ const DISMISS_DIALOG_ID = 'editFeedDismissDialog'
 
 const EditFeedDialog = () => {
   const dispatch = useAppDispatch()
-  const { updateFeed } = useFeeds()
   const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[EDIT_FEED_DIALOG_ID])
   const selectedFeed = useAppSelector((state: RootState) => state.feeds.selectedFeed)
   const { control, handleSubmit, reset, clearErrors, formState } = useForm<FeedFields>({
@@ -56,9 +54,9 @@ const EditFeedDialog = () => {
   const onSubmit = useCallback(
     async (data: FeedFields) => {
       const oldName = selectedFeed!.name
-      const updatedFeed = await updateFeed(selectedFeed!, data)
+      await selectedFeed!.updateFeed(data)
 
-      dispatch(modifyFeed({ oldName: oldName, new: updatedFeed }))
+      dispatch(modifyFeed({ oldName: oldName, new: selectedFeed! }))
       dispatch(show(FeedsSnackbarId.UPDATED_FEED))
 
       dismissChanges()

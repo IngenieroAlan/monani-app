@@ -24,8 +24,16 @@ class Feed extends Model {
     .query(Q.on(TableName.DIET_FEED, 'feed_id', this.id))
 
   @writer
+  async updateFeed({ name, feedType }: { name: string, feedType: FeedType }) {
+    await this.update((record) => {
+      record.name = name
+      record.feedType = feedType
+    })
+  }
+
+  @writer
   async delete() {
-    this.destroyPermanently()
+    await this.destroyPermanently()
   }
 }
 

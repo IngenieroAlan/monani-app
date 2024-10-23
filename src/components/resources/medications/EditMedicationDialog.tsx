@@ -1,6 +1,5 @@
 import DismissDialog from '@/components/DismissDialog'
 import MedicationForm, { MedicationFields } from '@/components/forms/MedicationForm'
-import useMedications from '@/hooks/collections/useMedications'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { modifyMedication, setSelectedMedication } from '@/redux/slices/medicationsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
@@ -19,7 +18,6 @@ const DISMISS_DIALOG_ID = 'editMedicationDismissDialog'
 
 const EditMedicationDialog = () => {
   const dispatch = useAppDispatch()
-  const { updateMedication } = useMedications()
   const visible = useAppSelector((state: RootState) => state.uiVisibility[EDIT_MEDICATION_DIALOG_ID])
   const selectedMedication = useAppSelector((state: RootState) => state.medications.selectedMedication)
   const { control, handleSubmit, reset, clearErrors, formState } = useForm<MedicationFields>({
@@ -56,9 +54,9 @@ const EditMedicationDialog = () => {
   const onSubmit = useCallback(
     async (data: MedicationFields) => {
       const oldName = selectedMedication!.name
-      const updatedMedication = await updateMedication(selectedMedication!, data)
+      await selectedMedication!.updateMedication(data)
 
-      dispatch(modifyMedication({ oldName: oldName, new: updatedMedication }))
+      dispatch(modifyMedication({ oldName: oldName, new: selectedMedication! }))
       dispatch(show(MedicationsSnackbarId.UPDATED_MEDICATION))
 
       dismissChanges()

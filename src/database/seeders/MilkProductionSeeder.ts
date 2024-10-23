@@ -23,7 +23,7 @@ const getNumOfCattle = async () => {
     .query(
       Q.where('production_type', 'Lechera'),
       Q.where('is_active', true),
-      Q.where('quarantine_days_left', null)
+      Q.where('quarantine_ends_at', null)
     )
     .fetchCount()
 }

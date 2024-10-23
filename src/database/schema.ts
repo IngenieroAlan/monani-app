@@ -71,10 +71,10 @@ export default appSchema({
         { name: 'is_active', type: 'boolean' },
         { name: 'is_archived', type: 'boolean' },
         { name: 'is_sold', type: 'boolean' },
-        { name: 'quarantine_days_left', type: 'number', isOptional: true },
         { name: 'diet_id', type: 'string' },
         { name: 'born_at', type: 'number' },
         { name: 'admitted_at', type: 'number' },
+        { name: 'quarantine_ends_at', type: 'number', isOptional: true },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]

@@ -42,6 +42,7 @@ interface Diet {
     isConcentrateExcluded: boolean;
 }
 interface DietFeed {
+    dietFeedId: string;
     dietId: string;
     feedId: string;
     feedAmount: number;
@@ -52,6 +53,9 @@ interface Feed {
     feedId: string;
     name: string;
     feedType: FeedType;
+}
+interface DietFeedItem extends DietFeed { 
+    name: string;
 }
 interface Genealogy {
     motherId: string;
@@ -90,6 +94,7 @@ export type {
     Diet,
     DietFeed,
     Feed,
+    DietFeedItem,
     Genealogy,
     Medication,
     MedicationSchedule,

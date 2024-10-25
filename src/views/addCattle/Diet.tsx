@@ -5,32 +5,53 @@ import { TableName } from "@/database/schema"
 import { Q } from "@nozbe/watermelondb"
 import { useDatabase } from "@nozbe/watermelondb/react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useContext, useEffect, useState } from "react"
-import { ScrollView, StyleSheet, View } from "react-native"
+import { useContext, useEffect, useRef, useState } from "react"
+import { FlatList, ScrollView, StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
 import DietFeedsList from "@/components/cattle/DietFeedsList"
 import { RootStackParams } from "@/navigation/Navigator"
+import useFeeds from "@/hooks/collections/useFeeds"
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
+import { RootState } from "@/redux/store/store"
+import { setFeeds } from "@/redux/slices/feedsSlice"
+import { DietFeedItem } from "@/interfaces/cattleInterfaces"
 
 type Props = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Diet'>;
 export const Diet = ({ navigation, route }: Props) => {
     const { cattle, dietFeeds } = useContext(CattleContext)
     const theme = useTheme()
-    const database = useDatabase()
-    const [feeds, setFeeds] = useState<Feed[]>([])
+    const feeds = useAppSelector((state: RootState) => state.feeds.records)
+    const { getFeeds } = useFeeds()
+    const dispatch = useAppDispatch()
+    const [currentDietFeeds, setCurrentDietFeeds] = useState<DietFeedItem[]>([])
 
     useEffect(() => {
         const fetchFeeds = async () => {
-            setFeeds(
-                await database.collections.get<Feed>(TableName.FEEDS).query(
-                    Q.sortBy('name', Q.asc),
-                ).fetch()
-            )
+            dispatch(setFeeds(await getFeeds()))
         }
 
-        fetchFeeds()
-    }, [])
+        if (feeds.length === 0) fetchFeeds()
+    }, [feeds])
+
+    useEffect(() => {
+        setCurrentDietFeeds(dietFeeds.map(dietFeed => {
+            const feed = feeds.find(feed => feed.id === dietFeed.feedId)
+            return {
+                ...dietFeed,
+                dietFeedId: dietFeed.dietFeedId,
+                dietId: dietFeed.dietId,
+                feedId: dietFeed.feedId,
+                name: feed?.name || '',
+                feedAmount: dietFeed.feedAmount,
+                feedProportion: dietFeed.feedProportion,
+                percentage: dietFeed.percentage,
+            }
+        })
+        )
+    }, [dietFeeds])
+
 
     return (<>
         <Appbar.Header>
@@ -40,7 +61,7 @@ export const Diet = ({ navigation, route }: Props) => {
             <Appbar.Action icon="cog" onPress={() => navigation.navigate('DietSettings')} />
         </Appbar.Header>
         <SafeAreaProvider style={{ backgroundColor: theme.colors.surface }}>
-            <DietFeedsList feeds={feeds} />
+            <DietFeedsList dietFeeds={currentDietFeeds} />
             <View style={styles.navigationButtons}>
                 <Button
                     icon="arrow-left"

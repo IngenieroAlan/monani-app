@@ -5,10 +5,8 @@ import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View, ViewProps }
 import { HelperText, Text, useTheme } from "react-native-paper";
 
 // definition of the Item, which will be rendered in the FlatList
-type TonChange = (feedId: string) => () => void
-
 const FeedItem = (
-    { feedId, name, feedType, onChange }: { feedId: string; name: string; feedType: string; onChange: TonChange }
+    { feedId, name, feedType, onChange }: { feedId: string; name: string; feedType: string; onChange: (feedId: string) => () => string }
 ) => (
     <TouchableOpacity activeOpacity={0.8} onPress={onChange(feedId)}>
         <View style={{ margin: 10 }}>
@@ -38,10 +36,15 @@ const SearchFeedList = <T extends FieldValues>({
     name,
     errors,
     helperText,
-    control,
-    containerStyle,
+    control
 }: ListProps<T>) => {
-    const renderItem = ({ item, onChange }: { item: Feed; onChange: TonChange }) => {
+    // onChange function
+    const onChange = (value: string) => () => {
+        setClicked(true);
+        return value;
+    };
+
+    const renderItem = ({ item }: { item: Feed }) => {
         // if the searchPhrase is empty, return null
         if (searchPhrase === "") {
             return null;
@@ -58,17 +61,20 @@ const SearchFeedList = <T extends FieldValues>({
     };
 
     const theme = useTheme();
+    console.log(data);
+    
     return (
-        <SafeAreaView style={{
-            position: "absolute",
-            zIndex: 1,
-            backgroundColor: theme.colors.surface,
-            margin: 16,
-            top: 68,
-            width: "100%",
-        }}>
-            <View style={containerStyle}>
-                <Controller
+        <SafeAreaView style={{ width: '100%', flex: 1 }}>
+            <View
+                onStartShouldSetResponder={() => {
+                    setClicked(false);
+                    return false;
+                }}
+            >
+                <FlatList data={data} renderItem={renderItem} keyExtractor={(item) => item.feedId} />
+            </View>
+
+            {/* <Controller
                     name={name}
                     control={control}
                     render={({ field: { onChange, onBlur, value } }) => (
@@ -79,7 +85,6 @@ const SearchFeedList = <T extends FieldValues>({
                                 return false;
                             }}
                         >
-                            <FlatList data={data} renderItem={renderItem} keyExtractor={(item) => item.feedId} />
                         </View>
                     )}
                 />
@@ -87,9 +92,7 @@ const SearchFeedList = <T extends FieldValues>({
                     errors && <HelperText type="error">
                         {helperText}
                     </HelperText>
-                }
-
-            </View>
+                } */}
         </SafeAreaView >
     );
 };

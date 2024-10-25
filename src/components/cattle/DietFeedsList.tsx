@@ -1,19 +1,14 @@
-import DietFeed from '@/database/models/DietFeed'
 import Feed from '@/database/models/Feed'
-import { TableName } from '@/database/schema'
-import { show } from '@/redux/slices/uiVisibilitySlice'
-import { Q } from '@nozbe/watermelondb'
+import { DietFeedItem } from '@/interfaces/cattleInterfaces'
 import { useDatabase } from '@nozbe/watermelondb/react'
-import { memo, useEffect, useRef, useState } from 'react'
+import { forwardRef, memo, Ref, useState } from 'react'
 import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useDispatch } from 'react-redux'
 
-type FeedsCount = { feed_id: string }
-
-const ListItemMenu = ({ feedId }: { feedId: string; }) => {
+const ListItemMenu = ({ dietFeedId }: { dietFeedId: string; }) => {
     const theme = useTheme()
     const dispatch = useDispatch()
     const insets = useSafeAreaInsets()
@@ -57,33 +52,35 @@ const ListItemMenu = ({ feedId }: { feedId: string; }) => {
     )
 }
 
-const ListItem = ({ feed }: { feed: Feed }) => {
+const ListItem = ({ dietFeed }: { dietFeed: DietFeedItem }) => {
     return (
         <List.Item
             style={{ paddingVertical: 2, paddingRight: 8 }}
-            title={feed.name}
-            description={feed.feedType}
+            title={dietFeed.name}
+            description={dietFeed.feedProportion === 'Por porcentaje' ? `${dietFeed.percentage}%` : `${dietFeed.feedAmount} kg`}
             right={() => (
                 <ListItemMenu
-                    feedId={feed.id}
+                    dietFeedId={dietFeed.dietFeedId}
                 />
             )}
         />
     )
 }
 
-const DietFeedsList = ({ feeds }: { feeds: Feed[] }) => {
+const DietFeedsList = (
+    { dietFeeds }: { dietFeeds: DietFeedItem[] }
+) => {
     const database = useDatabase()
 
     return (
         <FlatList
-            data={feeds}
+            data={dietFeeds}
             renderItem={({ item }) => (
                 <ListItem
-                    feed={item}
+                    dietFeed={item}
                 />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.dietFeedId}
             ListFooterComponent={() => <View style={{ height: 88 }} />}
         />
     )

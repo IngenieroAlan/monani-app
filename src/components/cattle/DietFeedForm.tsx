@@ -12,15 +12,11 @@ import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import SearchFeedList from "./SearchFeedList";
 
-interface DietFeedFormProps {
-    navigation: NativeStackScreenProps<AddCattleStackParams, 'DietFeedForm'>;
-    feeds: Feed[];
-}
-
-export default function DietFeedForm({ navigation, feeds }: DietFeedFormProps) {
+export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddCattleStackParams, 'DietFeedForm'>, {feeds}: {feeds: Feed[]}) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchBarFocused, setSearchBarFocused] = useState(false);
     const theme = useTheme();
+    
     type DietFeedFields = z.infer<typeof DietFeedSchema>
 
     const dropdownOptions = [
@@ -51,11 +47,11 @@ export default function DietFeedForm({ navigation, feeds }: DietFeedFormProps) {
 
     const onSubmit = () => {
         // save the data
-        navigation.navigation.goBack()
+        navigation.goBack()
     }
     return (<>
         <Appbar.Header>
-            <IconButton icon={'close'} onPress={navigation.navigation.goBack} />
+            <IconButton icon={'close'} onPress={navigation.goBack} />
             <Appbar.Content title='Dieta' />
             <Button onPress={onSubmit}>Guardar</Button>
         </Appbar.Header>
@@ -67,16 +63,34 @@ export default function DietFeedForm({ navigation, feeds }: DietFeedFormProps) {
                 onChangeText={setSearchQuery}
                 value={searchQuery}
                 onFocus={() => setSearchBarFocused(true)}
-                onBlur={() => setSearchBarFocused(false)}
+                // onBlur={() => setSearchBarFocused(false)}
             />
 
-            {/* {searchBarFocused && (
-                
-                // <SearchFeedList searchPhrase={searchQuery} data={feeds} setClicked={() => {
-                //     // and close the search bar
-                //     setSearchBarFocused(false)
-                //  }} />
-            )} */}
+            {searchBarFocused && (
+                <View
+                    style={{
+                        position: "absolute",
+                        zIndex: 1,
+                        backgroundColor: theme.colors.surface,
+                        margin: 16,
+                        top: 68,
+                        width: "100%",
+                    }}>
+                    <SearchFeedList
+                        searchPhrase={searchQuery}
+                        data={feeds}
+                        control={control}
+                        name='feedId'
+                        errors={errors.feedId}
+                        label='Alimento*'
+                        helperText={errors.feedId?.message ? errors.feedId?.message : ''}
+                        setClicked={() => {
+                            // and close the search bar
+                            setSearchBarFocused(false)
+                        }}
+                    />
+                </View>
+            )}
 
             <MDropdown
                 name='feedProportion'

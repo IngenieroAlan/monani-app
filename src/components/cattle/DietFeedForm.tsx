@@ -1,4 +1,3 @@
-import { Feed } from "@/interfaces/cattleInterfaces";
 import { AddCattleStackParams } from "@/navigation/stacks/AddCattleStack";
 import DietFeedSchema from "@/validationSchemas/DietFeedSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,11 +11,11 @@ import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import SearchFeedList from "./SearchFeedList";
 
-export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddCattleStackParams, 'DietFeedForm'>, {feeds}: {feeds: Feed[]}) {
+export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddCattleStackParams, 'DietFeedForm'>) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchBarFocused, setSearchBarFocused] = useState(false);
     const theme = useTheme();
-    
+
     type DietFeedFields = z.infer<typeof DietFeedSchema>
 
     const dropdownOptions = [
@@ -49,6 +48,7 @@ export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddC
         // save the data
         navigation.goBack()
     }
+
     return (<>
         <Appbar.Header>
             <IconButton icon={'close'} onPress={navigation.goBack} />
@@ -63,26 +63,27 @@ export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddC
                 onChangeText={setSearchQuery}
                 value={searchQuery}
                 onFocus={() => setSearchBarFocused(true)}
-                // onBlur={() => setSearchBarFocused(false)}
             />
 
             {searchBarFocused && (
-                <View
-                    style={{
-                        position: "absolute",
-                        zIndex: 1,
-                        backgroundColor: theme.colors.surface,
-                        margin: 16,
-                        top: 68,
-                        width: "100%",
-                    }}>
+                <View style={{
+                    position: "absolute",
+                    zIndex: 1,
+                    backgroundColor: theme.colors.surface,
+                    margin: 16,
+                    top: 64,
+                    width: "100%",
+                    borderRadius: 10,
+                    elevation: 5,
+                    paddingVertical: 8
+                }}>
                     <SearchFeedList
                         searchPhrase={searchQuery}
-                        data={feeds}
+                        setSearchQuery={setSearchQuery}
+                        setSearchBarFocused={setSearchBarFocused}
                         control={control}
                         name='feedId'
                         errors={errors.feedId}
-                        label='Alimento*'
                         helperText={errors.feedId?.message ? errors.feedId?.message : ''}
                         setClicked={() => {
                             // and close the search bar
@@ -107,7 +108,7 @@ export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddC
             <CustomTextInput
                 name='feedAmount'
                 control={control}
-                label='Nombre*'
+                label='Cantidad*'
                 errors={errors.feedAmount}
                 helperText={errors.feedAmount?.message ? errors.feedAmount?.message : ''}
                 more={{
@@ -115,7 +116,6 @@ export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddC
                     theme: { colors: { background: theme.colors.elevation.level3 } }
                 }}
             />
-
         </View>
     </>)
 }

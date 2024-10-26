@@ -1,25 +1,20 @@
-import { CardFeedItem } from "@/components/cattle/CardFeedItem"
+import DietFeedsList from "@/components/cattle/DietFeedsList"
 import { CattleContext } from "@/context/CattleContext"
-import Feed from "@/database/models/Feed"
-import { TableName } from "@/database/schema"
-import { Q } from "@nozbe/watermelondb"
-import { useDatabase } from "@nozbe/watermelondb/react"
+import useFeeds from "@/hooks/collections/useFeeds"
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
+import { DietFeedItem } from "@/interfaces/cattleInterfaces"
+import { RootStackParams } from "@/navigation/Navigator"
+import { setFeeds } from "@/redux/slices/feedsSlice"
+import { RootState } from "@/redux/store/store"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useContext, useEffect, useRef, useState } from "react"
-import { FlatList, ScrollView, StyleSheet, View } from "react-native"
+import { useContext, useEffect, useState } from "react"
+import { StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
-import DietFeedsList from "@/components/cattle/DietFeedsList"
-import { RootStackParams } from "@/navigation/Navigator"
-import useFeeds from "@/hooks/collections/useFeeds"
-import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { RootState } from "@/redux/store/store"
-import { setFeeds } from "@/redux/slices/feedsSlice"
-import { DietFeedItem } from "@/interfaces/cattleInterfaces"
 
 type Props = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Diet'>;
-export const Diet = ({ navigation, route }: Props) => {
+export const Diet = ({ navigation }: Props) => {
     const { cattle, dietFeeds } = useContext(CattleContext)
     const theme = useTheme()
     const feeds = useAppSelector((state: RootState) => state.feeds.records)

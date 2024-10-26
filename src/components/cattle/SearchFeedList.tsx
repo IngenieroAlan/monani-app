@@ -42,12 +42,10 @@ const FeedItem = memo((
 type DietFeedFields = z.infer<typeof DietFeedSchema>
 interface ListProps<T extends FieldValues> {
     searchPhrase: string;
-    setClicked: (clicked: boolean) => void;
+    setClicked: () => void;
     setSearchQuery: (query: string) => void;
     setSearchBarFocused: (focused: boolean) => void;
     name: FieldPath<DietFeedFields>;
-    errors: FieldError | undefined;
-    helperText: string;
     control: Control<DietFeedFields>;
 }
 const SearchFeedList = <T extends FieldValues>({
@@ -56,8 +54,6 @@ const SearchFeedList = <T extends FieldValues>({
     setSearchQuery,
     setSearchBarFocused,
     name,
-    errors,
-    helperText,
     control
 }: ListProps<T>) => {
     const feeds = useAppSelector((state: RootState) => state.feeds.records)
@@ -106,19 +102,17 @@ const SearchFeedList = <T extends FieldValues>({
         return null;
     };
 
-    const theme = useTheme();
-
     return (
         <SafeAreaView>
             <Controller
                 name={name}
                 control={control}
-                render={({ field: { onChange, value } }) => {
+                render={({ field: { onChange } }) => {
                     return (
                         <View
                             onStartShouldSetResponder={() => {
-                                setClicked(false);
-                                return false;
+                                setClicked();
+                                return true;
                             }}
                         >
                             <FlatList data={feeds} renderItem={({ item }) => renderItem({ item, onChange })} keyExtractor={(item) => item.id} />
@@ -126,12 +120,6 @@ const SearchFeedList = <T extends FieldValues>({
                     )
                 }}
             />
-
-            {
-                errors && <HelperText type="error">
-                    {helperText}
-                </HelperText>
-            }
         </SafeAreaView >
     );
 };

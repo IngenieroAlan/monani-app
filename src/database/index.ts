@@ -59,7 +59,7 @@ const database = new Database({
   ]
 })
 
-setGenerator(() => randomUUID())
+// setGenerator(() => randomUUID())
 
 export const resetDatabase = async () => {
   await database.write(async () => {

@@ -2,19 +2,24 @@ import { AddCattleStackParams } from "@/navigation/stacks/AddCattleStack";
 import DietFeedSchema from "@/validationSchemas/DietFeedSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
-import { Appbar, Button, IconButton, Searchbar, useTheme } from "react-native-paper";
+import { Appbar, Button, HelperText, IconButton, Searchbar, useTheme } from "react-native-paper";
 import { z } from "zod";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import SearchFeedList from "./SearchFeedList";
+import { CattleContext, CattleDispatchContext } from "@/context/CattleContext";
+import { Types } from "@/context/CattleReducer";
 
 export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddCattleStackParams, 'DietFeedForm'>) {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchBarFocused, setSearchBarFocused] = useState(false);
+    const [activeList, setActiveList] = useState(false)
     const theme = useTheme();
+    const { diet, dietFeeds } = useContext(CattleContext)
+    const dispatch = useContext(CattleDispatchContext)
 
     type DietFeedFields = z.infer<typeof DietFeedSchema>
 
@@ -33,12 +38,13 @@ export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddC
         control,
         handleSubmit,
         reset,
+        getValues,
         formState: { errors, isDirty, isSubmitting, isValid }
     } = useForm<DietFeedFields>({
         defaultValues: {
             feedId: undefined,
             feedProportion: 'Por porcentaje',
-            feedAmount: undefined
+            quantity: undefined
         },
         resolver: zodResolver(DietFeedSchema),
         mode: 'onTouched'
@@ -46,12 +52,27 @@ export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddC
 
     const onSubmit = () => {
         // save the data
+        const feedProportion = getValues('feedProportion')
+        dispatch({
+            type: Types.SAVE_DIET_FEED,
+            payload: {
+                dietFeedId: '0',
+                dietId: diet.dietId,
+                feedId: getValues('feedId'),
+                feedProportion: feedProportion,
+                feedAmount: feedProportion === 'Por porcentaje' ? 0 : getValues('quantity'),
+                percentage: feedProportion === 'Por porcentaje' ? getValues('quantity') : 0
+            }
+        })
+
+        reset
+
         navigation.goBack()
     }
 
     return (<>
         <Appbar.Header>
-            <IconButton icon={'close'} onPress={navigation.goBack} />
+            <IconButton icon={'close'} onPress={() => handleSubmit(onSubmit)} />
             <Appbar.Content title='Dieta' />
             <Button onPress={onSubmit}>Guardar</Button>
         </Appbar.Header>
@@ -63,7 +84,15 @@ export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddC
                 onChangeText={setSearchQuery}
                 value={searchQuery}
                 onFocus={() => setSearchBarFocused(true)}
+                onBlur={() => activeList ? setSearchBarFocused(false) : setSearchBarFocused(true)}
+                autoFocus={!isDirty}
             />
+
+            {
+                errors.feedId && <HelperText type="error">
+                    {errors.feedId.message}
+                </HelperText>
+            }
 
             {searchBarFocused && (
                 <View style={{
@@ -83,11 +112,9 @@ export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddC
                         setSearchBarFocused={setSearchBarFocused}
                         control={control}
                         name='feedId'
-                        errors={errors.feedId}
-                        helperText={errors.feedId?.message ? errors.feedId?.message : ''}
                         setClicked={() => {
-                            // and close the search bar
                             setSearchBarFocused(false)
+                            setActiveList(false)
                         }}
                     />
                 </View>
@@ -106,16 +133,17 @@ export default function DietFeedForm({ navigation }: NativeStackScreenProps<AddC
             />
 
             <CustomTextInput
-                name='feedAmount'
+                name='quantity'
                 control={control}
                 label='Cantidad*'
-                errors={errors.feedAmount}
-                helperText={errors.feedAmount?.message ? errors.feedAmount?.message : ''}
+                errors={errors.quantity}
+                helperText={errors.quantity?.message ? errors.quantity?.message : ''}
                 more={{
-                    autoFocus: !isDirty,
-                    theme: { colors: { background: theme.colors.elevation.level3 } }
+                    theme: { colors: { background: theme.colors.elevation.level3 } },
+                    keyboardType: 'numeric'
                 }}
             />
+
         </View>
     </>)
 }

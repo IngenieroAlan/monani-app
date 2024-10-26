@@ -26,6 +26,27 @@ class DietFeed extends Model {
   @immutableRelation(TableName.DIETS, 'diet_id') diet!: Relation<Diet>
 
   @writer
+  async updateDietFeed({
+    feed,
+    feedAmount,
+    percentage,
+    feedProportion
+  }: {
+    feed: Feed
+    feedAmount: number
+    percentage?: number
+    feedProportion: FeedProportion
+  }) {
+    await this.update((record) => {
+      record.feed.set(feed)
+
+      record.feedAmount = feedAmount
+      record.percentage = percentage
+      record.feedProportion = feedProportion
+    })
+  }
+
+  @writer
   async delete() {
     await this.destroyPermanently()
   }

@@ -1,5 +1,5 @@
 import { Model, Relation } from '@nozbe/watermelondb'
-import { date, field, immutableRelation, readonly, relation } from '@nozbe/watermelondb/decorators'
+import { date, field, immutableRelation, readonly, relation, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
 import Medication from './Medication'
@@ -21,6 +21,29 @@ class MedicationSchedule extends Model {
   @relation(TableName.MEDICATIONS, 'medication_id') medication!: Relation<Medication>
 
   @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
+
+  @writer
+  async updateMedicationSchedule({
+    medication,
+    nextDoseAt,
+    dosesPerYear
+  }: {
+    medication: Medication
+    nextDoseAt: Date
+    dosesPerYear: number
+  }) {
+    await this.update((record) => {
+      record.medication.set(medication)
+
+      record.nextDoseAt = nextDoseAt
+      record.dosesPerYear = dosesPerYear
+    })
+  }
+
+  @writer
+  async delete() {
+    await this.destroyPermanently()
+  }
 }
 
 export default MedicationSchedule

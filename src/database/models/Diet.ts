@@ -1,8 +1,8 @@
-import { Model, Q, Relation } from '@nozbe/watermelondb'
-import { children, date, field, lazy, readonly, writer } from '@nozbe/watermelondb/decorators'
+import { Model, Q } from '@nozbe/watermelondb'
+import { date, field, lazy, readonly, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
-import DietFeed from './DietFeed'
+import Feed from './Feed'
 
 export type MatterProportion = 'Porcentaje de peso' | 'Fija' | 'Sin definir'
 
@@ -23,18 +23,17 @@ class Diet extends Model {
   @field('matter_proportion') matterProportion!: MatterProportion
   @field('is_concentrate_excluded') isConcentrateExcluded!: boolean
 
-  @children(TableName.CATTLE) cattleRelation!: Relation<Cattle>
-
+  // @children(TableName.CATTLE) cattleRelation!: Relation<Cattle>
 
   @lazy
   cattle = this.collections
     .get<Cattle>(TableName.CATTLE)
-    .query(Q.where('diet_id', this.id))
+    .query(Q.where('diet_id', this.id), Q.take(1))
   
   @lazy
   feeds = this.collections
-    .get<DietFeed>(TableName.DIET_FEED)
-    .query(Q.where('diet_id', this.id))
+    .get<Feed>(TableName.FEEDS)
+    .query(Q.on(TableName.DIET_FEED, 'diet_id', this.id))
 
   @writer
   async updateDiet({

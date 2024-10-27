@@ -7,7 +7,8 @@ import {
   medicationsReducer,
   notificationsReducer,
   uiReducer,
-  uiVisibilityReducer
+  uiVisibilityReducer,
+  addCattleReducer
 } from '../slices'
 
 const store = configureStore({
@@ -19,7 +20,8 @@ const store = configureStore({
     uiVisibility: uiVisibilityReducer,
     notifications: notificationsReducer,
     feeds: feedsReducer,
-    medications: medicationsReducer
+    medications: medicationsReducer,
+    addCattle: addCattleReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 })

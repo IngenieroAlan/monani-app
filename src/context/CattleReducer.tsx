@@ -1,4 +1,5 @@
 import { Cattle, Diet, DietFeed, Feed, Genealogy } from "../interfaces/cattleInterfaces";
+import { CattleInitialState } from "./CattleContext";
 
 type ActionMap<M extends { [index: string]: any }> = {
   [Key in keyof M]: M[Key] extends undefined
@@ -11,18 +12,24 @@ type ActionMap<M extends { [index: string]: any }> = {
   }
 };
 
-export enum Types {
+export enum ActionType {
+  RESET = 'RESET',
   SAVE_CATTLE_INFO = 'SAVE_CATTLE_INFO',
   SAVE_DIET_FEED = 'SAVE_DIET_FEED',
+  DELETE_DIET_FEED = 'DELETE_DIET_FEED',
 }
 
 type Payload = {
-  [Types.SAVE_CATTLE_INFO]: {
+  [ActionType.RESET]: undefined;
+  [ActionType.SAVE_CATTLE_INFO]: {
     cattle: Cattle;
     genealogy: Genealogy;
   };
-  [Types.SAVE_DIET_FEED]: {
-    dietFeedPayload: DietFeed;
+  [ActionType.SAVE_DIET_FEED]: {
+    dietFeed: DietFeed;
+  }
+  [ActionType.DELETE_DIET_FEED]: {
+    dietFeedId: string;
   }
 }
 
@@ -36,17 +43,27 @@ export interface CattleState {
 
 export const cattlesReducer = (state: CattleState, action: CattlesActions): CattleState => {
   switch (action.type) {
-    case Types.SAVE_CATTLE_INFO:
+    case ActionType.RESET:
+      return {
+        ...CattleInitialState,
+      };
+    case ActionType.SAVE_CATTLE_INFO:
       return {
         ...state,
         cattle: action.payload.cattle,
         genealogy: action.payload.genealogy,
       };
-    case Types.SAVE_DIET_FEED:
+    case ActionType.SAVE_DIET_FEED:
       return {
         ...state,
-        dietFeeds: [...state.dietFeeds, action.payload.dietFeedPayload],
+        dietFeeds: [...state.dietFeeds, action.payload.dietFeed],
       };
+    case ActionType.DELETE_DIET_FEED:
+      return {
+        ...state,
+        dietFeeds: state.dietFeeds.filter(dietFeed => dietFeed.dietFeedId !== action.payload.dietFeedId),
+      };
+
     default:
       return {
         ...state,

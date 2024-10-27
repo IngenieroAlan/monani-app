@@ -6,3 +6,4 @@ export { default as medicationsReducer } from './medicationsSlice';
 export { default as notificationsReducer } from "./notificationsSlice";
 export { default as uiReducer } from "./ui";
 export { default as uiVisibilityReducer } from "./uiVisibilitySlice";
+export { default as addCattleReducer } from "./addCattleSlice";

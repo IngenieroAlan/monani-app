@@ -1,29 +1,33 @@
-import Feed from '@/database/models/Feed'
+import { useAppDispatch } from '@/hooks/useRedux'
 import { DietFeedItem } from '@/interfaces/cattleInterfaces'
-import { useDatabase } from '@nozbe/watermelondb/react'
-import { forwardRef, memo, Ref, useState } from 'react'
+import { deleteDietFeed } from '@/redux/slices/addCattleSlice'
+import { AddDietNavigationProps } from '@/views/addCattle/Diet'
+import { memo, useState } from 'react'
 import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useDispatch } from 'react-redux'
 
-const ListItemMenu = ({ dietFeedId }: { dietFeedId: string; }) => {
+type navigationProps = AddDietNavigationProps['navigation']// |  DietNavigationProps['navigation']
+
+const ListItemMenu = (
+    { dietFeedId, navigation }: { dietFeedId: string, navigation: navigationProps }
+) => {
     const theme = useTheme()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const insets = useSafeAreaInsets()
-    const [visible, setVisible] = useState(false)
+    const [menuVisible, setMenuVisible] = useState(false)
 
     return (
         <Menu
-            visible={visible}
-            onDismiss={() => setVisible(false)}
+            visible={menuVisible}
+            onDismiss={() => setMenuVisible(false)}
             anchorPosition='bottom'
             statusBarHeight={insets.top}
             anchor={
                 <IconButton
                     icon='dots-vertical'
-                    onPress={() => setVisible(true)}
+                    onPress={() => setMenuVisible(true)}
                 />
             }
         >
@@ -31,7 +35,11 @@ const ListItemMenu = ({ dietFeedId }: { dietFeedId: string; }) => {
                 title='Editar'
                 leadingIcon='pencil-outline'
                 onPress={() => {
-
+                    setMenuVisible(false);
+                    navigation.navigate('DietFeed', {
+                        dietFeedId,
+                        modify: true
+                    });
                 }}
             />
             <Menu.Item
@@ -45,14 +53,17 @@ const ListItemMenu = ({ dietFeedId }: { dietFeedId: string; }) => {
                     />
                 )}
                 onPress={() => {
-
+                    setMenuVisible(false);
+                    dispatch(deleteDietFeed({ dietFeedId }))
                 }}
             />
         </Menu>
     )
 }
 
-const ListItem = ({ dietFeed }: { dietFeed: DietFeedItem }) => {
+const ListItem = (
+    { dietFeed, navigation }: { dietFeed: DietFeedItem, navigation: navigationProps }
+) => {
     return (
         <List.Item
             style={{ paddingVertical: 2, paddingRight: 8 }}
@@ -61,6 +72,7 @@ const ListItem = ({ dietFeed }: { dietFeed: DietFeedItem }) => {
             right={() => (
                 <ListItemMenu
                     dietFeedId={dietFeed.dietFeedId}
+                    navigation={navigation}
                 />
             )}
         />
@@ -68,9 +80,8 @@ const ListItem = ({ dietFeed }: { dietFeed: DietFeedItem }) => {
 }
 
 const DietFeedsList = (
-    { dietFeeds }: { dietFeeds: DietFeedItem[] }
+    { dietFeeds, navigation }: { dietFeeds: DietFeedItem[], navigation: navigationProps }
 ) => {
-    const database = useDatabase()
 
     return (
         <FlatList
@@ -78,6 +89,7 @@ const DietFeedsList = (
             renderItem={({ item }) => (
                 <ListItem
                     dietFeed={item}
+                    navigation={navigation}
                 />
             )}
             keyExtractor={(item) => item.dietFeedId}

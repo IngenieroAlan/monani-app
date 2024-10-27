@@ -1,4 +1,6 @@
+import { useAppDispatch } from "@/hooks/useRedux"
 import { RootStackParams } from "@/navigation/Navigator"
+import { reset } from "@/redux/slices/addCattleSlice"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ScrollView, StyleSheet, View } from "react-native"
 import { Appbar, Button } from "react-native-paper"
@@ -7,8 +9,14 @@ import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
 
 type Props = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Medications'>;
 export const Medications = ({ navigation }: Props) => {
+    const dispatch = useAppDispatch()
 
     // TODO: Fetch medications from db
+
+    const goBack = () => {
+        dispatch(reset())
+        navigation.navigate('HomeView')
+    }
 
     const handleSave = () => {
         // TODO: Save cattle to db
@@ -18,9 +26,9 @@ export const Medications = ({ navigation }: Props) => {
 
     return (<>
         <Appbar.Header>
-            <Appbar.BackAction onPress={() => navigation.navigate('HomeView')} />
+            <Appbar.BackAction onPress={goBack} />
             <Appbar.Content title='Medicación' />
-            <Appbar.Action icon="plus" onPress={() => navigation.navigate('MedicationsForm')} />
+            <Appbar.Action icon="plus" onPress={() => navigation.navigate('Medication')} />
         </Appbar.Header>
         <SafeAreaProvider>
             <ScrollView style={{ flexGrow: 1 }} contentContainerStyle={{ flexGrow: 1 }}>

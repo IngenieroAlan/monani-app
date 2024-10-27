@@ -1,18 +1,19 @@
-import { CattleContext, CattleDispatchContext } from "@/context/CattleContext"
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { Cattle, Genealogy } from "@/interfaces/cattleInterfaces"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useContext, useState } from "react"
+import { useState } from "react"
 import { ScrollView, View } from "react-native"
 import { Appbar, Button, Checkbox, Divider, List, Searchbar, Text, TextInput, useTheme } from "react-native-paper"
 import { DatePickerInput } from "react-native-paper-dates"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
+import { reset } from "@/redux/slices/addCattleSlice"
 
 type Props = NativeStackScreenProps<AddCattleStackParams, 'CattleForm'>;
 export const CattleForm = ({ navigation, route }: Props) => {
     const theme = useTheme()
-    const { cattle } = useContext(CattleContext)
-    const dispatch = useContext(CattleDispatchContext)
+    const dispatch = useAppDispatch()
+    const { cattle } = useAppSelector(state => state.addCattle)
     const [currentCattle, setCattle] = useState<Partial<Cattle>>(cattle)
 
     const [genealogy, setGenealogy] = useState<Partial<Genealogy>>({
@@ -62,6 +63,11 @@ export const CattleForm = ({ navigation, route }: Props) => {
         return true
     }
 
+    const goBack = () => {
+        dispatch(reset())
+        navigation.goBack()
+    }
+
     const handleNext = () => {
         // if (!validateForm()) return
 
@@ -72,7 +78,7 @@ export const CattleForm = ({ navigation, route }: Props) => {
 
     return (<>
         <Appbar.Header>
-            <Appbar.BackAction onPress={navigation.goBack} />
+            <Appbar.BackAction onPress={goBack} />
             <Appbar.Content title='Información' />
         </Appbar.Header>
         <SafeAreaProvider>

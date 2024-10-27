@@ -1,25 +1,25 @@
 import DietFeedsList from "@/components/cattle/DietFeedsList"
-import { CattleContext } from "@/context/CattleContext"
 import useFeeds from "@/hooks/collections/useFeeds"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { DietFeedItem } from "@/interfaces/cattleInterfaces"
 import { RootStackParams } from "@/navigation/Navigator"
+import { reset } from "@/redux/slices/addCattleSlice"
 import { setFeeds } from "@/redux/slices/feedsSlice"
 import { RootState } from "@/redux/store/store"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
 
-type Props = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Diet'>;
-export const Diet = ({ navigation }: Props) => {
-    const { cattle, dietFeeds } = useContext(CattleContext)
+export type AddDietNavigationProps = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Diet'>;
+export const Diet = ({ navigation }: AddDietNavigationProps) => {
     const theme = useTheme()
     const feeds = useAppSelector((state: RootState) => state.feeds.records)
     const { getFeeds } = useFeeds()
     const dispatch = useAppDispatch()
+    const { dietFeeds } = useAppSelector((state: RootState) => state.addCattle)
     const [currentDietFeeds, setCurrentDietFeeds] = useState<DietFeedItem[]>([])
 
     useEffect(() => {
@@ -47,16 +47,20 @@ export const Diet = ({ navigation }: Props) => {
         )
     }, [dietFeeds])
 
+    const goBack = () => {
+        dispatch(reset())
+        navigation.navigate('HomeView')
+    }
 
     return (<>
         <Appbar.Header>
-            <Appbar.BackAction onPress={() => navigation.navigate('HomeView')} />
+            <Appbar.BackAction onPress={goBack} />
             <Appbar.Content title='Dieta' />
-            <Appbar.Action icon="plus" onPress={() => navigation.navigate('DietFeedForm')} />
+            <Appbar.Action icon="plus" onPress={() => navigation.navigate('DietFeed')} />
             <Appbar.Action icon="cog" onPress={() => navigation.navigate('DietSettings')} />
         </Appbar.Header>
         <SafeAreaProvider style={{ backgroundColor: theme.colors.surface }}>
-            <DietFeedsList dietFeeds={currentDietFeeds} />
+            <DietFeedsList dietFeeds={currentDietFeeds} navigation={navigation} />
             <View style={styles.navigationButtons}>
                 <Button
                     icon="arrow-left"

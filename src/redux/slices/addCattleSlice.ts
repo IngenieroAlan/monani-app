@@ -50,9 +50,7 @@ const addCattleSlice = createSlice({
 	name: 'addCattle',
 	initialState,
 	reducers: {
-		reset: (state) => {
-			state = initialState
-		},
+		reset: () => initialState,
 		saveCattleInfo: (state, action: PayloadAction<{ cattle: Cattle; genealogy: Genealogy }>) => {
 			state.cattle = action.payload.cattle
 			state.genealogy = action.payload.genealogy

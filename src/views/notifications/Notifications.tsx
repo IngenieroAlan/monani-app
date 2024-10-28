@@ -1,24 +1,21 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { SafeAreaView, ScrollView, View } from 'react-native';
-import { ActivityIndicator, Button, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Text, useTheme } from 'react-native-paper';
 import mainStyles from '../../styles/main';
-import { CustomTextInput } from '@/components/CustomTextInput';
 import { NotificationsList } from '@/components/NotificationsList';
-import { Notification } from '@/interfaces/notificationsInterfaces';
-import { es } from 'date-fns/locale'
-import { formatDistance, subDays } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { useDatabase } from '@nozbe/watermelondb/react';
-import { endLoading, startLoading } from '@/redux/slices/ui';
 import { getNotifications } from '@/redux/slices/notificationsSlice';
 import { RootState } from '@/redux/store/store';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { colors } from '@/utils/colors';
+import Notification from '@/database/models/Notification';
 
-
-const formHelpers = {
-  name: "El campo del nombre es requerido",
-};
+interface FormValues {
+  name: string;
+}
 
 export const NotificationsView = () => {
   const theme = useTheme();
@@ -27,35 +24,60 @@ export const NotificationsView = () => {
   const { notifications } = useAppSelector((state: RootState) => state.notifications);
   const { isLoading } = useAppSelector((state: RootState) => state.ui);
 
-
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({
     defaultValues: {
       name: ""
     }
   });
-  const generateDates = () => {
-    //notifications.sort((a, b) => b.eventAt.getTime() - a.eventAt.getTime());
-    /* notificationsData.forEach((noti) => {
-      //  console.log(
-      //  formatDistance(new Date(noti.eventAt), new Date(), { addSuffix: true, locale: es })); 
-    }) */
-  }
-  useEffect(() => {
-    generateDates();
-  }, [generateDates])
+
+  const formatNotificationDate = (timestamp: Date) => {
+    const today = new Date();
+    const notificationDate = new Date(timestamp);
+
+    const isToday = notificationDate.toDateString() === today.toDateString();
+    const isYesterday = notificationDate.toDateString() === new Date(today.setDate(today.getDate() - 1)).toDateString();
+
+    if (isToday) {
+      return "Hoy";
+    } else if (isYesterday) {
+      return "Ayer";
+    } else {
+      return format(notificationDate, "d 'de' MMMM 'de' yyyy", { locale: es });
+    }
+  };
+
+  const groupNotificationsByDay = (notifications: Notification[]): Record<string, Notification[]> => {
+    return notifications.reduce((acc: Record<string, Notification[]>, notification) => {
+      const dateKey: string = formatNotificationDate(notification.eventAt);
+
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+
+      acc[dateKey].push(notification);
+      return acc;
+    }, {});
+  };
+
+  // Agrupa las notificaciones cada vez que cambian
+  const groupedNotifications = useMemo(() => {
+    return groupNotificationsByDay(notifications);
+  }, [notifications]);
 
   useEffect(() => {
     dispatch(getNotifications(database));
-  }, [dispatch])
-
-
+  }, [dispatch, database]);
 
   return (
     <SafeAreaView style={mainStyles.container}>
       <ScrollView style={mainStyles.container}>
-        {
-          isLoading ? <ActivityIndicator color={colors.notification.default} animating={isLoading}/> : <NotificationsList day='Hoy' dayNotifications={notifications} />
-        }
+        {isLoading ? (
+          <ActivityIndicator color={colors.notification.default} animating={isLoading} />
+        ) : (
+          Object.keys(groupedNotifications).map((day) => (
+            <NotificationsList day={day} key={day} dayNotifications={groupedNotifications[day]} />
+          ))
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -30,7 +30,7 @@ export const NotificationsList = ({ day, dayNotifications }: Props) => {
 
     return (
         <List.Section>
-            <List.Subheader>{day}</List.Subheader>
+            <List.Subheader style={{ fontWeight: 'bold', fontSize: 16 }}>{day}</List.Subheader>
             {
                 dayNotifications && dayNotifications.map((dayNotification) => (
                     <NotificationItemList key={dayNotification.id} database={database} dayNotification={dayNotification} />

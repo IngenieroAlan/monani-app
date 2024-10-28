@@ -1,8 +1,8 @@
 import { colors } from '@/utils/colors';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { IconButton, List, Menu, Icon } from 'react-native-paper';
-import { Navigator } from '../navigation/Navigator';
+//import { Navigator } from '../navigation/Navigator';
 import Notification from '@/database/models/Notification';
 import { useAppDispatch } from '../hooks/useRedux';
 import { deleteNotification, getNotifications, markAsReadNoti } from '@/redux/slices/notificationsSlice';
@@ -52,10 +52,10 @@ export const NotificationItemList = ({ dayNotification, database }: itemProps) =
         dispatch(markAsReadNoti(dayNotification));
         //navigator.navigate('notificationsDetails');
     }
-    const onMarkAsRead = () => {
-        dispatch(markAsReadNoti(dayNotification));
+    const handleMarkAsRead = (notification: Notification) => {
+        dispatch(markAsReadNoti(notification));
         setVisible(false);
-    }
+      };
     const onDelete = () => {
         dispatch(deleteNotification(database, dayNotification));
         setVisible(false);
@@ -78,7 +78,7 @@ export const NotificationItemList = ({ dayNotification, database }: itemProps) =
                     onDismiss={() => setVisible(false)}
                     anchor={<IconButton icon={"dots-vertical"} size={24} iconColor={colors.icons.main} onPress={() => setVisible(true)} />}
                 >
-                    <Menu.Item title="Marcar como leído" leadingIcon="checkbox-outline" onPress={onMarkAsRead} />
+                    <Menu.Item title="Marcar como leído" leadingIcon="checkbox-outline" onPress={()=>handleMarkAsRead(dayNotification)} />
                     <Menu.Item title="Eliminar" leadingIcon="trash-can-outline" onPress={onDelete} />
                 </Menu>
             }

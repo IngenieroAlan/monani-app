@@ -59,7 +59,6 @@ export const NotificationsView = () => {
     }, {});
   };
 
-  // Agrupa las notificaciones cada vez que cambian
   const groupedNotifications = useMemo(() => {
     return groupNotificationsByDay(notifications);
   }, [notifications]);

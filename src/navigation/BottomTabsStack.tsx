@@ -8,20 +8,16 @@ import { NotificationsStack } from './stacks/NotificationsStack';
 import { useDatabase } from '@nozbe/watermelondb/react';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { getNotifications } from '@/redux/slices/notificationsSlice';
+
 const Tab = createMaterialBottomTabNavigator();
 
 const BottomTabsStack = () => {
   const database = useDatabase();
   const dispatch = useAppDispatch();
-  const {notifications} = useAppSelector(state=>state.notifications)
-  const [notisCount, setNotisCount] = useState(0);
+  const { notificationsCount } = useAppSelector(state => state.notifications);
   useEffect(() => {
-    setNotisCount(notifications.filter(noti=>noti.isMarkedAsRead===false).length)
-  }, [notifications])
-  useEffect(() => {
-    dispatch(getNotifications(database))
-  }, [dispatch])
-  
+    dispatch(getNotifications(database));
+  }, [dispatch]);
 
 
   return (
@@ -58,9 +54,9 @@ const BottomTabsStack = () => {
           name="Notificaciones"
           component={NotificationsStack}
           options={{
-            tabBarBadge: notisCount,
+            tabBarBadge: notificationsCount > 0 ? notificationsCount : undefined,
             tabBarIcon: ({ color }) => (
-              <Icon source="bell-outline" color={color} size={24} ></Icon>
+              <Icon source="bell-outline" color={color} size={24} />
             ),
           }}
         />

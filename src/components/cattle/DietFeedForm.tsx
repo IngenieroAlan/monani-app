@@ -1,12 +1,17 @@
 import DietFeedSchema from "@/validationSchemas/DietFeedSchema";
-import { memo, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Control, FormState } from "react-hook-form";
-import { View } from "react-native";
+import { FlatList, View } from "react-native";
 import { HelperText, Searchbar, useTheme } from "react-native-paper";
 import { z } from "zod";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import SearchFeedList from "./SearchFeedList";
+import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
+import useFeeds from "@/hooks/collections/useFeeds";
+import { setFeeds } from "@/redux/slices/feedsSlice";
+import { RootState } from "@/redux/store/store";
 
 type DietFeedFields = z.infer<typeof DietFeedSchema>
 
@@ -16,12 +21,22 @@ const DietFeedForm = (
       control: Control<DietFeedFields>;
       formState: FormState<DietFeedFields>;
       feedName?: string;
-    }) => {
+    }
+) => {
   const theme = useTheme();
-  const [searchQuery, setSearchQuery] = useState(feedName || '');
-  const [searchBarFocused, setSearchBarFocused] = useState(false);
-  const [activeList, setActiveList] = useState(false)
-  const { errors } = formState
+  const { errors } = formState;
+
+  const feeds = useAppSelector((state: RootState) => state.feeds.records)
+  const { getFeeds } = useFeeds()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    const fetchFeeds = async () => {
+      dispatch(setFeeds(await getFeeds()))
+    }
+
+    if (feeds.length === 0) fetchFeeds()
+  }, [feeds])
 
   const dropdownOptions = [
     {
@@ -34,50 +49,30 @@ const DietFeedForm = (
     }
   ]
 
+  const feedData: SearchBarDataItem[] =
+    useMemo(() =>
+      feeds.map(feed => ({
+        id: feed.id,
+        title: feed.name,
+        description: feed.feedType,
+        value: feed.id
+      }))
+      , [feeds])
+  const flatListRef = useRef<FlatList>(null)
+
   return (
     <View style={{ padding: 16, gap: 10, flex: 1 }}>
-      <Searchbar
+      <MSearchBar
+        name='feedId'
+        control={control}
         placeholder="Alimento"
+        initialQuery={feedName}
         mode="bar"
         theme={{ roundness: 1 }}
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        onFocus={() => setSearchBarFocused(true)}
-        onBlur={() => activeList ? setSearchBarFocused(false) : setSearchBarFocused(true)}
+        data={feedData}
+        errroMessage={errors.feedId?.message ? errors.feedId?.message : ''}
+        maxHeight={500}
       />
-
-      {
-        errors.feedId && <HelperText type="error">
-          {errors.feedId.message}
-        </HelperText>
-      }
-
-      {searchBarFocused && (
-        <View style={{
-          position: "absolute",
-          zIndex: 1,
-          backgroundColor: theme.colors.surface,
-          margin: 16,
-          top: 64,
-          width: "100%",
-          borderRadius: 10,
-          elevation: 5,
-          paddingVertical: 8
-        }}>
-          <SearchFeedList
-            searchPhrase={searchQuery}
-            setSearchQuery={setSearchQuery}
-            setSearchBarFocused={setSearchBarFocused}
-            control={control}
-            name='feedId'
-            setClicked={() => {
-              setSearchBarFocused(false)
-              setActiveList(false)
-            }}
-          />
-        </View>
-      )}
-
       <MDropdown
         name='feedProportion'
         control={control}

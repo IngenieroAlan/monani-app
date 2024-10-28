@@ -1,6 +1,6 @@
 
 import DietSettings from "@/components/cattle/DietSettings";
-import { CattleForm } from "@/views/addCattle/CattleInfo";
+import { CattlInfo } from "@/views/addCattle/CattleInfo";
 import { Diet } from "@/views/addCattle/Diet";
 import DietFeed from "@/views/addCattle/DietFeed";
 import Medication from "@/views/addCattle/Medication";
@@ -9,7 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
 export type AddCattleStackParams = {
-	CattleForm: undefined;
+	CattleInfo: undefined;
 	Diet: undefined;
 	DietSettings: undefined;
 	DietFeed: {
@@ -26,8 +26,8 @@ const AddCattleStack = () => {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: false }}>
 			<Stack.Screen
-				name="CattleForm"
-				component={CattleForm}
+				name="CattleInfo"
+				component={CattlInfo}
 			/>
 			<Stack.Screen
 				name="Diet"

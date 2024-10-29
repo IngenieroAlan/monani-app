@@ -1,6 +1,5 @@
 import Cattle from "@/database/models/Cattle";
 import useCattle from "@/hooks/collections/useCattle";
-import { CattleInfoFields } from "@/validationSchemas/cattleInfoSchema";
 import { Q } from "@nozbe/watermelondb";
 import { memo, useEffect, useMemo, useState } from "react";
 import { Control, Controller, FormState, useController } from "react-hook-form";
@@ -10,6 +9,7 @@ import { DatePickerInput } from "react-native-paper-dates";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import MSearchBar from "../MSearchBar";
+import { CattleInfoFields } from "@/redux/slices/addCattleSlice";
 // import { FlatList } from "react-native-gesture-handler";
 
 const CattleInfoForm = (
@@ -22,7 +22,8 @@ const CattleInfoForm = (
 ) => {
   const theme = useTheme();
   const { errors } = formState;
-  const { field, fieldState } = useController({ name: 'cattleStatus', control });
+  const { field: cattleStatusField } = useController({ name: 'cattleStatus', control });
+  const { field: quarantineDaysLeft } = useController({ name: 'quarantineDaysLeft', control });
 
   const cattleStatusOptions = [
     {
@@ -30,8 +31,8 @@ const CattleInfoForm = (
       value: 'Gestante'
     },
     {
-      label: 'Producción',
-      value: 'Producción'
+      label: 'En producción',
+      value: 'En producción'
     },
     {
       label: 'De reemplazo',
@@ -186,7 +187,7 @@ const CattleInfoForm = (
             }}
           />
 
-          {field.value === 'Gestante' && (
+          {cattleStatusField.value === 'Gestante' && (
             <Controller
               name="pregnantAt"
               control={control}
@@ -245,6 +246,7 @@ const CattleInfoForm = (
             status={inQuarantine ? 'checked' : 'unchecked'}
             onPress={() => {
               setQuarantine(!inQuarantine);
+              quarantineDaysLeft.onChange(inQuarantine ? 0 : undefined as any)
             }}
           />
           <CustomTextInput
@@ -254,7 +256,8 @@ const CattleInfoForm = (
             errors={errors.quarantineDaysLeft}
             helperText={errors.quarantineDaysLeft?.message ? errors.quarantineDaysLeft.message : ''}
             more={{
-              keyboardType: "numeric"
+              keyboardType: "numeric",
+              disabled: !inQuarantine
             }}
           />
         </View>

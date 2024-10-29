@@ -1,17 +1,18 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
+import useMedications from "@/hooks/collections/useMedications"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
+import { MedicationScheduleItem } from "@/interfaces/cattleInterfaces"
 import { RootStackParams } from "@/navigation/Navigator"
 import { reset } from "@/redux/slices/addCattleSlice"
+import { setMedications } from "@/redux/slices/medicationsSlice"
+import { RootState } from "@/redux/store/store"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
-import { RootState } from "@/redux/store/store"
-import useMedications from "@/hooks/collections/useMedications"
-import { MedicationScheduleItem } from "@/interfaces/cattleInterfaces"
-import { useEffect, useState } from "react"
-import { setMedications } from "@/redux/slices/medicationsSlice"
+import useCattle from "@/hooks/collections/useCattle"
 
 export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Medications'>;
 export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) => {
@@ -19,8 +20,9 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
   const dispatch = useAppDispatch()
   const medications = useAppSelector((state: RootState) => state.medications.records)
   const { getMedications } = useMedications()
-  const { medicationSchedules } = useAppSelector((state: RootState) => state.addCattle)
+  const { cattle, diet, dietFeeds, medicationSchedules } = useAppSelector((state: RootState) => state.addCattle)
   const [currentMedicationSchedules, setCurrentMedicationSchedules] = useState<MedicationScheduleItem[]>([])
+  const { createCattle } = useCattle()
 
   useEffect(() => {
     const fetchMedications = async () => {
@@ -30,14 +32,14 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
     if (medications.length === 0) fetchMedications()
   }, [medications])
 
-  useEffect(() => {    
+  useEffect(() => {
     setCurrentMedicationSchedules(
       medicationSchedules.map(medicationSchedule => {
         const medication = medications.find(medication => medication.id === medicationSchedule.medicationId)
         return {
           ...medicationSchedule,
           medicationType: medication?.medicationType || 'Otro',
-          medicationName: medication?.name || '', 
+          medicationName: medication?.name || '',
         }
       })
     )
@@ -50,8 +52,14 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
     navigation.navigate('HomeView')
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // TODO: Save cattle to db
+    // await createCattle(
+    //   cattle,
+    //   diet,
+    //   dietFeeds,
+    //   medicationSchedules
+    // )
 
     navigation.navigate('HomeView');
   }

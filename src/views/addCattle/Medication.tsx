@@ -77,7 +77,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
   return (<>
     <Appbar.Header>
       <IconButton icon={'close'} onPress={navigation.goBack} />
-      <Appbar.Content title='Agregar medicación' />
+      <Appbar.Content title={modify ? 'Ajustar medicación' : 'Agregar medicación'} />
       <Button onPress={handleSubmit(onSubmit)} disabled={!isValid || !isDirty || isSubmitting}>Guardar</Button>
     </Appbar.Header>
     <MedicationForm

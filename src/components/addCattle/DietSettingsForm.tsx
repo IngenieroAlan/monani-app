@@ -1,22 +1,23 @@
 import { memo } from "react";
 import { Control, Controller, FormState, useController } from "react-hook-form";
 import { View } from "react-native";
-import { Checkbox, useTheme } from "react-native-paper";
+import { Checkbox, Text, useTheme } from "react-native-paper";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import { ACDietFields } from "@/validationSchemas/ACDietSchema";
 
 const DietSettingsForm = (
-  { control, formState }:
+  { control, formState, cattleWeight }:
     {
       control: Control<ACDietFields>;
       formState: FormState<ACDietFields>;
+      cattleWeight: number;
     }
 ) => {
   const theme = useTheme();
   const { errors } = formState;
   const { field: matterProportion } = useController({ name: 'matterProportion', control });
-  const { field: matterAmount } = useController({ name: 'matterAmount', control });
+  const { field: quantity } = useController({ name: 'quantity', control });
 
   const dropdownOptions = [
     {
@@ -55,7 +56,7 @@ const DietSettingsForm = (
         errroMessage={errors.matterProportion?.message}
         onSelect={() => {
           if (matterProportion.value === 'Sin definir') {
-            matterAmount.onChange(undefined);
+            quantity.onChange(undefined);
           }
         }}
         theme={{
@@ -63,26 +64,29 @@ const DietSettingsForm = (
         }}
       />
 
-      {matterProportion.value !== 'Sin definir' && (
-        <CustomTextInput
-          name='matterAmount'
-          control={control}
-          label='Cantidad de materia*'
-          errors={errors.matterAmount}
-          helperText={errors.matterAmount?.message ? errors.matterAmount?.message : ''}
-          more={{
-            theme: { colors: { background: theme.colors.elevation.level3 } },
-            keyboardType: 'numeric',
-          }}
-        />
-      )}
+      <CustomTextInput
+        name='quantity'
+        control={control}
+        label='Cantidad de materia*'
+        errors={errors.quantity}
+        helperText={errors.quantity?.message ? errors.quantity?.message : ''}
+        more={{
+          theme: { colors: { background: theme.colors.elevation.level3 } },
+          keyboardType: 'numeric',
+          disabled: matterProportion.value === 'Sin definir'
+        }}
+      />
+      <Text variant="labelSmall">
+        {matterProportion.value === 'Porcentaje de peso' ?
+          `Equivalente a ${(cattleWeight * ((quantity.value ?? 0) / 100))} kg.` : ''}
+      </Text>
 
       <Controller
         control={control}
         name="isConcentrateExcluded"
         render={({ field: { onChange, value } }) => (
           <Checkbox.Item
-            label="En cuarentena"
+            label="Excluir concentrado de la proporción de materia"
             status={value ? 'checked' : 'unchecked'}
             onPress={() => onChange(!value)}
           />

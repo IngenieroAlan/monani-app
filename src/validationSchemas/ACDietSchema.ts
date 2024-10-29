@@ -6,7 +6,7 @@ const MatterProportionEnum = z.enum(["Porcentaje de peso", "Fija", "Sin definir"
 const ACDietSchema = z.object({
   waterAmount: z.coerce.number(),
   matterProportion: MatterProportionEnum,
-  matterAmount: z.coerce.number().optional(),
+  quantity: z.coerce.number().optional(),
   isConcentrateExcluded: z.boolean()
 })
 

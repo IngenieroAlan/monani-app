@@ -4,24 +4,27 @@ import { setFeeds } from "@/redux/slices/feedsSlice";
 import { RootState } from "@/redux/store/store";
 import DietFeedSchema, { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
 import { memo, useEffect, useMemo } from "react";
-import { Control, FormState } from "react-hook-form";
+import { Control, FormState, useController } from "react-hook-form";
 import { View } from "react-native";
-import { useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import { z } from "zod";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
 
 const DietFeedForm = (
-  { control, formState, feedName }:
+  { control, formState, feedName, cattleWeight }:
     {
       control: Control<DietFeedFields>;
       formState: FormState<DietFeedFields>;
       feedName?: string;
+      cattleWeight: number;
     }
 ) => {
   const theme = useTheme();
   const { errors } = formState;
+  const { field: feedProportion } = useController({ name: 'feedProportion', control });
+  const { field: quantity } = useController({ name: 'quantity', control });
 
   const feeds = useAppSelector((state: RootState) => state.feeds.records)
   const { getFeeds } = useFeeds()
@@ -92,6 +95,10 @@ const DietFeedForm = (
           keyboardType: 'numeric'
         }}
       />
+      <Text variant='labelSmall'>
+        {feedProportion.value === 'Por porcentaje' ?
+          `Equivalente a ${(cattleWeight * (quantity.value / 100))} kg.` : ''}
+      </Text>
 
     </View>
   )

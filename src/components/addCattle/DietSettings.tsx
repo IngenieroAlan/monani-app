@@ -16,7 +16,7 @@ export default function DietSettings({ navigation }: NativeStackScreenProps<AddC
   const initialDietFeedValues = diet ? {
     waterAmount: diet.waterAmount ?? 0,
     matterProportion: diet.matterProportion,
-    matterAmount: diet.matterAmount ?? 0,
+    quantity: diet.matterProportion === 'Fija' ? diet.matterAmount : diet.percentage,
     isConcentrateExcluded: diet.isConcentrateExcluded ?? false
   } : undefined
 
@@ -27,9 +27,9 @@ export default function DietSettings({ navigation }: NativeStackScreenProps<AddC
     formState
   } = useForm<ACDietFields>({
     defaultValues: initialDietFeedValues || {
-      matterAmount: undefined,
-      matterProportion: 'Sin definir',
       waterAmount: undefined,
+      matterProportion: 'Sin definir',
+      quantity: undefined,
       isConcentrateExcluded: false
     },
     resolver: zodResolver(ACDietSchema),
@@ -40,7 +40,7 @@ export default function DietSettings({ navigation }: NativeStackScreenProps<AddC
   const onSubmit = useCallback(() => {
     const matterProportion = getValues('matterProportion')
     const waterAmount = getValues('waterAmount')
-    const quantity = getValues('matterAmount')
+    const quantity = getValues('quantity')
     const isConcentrateExcluded = getValues('isConcentrateExcluded')
     const percentage = matterProportion === 'Porcentaje de peso' ? quantity : undefined
 
@@ -52,13 +52,11 @@ export default function DietSettings({ navigation }: NativeStackScreenProps<AddC
         matterAmount = cattle.weight * (quantity / 100)
       }
     }
-    console.log(matterAmount);
-    
 
     dispatch(setDiet({
       diet: {
         dietId: diet.dietId,
-        matterAmount,
+        matterAmount: matterAmount,
         matterProportion,
         waterAmount,
         isConcentrateExcluded,
@@ -78,6 +76,7 @@ export default function DietSettings({ navigation }: NativeStackScreenProps<AddC
     <DietSettingsForm
       control={control}
       formState={formState}
+      cattleWeight={cattle.weight}
     />
   </>)
 }

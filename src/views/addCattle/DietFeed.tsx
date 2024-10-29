@@ -86,13 +86,14 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
   return (<>
     <Appbar.Header>
       <IconButton icon={'close'} onPress={navigation.goBack} />
-      <Appbar.Content title='Dieta' />
+      <Appbar.Content title={modify ? 'Ajustar alimento' : 'Agregar alimento'} />
       <Button onPress={handleSubmit(onSubmit)} disabled={!isValid || !isDirty || isSubmitting}>Guardar</Button>
     </Appbar.Header>
     <DietFeedForm
       control={control}
       formState={formState}
       feedName={feedName}
+      cattleWeight={cattle.weight}
     />
   </>)
 }

@@ -3,9 +3,12 @@ import { MatterProportion } from '@/database/models/Diet';
 import { Cattle, Diet, DietFeed, Genealogy, MedicationSchedule } from '@/interfaces/cattleInterfaces';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+export interface CattleInfoFields extends
+	Omit<Cattle, 'cattleId' | 'isActive' | 'isArchived' | 'isSold' | 'dietId'> {
+	motherId?: string
+}
 export interface CattleState {
-	cattle: Cattle;
-	genealogy: Genealogy;
+	cattle: CattleInfoFields
 	diet: Diet;
 	dietFeeds: DietFeed[];
 	medicationSchedules: MedicationSchedule[];
@@ -13,7 +16,6 @@ export interface CattleState {
 
 const initialState: CattleState = {
 	cattle: {
-		cattleId: '',
 		name: '',
 		weight: 500, // temporary value
 		bornAt: new Date(),
@@ -24,15 +26,7 @@ const initialState: CattleState = {
 		productionType: '' as ProductionType,
 		quarantineDaysLeft: 0,
 		pregnantAt: undefined,
-		isActive: false,
-		isArchived: false,
-		isSold: false,
-		dietId: '',
-	},
-
-	genealogy: {
 		motherId: '',
-		offspringId: '',
 	},
 
 	diet: {
@@ -54,9 +48,8 @@ const addCattleSlice = createSlice({
 	initialState,
 	reducers: {
 		reset: () => initialState,
-		saveCattleInfo: (state, action: PayloadAction<{ cattle: Cattle; genealogy: Genealogy }>) => {
+		saveCattleInfo: (state, action: PayloadAction<{ cattle: CattleInfoFields }>) => {
 			state.cattle = action.payload.cattle
-			state.genealogy = action.payload.genealogy
 		},
 		saveDietFeed: (state, action: PayloadAction<{ dietFeed: DietFeed }>) => {
 			state.dietFeeds.push(action.payload.dietFeed)

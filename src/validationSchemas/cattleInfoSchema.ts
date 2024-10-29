@@ -8,11 +8,7 @@ const CattleStatusEnum = z.enum(["Gestante", "En producción", "De reemplazo", "
 const ProductionTypeEnum = z.enum(["Lechera", "De carne"]) satisfies z.ZodType<ProductionType>
 
 const CattleInfoSchema = z.object({
-  name: z
-    .string()
-    .min(NAME_MIN_LENGTH, { message: `El nombre debe contener mínimo ${NAME_MIN_LENGTH} caracteres.` })
-    .max(NAME_MAX_LENGTH, { message: `El nombre debe contener máximo ${NAME_MAX_LENGTH} caracteres.` })
-    .optional(),
+  name: z.string().optional(),
   tagId: z.string(),
   tagCattleNumber: z.string(),
   admittedAt: z.date(),
@@ -25,5 +21,4 @@ const CattleInfoSchema = z.object({
   quarantineDaysLeft: z.coerce.number().optional(),
 })
 
-export default CattleInfoSchema
-export type CattleInfoFields = z.infer<typeof CattleInfoSchema>
+export default CattleInfoSchema;

@@ -7,14 +7,14 @@ import { CattleStatus, ProductionType } from "../database/models/Cattle";
 
 interface Cattle {
     cattleId: string;
-    name: string | undefined;
+    name?: string;
     tagId: string;
     tagCattleNumber: string;
     weight: number;
-    quarantineDaysLeft: number | undefined;
+    quarantineDaysLeft?: number;
     admittedAt: Date;
     bornAt: Date;
-    pregnantAt: Date | undefined;
+    pregnantAt?: Date;
     productionType: ProductionType;
     cattleStatus: CattleStatus;
     isActive: boolean;
@@ -24,7 +24,7 @@ interface Cattle {
 }
 interface CattleArchive {
     cattleId: string;
-    notes: string | undefined;
+    notes?: string;
     archivedAt: Date;
     reason: ArchiveReason;
 }
@@ -36,8 +36,8 @@ interface CattleSale {
 interface Diet {
     dietId: string;
     waterAmount: number;
-    matterAmount: number | undefined;
-    percentage: number | undefined;
+    matterAmount?: number;
+    percentage?: number;
     matterProportion: MatterProportion;
     isConcentrateExcluded: boolean;
 }
@@ -46,7 +46,7 @@ interface DietFeed {
     dietId: string;
     feedId: string;
     feedAmount: number;
-    percentage: number | undefined;
+    percentage?: number;
     feedProportion: FeedProportion;
 }
 interface Feed {

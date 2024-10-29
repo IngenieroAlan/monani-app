@@ -27,8 +27,10 @@ const CattleListItem = ({ record }: { record: CattleSale }) => {
     <List.Item
       title={title}
       description={`${useNumberFormat(record.kg.toFixed(3))} kg.`}
+      left={() => <Icon size={24} source='cow' />}
       right={right}
       onPress={() => {}}
+      style={{ paddingStart: 16 }}
     />
   )
 }

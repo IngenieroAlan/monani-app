@@ -30,8 +30,10 @@ const MilkListItem = ({ record }: { record: MilkSale }) => {
     <List.Item
       title={title}
       description={`${useNumberFormat(record.liters.toFixed(3))} L.`}
+      left={() => <Icon size={24} source='beer-outline' />}
       right={right}
       onPress={() => {}}
+      style={{ paddingStart: 16 }}
     />
   )
 }

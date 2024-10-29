@@ -3,9 +3,11 @@ import MilkSale from '@/database/models/MilkSale'
 import { TableName } from '@/database/schema'
 import { Model, Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
-import { formatISO } from 'date-fns'
+import { formatISO, set } from 'date-fns'
 import merge from 'deepmerge'
 import { useEffect, useState } from 'react'
+
+export type SalesType = 'Lechera' | 'Ganado'
 
 export type EarningsRecord = {
   date: string
@@ -20,7 +22,7 @@ type EarningsData = {
   }
 }
 
-const useEarnings = ({ take }: { take?: number }) => {
+const useEarnings = ({ take, salesType }: { take?: number, salesType?: SalesType | null }) => {
   const database = useDatabase()
   const [cattleSales, setCattleSales] = useState<CattleSale[]>([])
   const [milkSales, setMilkSales] = useState<MilkSale[]>([])
@@ -29,7 +31,6 @@ const useEarnings = ({ take }: { take?: number }) => {
   let cattleSalesQuery = database.collections
     .get<CattleSale>(TableName.CATTLE_SALES)
     .query(Q.sortBy('sold_at', Q.desc))
-
   let milkSalesQuery = database.collections
     .get<MilkSale>(TableName.MILK_SALES)
     .query(Q.sortBy('sold_at', Q.desc))
@@ -43,13 +44,14 @@ const useEarnings = ({ take }: { take?: number }) => {
     const salesEarnings: EarningsData = {}
 
     for (const sale of data) {
-      const date = formatISO(sale.soldAt)
+      const date = set(sale.soldAt, { hours: 0, minutes: 0, seconds: 0 })
+      const isoDate = formatISO(date)
 
-      if (!salesEarnings[date]?.[key]) {
-        salesEarnings[date] = { cattleSales: [], milkSales: [] }
+      if (!salesEarnings[isoDate]?.[key]) {
+        salesEarnings[isoDate] = { cattleSales: [], milkSales: [] }
       }
 
-      salesEarnings[date][key].push(sale as any)
+      salesEarnings[isoDate][key].push(sale as any)
     }
 
     return salesEarnings
@@ -57,28 +59,37 @@ const useEarnings = ({ take }: { take?: number }) => {
 
   useEffect(() => {
     const cattleSalesSubscription = cattleSalesQuery.observeWithColumns(['sold_at']).subscribe((data) => {
-      setCattleSales(data)
+      setCattleSales(salesType === 'Ganado' || salesType === null ? data : [])
     })
     const milkSalesSubscription = milkSalesQuery.observeWithColumns(['sold_at']).subscribe((data) => {
-      setMilkSales(data)
+      setMilkSales(salesType === 'Lechera' || salesType === null ? data : [])
     })
 
     return () => {
       cattleSalesSubscription.unsubscribe()
       milkSalesSubscription.unsubscribe()
     }
-  }, [database, take])
+  }, [database, take, salesType])
 
   useEffect(() => {
     const cattleEarnings = retrieveEarnings(cattleSales, 'cattleSales')
     const milkEarnings = retrieveEarnings(milkSales, 'milkSales')
 
-    const earnings: EarningsData = merge(milkEarnings, cattleEarnings, {
+    const earnings: EarningsData = merge(cattleEarnings, milkEarnings, {
       isMergeableObject: (value) => !(value instanceof Model)
     })
 
+    const sortedDates = Object.keys(earnings).sort((a, b) => {
+      return new Date(b).getTime() - new Date(a).getTime()
+    })
+
+    const sortedEarnings: EarningsData = {}
+    for (const date of sortedDates) {
+      sortedEarnings[date] = earnings[date]
+    }
+
     setEarningsRecords(
-      Object.entries(earnings).map(([date, sales]) => ({
+      Object.entries(sortedEarnings).map(([date, sales]) => ({
         date,
         ...sales
       }))

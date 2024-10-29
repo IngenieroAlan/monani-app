@@ -1,14 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import {
+  addCattleReducer,
   bottomSheetReducer,
+  earningsQueryReducer,
   feedsReducer,
   homeCattleListQueryReducer,
   homeFiltersReducer,
   medicationsReducer,
   notificationsReducer,
   uiReducer,
-  uiVisibilityReducer,
-  addCattleReducer
+  uiVisibilityReducer
 } from '../slices'
 
 const store = configureStore({
@@ -22,6 +23,7 @@ const store = configureStore({
     feeds: feedsReducer,
     medications: medicationsReducer,
     addCattle: addCattleReducer,
+    earningsQuery: earningsQueryReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
 })

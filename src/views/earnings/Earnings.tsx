@@ -1,12 +1,16 @@
+import EarningsList from '@/components/earnings/EarningsList'
 import React from 'react'
 import { View } from 'react-native'
-import { Text } from 'react-native-paper';
-import mainStyles from '../../styles/main';
+import { useTheme } from 'react-native-paper'
 
-export const EarningsView = () => {
+const EarningsView = () => {
+  const theme = useTheme()
+
   return (
-    <View style={mainStyles.container}>
-      <Text>EarningsView</Text>
+    <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>      
+      <EarningsList />
     </View>
   )
 }
+
+export default EarningsView

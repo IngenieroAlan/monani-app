@@ -1,19 +1,16 @@
-import DietFeedSchema from "@/validationSchemas/DietFeedSchema";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import useFeeds from "@/hooks/collections/useFeeds";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
+import { setFeeds } from "@/redux/slices/feedsSlice";
+import { RootState } from "@/redux/store/store";
+import DietFeedSchema, { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
+import { memo, useEffect, useMemo } from "react";
 import { Control, FormState } from "react-hook-form";
-import { FlatList, View } from "react-native";
-import { HelperText, Searchbar, useTheme } from "react-native-paper";
+import { View } from "react-native";
+import { useTheme } from "react-native-paper";
 import { z } from "zod";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
-import SearchFeedList from "./SearchFeedList";
 import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
-import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import useFeeds from "@/hooks/collections/useFeeds";
-import { setFeeds } from "@/redux/slices/feedsSlice";
-import { RootState } from "@/redux/store/store";
-
-type DietFeedFields = z.infer<typeof DietFeedSchema>
 
 const DietFeedForm = (
   { control, formState, feedName }:
@@ -44,8 +41,8 @@ const DietFeedForm = (
       value: 'Por porcentaje'
     },
     {
-      label: 'Por cantidad',
-      value: 'Por cantidad'
+      label: 'Fija',
+      value: 'Fija'
     }
   ]
 
@@ -58,7 +55,6 @@ const DietFeedForm = (
         value: feed.id
       }))
       , [feeds])
-  const flatListRef = useRef<FlatList>(null)
 
   return (
     <View style={{ padding: 16, gap: 10, flex: 1 }}>

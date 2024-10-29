@@ -1,5 +1,5 @@
 
-import DietSettings from "@/components/cattle/DietSettings";
+import DietSettings from "@/components/addCattle/DietSettings";
 import { CattlInfo } from "@/views/addCattle/CattleInfo";
 import { Diet } from "@/views/addCattle/Diet";
 import DietFeed from "@/views/addCattle/DietFeed";
@@ -13,12 +13,16 @@ export type AddCattleStackParams = {
 	Diet: undefined;
 	DietSettings: undefined;
 	DietFeed: {
-		dietFeedId: string;
+		medicationScheduleId: string;
 		modify: boolean;
 	}
 	| undefined;
 	Medications: undefined;
-	Medication: undefined;
+	Medication: {
+		medicationScheduleId: string;
+		modify: boolean;
+	}
+	| undefined;
 }
 
 const Stack = createStackNavigator<AddCattleStackParams>();

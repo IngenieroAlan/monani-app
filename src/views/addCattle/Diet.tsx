@@ -1,4 +1,4 @@
-import DietFeedsList from "@/components/cattle/DietFeedsList"
+import DietFeedsList from "@/components/addCattle/DietFeedsList"
 import useFeeds from "@/hooks/collections/useFeeds"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { DietFeedItem } from "@/interfaces/cattleInterfaces"
@@ -38,7 +38,7 @@ export const Diet = ({ navigation }: AddDietNavigationProps) => {
                 dietFeedId: dietFeed.dietFeedId,
                 dietId: dietFeed.dietId,
                 feedId: dietFeed.feedId,
-                name: feed?.name || '',
+                FeedName: feed?.name || '',
                 feedAmount: dietFeed.feedAmount,
                 feedProportion: dietFeed.feedProportion,
                 percentage: dietFeed.percentage,

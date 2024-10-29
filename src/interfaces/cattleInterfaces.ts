@@ -54,8 +54,8 @@ interface Feed {
     name: string;
     feedType: FeedType;
 }
-interface DietFeedItem extends DietFeed { 
-    name: string;
+interface DietFeedItem extends DietFeed {
+    FeedName: string;
 }
 interface Genealogy {
     motherId: string;
@@ -67,10 +67,15 @@ interface Medication {
     medicationType: MedicationType;
 }
 interface MedicationSchedule {
+    medicationScheduleId: string;
     cattleId: string;
     medicationId: string;
     nextDoseAt: Date;
     dosesPerYear: number;
+}
+interface MedicationScheduleItem extends MedicationSchedule {
+    medicationName: string;
+    medicationType: MedicationType;
 }
 interface MilkReport {
     cattleId: string;
@@ -98,6 +103,7 @@ export type {
     Genealogy,
     Medication,
     MedicationSchedule,
+    MedicationScheduleItem,
     MilkReport,
     WeightReport
 }

@@ -1,6 +1,6 @@
 import { Model, Q, Query, Relation } from '@nozbe/watermelondb'
 import { children, date, field, immutableRelation, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
-import { addDays, differenceInCalendarDays, formatISO, getYear, isAfter } from 'date-fns'
+import { addDays, differenceInCalendarDays, format, getYear, isAfter } from 'date-fns'
 import { TableName } from '../schema'
 import AnnualEarnings from './AnnualEarnings'
 import CattleArchive, { ArchiveReason } from './CattleArchive'
@@ -201,11 +201,11 @@ class Cattle extends Model {
   async weigh({ weight, weighedAt }: { weight: number, weighedAt: Date }) {
     if (isAfter(weighedAt, this.admittedAt)){
       throw new Error(
-        `A weight report can't have a date after ${formatISO(this.admittedAt, { representation: 'date' })}.`
+        `A weight report can't have a date after ${format(this.admittedAt, 'yyyy/MM/dd')}.`
       )
     }
 
-    const weighedAtDate = formatISO(weighedAt, { representation: 'date' })
+    const weighedAtDate = format(weighedAt, 'yyyy/MM/dd')
     const existingReport = await this.weightReports
       .extend(
         Q.where('cattle_id', this.id),
@@ -266,7 +266,7 @@ class Cattle extends Model {
    */
   @writer
   async createMilkReport({ liters, reportedAt }: { liters: number, reportedAt: Date }) {
-    const reportedAtDate = formatISO(reportedAt, { representation: 'date' })
+    const reportedAtDate = format(reportedAt, 'yyyy/MM/dd')
     const milkReports = await this.milkReports.extend(
       Q.unsafeSqlExpr(`strftime("%Y-%m-%d", datetime(reported_at / 1000, "unixepoch")) = '${reportedAtDate}'`)
     )

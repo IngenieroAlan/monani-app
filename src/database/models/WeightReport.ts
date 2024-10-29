@@ -1,6 +1,6 @@
 import { Model, Q, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, lazy, readonly, writer } from '@nozbe/watermelondb/decorators'
-import { differenceInCalendarDays, formatISO, isAfter } from 'date-fns'
+import { differenceInCalendarDays, format, isAfter } from 'date-fns'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
 
@@ -48,11 +48,11 @@ class WeightReport extends Model {
 
     if (isAfter(weighedAt, cattle.admittedAt)){
       throw new Error(
-        `A weight report can't have a date after ${formatISO(cattle.admittedAt, { representation: 'date' })}.`
+        `A weight report can't have a date after ${format(cattle.admittedAt, 'yyyy/MM/dd')}.`
       )
     }
 
-    const weighedAtDate = formatISO(weighedAt, { representation: 'date' })
+    const weighedAtDate = format(weighedAt, 'yyyy/MM/dd')
     const existingReport = await this.collections
       .get<WeightReport>(TableName.WEIGHT_REPORTS)
       .query(Q.unsafeSqlQuery(

@@ -43,7 +43,7 @@ const useEarnings = ({ take }: { take?: number }) => {
     const salesEarnings: EarningsData = {}
 
     for (const sale of data) {
-      const date = formatISO(sale.soldAt, { representation: 'date' })
+      const date = formatISO(sale.soldAt)
 
       if (!salesEarnings[date]?.[key]) {
         salesEarnings[date] = { cattleSales: [], milkSales: [] }

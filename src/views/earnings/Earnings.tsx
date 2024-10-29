@@ -1,4 +1,4 @@
-import EarningsList from '@/components/earnings/EarningsList'
+import EarningsList from '@/components/earnings/EarningsList/EarningsList'
 import EarningsListFilters from '@/components/earnings/EarningsListFilters'
 import SalesFilterBottomSheet from '@/components/earnings/SalesFilterBottomSheet'
 import React from 'react'

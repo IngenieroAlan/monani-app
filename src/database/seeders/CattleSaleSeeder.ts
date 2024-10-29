@@ -50,7 +50,9 @@ const CattleSaleSeeder = async () => {
   const annualEarningsRecords: { [year: number]: number } = {}
 
   for (let i = 0; i < NUM_OF_RECORDS; i++) {
-    cattleSaleRecords.push(CattleSaleFactory(cattle[i].id, cattle[i].weight))
+    const latestWeightReport = (await cattle[i].latestWeightReport)[0]
+
+    cattleSaleRecords.push(CattleSaleFactory(cattle[i], latestWeightReport.weight))
 
     totalCattleSales += cattleSaleRecords[i].sold_by
 

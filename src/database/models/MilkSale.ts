@@ -14,6 +14,8 @@ class MilkSale extends Model {
   @readonly @date('updated_at') updatedAt!: Date
 
   @date('sold_at') soldAt!: Date
+  @field('details') details!: string
+  @field('liters') liters!: number
   @field('sold_by') soldBy!: number
 
   @immutableRelation(TableName.MILK_PRODUCTIONS, 'milk_production_id') milkProduction!: Relation<MilkProduction>

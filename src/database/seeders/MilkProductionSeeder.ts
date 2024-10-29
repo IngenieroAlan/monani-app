@@ -1,18 +1,12 @@
 import { faker } from '@faker-js/faker'
 import { DirtyRaw, Q } from '@nozbe/watermelondb'
-import { subYears } from 'date-fns'
+import { eachDayOfInterval, subMonths } from 'date-fns'
 import database from '..'
 import Cattle from '../models/Cattle'
 import MilkProduction from '../models/MilkProduction'
 import { TableName } from '../schema'
 import MilkReportSeeder from './MilkReportSeeder'
 import MonthlyMilkProductionSeeeder from './MonthlyMilkProductionSeeder'
-
-const MIN_PRODUCTION_DATE = subYears(new Date(), 2)
-const MAX_PRODUCTION_DATE = new Date()
-
-const MIN_NUM_OF_DATES = 100
-const MAX_NUM_OF_DATES = 150
 
 const MIN_LITERS_PER_COW = 6
 const MAX_LITERS_PER_COW = 12
@@ -29,10 +23,9 @@ const getNumOfCattle = async () => {
 }
 
 const getProductionDates = () => {
-  return faker.date.betweens({
-    from: MIN_PRODUCTION_DATE,
-    to: MAX_PRODUCTION_DATE,
-    count: { min: MIN_NUM_OF_DATES, max: MAX_NUM_OF_DATES }
+  return eachDayOfInterval({
+    start: subMonths(new Date(), 6),
+    end: new Date()
   })
 }
 

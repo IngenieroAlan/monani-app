@@ -44,15 +44,13 @@ const MilkSaleSeeder = async () => {
   const milkSaleRecords: DirtyRaw[] = []
   let totalMilkSales = 0
   const annualEarningsRecords: { [year: number]: number } = []
-  let milkProductions = await database
+  const milkProductions = await database
     .get<MilkProduction>(TableName.MILK_PRODUCTIONS)
-    .query(Q.where('is_sold', false))
+    .query(Q.where('is_sold', true))
     .fetch()
 
-  milkProductions = milkProductions.slice(0, Math.floor(milkProductions.length / 2))
-
   for (const milkProduction of milkProductions) {
-    const milkSaleRecord = MilkSaleFactory(milkProduction.id, milkProduction.liters)
+    const milkSaleRecord = MilkSaleFactory(milkProduction, milkProduction.liters)
 
     milkSaleRecords.push(milkSaleRecord)
     totalMilkSales += milkSaleRecord.sold_by
@@ -68,12 +66,7 @@ const MilkSaleSeeder = async () => {
   const annualEarningsUpdates = await prepareAnnualEarningsUpdate(annualEarningsRecords)
 
   await database.write(async () => {
-    await database.batch(
-      ...milkProductions.map((milkProduction) => {
-        return milkProduction.prepareUpdate((_milkProduction) => {
-          _milkProduction.isSold = true
-        })
-      }),
+    await database.batch([
       ...milkSaleRecords.map((milkSale) => {
         return database.get<MilkSale>(TableName.MILK_SALES).prepareCreateFromDirtyRaw(milkSale)
       }),
@@ -82,7 +75,7 @@ const MilkSaleSeeder = async () => {
         earningsSummary.totalMilkSales += +totalMilkSales.toFixed(2)
       }),
       ...annualEarningsUpdates
-    )
+    ])
   })
 
   console.log(`Milk sales table seeded with ${milkProductions.length} records.`)

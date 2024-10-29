@@ -8,7 +8,7 @@ import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
 import { reset as resetCattle } from "@/redux/slices/addCattleSlice"
-import CattleInfoForm from "@/components/cattle/CattleInfoForm"
+import CattleInfoForm from "@/components/addCattle/CattleInfoForm"
 
 type Props = NativeStackScreenProps<AddCattleStackParams, 'CattleInfo'>;
 export const CattlInfo = ({ navigation }: Props) => {

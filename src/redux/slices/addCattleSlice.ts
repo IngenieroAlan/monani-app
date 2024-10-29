@@ -1,6 +1,6 @@
 import { CattleStatus, ProductionType } from '@/database/models/Cattle';
 import { MatterProportion } from '@/database/models/Diet';
-import { Cattle, Diet, DietFeed, Genealogy } from '@/interfaces/cattleInterfaces';
+import { Cattle, Diet, DietFeed, Genealogy, MedicationSchedule } from '@/interfaces/cattleInterfaces';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface CattleState {
@@ -8,6 +8,7 @@ export interface CattleState {
 	genealogy: Genealogy;
 	diet: Diet;
 	dietFeeds: DietFeed[];
+	medicationSchedules: MedicationSchedule[];
 }
 
 const initialState: CattleState = {
@@ -44,6 +45,8 @@ const initialState: CattleState = {
 	},
 
 	dietFeeds: [],
+
+	medicationSchedules: [],
 }
 
 const addCattleSlice = createSlice({
@@ -65,9 +68,32 @@ const addCattleSlice = createSlice({
 		deleteDietFeed: (state, action: PayloadAction<{ dietFeedId: string }>) => {
 			state.dietFeeds = state.dietFeeds.filter((dietFeed) => dietFeed.dietFeedId !== action.payload.dietFeedId)
 		},
+		saveMedicationSchedule: (state, action: PayloadAction<{ medicationSchedule: MedicationSchedule }>) => {
+			state.medicationSchedules.push(action.payload.medicationSchedule)
+		},
+		modifyMedicationSchedule: (state, action: PayloadAction<{ medicationSchedule: MedicationSchedule }>) => {
+			const index = state.medicationSchedules.findIndex((medicationSchedule) => medicationSchedule.medicationScheduleId === action.payload.medicationSchedule.medicationScheduleId)
+			state.medicationSchedules[index] = action.payload.medicationSchedule
+		},
+		deleteMedicationSchedule: (state, action: PayloadAction<{ medicationScheduleId: string }>) => {
+			state.medicationSchedules = state.medicationSchedules.filter((medicationSchedule) => medicationSchedule.medicationScheduleId !== action.payload.medicationScheduleId)
+		},
+		setDiet: (state, action: PayloadAction<{ diet: Diet }>) => {
+			state.diet = action.payload.diet
+		},
 	}
 })
 
-export const { saveCattleInfo, saveDietFeed, modifyFeedDiet, deleteDietFeed, reset } = addCattleSlice.actions
+export const {
+	reset,
+	saveCattleInfo,
+	saveDietFeed,
+	modifyFeedDiet,
+	deleteDietFeed,
+	saveMedicationSchedule,
+	modifyMedicationSchedule,
+	deleteMedicationSchedule,
+	setDiet,
+} = addCattleSlice.actions
 
 export default addCattleSlice.reducer

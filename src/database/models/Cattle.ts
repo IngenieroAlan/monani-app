@@ -63,8 +63,12 @@ class Cattle extends Model {
   @children(TableName.MILK_REPORTS) milkReports!: Query<MilkReport>
   @children(TableName.MEDICATION_SCHEDULES) medicationSchedules!: Query<MedicationSchedule>
 
-  // @children(TableName.CATTLE_SALES) cattleSalesRelation!: Relation<CattleSale>
-  // @children(TableName.CATTLE_ARCHIVES) cattleArchiveRelation!: Relation<CattleArchive>
+  @lazy
+  latestWeightReport = this.weightReports
+    .extend(
+      Q.sortBy('weighed_at', Q.desc),
+      Q.take(1)
+    )
 
   @lazy
   sale = this.collections
@@ -169,6 +173,8 @@ class Cattle extends Model {
       })
     }
 
+    const latestWeightReport = (await this.latestWeightReport)[0]
+
     await this.batch(
       this.prepareUpdate((record) => {
         record.isActive = false,
@@ -178,6 +184,8 @@ class Cattle extends Model {
         .prepareCreate((record) => {
           record.cattle.set(this)
 
+          record.kg = latestWeightReport ? latestWeightReport.weight : this.weight
+          record.details = `No. ${this.tagId}${this.name ? `: ${this.name}` : ''}`,
           record.soldBy = soldBy
           record.soldAt = soldAt
         }),
@@ -198,9 +206,8 @@ class Cattle extends Model {
     }
 
     const weighedAtDate = formatISO(weighedAt, { representation: 'date' })
-    const existingReport = await this.collections
-      .get<WeightReport>(TableName.WEIGHT_REPORTS)
-      .query(
+    const existingReport = await this.weightReports
+      .extend(
         Q.where('cattle_id', this.id),
         Q.unsafeSqlExpr(`strftime('%Y-%m-%d', datetime(weighed_at / 1000, 'unixepoch')) = ${weighedAtDate}`),
         Q.take(1)
@@ -209,18 +216,16 @@ class Cattle extends Model {
 
     if (existingReport.length === 1) throw new Error(`There is already a weight report with the date ${weighedAtDate}.`)
 
-    const previousReport = (await this.collections
-      .get<WeightReport>(TableName.WEIGHT_REPORTS)
-      .query(
+    const previousReport = (await this.weightReports
+      .extend(
         Q.where('cattle_id', this.id),
         Q.where('weighed_at', Q.gt(weighedAt.getTime())),
         Q.sortBy('weighed_at', Q.asc),
         Q.take(1)
       )
       .fetch())[0]
-    const nextReport = (await this.collections
-      .get<WeightReport>(TableName.WEIGHT_REPORTS)
-      .query(
+    const nextReport = (await this.weightReports
+      .extend(
         Q.where('cattle_id', this.id),
         Q.where('weighed_at', Q.lt(weighedAt.getTime())),
         Q.sortBy('weighed_at', Q.desc),

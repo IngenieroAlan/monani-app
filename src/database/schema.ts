@@ -176,8 +176,10 @@ export default appSchema({
     tableSchema({
       name: TableName.CATTLE_SALES,
       columns: [
-        { name: 'cattle_id', type: 'string' },
+        { name: 'details', type: 'string' },
+        { name: 'kg', type: 'number' },
         { name: 'sold_by', type: 'number' },
+        { name: 'cattle_id', type: 'string' },
         { name: 'sold_at', type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
@@ -186,8 +188,10 @@ export default appSchema({
     tableSchema({
       name: TableName.MILK_SALES,
       columns: [
-        { name: 'milk_production_id', type: 'string' },
+        { name: 'details', type: 'string' },
+        { name: 'liters', type: 'number' },
         { name: 'sold_by', type: 'number' },
+        { name: 'milk_production_id', type: 'string' },
         { name: 'sold_at', type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }

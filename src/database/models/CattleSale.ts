@@ -14,9 +14,11 @@ class CattleSale extends Model {
   @readonly @date('updated_at') updatedAt!: Date
 
   @date('sold_at') soldAt!: Date
+  @field('details') details!: string
+  @field('kg') kg!: number
   @field('sold_by') soldBy!: number
 
-  @immutableRelation(TableName.WEIGHT_REPORTS, 'cattle_id') cattle!: Relation<Cattle>
+  @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
 }
 
 export default CattleSale

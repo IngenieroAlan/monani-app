@@ -12,7 +12,7 @@ import { StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
-import useCattle from "@/hooks/collections/useCattle"
+import useCattle, { DietFeedFields } from "@/hooks/collections/useCattle"
 
 export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Medications'>;
 export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) => {
@@ -23,6 +23,8 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
   const { cattle, diet, dietFeeds, medicationSchedules } = useAppSelector((state: RootState) => state.addCattle)
   const [currentMedicationSchedules, setCurrentMedicationSchedules] = useState<MedicationScheduleItem[]>([])
   const { createCattle } = useCattle()
+
+  const feeds = useAppSelector((state: RootState) => state.feeds.records)
 
   useEffect(() => {
     const fetchMedications = async () => {
@@ -45,21 +47,47 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
     )
   }, [medicationSchedules])
 
-  // TODO: Fetch medications from db
 
   const goBack = () => {
     dispatch(reset())
     navigation.navigate('HomeView')
   }
 
-  const handleSave = async () => {
-    // TODO: Save cattle to db
-    // await createCattle(
-    //   cattle,
-    //   diet,
-    //   dietFeeds,
-    //   medicationSchedules
-    // )
+  const handleSave = () => {
+    const dietFeedsFields: DietFeedFields[] = dietFeeds.map(dietFeed => {
+      const feed = feeds.find(feed => feed.id === dietFeed.feedId)
+      return {
+        feed: feed!,
+        feedAmount: dietFeed.feedAmount,
+        feedProportion: dietFeed.feedProportion
+      }
+    })
+
+    const medicationSchedulesFields = medicationSchedules.map(medicationSchedule => {
+      const medication = medications.find(medication => medication.id === medicationSchedule.medicationId)
+      return {
+        medication: medication!,
+        nextDoseAt: medicationSchedule.nextDoseAt,
+        dosesPerYear: medicationSchedule.dosesPerYear
+      }
+    })
+
+    const createCattleFunction = async () => {
+      try {
+        await createCattle(
+          cattle,
+          diet,
+          dietFeedsFields,
+          medicationSchedulesFields
+        )
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    createCattleFunction();
+
+    dispatch(reset());
 
     navigation.navigate('HomeView');
   }

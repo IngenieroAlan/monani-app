@@ -31,14 +31,14 @@ type DietFields = {
   isConcentrateExcluded: boolean
 }
 
-type DietFeedFields = {
+export type DietFeedFields = {
   feed: Feed
   feedAmount: number
   percentage?: number
   feedProportion: FeedProportion
 }
 
-type MedicationScheduleFields = {
+export type MedicationScheduleFields = {
   medication: Medication
   nextDoseAt: Date
   dosesPerYear: number

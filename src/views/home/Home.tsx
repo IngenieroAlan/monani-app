@@ -1,21 +1,20 @@
 import BottomSheetProductionFilter from '@/components/home/BottomSheetProductionFilter'
 import BottomSheetStatusFilter from '@/components/home/BottomSheetStatusFilter'
 import CattleList from '@/components/home/CattleList'
+import CattleListFilters from '@/components/home/CattleListFilters'
 import useScrollFab from '@/hooks/useScrollFab'
 import { LivestockStackParams } from '@/navigation/stacks/LivestockStack'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
-import React, { useRef } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
-import { AnimatedFAB, Appbar, FAB, useTheme } from 'react-native-paper'
+import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
 
 type ScreenNavigationProp = NativeStackScreenProps<LivestockStackParams>
 
 export const HomeView = ({ navigation }: ScreenNavigationProp) => {
   const theme = useTheme()
-  const flatListRef = useRef<FlatList>(null)
-  const { isFabExtended, isScrollAtTop, onScroll } = useScrollFab()
+  const { isFabExtended, onScroll } = useScrollFab()
 
   return (
     <>
@@ -37,28 +36,15 @@ export const HomeView = ({ navigation }: ScreenNavigationProp) => {
             onPress={() => navigation.navigate('ResourcesStack')}
           />
         </Appbar.Header>
-        <CattleList // TODO: Implement infinite scroll and paginate query results. (VirtualizedList)
-          onScroll={onScroll}
-          ref={flatListRef}
+        <CattleListFilters />
+        <CattleList onScroll={onScroll} />
+        <AnimatedFAB
+          style={styles.fab}
+          extended={isFabExtended}
+          icon='plus'
+          label='Añadir'
+          onPress={() => navigation.navigate('AddCattleStack')}
         />
-        <View style={styles.fabsContainer}>
-          <FAB
-            visible={isScrollAtTop}
-            size='small'
-            icon='chevron-up'
-            variant='secondary'
-            onPress={() => flatListRef.current?.scrollToOffset({ animated: true, offset: 0 })}
-          />
-          <View style={{ flexDirection: 'row' }}>
-            <AnimatedFAB
-              style={{ position: 'relative' }}
-              extended={isFabExtended}
-              icon='plus'
-              label='Añadir'
-              onPress={() => navigation.navigate('AddCattleStack')}
-            />
-          </View>
-        </View>
       </View>
       <BottomSheetStatusFilter />
       <BottomSheetProductionFilter />
@@ -67,10 +53,7 @@ export const HomeView = ({ navigation }: ScreenNavigationProp) => {
 }
 
 const styles = StyleSheet.create({
-  fabsContainer: {
-    position: 'absolute',
-    alignItems: 'flex-end',
-    gap: 24,
+  fab: {
     right: 16,
     bottom: 16
   }

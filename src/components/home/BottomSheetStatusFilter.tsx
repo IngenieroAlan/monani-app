@@ -1,12 +1,11 @@
 import { CattleStatus } from '@/database/models/Cattle'
-import { setOneOfCattleStatusBind } from '@/redux/slices/homeCattleListQuerySlice'
-import { removeCattleStatusFilter, setCattleStatusFilter } from '@/redux/slices/homeStatusFilterSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { addOneOfCattleStatus, deleteOneOfCattleStatus } from '@/redux/slices/collections/cattleQuerySlice'
 import { RootState } from '@/redux/store/store'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { Checkbox, Icon, List, Text } from 'react-native-paper'
-import { useDispatch, useSelector } from 'react-redux'
 import MBottomSheet from '../MBottomSheet'
 
 type ListItemFilterProps = {
@@ -17,7 +16,7 @@ type ListItemFilterProps = {
 }
 
 const ListItemFilter = memo((props: ListItemFilterProps) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [isChecked, setIsChecked] = useState(props.checked ?? false)
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const ListItemFilter = memo((props: ListItemFilterProps) => {
   const onPress = () => {
     setIsChecked((prevCheck) => {
       const newCheck = !prevCheck
-      newCheck ? dispatch(setCattleStatusFilter(props.filter)) : dispatch(removeCattleStatusFilter(props.filter))
+      newCheck ? dispatch(addOneOfCattleStatus(props.filter)) : dispatch(deleteOneOfCattleStatus(props.filter))
 
       return newCheck
     })
@@ -60,34 +59,13 @@ const ListItemFilter = memo((props: ListItemFilterProps) => {
 })
 
 const BottomSheetStatusFilter = () => {
-  const dispatch = useDispatch()
-  const index = useSelector((state: RootState) => state.bottomSheet['homeStatusFilter'] ?? -1)
-  const statusFilter = useSelector((state: RootState) => state.homeFilters.cattleStatusFilter)
-  const oneOfCattleStatusBind = useSelector(
-    (state: RootState) => state.homeCattleListQuery.whereBinds.oneOfCattleStatus
-  )
-
-  // OnChange triggers slightly faster than onClose.
-  const onChange = useCallback(
-    (i: number) => {
-      if (i !== -1) return
-
-      const filters = [...statusFilter]
-      const bindClone = oneOfCattleStatusBind.slice()
-
-      // If filters selected and already fetched are equals, don't fetch again.
-      if (filters.sort().join(' ') !== bindClone.sort().join(' ')) {
-        dispatch(setOneOfCattleStatusBind(filters))
-      }
-    },
-    [statusFilter, oneOfCattleStatusBind]
-  )
+  const index = useAppSelector((state: RootState) => state.bottomSheet['homeStatusFilter'] ?? -1)
+  const statusFilter = useAppSelector((state: RootState) => state.cattleQuery.oneOfCattleStatus)
 
   return (
     <MBottomSheet
       id='homeStatusFilter'
       index={index}
-      onChange={onChange}
     >
       <BottomSheetScrollView scrollEnabled={false}>
         <Text

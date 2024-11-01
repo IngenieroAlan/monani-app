@@ -1,12 +1,11 @@
 import { ProductionType } from '@/database/models/Cattle'
-import { setEqProductionTypeBind } from '@/redux/slices/homeCattleListQuerySlice'
-import { setProductionTypeFilter } from '@/redux/slices/homeStatusFilterSlice'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { setEqProductionType } from '@/redux/slices/collections/cattleQuerySlice'
 import { RootState } from '@/redux/store/store'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { memo, useCallback } from 'react'
 import { View } from 'react-native'
 import { Icon, List, RadioButton, Text, useTheme } from 'react-native-paper'
-import { useDispatch, useSelector } from 'react-redux'
 import MBottomSheet from '../MBottomSheet'
 
 type ListItemFilterProps = {
@@ -17,8 +16,8 @@ type ListItemFilterProps = {
 
 const ListItemFilter = memo((props: ListItemFilterProps) => {
   const theme = useTheme()
-  const dispatch = useDispatch()
-  const productionFilter = useSelector((state: RootState) => state.homeFilters.productionTypeFilter)
+  const dispatch = useAppDispatch()
+  const productionFilter = useAppSelector((state: RootState) => state.cattleQuery.eqProductionType)
 
   const right = useCallback(() => {
     return (
@@ -43,7 +42,7 @@ const ListItemFilter = memo((props: ListItemFilterProps) => {
   }, [props.iconName])
 
   const onPress = useCallback(() => {
-    dispatch(setProductionTypeFilter(props.filter))
+    dispatch(setEqProductionType(props.filter))
   }, [props.filter])
 
   return (
@@ -58,24 +57,12 @@ const ListItemFilter = memo((props: ListItemFilterProps) => {
 })
 
 const BottomSheetProductionFilter = () => {
-  const dispatch = useDispatch()
-  const index = useSelector((state: RootState) => state.bottomSheet['homeProductionFilter'] ?? -1)
-  const productionFilter = useSelector((state: RootState) => state.homeFilters.productionTypeFilter)
-
-  const onChange = useCallback(
-    (i: number) => {
-      if (i !== -1) return
-
-      dispatch(setEqProductionTypeBind(productionFilter))
-    },
-    [productionFilter]
-  )
+  const index = useAppSelector((state: RootState) => state.bottomSheet['homeProductionFilter'] ?? -1)
 
   return (
     <MBottomSheet
       id='homeProductionFilter'
       index={index}
-      onChange={onChange}
     >
       <BottomSheetScrollView scrollEnabled={false}>
         <Text

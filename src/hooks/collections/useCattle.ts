@@ -58,7 +58,6 @@ const useCattle = ({ cattleStatus, productionType, take }: UseCattleProps = {}) 
   let cattleQuery = database.collections.get<Cattle>(TableName.CATTLE).query()
 
   if (take) {
-    console.log('Take: ', take);
     cattleQuery = cattleQuery.extend(Q.take(take))
   }
   if (cattleStatus && Array.from(cattleStatus).length) {

@@ -4,10 +4,12 @@ type SalesType = 'Lechera' | 'Ganado'
 
 type EarningsQueryState = {
   eqSalesType: SalesType | null
+  betweenDates: number[] | null
 }
 
 const initialState: EarningsQueryState = {
-  eqSalesType: null
+  eqSalesType: null,
+  betweenDates: null
 }
 
 const earningsQuerySlice = createSlice({
@@ -16,10 +18,13 @@ const earningsQuerySlice = createSlice({
   reducers: {
     setEqSalesType: (state, action: PayloadAction<SalesType | null>) => {
       state.eqSalesType = action.payload
+    },
+    setBetweenDates: (state, action: PayloadAction<number[] | null>) => {
+      state.betweenDates = action.payload
     }
   }
 })
 
-export const { setEqSalesType } = earningsQuerySlice.actions
+export const { setEqSalesType, setBetweenDates } = earningsQuerySlice.actions
 
 export default earningsQuerySlice.reducer

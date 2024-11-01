@@ -22,7 +22,7 @@ type EarningsData = {
   }
 }
 
-const useEarnings = ({ take, salesType }: { take?: number, salesType?: SalesType | null }) => {
+const useEarnings = ({ take, salesType }: { take?: number, salesType?: SalesType | null } = {}) => {
   const database = useDatabase()
   const [cattleSales, setCattleSales] = useState<CattleSale[]>([])
   const [milkSales, setMilkSales] = useState<MilkSale[]>([])

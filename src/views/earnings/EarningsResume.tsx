@@ -1,10 +1,23 @@
+import AnnualEarningsList from '@/components/earnings/resume/AnnualEarningsList'
+import TotalEarningsCard from '@/components/earnings/resume/TotalEarningsCard'
 import React from 'react'
 import { View } from 'react-native'
-import { Text } from 'react-native-paper'
-import mainStyles from '../../styles/main'
+import { Divider, useTheme } from 'react-native-paper'
 
-export const EarningsResumeView = () => {
-    return (
-        <View style={mainStyles.container}><Text>EarningsResumeView</Text></View>
-    )
+const EarningsResumeView = () => {
+  const theme = useTheme()
+
+  return (
+    <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+      <View style={{ padding: 16 }}>
+        <TotalEarningsCard />
+      </View>
+      <Divider />
+      <View style={{ flex: 1 }}>
+        <AnnualEarningsList />
+      </View>
+    </View>
+  )
 }
+
+export default EarningsResumeView

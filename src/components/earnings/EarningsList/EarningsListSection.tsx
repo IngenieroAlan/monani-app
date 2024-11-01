@@ -1,7 +1,7 @@
 import { EarningsRecord } from '@/hooks/collections/useEarnings'
 import { format, isThisYear, isToday, isYesterday } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { memo, useMemo } from 'react'
+import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import CattleListItem from './CattleListItem'
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default memo(EarningsListSection)
+export default EarningsListSection

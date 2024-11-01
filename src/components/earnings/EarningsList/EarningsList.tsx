@@ -2,18 +2,13 @@ import useEarnings, { EarningsRecord } from '@/hooks/collections/useEarnings'
 import { useAppSelector } from '@/hooks/useRedux'
 import { RootState } from '@/redux/store/store'
 import { FlashList } from '@shopify/flash-list'
-import { forwardRef, memo, Ref, useCallback, useState } from 'react'
-import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import { memo, useCallback, useState } from 'react'
 import { Divider } from 'react-native-paper'
 import EarningsListSection from './EarningsListSection'
 
 const ITEMS_PER_PAGINATE = 25
 
-const EarningsList = (
-  { onScroll }: { onScroll?: (e: NativeSyntheticEvent<NativeScrollEvent>) => void },
-  ref?: Ref<FlatList>
-) => {
+const EarningsList = () => {
   const [index, setIndex] = useState(0)
   const { earningsRecords } = useEarnings({
     take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * index,
@@ -31,7 +26,6 @@ const EarningsList = (
   return (
     <FlashList
       estimatedItemSize={80}
-      onScroll={onScroll}
       data={earningsRecords}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
@@ -42,4 +36,4 @@ const EarningsList = (
   )
 }
 
-export default memo(forwardRef(EarningsList))
+export default memo(EarningsList)

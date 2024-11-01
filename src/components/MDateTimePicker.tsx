@@ -1,7 +1,7 @@
 import { format, isThisYear } from 'date-fns'
 import { es } from 'date-fns/locale'
 import 'dayjs/locale/es'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button, Dialog, Divider, Icon, Portal, Text, useTheme } from 'react-native-paper'
 import DateTimePicker from 'react-native-ui-datepicker'
@@ -61,12 +61,20 @@ const MDateTimePicker = ({
     return `${startDateText} - ${endDateText}`
   }, [props.date, props.startDate, props.endDate, props.mode])
 
+  const disableConfirm = useCallback(() => {
+    if (props.mode === 'single') {
+      return !props.date
+    }
+
+    return !props.startDate || !props.endDate
+  }, [props.date, props.startDate, props.endDate])
+
   return (
     <Portal>
       <Dialog
         visible={visible}
         dismissable={dismissable}
-        onDismiss={props.onDismiss ?? props.onCancel}
+        onDismiss={props.onDismiss}
       >
         <View style={{}}>
           <View style={styles.headlineContainer}>
@@ -121,7 +129,12 @@ const MDateTimePicker = ({
         </View>
         <Dialog.Actions>
           <Button onPress={props.onCancel}>Cancelar</Button>
-          <Button onPress={props.onConfirm}>Aceptar</Button>
+          <Button
+            disabled={disableConfirm()}
+            onPress={props.onConfirm}
+          >
+            Aceptar
+          </Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>

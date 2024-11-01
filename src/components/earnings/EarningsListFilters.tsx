@@ -29,6 +29,7 @@ const EarningsListFilters = () => {
     <View style={styles.container}>
       <FilterChip
         mode='outlined'
+        icon='calendar-range'
         filters={dateFilterText.current ? [dateFilterText.current] : []}
         onPress={() => setVisibleDatePicker(true)}
         onClose={() => {
@@ -43,6 +44,7 @@ const EarningsListFilters = () => {
       </FilterChip>
       <FilterChip
         mode='outlined'
+        icon='filter-outline'
         filters={salesTypeFilter === null ? [] : [salesTypeFilter]}
         onPress={() => dispatch(open(SALES_FILTER_BOTTOM_SHEET_ID))}
         onClose={() => dispatch(setEqSalesType(null))}

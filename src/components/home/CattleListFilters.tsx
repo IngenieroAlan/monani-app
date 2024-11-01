@@ -13,16 +13,18 @@ const CattleListFilters = () => {
   return (
     <View style={styles.chipsContainer}>
       <FilterChip
-        filters={eqProductionType === null ? [] : [eqProductionType]}
         mode='outlined'
+        icon='filter-variant'
+        filters={eqProductionType === null ? [] : [eqProductionType]}
         onPress={() => dispatch(open('homeProductionFilter'))}
         onClose={() => dispatch(setEqProductionType(null))}
       >
         Producción
       </FilterChip>
       <FilterChip
-        filters={Array.from(oneOfCattleStatus)}
         mode='outlined'
+        icon='filter-outline'
+        filters={Array.from(oneOfCattleStatus)}
         onPress={() => dispatch(open('homeStatusFilter'))}
         onClose={() => dispatch(clearOneOfCattleStatus())}
       >

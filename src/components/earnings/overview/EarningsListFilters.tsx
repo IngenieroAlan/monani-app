@@ -6,8 +6,8 @@ import { format, set } from 'date-fns'
 import { useRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { DateType } from 'react-native-ui-datepicker'
-import FilterChip from '../FilterChip'
-import MDateTimePicker from '../MDateTimePicker'
+import FilterChip from '../../FilterChip'
+import MDateTimePicker from '../../MDateTimePicker'
 import { SALES_FILTER_BOTTOM_SHEET_ID } from './SalesFilterBottomSheet'
 
 const getDateFilterText = (startDate: Date, endDate: Date) => {

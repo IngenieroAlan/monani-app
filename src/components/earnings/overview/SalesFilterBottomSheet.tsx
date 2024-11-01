@@ -6,7 +6,7 @@ import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { memo, useCallback } from 'react'
 import { View } from 'react-native'
 import { Icon, List, RadioButton, Text, useTheme } from 'react-native-paper'
-import MBottomSheet from '../MBottomSheet'
+import MBottomSheet from '../../MBottomSheet'
 
 export const SALES_FILTER_BOTTOM_SHEET_ID = 'salesFilterBottomSheet'
 

@@ -1,19 +1,39 @@
 import AnnualEarnings from '@/database/models/AnnualEarnings'
 import useAnnualEarnings from '@/hooks/collections/useAnnualEarnings'
 import useNumberFormat from '@/hooks/useNumberFormat'
+import useAppTheme from '@/theme'
 import { FlashList } from '@shopify/flash-list'
 import { useCallback } from 'react'
 import { View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
 
-const ListItem = ({ item }: { item: AnnualEarnings }) => {
+const EarningsDifference = ({ difference }: { difference: number }) => {
+  const theme = useAppTheme()
+
+  return (
+    difference !== 0 && (
+      <Text
+        variant='labelSmall'
+        style={{ color: difference < 0 ? theme.colors.error : theme.colors.success }}
+      >
+        {`${difference > 0 ? '+' : '-'}$${useNumberFormat(Math.abs(difference).toFixed(2))}`}
+      </Text>
+    )
+  )
+}
+
+const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?: number }) => {
   return (
     <List.Item
+      onLayout={(e) => console.log(e.nativeEvent.layout.height)}
       title={item.year}
       description=' '
       right={() => (
         <View style={{ flexDirection: 'row', gap: 8 }}>
-          <Text variant='labelSmall'>{`$${useNumberFormat(item.totalEarnings.toFixed(2))}`}</Text>
+          <View style={{ alignItems: 'flex-end' }}>
+            <Text variant='labelSmall'>{`$${useNumberFormat(item.totalEarnings.toFixed(2))}`}</Text>
+            {prevEarnings && <EarningsDifference difference={item.totalEarnings - prevEarnings} />}
+          </View>
           <Icon
             size={24}
             source='menu-right'
@@ -28,15 +48,31 @@ const ListItem = ({ item }: { item: AnnualEarnings }) => {
 const AnnualEarningsList = () => {
   const { annualEarningsRecords } = useAnnualEarnings()
 
-  const renderItem = useCallback(({ item }: { item: AnnualEarnings }) => {
-    return <ListItem item={item} />
+  const renderItem = useCallback(
+    ({ index, item }: { item: AnnualEarnings; index: number }) => {
+      const prevEarnings =
+        index + 1 <= annualEarningsRecords.length - 1 ? annualEarningsRecords[index + 1].totalEarnings : undefined
+
+      return (
+        <ListItem
+          item={item}
+          prevEarnings={prevEarnings}
+        />
+      )
+    },
+    [annualEarningsRecords]
+  )
+
+  const keyExtractor = useCallback((item: any, index: number) => {
+    return index.toString()
   }, [])
 
   return (
     <FlashList
+      estimatedItemSize={69}
       data={annualEarningsRecords}
       renderItem={renderItem}
-      estimatedItemSize={63}
+      keyExtractor={keyExtractor}
       ListHeaderComponent={() => (
         <Text
           variant='titleMedium'

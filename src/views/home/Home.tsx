@@ -3,18 +3,16 @@ import BottomSheetStatusFilter from '@/components/home/BottomSheetStatusFilter'
 import CattleList from '@/components/home/CattleList'
 import CattleListFilters from '@/components/home/CattleListFilters'
 import useScrollFab from '@/hooks/useScrollFab'
-import { LivestockStackParams } from '@/navigation/stacks/LivestockStack'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { useNavigation } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
 
-type ScreenNavigationProp = NativeStackScreenProps<LivestockStackParams>
-
-export const HomeView = ({ navigation }: ScreenNavigationProp) => {
+export const HomeView = () => {
   const theme = useTheme()
   const { isFabExtended, onScroll } = useScrollFab()
+  const navigation = useNavigation()
 
   return (
     <>

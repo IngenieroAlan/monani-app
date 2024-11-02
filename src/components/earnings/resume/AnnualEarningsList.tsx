@@ -2,6 +2,7 @@ import AnnualEarnings from '@/database/models/AnnualEarnings'
 import useAnnualEarnings from '@/hooks/collections/useAnnualEarnings'
 import useNumberFormat from '@/hooks/useNumberFormat'
 import useAppTheme from '@/theme'
+import { useNavigation } from '@react-navigation/native'
 import { FlashList } from '@shopify/flash-list'
 import { useCallback } from 'react'
 import { View } from 'react-native'
@@ -23,9 +24,10 @@ const EarningsDifference = ({ difference }: { difference: number }) => {
 }
 
 const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?: number }) => {
+  const navigation = useNavigation()
+
   return (
     <List.Item
-      onLayout={(e) => console.log(e.nativeEvent.layout.height)}
       title={item.year}
       description=' '
       right={() => (
@@ -40,7 +42,7 @@ const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?:
           />
         </View>
       )}
-      onPress={() => {}}
+      onPress={() => navigation.navigate('AnnualEarningsView', { year: item.year })}
     />
   )
 }

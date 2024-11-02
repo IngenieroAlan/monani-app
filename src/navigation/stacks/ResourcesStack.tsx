@@ -2,14 +2,9 @@ import Feeds from '@/views/resources/Feeds'
 import Medications from '@/views/resources/Medications'
 import Resources from '@/views/resources/Resources'
 import { createStackNavigator } from '@react-navigation/stack'
+import { ResourcesStackParamList } from '../types'
 
-export type ResourcesStackParams = {
-  ResourcesView: undefined
-  FeedsView: undefined
-  MedicationsView: undefined
-}
-
-const Stack = createStackNavigator<ResourcesStackParams>()
+const Stack = createStackNavigator<ResourcesStackParamList>()
 
 const ResourcesStack = () => {
   return (

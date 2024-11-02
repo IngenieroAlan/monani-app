@@ -4,12 +4,9 @@ import { Icon, Text, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import EarningsView from '../../views/earnings/Earnings'
 import EarningsResumeView from '../../views/earnings/EarningsResume'
+import { EarningsStackParamList } from '../types'
 
-export type EarningsStackParams = {
-  EarningsView: undefined
-  EarningsResumeView: undefined
-}
-const Stack = createMaterialTopTabNavigator<EarningsStackParams>()
+const Stack = createMaterialTopTabNavigator<EarningsStackParamList>()
 
 export const EarningsStack = () => {
   const theme = useTheme()

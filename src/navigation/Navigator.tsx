@@ -1,5 +1,5 @@
+import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
-import { NavigationProp } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { View } from 'react-native'
@@ -7,18 +7,9 @@ import { useTheme } from 'react-native-paper'
 import BottomTabsStack from './BottomTabsStack'
 import AddCattleStack from './stacks/AddCattleStack'
 import ResourcesStack from './stacks/ResourcesStack'
+import { RootStackParamList } from './types'
 
-export type RootStackParams = {
-  HomeView: undefined
-  BottomTabsStack: undefined
-  AddCattleStack: undefined
-  ResourcesStack: undefined
-  SearchCattleView: undefined
-}
-
-export type StackNavigation = NavigationProp<RootStackParams>
-
-const Stack = createStackNavigator<RootStackParams>()
+const Stack = createStackNavigator<RootStackParamList>()
 
 export const Navigator = () => {
   const theme = useTheme()
@@ -41,6 +32,10 @@ export const Navigator = () => {
         <Stack.Screen
           name='ResourcesStack'
           component={ResourcesStack}
+        />
+        <Stack.Screen
+          name='AnnualEarningsView'
+          component={AnnualEarningsView}
         />
       </Stack.Navigator>
     </View>

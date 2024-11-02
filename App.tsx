@@ -2,7 +2,6 @@ import { CattleProvider } from '@/context/CattleProvider'
 import database, { initializeDatabase, resetDatabase } from '@/database'
 import seedDatabase from '@/database/seeders/seeder'
 import { Navigator } from '@/navigation/Navigator'
-import { RootStackParamList } from '@/navigation/types'
 import store from '@/redux/store/store'
 import { ExtendedDarkTheme, ExtendedLightTheme } from '@/theme'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
@@ -14,12 +13,6 @@ import { useColorScheme } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { es, registerTranslation } from 'react-native-paper-dates'
 import { Provider } from 'react-redux'
-
-declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
-  }
-}
 
 interface Props {
   children: JSX.Element | JSX.Element[]

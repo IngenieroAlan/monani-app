@@ -9,10 +9,10 @@ export type RootStackParamList = {
 }
 
 export type BottomTabsParamList = {
-  "Ganado": undefined
-  "Prod. lechera": undefined
-  "Ganancias": undefined
-  "Notificaciones": undefined
+  Ganado: undefined
+  'Prod. lechera': undefined
+  Ganancias: undefined
+  Notificaciones: undefined
 }
 
 export type EarningsStackParamList = {
@@ -24,4 +24,10 @@ export type ResourcesStackParamList = {
   ResourcesView: undefined
   FeedsView: undefined
   MedicationsView: undefined
+}
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
 }

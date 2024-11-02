@@ -1,11 +1,11 @@
-import { ResourcesStackParams } from '@/navigation/stacks/ResourcesStack'
+import { ResourcesStackParamList } from '@/navigation/types'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
 import { useCallback } from 'react'
 import { View } from 'react-native'
 import { Appbar, Divider, Icon, List, ListItemProps, useTheme } from 'react-native-paper'
 
-type ScreenNavigationProp = NativeStackScreenProps<ResourcesStackParams>
+type ScreenProps = NativeStackScreenProps<ResourcesStackParamList>
 
 const ListItem = (props: ListItemProps & { iconName: string }) => {
   const left = useCallback(() => {
@@ -28,7 +28,7 @@ const ListItem = (props: ListItemProps & { iconName: string }) => {
   )
 }
 
-const Resources = ({ navigation }: ScreenNavigationProp) => {
+const Resources = ({ navigation }: ScreenProps) => {
   const theme = useTheme()
 
   return (

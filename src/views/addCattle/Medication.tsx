@@ -1,6 +1,6 @@
 import MedicationForm from "@/components/addCattle/MedicationForm";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { AddCattleStackParams } from "@/navigation/stacks/AddCattleStack";
+import { AddCattleStackParamsList } from "@/navigation/types";
 import { modifyMedicationSchedule, saveMedicationSchedule } from "@/redux/slices/addCattleSlice";
 import { RootState } from "@/redux/store/store";
 import ACMedicationSchema, { ACMedication } from "@/validationSchemas/ACMedicationSchema";
@@ -10,7 +10,7 @@ import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
 
-export default function Medication({ navigation, route }: NativeStackScreenProps<AddCattleStackParams, 'Medication'>) {
+export default function Medication({ navigation, route }: NativeStackScreenProps<AddCattleStackParamsList, 'Medication'>) {
   const { medicationSchedules, cattle } = useAppSelector(state => state.addCattle)
   const medications = useAppSelector((state: RootState) => state.medications.records)
   const dispatch = useAppDispatch();
@@ -55,7 +55,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
           medicationId,
           nextDoseAt,
           dosesPerYear,
-          cattleId: cattle.cattleId,
+          cattleId: cattle.tagId,
         }
       }))
     } else {
@@ -65,7 +65,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
           medicationId,
           nextDoseAt,
           dosesPerYear,
-          cattleId: cattle.cattleId,
+          cattleId: cattle.tagId,
         }
       }))
       reset();

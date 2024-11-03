@@ -7,25 +7,9 @@ import Medication from "@/views/addCattle/Medication";
 import { Medications } from "@/views/addCattle/Medications";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
+import { AddCattleStackParamsList } from "../types";
 
-export type AddCattleStackParams = {
-	CattleInfo: undefined;
-	Diet: undefined;
-	DietSettings: undefined;
-	DietFeed: {
-		medicationScheduleId: string;
-		modify: boolean;
-	}
-	| undefined;
-	Medications: undefined;
-	Medication: {
-		medicationScheduleId: string;
-		modify: boolean;
-	}
-	| undefined;
-}
-
-const Stack = createStackNavigator<AddCattleStackParams>();
+const Stack = createStackNavigator<AddCattleStackParamsList>();
 const AddCattleStack = () => {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: false }}>

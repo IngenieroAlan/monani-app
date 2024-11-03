@@ -1,8 +1,9 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
+import useCattle, { DietFeedFields } from "@/hooks/collections/useCattle"
 import useMedications from "@/hooks/collections/useMedications"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { MedicationScheduleItem } from "@/interfaces/cattleInterfaces"
-import { RootStackParams } from "@/navigation/Navigator"
+import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
 import { setMedications } from "@/redux/slices/medicationsSlice"
 import { RootState } from "@/redux/store/store"
@@ -11,10 +12,8 @@ import { useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
-import useCattle, { DietFeedFields } from "@/hooks/collections/useCattle"
 
-export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Medications'>;
+export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattleStackParamsList & BottomTabsParamList, 'Medications'>;
 export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -50,7 +49,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
   const goBack = () => {
     dispatch(reset())
-    navigation.navigate('HomeView')
+    navigation.navigate('Ganado')
   }
 
   const handleSave = () => {
@@ -89,7 +88,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
     dispatch(reset());
 
-    navigation.navigate('HomeView');
+    navigation.navigate('Ganado');
   }
 
   return (<>

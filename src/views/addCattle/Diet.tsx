@@ -2,7 +2,7 @@ import DietFeedsList from "@/components/addCattle/DietFeedsList"
 import useFeeds from "@/hooks/collections/useFeeds"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { DietFeedItem } from "@/interfaces/cattleInterfaces"
-import { RootStackParams } from "@/navigation/Navigator"
+import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
 import { setFeeds } from "@/redux/slices/feedsSlice"
 import { RootState } from "@/redux/store/store"
@@ -11,9 +11,8 @@ import { useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
 
-export type AddDietNavigationProps = NativeStackScreenProps<AddCattleStackParams & RootStackParams, 'Diet'>;
+export type AddDietNavigationProps = NativeStackScreenProps<AddCattleStackParamsList & BottomTabsParamList, 'Diet'>;
 export const Diet = ({ navigation }: AddDietNavigationProps) => {
     const theme = useTheme()
     const feeds = useAppSelector((state: RootState) => state.feeds.records)
@@ -49,7 +48,7 @@ export const Diet = ({ navigation }: AddDietNavigationProps) => {
 
     const goBack = () => {
         dispatch(reset())
-        navigation.navigate('HomeView')
+        navigation.navigate('Ganado')
     }
 
     return (<>

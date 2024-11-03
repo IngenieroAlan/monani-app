@@ -1,6 +1,6 @@
 import DietFeedForm from "@/components/addCattle/DietFeedForm";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { AddCattleStackParams } from "@/navigation/stacks/AddCattleStack";
+import { AddCattleStackParamsList } from "@/navigation/types";
 import { modifyFeedDiet, saveDietFeed } from "@/redux/slices/addCattleSlice";
 import { RootState } from "@/redux/store/store";
 import DietFeedSchema, { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
@@ -10,7 +10,7 @@ import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
 
-export default function DietFeed({ navigation, route }: NativeStackScreenProps<AddCattleStackParams, 'DietFeed'>) {
+export default function DietFeed({ navigation, route }: NativeStackScreenProps<AddCattleStackParamsList, 'DietFeed'>) {
   const { cattle, diet, dietFeeds } = useAppSelector(state => state.addCattle)
   const feeds = useAppSelector((state: RootState) => state.feeds.records)
   const dispatch = useAppDispatch();

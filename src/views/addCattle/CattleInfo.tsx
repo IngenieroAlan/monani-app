@@ -1,17 +1,17 @@
 import CattleInfoForm from "@/components/addCattle/CattleInfoForm"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
+import { AddCattleStackParamsList } from "@/navigation/types"
 import { CattleInfoFields, reset as resetCattle, saveCattleInfo } from "@/redux/slices/addCattleSlice"
 import CattleInfoSchema from "@/validationSchemas/cattleInfoSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { AddCattleStackParams } from "../../navigation/stacks/AddCattleStack"
-import { useMemo } from "react"
 
-type Props = NativeStackScreenProps<AddCattleStackParams, 'CattleInfo'>;
+type Props = NativeStackScreenProps<AddCattleStackParamsList, 'CattleInfo'>;
 export const CattlInfo = ({ navigation }: Props) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()

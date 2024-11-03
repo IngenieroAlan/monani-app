@@ -26,8 +26,25 @@ export type ResourcesStackParamList = {
   MedicationsView: undefined
 }
 
+export type AddCattleStackParamsList = {
+  CattleInfo: undefined;
+  Diet: undefined;
+  DietSettings: undefined;
+  DietFeed: {
+    medicationScheduleId: string;
+    modify: boolean;
+  }
+  | undefined;
+  Medications: undefined;
+  Medication: {
+    medicationScheduleId: string;
+    modify: boolean;
+  }
+  | undefined;
+}
+
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
+    interface RootParamList extends RootStackParamList { }
   }
 }

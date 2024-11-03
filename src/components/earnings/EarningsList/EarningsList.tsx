@@ -1,13 +1,12 @@
-import useEarnings, { EarningsRecord } from '@/hooks/collections/useEarnings'
-import { useAppSelector } from '@/hooks/useRedux'
-import { RootState } from '@/redux/store/store'
-import { FlashList } from '@shopify/flash-list'
-import { memo, useCallback, useState } from 'react'
+import { EarningsRecord } from '@/hooks/collections/useEarnings'
+import { FlashList, FlashListProps } from '@shopify/flash-list'
+import { memo, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Divider, Icon, Text } from 'react-native-paper'
 import EarningsListSection from './EarningsListSection'
 
-const ITEMS_PER_PAGINATE = 25
+type Props = Omit<FlashListProps<EarningsRecord>, 'renderItem'> &
+  Partial<Pick<FlashListProps<EarningsRecord>, 'renderItem'>>
 
 const EmptyList = () => {
   return (
@@ -26,14 +25,7 @@ const EmptyList = () => {
   )
 }
 
-const EarningsList = () => {
-  const [index, setIndex] = useState(0)
-  const { earningsRecords } = useEarnings({
-    take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * index,
-    salesType: useAppSelector((state: RootState) => state.earningsQuery.eqSalesType),
-    betweenDates: useAppSelector((state: RootState) => state.earningsQuery.betweenDates)
-  })
-
+const EarningsList = (props: Props) => {
   const renderItem = useCallback(({ item }: { item: EarningsRecord }) => {
     return <EarningsListSection records={item} />
   }, [])
@@ -42,15 +34,14 @@ const EarningsList = () => {
     return index.toString()
   }, [])
 
-  return earningsRecords?.length ? (
+  return props.data?.length ? (
     <FlashList
       estimatedItemSize={80}
-      data={earningsRecords}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       ItemSeparatorComponent={() => <Divider />}
       onEndReachedThreshold={2}
-      onEndReached={() => setIndex(index + 1)}
+      {...props}
     />
   ) : (
     <EmptyList />

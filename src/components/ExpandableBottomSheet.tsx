@@ -1,8 +1,7 @@
 import useAppTheme from '@/theme'
 import BottomSheet, { BottomSheetProps } from '@gorhom/bottom-sheet'
 import { useCallback, useMemo, useState } from 'react'
-import { LayoutChangeEvent, StyleSheet, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
+import { LayoutChangeEvent, View } from 'react-native'
 
 const ExpandableBottomSheet = (props: BottomSheetProps) => {
   const theme = useAppTheme()

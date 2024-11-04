@@ -36,7 +36,7 @@
     "react-hook-form": "^7.53.1",
     "react-native": "^0.74.5",
     "react-native-gesture-handler": "~2.16.1",
-    "react-native-pager-view": "^6.3.0",
+    "react-native-pager-view": "6.3.0",
     "react-native-paper": "^5.12.5",
     "react-native-paper-dates": "^0.22.26",
     "react-native-paper-dropdown": "^2.3.1",

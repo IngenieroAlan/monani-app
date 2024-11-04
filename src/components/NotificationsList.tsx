@@ -8,6 +8,10 @@ import { useAppDispatch } from '../hooks/useRedux';
 import { deleteNotification, getNotifications, markAsReadNoti } from '@/redux/slices/notificationsSlice';
 import { useDatabase } from '@nozbe/watermelondb/react';
 import { Database } from '@nozbe/watermelondb';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { NotificationsStackParams } from '@/navigation/stacks/NotificationsStack';
+
+type ScreenNavigationProp = StackNavigationProp<NotificationsStackParams>
 
 const MenuItems = [
     {
@@ -45,12 +49,12 @@ interface itemProps {
     database: Database;
 }
 export const NotificationItemList = ({ dayNotification, database }: itemProps) => {
+    const navigator = useNavigation<ScreenNavigationProp>();
     const dispatch = useAppDispatch();
     const [visible, setVisible] = useState(false);
-    const navigator = useNavigation();
     const onPress = () => {
         dispatch(markAsReadNoti(dayNotification));
-        //navigator.navigate('notificationsDetails');
+        navigator.navigate("NotificationsDetailsView")
     }
     const handleMarkAsRead = (notification: Notification) => {
         dispatch(markAsReadNoti(notification));

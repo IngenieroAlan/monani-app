@@ -1,13 +1,13 @@
-import { colors } from '@/utils/colors';
+import { cattleDetails } from '@/styles/main';
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Card, Divider, Text } from 'react-native-paper';
 
 export const InfoRoute = () => {
     return (
-        <ScrollView style={{ flex: 1, backgroundColor: "#fff" }}>
-            <View style={{ padding: 10, gap: 20 }}>
-                <Card style={styles.card}>
+        <ScrollView style={cattleDetails.container}>
+            <View style={cattleDetails.cardsContainer}>
+                <Card style={cattleDetails.card}>
                     <Card.Title title="Cuarentena" />
                     <Divider style={{ width: "85%", alignSelf: "center" }} />
                     <Card.Content style={{ marginTop: 10 }}>
@@ -15,7 +15,7 @@ export const InfoRoute = () => {
                         <Text variant="titleSmall">27 días</Text>
                     </Card.Content>
                 </Card>
-                <Card style={styles.card}>
+                <Card style={cattleDetails.card}>
                     <Card.Title title="Datos generales" />
                     <Divider style={{ width: "85%", alignSelf: "center" }} />
                     <Card.Content style={{ marginTop: 10, gap: 8 }}>
@@ -37,7 +37,7 @@ export const InfoRoute = () => {
                         </View>
                     </Card.Content>
                 </Card>
-                <Card style={styles.card}>
+                <Card style={cattleDetails.card}>
                     <Card.Title title="Datos biológicos" />
                     <Divider style={{ width: "85%", alignSelf: "center" }} />
                     <Card.Content style={{ marginTop: 10, gap: 8 }}>
@@ -55,7 +55,7 @@ export const InfoRoute = () => {
                         </View>
                     </Card.Content>
                 </Card>
-                <Card style={styles.card}>
+                <Card style={cattleDetails.card}>
                     <Card.Title title="Estado productivo" />
                     <Divider style={{ width: "85%", alignSelf: "center" }} />
                     <Card.Content style={{ marginTop: 10, gap: 8 }}>
@@ -69,7 +69,7 @@ export const InfoRoute = () => {
                         </View>
                     </Card.Content>
                 </Card>
-                <Card style={styles.card}>
+                <Card style={cattleDetails.card}>
                     <Card.Title title="Gestación" />
                     <Divider style={{ width: "85%", alignSelf: "center" }} />
                     <Card.Content style={{ marginTop: 10, gap: 8 }}>
@@ -91,10 +91,3 @@ export const InfoRoute = () => {
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    card: {
-        backgroundColor: "#FFF",
-        paddingTop: 4
-    }
-});

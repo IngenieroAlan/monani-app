@@ -4,6 +4,7 @@ import { View, useWindowDimensions } from 'react-native';
 import { Icon } from 'react-native-paper';
 import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
 import { InfoRoute } from "./routes/Info"
+import { DietRoute } from './routes/Diet';
 
 const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
@@ -15,7 +16,7 @@ const SecondRoute = () => (
 
 const renderScene = SceneMap({
     info: InfoRoute,
-    diet: SecondRoute,
+    diet: DietRoute,
     medication: FirstRoute,
     weight: SecondRoute,
     milkyProd: FirstRoute,

@@ -1,27 +1,12 @@
 import AnnualEarnings from '@/database/models/AnnualEarnings'
 import useAnnualEarnings from '@/hooks/collections/useAnnualEarnings'
 import useNumberFormat from '@/hooks/useNumberFormat'
-import useAppTheme from '@/theme'
 import { useNavigation } from '@react-navigation/native'
 import { FlashList } from '@shopify/flash-list'
 import { useCallback } from 'react'
 import { View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
-
-const EarningsDifference = ({ difference }: { difference: number }) => {
-  const theme = useAppTheme()
-
-  return (
-    difference !== 0 && (
-      <Text
-        variant='labelSmall'
-        style={{ color: difference < 0 ? theme.colors.error : theme.colors.success }}
-      >
-        {`${difference > 0 ? '+' : '-'}$${useNumberFormat(Math.abs(difference).toFixed(2))}`}
-      </Text>
-    )
-  )
-}
+import EarningsDifference from '../EarningsDifference'
 
 const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?: number }) => {
   const navigation = useNavigation()
@@ -42,7 +27,15 @@ const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?:
           />
         </View>
       )}
-      onPress={() => navigation.navigate('AnnualEarningsView', { year: item.year })}
+      onPress={() =>
+        navigation.navigate('AnnualEarningsView', {
+          year: item.year,
+          totalEarnings: item.totalEarnings,
+          totalCattleEarnings: item.totalCattleSales,
+          totalMilkEarnings: item.totalMilkSales,
+          difference: prevEarnings ? item.totalEarnings - prevEarnings : 0
+        })
+      }
     />
   )
 }

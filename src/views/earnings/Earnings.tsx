@@ -1,10 +1,11 @@
 import EarningsList from '@/components/earnings/EarningsList/EarningsList'
-import EarningsListFilters from '@/components/earnings/overview/EarningsListFilters'
-import SalesFilterBottomSheet from '@/components/earnings/overview/SalesFilterBottomSheet'
+import EarningsListFilters from '@/components/earnings/EarningsListFilters/EarningsListFilters'
 import useEarnings from '@/hooks/collections/useEarnings'
-import { useAppSelector } from '@/hooks/useRedux'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { reset } from '@/redux/slices/collections/earningsQuerySlice'
 import { RootState } from '@/redux/store/store'
-import React, { useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
@@ -28,13 +29,19 @@ const List = () => {
 
 const EarningsView = () => {
   const theme = useTheme()
+  const dispatch = useAppDispatch()
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => dispatch(reset()))
+
+    return unsubscribe
+  }, [navigation])
 
   return (
     <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
       <EarningsListFilters />
       <List />
-
-      <SalesFilterBottomSheet />
     </View>
   )
 }

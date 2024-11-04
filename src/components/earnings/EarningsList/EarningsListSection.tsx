@@ -1,5 +1,7 @@
 import { EarningsRecord } from '@/hooks/collections/useEarnings'
-import { format, isThisYear, isToday, isYesterday } from 'date-fns'
+import { useAppSelector } from '@/hooks/useRedux'
+import { RootState } from '@/redux/store/store'
+import { format, isSameYear, isThisYear, isToday, isYesterday } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -8,12 +10,16 @@ import CattleListItem from './CattleListItem'
 import MilkListItem from './MilkListItem'
 
 const EarningsListSection = ({ records }: { records: EarningsRecord }) => {
+  const year = useAppSelector((state: RootState) => state.earningsQuery.year)
+
   const title = useMemo(() => {
     if (isToday(records.date)) return 'Hoy'
 
     if (isYesterday(records.date)) return 'Ayer'
 
-    if (isThisYear(records.date)) return format(records.date, "dd 'de' MMMM", { locale: es })
+    if (year === null ? isThisYear(records.date) : isSameYear(records.date, new Date(year, 0, 1))) {
+      return format(records.date, "dd 'de' MMMM", { locale: es })
+    }
 
     return format(records.date, "dd 'de' MMMM 'de' yyyy", { locale: es })
   }, [records])

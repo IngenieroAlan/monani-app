@@ -8,15 +8,18 @@ import { View } from 'react-native'
 import { Icon, List, RadioButton, Text, useTheme } from 'react-native-paper'
 import MBottomSheet from '../../MBottomSheet'
 
-export const SALES_FILTER_BOTTOM_SHEET_ID = 'salesFilterBottomSheet'
-
 type ListItemFilterProps = {
   title: string
   iconName: string
   filter: SalesType
 }
 
-const ListItemFilter = memo(({ title, iconName, filter }: ListItemFilterProps) => {
+type BottomSheetProps = {
+  index: number
+  setIndex: (n: number) => void
+}
+
+const ListItemFilter = ({ title, iconName, filter }: ListItemFilterProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const salesTypeFilter = useAppSelector((state: RootState) => state.earningsQuery.eqSalesType)
@@ -56,15 +59,13 @@ const ListItemFilter = memo(({ title, iconName, filter }: ListItemFilterProps) =
       style={{ paddingStart: 16 }}
     />
   )
-})
+}
 
-const SalesFilterBottomSheet = () => {
-  const index = useAppSelector((state: RootState) => state.bottomSheet[SALES_FILTER_BOTTOM_SHEET_ID] ?? -1)
-
+const SalesFilterBottomSheet = ({ index, setIndex }: BottomSheetProps) => {
   return (
     <MBottomSheet
-      id={SALES_FILTER_BOTTOM_SHEET_ID}
       index={index}
+      onClose={() => setIndex(-1)}
     >
       <BottomSheetScrollView scrollEnabled={false}>
         <Text
@@ -90,4 +91,4 @@ const SalesFilterBottomSheet = () => {
   )
 }
 
-export default SalesFilterBottomSheet
+export default memo(SalesFilterBottomSheet)

@@ -26,9 +26,10 @@ type UseEarningsProps = {
   take?: number
   salesType?: SalesType | null
   betweenDates?: number[] | null
+  year?: number | null
 }
 
-const useEarnings = ({ take, salesType, betweenDates }: UseEarningsProps = {}) => {
+const useEarnings = ({ take, salesType, betweenDates, year }: UseEarningsProps = {}) => {
   const database = useDatabase()
   const [cattleSales, setCattleSales] = useState<CattleSale[]>([])
   const [milkSales, setMilkSales] = useState<MilkSale[]>([])
@@ -45,12 +46,22 @@ const useEarnings = ({ take, salesType, betweenDates }: UseEarningsProps = {}) =
     cattleSalesQuery = cattleSalesQuery.extend(Q.take(take))
     milkSalesQuery = milkSalesQuery.extend(Q.take(take))
   }
+
   if (betweenDates?.length) {
     cattleSalesQuery = cattleSalesQuery.extend(
       Q.where('sold_at', Q.between(betweenDates[0], betweenDates[1]))
     )
     milkSalesQuery = milkSalesQuery.extend(
       Q.where('sold_at', Q.between(betweenDates[0], betweenDates[1]))
+    )
+  }
+
+  if (year) {
+    cattleSalesQuery = cattleSalesQuery.extend(
+      Q.unsafeSqlExpr(`strftime('%Y', datetime(sold_at / 1000, 'unixepoch')) = '${year}'`)
+    )
+    milkSalesQuery = milkSalesQuery.extend(
+      Q.unsafeSqlExpr(`strftime('%Y', datetime(sold_at / 1000, 'unixepoch')) = '${year}'`)
     )
   }
 
@@ -83,7 +94,7 @@ const useEarnings = ({ take, salesType, betweenDates }: UseEarningsProps = {}) =
       cattleSalesSubscription.unsubscribe()
       milkSalesSubscription.unsubscribe()
     }
-  }, [database, take, salesType, betweenDates])
+  }, [database, take, salesType, betweenDates, year])
 
   useEffect(() => {
     const cattleEarnings = retrieveEarnings(cattleSales, 'cattleSales')

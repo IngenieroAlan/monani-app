@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 import { Portal, useTheme } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 
-const MBottomSheet = (props: BottomSheetProps & { id: string }) => {
+const MBottomSheet = (props: BottomSheetProps & { id?: string }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
 
@@ -28,7 +28,11 @@ const MBottomSheet = (props: BottomSheetProps & { id: string }) => {
         backdropComponent={backdrop}
         enableDynamicSizing={true}
         enablePanDownToClose={true}
-        onClose={() => {dispatch(close(props.id))}}
+        onClose={() => {
+          if (!props.id) return
+
+          dispatch(close(props.id))
+        }}
         {...props}
       >
         {props.children}

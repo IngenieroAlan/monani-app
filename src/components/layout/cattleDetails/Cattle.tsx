@@ -1,16 +1,15 @@
-import { RootStackParamList } from '@/navigation/types';
+import database from '@/database';
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
+import { getCattles, setCattleInfo } from '@/redux/slices/cattles';
 import { colors } from '@/utils/colors';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { Appbar, Icon } from 'react-native-paper';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { DietRoute } from './routes/Diet';
+import { GenealogyRoute } from './routes/Genealogy';
 import { InfoRoute } from "./routes/Info";
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
-import { useNavigation } from '@react-navigation/native';
-import { getCattles, setCattleInfo } from '@/redux/slices/cattles';
-import database from '@/database';
 
 const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
@@ -26,7 +25,7 @@ const renderScene = SceneMap({
     medication: FirstRoute,
     weight: SecondRoute,
     milkyProd: FirstRoute,
-    genealogy: SecondRoute,
+    genealogy: GenealogyRoute,
 });
 
 const iconSize = 20;
@@ -58,7 +57,7 @@ export const Cattle = () => {
     return (<>
         <Appbar.Header>
             <Appbar.BackAction onPress={navigator.goBack} />
-            <Appbar.Content title={`No. ${cattleInfo?.tagCattleNumber}`} />
+            <Appbar.Content title={`No. ${cattleInfo?.tagId}`} />
         </Appbar.Header>
         <TabView
             navigationState={{ index, routes }}

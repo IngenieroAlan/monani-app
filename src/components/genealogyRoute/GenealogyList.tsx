@@ -1,16 +1,9 @@
 import Cattle from '@/database/models/Cattle'
-import useCattle from '@/hooks/collections/useCattle'
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setSelectedCattle } from '@/redux/slices/cattles'
-import { RootState } from '@/redux/store/store'
 import { withObservables } from '@nozbe/watermelondb/react'
-import { useNavigation } from '@react-navigation/native'
 import { FlashList } from '@shopify/flash-list'
-import React, { memo, useState } from 'react'
-import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
-
-const ITEMS_PER_PAGINATE = 25
 
 const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle
@@ -40,10 +33,6 @@ const ListItemRight = ({ cattleWeight }: { cattleWeight: number }) => {
   return (
     <View style={{ flexDirection: 'row', gap: 8 }}>
       <Text variant='labelSmall'>{`${formattedWeight} kg.`}</Text>
-      <Icon
-        size={24}
-        source='menu-right'
-      />
     </View>
   )
 }
@@ -60,40 +49,22 @@ const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
 }
 
 const CattleItem = observeCattle(({ cattle }: { cattle: Cattle }) => {
-  const navigator = useNavigation();
-  const dispatch = useAppDispatch();
-  const navigateToCattleDetails = () => {
-    try {
-      dispatch(setSelectedCattle(cattle.id))
-    } catch (error) {
-      console.log(error);
-    }
-    navigator.navigate('CattleDetailsLayout')
-  }
   return (
     <List.Item
       title={<ListItemTitle cattle={cattle} />}
       description={<Text variant='bodyMedium'>{cattle.cattleStatus}</Text>}
       right={() => <ListItemRight cattleWeight={cattle.weight} />}
-      onPress={navigateToCattleDetails}
     />
   )
 })
 
-const CattleList = ({ onScroll }: { onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => void }) => {
+const GenealogyList = ({offspring}:{offspring: Cattle[] | undefined}) => {
   const [index, setIndex] = useState(0)
-  const { oneOfCattleStatus, eqProductionType } = useAppSelector((state: RootState) => state.cattleQuery)
-  const { cattleRecords } = useCattle({
-    cattleStatus: oneOfCattleStatus,
-    productionType: eqProductionType,
-    take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * index
-  })
 
   return (
     <FlashList
-      onScroll={onScroll}
       estimatedItemSize={88}
-      data={cattleRecords}
+      data={offspring}
       renderItem={({ item }) => <CattleItem cattle={item} />}
       keyExtractor={(item: Cattle) => item.id}
       ListFooterComponent={() => <View style={{ height: 88 }} />}
@@ -115,4 +86,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default memo(CattleList)
+export default GenealogyList

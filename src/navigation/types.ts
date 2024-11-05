@@ -1,3 +1,4 @@
+import Cattle from '@/database/models/Cattle'
 import { NavigatorScreenParams } from '@react-navigation/native'
 
 export type RootStackParamList = {
@@ -12,9 +13,7 @@ export type RootStackParamList = {
     totalMilkEarnings: number
     difference: number
   }
-  CattleDetailsLayout: {
-    tagId: string
-  }
+  CattleDetailsLayout: undefined
 }
 
 export type BottomTabsParamList = {

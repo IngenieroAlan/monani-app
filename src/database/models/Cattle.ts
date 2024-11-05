@@ -10,6 +10,7 @@ import Genealogy from './Genealogy'
 import MedicationSchedule from './MedicationSchedule'
 import MilkProduction from './MilkProduction'
 import MilkReport from './MilkReport'
+import Notification from './Notification'
 import WeightReport from './WeightReport'
 
 export type ProductionType = 'Lechera' | 'De carne'
@@ -37,7 +38,8 @@ class Cattle extends Model {
     [TableName.MEDICATION_SCHEDULES]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
     [TableName.WEIGHT_REPORTS]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
     [TableName.MILK_REPORTS]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
-    [TableName.CATTLE_SALES]: { type: 'has_many' as const, foreignKey: 'cattle_id' }
+    [TableName.CATTLE_SALES]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
+    [TableName.NOTIFICATIONS]: { type: 'has_many' as const, foreignKey: 'cattle_id' }
   }
 
   @readonly @date('created_at') createdAt!: Date
@@ -62,6 +64,7 @@ class Cattle extends Model {
   @children(TableName.WEIGHT_REPORTS) weightReports!: Query<WeightReport>
   @children(TableName.MILK_REPORTS) milkReports!: Query<MilkReport>
   @children(TableName.MEDICATION_SCHEDULES) medicationSchedules!: Query<MedicationSchedule>
+  @children(TableName.NOTIFICATIONS) notifications!: Query<Notification>
 
   @lazy
   latestWeightReport = this.weightReports

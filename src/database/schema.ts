@@ -221,6 +221,7 @@ export default appSchema({
     tableSchema({
       name: TableName.NOTIFICATIONS,
       columns: [
+        { name: 'cattle_id', type: 'string' },
         { name: 'title', type: 'string' },
         { name: 'description', type: 'string' },
         { name: 'icon_name', type: 'string' },

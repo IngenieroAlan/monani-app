@@ -12,6 +12,9 @@ export type RootStackParamList = {
     totalMilkEarnings: number
     difference: number
   }
+  CattleDetailsLayout: {
+    tagId: string
+  }
 }
 
 export type BottomTabsParamList = {

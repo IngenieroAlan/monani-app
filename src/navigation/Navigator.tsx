@@ -1,3 +1,4 @@
+import { Cattle } from '@/components/layout/cattleDetails/Cattle'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -36,6 +37,10 @@ export const Navigator = () => {
         <Stack.Screen
           name='AnnualEarningsView'
           component={AnnualEarningsView}
+        />
+        <Stack.Screen
+          name='CattleDetailsLayout'
+          component={Cattle}
         />
       </Stack.Navigator>
     </View>

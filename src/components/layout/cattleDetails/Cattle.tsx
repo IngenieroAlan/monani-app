@@ -1,10 +1,12 @@
+import { RootStackParamList } from '@/navigation/types';
 import { colors } from '@/utils/colors';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
-import { Icon } from 'react-native-paper';
-import { SceneMap, TabView, TabBar } from 'react-native-tab-view';
-import { InfoRoute } from "./routes/Info"
+import { Appbar, Icon } from 'react-native-paper';
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { DietRoute } from './routes/Diet';
+import { InfoRoute } from "./routes/Info";
 
 const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
@@ -25,8 +27,9 @@ const renderScene = SceneMap({
 
 const iconSize = 20;
 
-export const Cattle = () => {
+export const Cattle = ({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'CattleDetailsLayout'>) => {
     const layout = useWindowDimensions();
+    const { tagId } = route.params;
 
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
@@ -38,7 +41,11 @@ export const Cattle = () => {
         { key: 'genealogy', title: 'Genealogía', icon: <Icon size={iconSize} source={'family-tree'} /> },
     ]);
 
-    return (
+    return (<>
+        <Appbar.Header>
+            <Appbar.BackAction onPress={navigation.goBack} />
+            <Appbar.Content title={`No. ${tagId}`} />
+        </Appbar.Header>
         <TabView
             navigationState={{ index, routes }}
             renderScene={renderScene}
@@ -56,5 +63,5 @@ export const Cattle = () => {
                 />
             )}
         />
-    );
+    </>);
 };

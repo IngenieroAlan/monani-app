@@ -3,6 +3,7 @@ import useCattle from '@/hooks/collections/useCattle'
 import { useAppSelector } from '@/hooks/useRedux'
 import { RootState } from '@/redux/store/store'
 import { withObservables } from '@nozbe/watermelondb/react'
+import { useNavigation } from '@react-navigation/native'
 import { FlashList } from '@shopify/flash-list'
 import React, { memo, useState } from 'react'
 import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View } from 'react-native'
@@ -58,12 +59,13 @@ const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
 }
 
 const CattleItem = observeCattle(({ cattle }: { cattle: Cattle }) => {
+  const navigator = useNavigation();
   return (
     <List.Item
       title={<ListItemTitle cattle={cattle} />}
       description={<Text variant='bodyMedium'>{cattle.cattleStatus}</Text>}
       right={() => <ListItemRight cattleWeight={cattle.weight} />}
-      onPress={() => {}}
+      onPress={() => navigator.navigate('CattleDetailsLayout', { tagId: cattle.tagId })}
     />
   )
 })

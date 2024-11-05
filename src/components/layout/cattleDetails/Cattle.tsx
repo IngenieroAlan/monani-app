@@ -1,14 +1,16 @@
 import { RootStackParamList } from '@/navigation/types';
 import { colors } from '@/utils/colors';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { Appbar, Icon } from 'react-native-paper';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { DietRoute } from './routes/Diet';
 import { InfoRoute } from "./routes/Info";
-import { useAppSelector } from '@/hooks/useRedux';
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { useNavigation } from '@react-navigation/native';
+import { getCattles, setCattleInfo } from '@/redux/slices/cattles';
+import database from '@/database';
 
 const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
@@ -33,9 +35,16 @@ const iconSize = 20;
 export const Cattle = () => {
     const layout = useWindowDimensions();
     const navigator = useNavigation();
-    const { selectedCattle } = useAppSelector(state => state.cattles);
-    console.log(selectedCattle);
-    
+    const { selectedCattle, cattles, cattleInfo } = useAppSelector(state => state.cattles);
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(getCattles(database))
+        const res = cattles.find(cow => cow.id === selectedCattle);
+        dispatch(setCattleInfo(res))
+    }, [dispatch])
+
+
     const [routes] = React.useState([
         { key: 'info', title: 'Información', icon: <Icon size={iconSize} source={'file-document-outline'} /> },
         { key: 'diet', title: 'Dieta', icon: <Icon size={iconSize} source={'food-apple-outline'} /> },
@@ -49,7 +58,7 @@ export const Cattle = () => {
     return (<>
         <Appbar.Header>
             <Appbar.BackAction onPress={navigator.goBack} />
-            <Appbar.Content title={`No. ${selectedCattle}`} />
+            <Appbar.Content title={`No. ${cattleInfo?.tagCattleNumber}`} />
         </Appbar.Header>
         <TabView
             navigationState={{ index, routes }}

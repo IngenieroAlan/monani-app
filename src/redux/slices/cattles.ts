@@ -7,11 +7,13 @@ import Cattle from "@/database/models/Cattle";
 interface CattleState {
   selectedCattle: string | null;
   cattles: Cattle[];
+  cattleInfo: Cattle | null;
 }
 
 const initialState: CattleState = {
   selectedCattle: null,
   cattles: [],
+  cattleInfo: null,
 };
 
 const cattlesSlice = createSlice({
@@ -23,6 +25,9 @@ const cattlesSlice = createSlice({
     },
     setCattles(state, action) {
       state.cattles = action.payload;
+    },
+    setCattleInfo(state, action) {
+      state.cattleInfo = action.payload;
     },
     addCattle(state, { payload }) {
       state.cattles.push(payload);
@@ -62,48 +67,6 @@ export const getCattles = (database: Database) => {
   };
 };
 
-export const getCattlesById = (database: Database, cattleId: string) => {
-  return async (dispatch: Dispatch) => {
-    dispatch(startLoading());
-    try {
-      const results = await database.collections
-        .get<Cattle>(TableName.CATTLE)
-        .query(Q.where("id", cattleId))
-        .fetch();
-
-      if (results.length > 0) {
-        dispatch(setCattles(results));
-      } else {
-        console.warn(`Cattle with ID ${cattleId} not found.`);
-      }
-
-      dispatch(endLoading());
-    } catch (err) {
-      console.error("Error fetching cattle by ID:", err);
-      dispatch(endLoading());
-    }
-  };
-};
-
-/* export const addNewCattle = (database: Database, data: Cattle) => {
-  return async (dispatch: Dispatch) => {
-    dispatch(startLoading());
-    try {
-      const results = await database.collections
-        .get<Cattle>(TableName.CATTLE)
-        .create((cattle) => {
-          cattle = data;
-        });
-
-      dispatch(addCattle(results));
-      dispatch(endLoading());
-    } catch (err) {
-      dispatch(endLoading());
-      console.log(err);
-    }
-  };
-}; */
-
 export const deleteCattle = (cattle: Cattle) => {
   return async (dispatch: Dispatch) => {
     await cattle.delete();
@@ -114,6 +77,7 @@ export const deleteCattle = (cattle: Cattle) => {
 export const {
   setSelectedCattle,
   setCattles,
+  setCattleInfo,
   addCattle,
   replaceCattle,
   deleteCattleFromList,

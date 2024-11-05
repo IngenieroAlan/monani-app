@@ -39,8 +39,8 @@ const AnnualEarningsCard = ({ totalEarnings, totalCattleEarnings, totalMilkEarni
         </View>
         <Divider horizontalInset />
         <View style={styles.salesContainer}>
-        <Text variant='titleSmall'>Ganancias mensuales promedio</Text>
-        <Text variant='bodyMedium'>{`$${useNumberFormat(totalMilkEarnings.toFixed(2))}`}</Text>
+          <Text variant='titleSmall'>Ganancias mensuales promedio</Text>
+          <Text variant='bodyMedium'>{`$${useNumberFormat((totalEarnings / 12).toFixed(2))}`}</Text>
         </View>
       </Card.Content>
     </Card>

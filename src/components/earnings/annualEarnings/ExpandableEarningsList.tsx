@@ -1,28 +1,41 @@
 import ExpandableBottomSheet from '@/components/ExpandableBottomSheet'
-import { EarningsRecord } from '@/hooks/collections/useEarnings'
+import useEarnings from '@/hooks/collections/useEarnings'
+import { useAppSelector } from '@/hooks/useRedux'
+import { RootState } from '@/redux/store/store'
 import { BottomSheetView } from '@gorhom/bottom-sheet'
-import { memo } from 'react'
+import { useState } from 'react'
 import EarningsList from '../EarningsList/EarningsList'
 import EarningsListFilters from '../EarningsListFilters/EarningsListFilters'
 
-type Props = {
-  earningsRecords?: EarningsRecord[]
-  index: number
-  setIndex: (n: number) => void
+const ITEMS_PER_PAGINATE = 25
+
+const List = () => {
+  const [index, setIndex] = useState(0)
+  const { eqSalesType, betweenDates, year } = useAppSelector((state: RootState) => state.earningsQuery)
+  const { earningsRecords } = useEarnings({
+    take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * index,
+    salesType: eqSalesType,
+    betweenDates,
+    year
+  })
+
+  return (
+    <EarningsList
+      data={earningsRecords}
+      onEndReached={() => setIndex(index + 1)}
+    />
+  )
 }
 
-const ExpandableEarningsList = ({ earningsRecords, index, setIndex }: Props) => {
+const ExpandableEarningsList = () => {
   return (
     <ExpandableBottomSheet>
       <BottomSheetView style={{ flex: 1 }}>
         <EarningsListFilters />
-        <EarningsList
-          data={earningsRecords}
-          onEndReached={() => setIndex(index + 1)}
-        />
+        <List />
       </BottomSheetView>
     </ExpandableBottomSheet>
   )
 }
 
-export default memo(ExpandableEarningsList)
+export default ExpandableEarningsList

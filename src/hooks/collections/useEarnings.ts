@@ -24,12 +24,12 @@ type EarningsData = {
 
 type UseEarningsProps = {
   take?: number
-  salesType?: SalesType | null
+  eqSalesType?: SalesType | null
   betweenDates?: number[] | null
   year?: number | null
 }
 
-const useEarnings = ({ take, salesType, betweenDates, year }: UseEarningsProps = {}) => {
+const useEarnings = ({ take, eqSalesType, betweenDates, year }: UseEarningsProps = {}) => {
   const database = useDatabase()
   const [cattleSales, setCattleSales] = useState<CattleSale[]>([])
   const [milkSales, setMilkSales] = useState<MilkSale[]>([])
@@ -84,17 +84,17 @@ const useEarnings = ({ take, salesType, betweenDates, year }: UseEarningsProps =
 
   useEffect(() => {
     const cattleSalesSubscription = cattleSalesQuery.observeWithColumns(['sold_at']).subscribe((data) => {
-      setCattleSales(salesType === 'Ganado' || salesType === null ? data : [])
+      setCattleSales(eqSalesType === 'Ganado' || eqSalesType === null ? data : [])
     })
     const milkSalesSubscription = milkSalesQuery.observeWithColumns(['sold_at']).subscribe((data) => {
-      setMilkSales(salesType === 'Lechera' || salesType === null ? data : [])
+      setMilkSales(eqSalesType === 'Lechera' || eqSalesType === null ? data : [])
     })
 
     return () => {
       cattleSalesSubscription.unsubscribe()
       milkSalesSubscription.unsubscribe()
     }
-  }, [database, take, salesType, betweenDates, year])
+  }, [database, take, eqSalesType, betweenDates, year])
 
   useEffect(() => {
     const cattleEarnings = retrieveEarnings(cattleSales, 'cattleSales')

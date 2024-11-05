@@ -22,7 +22,7 @@ type BottomSheetProps = {
 const ListItemFilter = ({ title, iconName, filter }: ListItemFilterProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const salesTypeFilter = useAppSelector((state: RootState) => state.earningsQuery.eqSalesType)
+  const eqSalesType = useAppSelector((state: RootState) => state.earningsQuery.eqSalesType)
 
   const onPress = useCallback(() => {
     dispatch(setEqSalesType(filter))
@@ -33,11 +33,11 @@ const ListItemFilter = ({ title, iconName, filter }: ListItemFilterProps) => {
       <RadioButton
         disabled={true}
         theme={{ colors: { onSurfaceDisabled: theme.colors.primary } }}
-        status={salesTypeFilter === filter ? 'checked' : 'unchecked'}
+        status={eqSalesType === filter ? 'checked' : 'unchecked'}
         value={filter}
       />
     )
-  }, [salesTypeFilter, filter])
+  }, [eqSalesType, filter])
 
   const left = useCallback(() => {
     return (

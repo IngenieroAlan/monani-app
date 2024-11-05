@@ -10,7 +10,8 @@ import SalesFilterBottomSheet from './SalesFilterBottomSheet'
 
 const EarningsListFilters = () => {
   const dispatch = useAppDispatch()
-  const { eqSalesType, year } = useAppSelector((state: RootState) => state.earningsQuery)
+  const eqSalesType = useAppSelector((state: RootState) => state.earningsQuery.eqSalesType)
+  const year = useAppSelector((state: RootState) => state.earningsQuery.year)
   const [visibleDatePicker, setVisibleDatePicker] = useState(false)
   const [index, setIndex] = useState(-1)
   const [startDate, setStartDate] = useState<DateType>()

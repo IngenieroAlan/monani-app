@@ -11,12 +11,11 @@ const ITEMS_PER_PAGINATE = 25
 
 const List = () => {
   const [index, setIndex] = useState(0)
-  const { eqSalesType, betweenDates, year } = useAppSelector((state: RootState) => state.earningsQuery)
   const { earningsRecords } = useEarnings({
     take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * index,
-    salesType: eqSalesType,
-    betweenDates,
-    year
+    eqSalesType: useAppSelector((state: RootState) => state.earningsQuery.eqSalesType),
+    betweenDates: useAppSelector((state: RootState) => state.earningsQuery.betweenDates),
+    year: useAppSelector((state: RootState) => state.earningsQuery.year)
   })
 
   return (

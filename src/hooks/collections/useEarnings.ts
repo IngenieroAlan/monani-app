@@ -33,7 +33,7 @@ const useEarnings = ({ take, salesType, betweenDates, year }: UseEarningsProps =
   const database = useDatabase()
   const [cattleSales, setCattleSales] = useState<CattleSale[]>([])
   const [milkSales, setMilkSales] = useState<MilkSale[]>([])
-  const [earningsRecords, setEarningsRecords] = useState<EarningsRecord[]>()
+  const [earningsRecords, setEarningsRecords] = useState<EarningsRecord[]>([])
 
   let cattleSalesQuery = database.collections
     .get<CattleSale>(TableName.CATTLE_SALES)

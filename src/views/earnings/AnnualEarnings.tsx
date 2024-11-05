@@ -35,16 +35,18 @@ const AnnualEarningsView = ({ route, navigation }: ScreenProps) => {
           <Appbar.BackAction onPress={navigation.goBack} />
           <Appbar.Content title={`Ganancias en ${year}`} />
         </Appbar.Header>
-        <View style={{ padding: 16 }}>
-          <AnnualEarningsCard
-            totalEarnings={totalEarnings}
-            totalCattleEarnings={totalCattleEarnings}
-            totalMilkEarnings={totalMilkEarnings}
-            difference={difference}
-          />
+        <View style={{ flex: 1 }}>
+          <View style={{ padding: 16 }}>
+            <AnnualEarningsCard
+              totalEarnings={totalEarnings}
+              totalCattleEarnings={totalCattleEarnings}
+              totalMilkEarnings={totalMilkEarnings}
+              difference={difference}
+            />
+          </View>
+          <Divider />
+          <ExpandableEarningsList />
         </View>
-        <Divider />
-        <ExpandableEarningsList />
       </View>
     </Portal.Host>
   )

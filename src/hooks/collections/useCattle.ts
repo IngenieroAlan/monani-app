@@ -2,6 +2,7 @@ import Cattle, { CattleStatus, ProductionType } from '@/database/models/Cattle'
 import Diet, { MatterProportion } from '@/database/models/Diet'
 import DietFeed, { FeedProportion } from '@/database/models/DietFeed'
 import Feed from '@/database/models/Feed'
+import Genealogy from '@/database/models/Genealogy'
 import Medication from '@/database/models/Medication'
 import MedicationSchedule from '@/database/models/MedicationSchedule'
 import { TableName } from '@/database/schema'
@@ -22,6 +23,7 @@ type CattleFields = {
   quarantineDays?: number
   productionType: ProductionType
   cattleStatus: CattleStatus
+  motherId?: string
 }
 
 type DietFields = {
@@ -82,41 +84,58 @@ const useCattle = ({ cattleStatus, productionType, take }: UseCattleProps = {}) 
     medicationScheduleData: MedicationScheduleFields[]
   ) => {
     const createdCattle = await database.write(async () => {
-      const diet = await database.collections.get<Diet>(TableName.DIETS).create((record) => {
-        record.waterAmount = dietData.waterAmount
-        record.matterAmount = dietData.matterAmount
-        record.percentage = dietData.percentage
-        record.matterProportion = dietData.matterProportion
-        record.isConcentrateExcluded = dietData.isConcentrateExcluded
-      })
-      const cattle = await database.collections.get<Cattle>(TableName.CATTLE).create((record) => {
-        record.diet.set(diet)
+      const diet = await database.collections
+        .get<Diet>(TableName.DIETS)
+        .create((record) => {
+          record.waterAmount = dietData.waterAmount
+          record.matterAmount = dietData.matterAmount
+          record.percentage = dietData.percentage
+          record.matterProportion = dietData.matterProportion
+          record.isConcentrateExcluded = dietData.isConcentrateExcluded
+        })
+      const cattle = await database.collections
+        .get<Cattle>(TableName.CATTLE)
+        .create((record) => {
+          record.diet.set(diet)
 
-        record.name = cattleData.name
-        record.tagId = cattleData.tagId
-        record.tagCattleNumber = cattleData.tagCattleNumber
-        record.admittedAt = cattleData.admittedAt
-        record.bornAt = cattleData.bornAt
-        record.pregnantAt = cattleData.pregnantAt
-        record.weight = cattleData.weight
-        record.quarantineEndsAt = cattleData.quarantineDays ? addDays(new Date(), cattleData.quarantineDays) : undefined
-        record.productionType = cattleData.productionType
-        record.cattleStatus = cattleData.cattleStatus
-        record.isActive = true
-        record.isArchived = false
-        record.isSold = false
-      })
+          record.name = cattleData.name
+          record.tagId = cattleData.tagId
+          record.tagCattleNumber = cattleData.tagCattleNumber
+          record.admittedAt = cattleData.admittedAt
+          record.bornAt = cattleData.bornAt
+          record.pregnantAt = cattleData.pregnantAt
+          record.weight = cattleData.weight
+          record.quarantineEndsAt = cattleData.quarantineDays ? addDays(new Date(), cattleData.quarantineDays) : undefined
+          record.productionType = cattleData.productionType
+          record.cattleStatus = cattleData.cattleStatus
+          record.isActive = true
+          record.isArchived = false
+          record.isSold = false
+        })
+
+      let preparedGenealogyRecord: Genealogy | null = null
+
+      if (cattleData.motherId) {
+        preparedGenealogyRecord = database.collections
+          .get<Genealogy>(TableName.GENEALOGY)
+          .prepareCreate((record) => {
+            record.motherId = cattleData.motherId!
+            record.offspringId = cattle.id
+          })
+      }
 
       await database.batch(
         ...dietFeedData.map((dietFeed) => {
-          return database.collections.get<DietFeed>(TableName.DIET_FEED).prepareCreate((record) => {
-            record.diet.set(diet)
-            record.feed.set(dietFeed.feed)
+          return database.collections
+            .get<DietFeed>(TableName.DIET_FEED)
+            .prepareCreate((record) => {
+              record.diet.set(diet)
+              record.feed.set(dietFeed.feed)
 
-            record.feedAmount = dietFeed.feedAmount
-            record.percentage = dietFeed.percentage
-            record.feedProportion = dietFeed.feedProportion
-          })
+              record.feedAmount = dietFeed.feedAmount
+              record.percentage = dietFeed.percentage
+              record.feedProportion = dietFeed.feedProportion
+            })
         }),
         ...medicationScheduleData.map((medicationSchedule) => {
           return database.collections
@@ -128,7 +147,8 @@ const useCattle = ({ cattleStatus, productionType, take }: UseCattleProps = {}) 
               record.nextDoseAt = medicationSchedule.nextDoseAt
               record.dosesPerYear = medicationSchedule.dosesPerYear
             })
-        })
+        }),
+        preparedGenealogyRecord
       )
     })
 

@@ -3,29 +3,30 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 type SalesType = 'Lechera' | 'Ganado'
 
 type EarningsQueryState = {
-  eqSalesType: SalesType | null
-  betweenDates: number[] | null
-  year: number | null
+  [listId: string]: {
+    eqSalesType: SalesType | null
+    betweenDates: number[] | null
+    year: number | null
+  }
 }
 
-const initialState: EarningsQueryState = {
-  eqSalesType: null,
-  betweenDates: null,
-  year: null
-}
+const initialState: EarningsQueryState = {}
 
 const earningsQuerySlice = createSlice({
   name: 'earningsQuery',
   initialState,
   reducers: {
-    setEqSalesType: (state, action: PayloadAction<SalesType | null>) => {
-      state.eqSalesType = action.payload
+    setEqSalesType: (state, action: PayloadAction<{ listId: string; eqSalesType: SalesType | null }>) => {
+      const { listId, eqSalesType } = action.payload
+      state[listId] = { ...state[listId], eqSalesType }
     },
-    setBetweenDates: (state, action: PayloadAction<number[] | null>) => {
-      state.betweenDates = action.payload
+    setBetweenDates: (state, action: PayloadAction<{ listId: string; betweenDates: number[] | null }>) => {
+      const { listId, betweenDates } = action.payload
+      state[listId] = { ...state[listId], betweenDates }
     },
-    setYear: (state, action: PayloadAction<number | null>) => {
-      state.year = action.payload
+    setYear: (state, action: PayloadAction<{ listId: string; year: number | null }>) => {
+      const { listId, year } = action.payload
+      state[listId] = { ...state[listId], year }
     },
     reset: () => initialState
   }

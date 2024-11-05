@@ -8,10 +8,10 @@ import FilterChip from '../../FilterChip'
 import DatePickerModal from './DatePickerModal'
 import SalesFilterBottomSheet from './SalesFilterBottomSheet'
 
-const EarningsListFilters = () => {
+const EarningsListFilters = ({ listId }: { listId: string }) => {
   const dispatch = useAppDispatch()
-  const eqSalesType = useAppSelector((state: RootState) => state.earningsQuery.eqSalesType)
-  const year = useAppSelector((state: RootState) => state.earningsQuery.year)
+  const eqSalesType = useAppSelector((state: RootState) => state.earningsQuery[listId]?.eqSalesType)
+  const year = useAppSelector((state: RootState) => state.earningsQuery[listId]?.year)
   const [visibleDatePicker, setVisibleDatePicker] = useState(false)
   const [index, setIndex] = useState(-1)
   const [startDate, setStartDate] = useState<DateType>()
@@ -19,8 +19,8 @@ const EarningsListFilters = () => {
   const dateFilterText = useRef<string | null>(null)
 
   const setDefaultDates = useCallback(() => {
-    setStartDate(year !== null ? new Date(year, 0, 1).toString() : null)
-    setEndDate(year !== null ? new Date(year, 0, 1).toString() : null)
+    setStartDate(year ? new Date(year, 0, 1).toString() : null)
+    setEndDate(year ? new Date(year, 0, 1).toString() : null)
   }, [year])
 
   return (
@@ -35,7 +35,7 @@ const EarningsListFilters = () => {
             dateFilterText.current = null
 
             setDefaultDates()
-            dispatch(setBetweenDates(null))
+            dispatch(setBetweenDates({ listId: listId, betweenDates: null }))
           }}
         >
           Fecha
@@ -43,9 +43,9 @@ const EarningsListFilters = () => {
         <FilterChip
           mode='outlined'
           icon='filter-outline'
-          filters={eqSalesType === null ? [] : [eqSalesType]}
+          filters={!eqSalesType ? [] : [eqSalesType]}
           onPress={() => setIndex(0)}
-          onClose={() => dispatch(setEqSalesType(null))}
+          onClose={() => dispatch(setEqSalesType({ listId: listId, eqSalesType: null }))}
         >
           Tipo de venta
         </FilterChip>
@@ -59,10 +59,12 @@ const EarningsListFilters = () => {
         setEndDate={setEndDate}
         dateFilterText={dateFilterText}
         setDefaultDates={setDefaultDates}
+        listId={listId}
       />
       <SalesFilterBottomSheet
         index={index}
         setIndex={setIndex}
+        listId={listId}
       />
     </>
   )

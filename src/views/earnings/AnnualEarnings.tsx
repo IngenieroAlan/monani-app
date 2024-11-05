@@ -1,5 +1,7 @@
 import AnnualEarningsCard from '@/components/earnings/annualEarnings/AnnualEarningsCard'
-import ExpandableEarningsList from '@/components/earnings/annualEarnings/ExpandableEarningsList'
+import ExpandableEarningsList, {
+  ANNUAL_EARNINGS_LIST_ID
+} from '@/components/earnings/annualEarnings/ExpandableEarningsList'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { RootStackParamList } from '@/navigation/types'
 import { reset, setYear } from '@/redux/slices/collections/earningsQuerySlice'
@@ -24,7 +26,7 @@ const AnnualEarningsView = ({ route, navigation }: ScreenProps) => {
   }, [navigation])
 
   useEffect(() => {
-    dispatch(setYear(year))
+    dispatch(setYear({ listId: ANNUAL_EARNINGS_LIST_ID, year }))
   }, [])
 
   return (

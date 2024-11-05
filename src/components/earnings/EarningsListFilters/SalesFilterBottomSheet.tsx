@@ -8,24 +8,26 @@ import { View } from 'react-native'
 import { Icon, List, RadioButton, Text, useTheme } from 'react-native-paper'
 import MBottomSheet from '../../MBottomSheet'
 
+type BottomSheetProps = {
+  index: number
+  setIndex: (n: number) => void
+  listId: string
+}
+
 type ListItemFilterProps = {
   title: string
   iconName: string
   filter: SalesType
+  listId: string
 }
 
-type BottomSheetProps = {
-  index: number
-  setIndex: (n: number) => void
-}
-
-const ListItemFilter = ({ title, iconName, filter }: ListItemFilterProps) => {
+const ListItemFilter = ({ title, iconName, filter, listId }: ListItemFilterProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const eqSalesType = useAppSelector((state: RootState) => state.earningsQuery.eqSalesType)
+  const eqSalesType = useAppSelector((state: RootState) => state.earningsQuery[listId]?.eqSalesType)
 
   const onPress = useCallback(() => {
-    dispatch(setEqSalesType(filter))
+    dispatch(setEqSalesType({ listId: listId, eqSalesType: filter }))
   }, [filter])
 
   const right = useCallback(() => {
@@ -61,7 +63,7 @@ const ListItemFilter = ({ title, iconName, filter }: ListItemFilterProps) => {
   )
 }
 
-const SalesFilterBottomSheet = ({ index, setIndex }: BottomSheetProps) => {
+const SalesFilterBottomSheet = ({ index, setIndex, listId }: BottomSheetProps) => {
   return (
     <MBottomSheet
       index={index}
@@ -79,11 +81,13 @@ const SalesFilterBottomSheet = ({ index, setIndex }: BottomSheetProps) => {
             title='Ganado'
             iconName='cow'
             filter='Ganado'
+            listId={listId}
           />
           <ListItemFilter
             title='Lechera'
             iconName='beer-outline'
             filter='Lechera'
+            listId={listId}
           />
         </View>
       </BottomSheetScrollView>

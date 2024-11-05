@@ -84,10 +84,10 @@ const useEarnings = ({ take, eqSalesType, betweenDates, year }: UseEarningsProps
 
   useEffect(() => {
     const cattleSalesSubscription = cattleSalesQuery.observeWithColumns(['sold_at']).subscribe((data) => {
-      setCattleSales(eqSalesType === 'Ganado' || eqSalesType === null ? data : [])
+      setCattleSales(eqSalesType === 'Ganado' || !eqSalesType ? data : [])
     })
     const milkSalesSubscription = milkSalesQuery.observeWithColumns(['sold_at']).subscribe((data) => {
-      setMilkSales(eqSalesType === 'Lechera' || eqSalesType === null ? data : [])
+      setMilkSales(eqSalesType === 'Lechera' || !eqSalesType ? data : [])
     })
 
     return () => {

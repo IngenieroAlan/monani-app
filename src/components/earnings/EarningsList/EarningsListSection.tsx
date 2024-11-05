@@ -9,8 +9,8 @@ import { Text } from 'react-native-paper'
 import CattleListItem from './CattleListItem'
 import MilkListItem from './MilkListItem'
 
-const EarningsListSection = ({ records }: { records: EarningsRecord }) => {
-  const year = useAppSelector((state: RootState) => state.earningsQuery.year)
+const EarningsListSection = ({ records, listId }: { records: EarningsRecord; listId: string }) => {
+  const year = useAppSelector((state: RootState) => state.earningsQuery[listId]?.year)
 
   const title = useMemo(() => {
     if (isToday(records.date)) return 'Hoy'

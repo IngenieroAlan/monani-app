@@ -25,9 +25,14 @@ const EmptyList = () => {
   )
 }
 
-const EarningsList = (props: Props) => {
+const EarningsList = (props: Props & { listId: string }) => {
   const renderItem = useCallback(({ item }: { item: EarningsRecord }) => {
-    return <EarningsListSection records={item} />
+    return (
+      <EarningsListSection
+        records={item}
+        listId={props.listId}
+      />
+    )
   }, [])
 
   const keyExtractor = useCallback((item: any, index: number) => {

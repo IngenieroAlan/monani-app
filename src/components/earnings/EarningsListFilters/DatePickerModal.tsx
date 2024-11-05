@@ -15,6 +15,7 @@ type Props = {
   setEndDate: (date: DateType) => void
   dateFilterText: MutableRefObject<string | null>
   setDefaultDates: () => void
+  listId: string
 }
 
 const getDateFilterText = (startDate: Date, endDate: Date) => {
@@ -25,7 +26,7 @@ const getDateFilterText = (startDate: Date, endDate: Date) => {
 }
 
 const DatePickerModal = (props: Props) => {
-  const year = useAppSelector((state: RootState) => state.earningsQuery.year)
+  const year = useAppSelector((state: RootState) => state.earningsQuery[props.listId]?.year)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -57,7 +58,7 @@ const DatePickerModal = (props: Props) => {
         const startDateTime = _startDate.getTime()
         const endDateTime = _endDate.getTime()
 
-        dispatch(setBetweenDates([startDateTime, endDateTime]))
+        dispatch(setBetweenDates({ listId: props.listId, betweenDates: [startDateTime, endDateTime] }))
         props.setVisibleDatePicker(false)
       }}
       onChange={(params) => {

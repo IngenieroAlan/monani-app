@@ -7,19 +7,22 @@ import { useState } from 'react'
 import EarningsList from '../EarningsList/EarningsList'
 import EarningsListFilters from '../EarningsListFilters/EarningsListFilters'
 
+export const ANNUAL_EARNINGS_LIST_ID = 'annualEarningsList'
+
 const ITEMS_PER_PAGINATE = 25
 
 const List = () => {
   const [index, setIndex] = useState(0)
   const { earningsRecords } = useEarnings({
     take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * index,
-    eqSalesType: useAppSelector((state: RootState) => state.earningsQuery.eqSalesType),
-    betweenDates: useAppSelector((state: RootState) => state.earningsQuery.betweenDates),
-    year: useAppSelector((state: RootState) => state.earningsQuery.year)
+    eqSalesType: useAppSelector((state: RootState) => state.earningsQuery[ANNUAL_EARNINGS_LIST_ID]?.eqSalesType),
+    betweenDates: useAppSelector((state: RootState) => state.earningsQuery[ANNUAL_EARNINGS_LIST_ID]?.betweenDates),
+    year: useAppSelector((state: RootState) => state.earningsQuery[ANNUAL_EARNINGS_LIST_ID]?.year)
   })
 
   return (
     <EarningsList
+      listId={ANNUAL_EARNINGS_LIST_ID}
       data={earningsRecords}
       onEndReached={() => setIndex(index + 1)}
     />
@@ -30,7 +33,7 @@ const ExpandableEarningsList = () => {
   return (
     <ExpandableBottomSheet>
       <BottomSheetView style={{ flex: 1 }}>
-        <EarningsListFilters />
+        <EarningsListFilters listId={ANNUAL_EARNINGS_LIST_ID} />
         <List />
       </BottomSheetView>
     </ExpandableBottomSheet>

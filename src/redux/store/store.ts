@@ -8,7 +8,8 @@ import {
   medicationsReducer,
   notificationsReducer,
   uiReducer,
-  uiVisibilityReducer
+  uiVisibilityReducer,
+  cattlesReducer
 } from '../slices'
 
 const store = configureStore({
@@ -20,6 +21,7 @@ const store = configureStore({
     notifications: notificationsReducer,
     feeds: feedsReducer,
     medications: medicationsReducer,
+    cattles:cattlesReducer,
     addCattle: addCattleReducer,
     earningsQuery: earningsQueryReducer
   },

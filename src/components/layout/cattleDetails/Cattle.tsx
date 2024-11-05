@@ -7,6 +7,8 @@ import { Appbar, Icon } from 'react-native-paper';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { DietRoute } from './routes/Diet';
 import { InfoRoute } from "./routes/Info";
+import { useAppSelector } from '@/hooks/useRedux';
+import { useNavigation } from '@react-navigation/native';
 
 const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
@@ -26,12 +28,14 @@ const renderScene = SceneMap({
 });
 
 const iconSize = 20;
+//NativeStackScreenProps<RootStackParamList, 'CattleDetailsLayout'>
 
-export const Cattle = ({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'CattleDetailsLayout'>) => {
+export const Cattle = () => {
     const layout = useWindowDimensions();
-    const { tagId } = route.params;
-
-    const [index, setIndex] = React.useState(0);
+    const navigator = useNavigation();
+    const { selectedCattle } = useAppSelector(state => state.cattles);
+    console.log(selectedCattle);
+    
     const [routes] = React.useState([
         { key: 'info', title: 'Información', icon: <Icon size={iconSize} source={'file-document-outline'} /> },
         { key: 'diet', title: 'Dieta', icon: <Icon size={iconSize} source={'food-apple-outline'} /> },
@@ -40,11 +44,12 @@ export const Cattle = ({ navigation, route }: NativeStackScreenProps<RootStackPa
         { key: 'milkyProd', title: 'Prod. Lechera', icon: <Icon size={iconSize} source={'beer-outline'} /> },
         { key: 'genealogy', title: 'Genealogía', icon: <Icon size={iconSize} source={'family-tree'} /> },
     ]);
+    const [index, setIndex] = React.useState(0);
 
     return (<>
         <Appbar.Header>
-            <Appbar.BackAction onPress={navigation.goBack} />
-            <Appbar.Content title={`No. ${tagId}`} />
+            <Appbar.BackAction onPress={navigator.goBack} />
+            <Appbar.Content title={`No. ${selectedCattle}`} />
         </Appbar.Header>
         <TabView
             navigationState={{ index, routes }}
@@ -59,7 +64,7 @@ export const Cattle = ({ navigation, route }: NativeStackScreenProps<RootStackPa
                     style={{ backgroundColor: '#FFF' }}
                     labelStyle={{ fontSize: 12, color: "black", textTransform: 'none' }}
                     tabStyle={{ width: 'auto' }}
-                    renderIcon={({ route, color }) => route.icon}
+                    renderIcon={({ route }) => route.icon}
                 />
             )}
         />

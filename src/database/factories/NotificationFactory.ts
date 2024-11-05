@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { subMonths } from 'date-fns'
+import Cattle from '../models/Cattle'
 
 const MIN_EVENT_AT = subMonths(new Date(), 6)
 const MAX_EVENT_AT = new Date()
@@ -12,13 +13,14 @@ const possibleIcons = [
   'cow',
 ]
 
-const NotificationFactory = () => {
+const NotificationFactory = (cattle:Cattle) => {
   return {
     event_at: faker.date.between({ from: MIN_EVENT_AT, to: MAX_EVENT_AT }).getTime(),
     title: faker.lorem.words(3),
     description: faker.lorem.sentences(2),
     icon_name: faker.helpers.arrayElement(possibleIcons),
     is_marked_as_read: faker.datatype.boolean(),
+    cattle_id: cattle.id, 
   }
 }
 

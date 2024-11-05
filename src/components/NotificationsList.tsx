@@ -10,6 +10,7 @@ import { useDatabase } from '@nozbe/watermelondb/react';
 import { Database } from '@nozbe/watermelondb';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NotificationsStackParams } from '@/navigation/stacks/NotificationsStack';
+import { setSelectedCattle } from '@/redux/slices/cattles';
 
 type ScreenNavigationProp = StackNavigationProp<NotificationsStackParams>
 
@@ -52,14 +53,22 @@ export const NotificationItemList = ({ dayNotification, database }: itemProps) =
     const navigator = useNavigation<ScreenNavigationProp>();
     const dispatch = useAppDispatch();
     const [visible, setVisible] = useState(false);
-    const onPress = () => {
+    const onPress = async () => {
         dispatch(markAsReadNoti(dayNotification));
+        try {
+            dispatch(setSelectedCattle((await dayNotification.cattle).id))
+            console.log((await dayNotification.cattle).id);
+        } catch (error) {
+            console.log(error);
+
+        }
+
         navigator.navigate("NotificationsDetailsView")
     }
     const handleMarkAsRead = (notification: Notification) => {
         dispatch(markAsReadNoti(notification));
         setVisible(false);
-      };
+    };
     const onDelete = () => {
         dispatch(deleteNotification(database, dayNotification));
         setVisible(false);
@@ -82,7 +91,7 @@ export const NotificationItemList = ({ dayNotification, database }: itemProps) =
                     onDismiss={() => setVisible(false)}
                     anchor={<IconButton icon={"dots-vertical"} size={24} iconColor={colors.icons.main} onPress={() => setVisible(true)} />}
                 >
-                    <Menu.Item title="Marcar como leído" leadingIcon="checkbox-outline" onPress={()=>handleMarkAsRead(dayNotification)} />
+                    <Menu.Item title="Marcar como leído" leadingIcon="checkbox-outline" onPress={() => handleMarkAsRead(dayNotification)} />
                     <Menu.Item title="Eliminar" leadingIcon="trash-can-outline" onPress={onDelete} />
                 </Menu>
             }

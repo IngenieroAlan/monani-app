@@ -7,7 +7,6 @@ import { MedicationType } from '../../../../database/models/Medication';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-
 interface CowMedications {
     name: string;
     type: MedicationType;
@@ -31,8 +30,6 @@ export const MedicationRoute = () => {
                 })
             );
             setMedications(AllMedications)
-            
-            AllMedications.forEach(med => console.log(`Medicamento: ${med.name}, Tipo: ${med.type}, Próxima dosis: ${med.nextDoseAt}`));
         };
         fetch();
     }, []);

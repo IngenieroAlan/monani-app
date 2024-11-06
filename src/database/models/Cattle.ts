@@ -324,6 +324,18 @@ class Cattle extends Model {
   }
 
   @writer
+  async removeMother() {
+    const genealogyRecord = await this.collections.get<Genealogy>(TableName.GENEALOGY)
+      .query(
+        Q.where('offspring_id', this.id),
+        Q.take(1)
+      )
+      .fetch()
+    
+    await genealogyRecord[0].destroyPermanently()
+  }
+
+  @writer
   async setOffsprings(offspringsIds: string[]) {
     await this.batch(
       ...offspringsIds.map((offspringId) => {

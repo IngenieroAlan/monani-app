@@ -11,20 +11,17 @@ import { DietRoute } from './routes/Diet';
 import { GenealogyRoute } from './routes/Genealogy';
 import { InfoRoute } from "./routes/Info";
 import { MedicationRoute } from './routes/Medication';
+import { WeightRoute } from './routes/Weight';
 
 const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
-);
-
-const SecondRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
 );
 
 const renderScene = SceneMap({
     info: InfoRoute,
     diet: DietRoute,
     medication: MedicationRoute,
-    weight: SecondRoute,
+    weight: WeightRoute,
     milkyProd: FirstRoute,
     genealogy: GenealogyRoute,
 });

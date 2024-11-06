@@ -45,13 +45,7 @@ const ListItemMenu = (
       <Menu.Item
         theme={{ colors: { onSurface: theme.colors.onSurface } }}
         title='Eliminar'
-        leadingIcon={() => (
-          <Icon
-            size={24}
-            source='minus'
-            color={theme.colors.onSurface}
-          />
-        )}
+        leadingIcon='minus'
         onPress={() => {
           setMenuVisible(false);
           dispatch(deleteDietFeed({ dietFeedId }))

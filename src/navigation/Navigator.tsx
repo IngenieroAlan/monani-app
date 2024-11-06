@@ -1,3 +1,4 @@
+import SearchMother from '@/components/genealogyRoute/SearchMother'
 import { Cattle } from '@/components/layout/cattleDetails/Cattle'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
@@ -41,6 +42,11 @@ export const Navigator = () => {
         <Stack.Screen
           name='CattleDetailsLayout'
           component={Cattle}
+        />
+        <Stack.Screen
+          name='SearchMother'
+          component={SearchMother}
+          options={{presentation: 'modal'}}
         />
       </Stack.Navigator>
     </View>

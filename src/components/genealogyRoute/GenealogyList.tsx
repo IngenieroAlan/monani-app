@@ -54,14 +54,25 @@ const CattleItem = observeCattle(({ cattle }: { cattle: Cattle }) => {
       title={<ListItemTitle cattle={cattle} />}
       description={<Text variant='bodyMedium'>{cattle.cattleStatus}</Text>}
       right={() => <ListItemRight cattleWeight={cattle.weight} />}
+      onPress={() => console.log('Navigate to cattle details')}
     />
   )
 })
 
-const GenealogyList = ({offspring}:{offspring: Cattle[] | undefined}) => {
+const GenealogyList = ({ offspring }: { offspring?: Cattle[] }) => {
   const [index, setIndex] = useState(0)
 
-  return (
+  return (<>
+    <Text
+      variant='titleMedium'
+      style={{
+        paddingHorizontal: 16,
+        paddingTop: 16,
+        paddingBottom: 4
+      }}
+    >
+      Descendencia
+    </Text>
     <FlashList
       estimatedItemSize={88}
       data={offspring}
@@ -72,7 +83,7 @@ const GenealogyList = ({offspring}:{offspring: Cattle[] | undefined}) => {
       onEndReachedThreshold={2}
       onEndReached={() => setIndex(index + 1)}
     />
-  )
+  </>)
 }
 
 const styles = StyleSheet.create({

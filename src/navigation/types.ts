@@ -14,6 +14,7 @@ export type RootStackParamList = {
     difference: number
   }
   CattleDetailsLayout: undefined
+  SearchMother: undefined
 }
 
 export type BottomTabsParamList = {

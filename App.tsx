@@ -3,7 +3,7 @@ import database, { initializeDatabase, resetDatabase } from '@/database'
 import seedDatabase from '@/database/seeders/seeder'
 import { Navigator } from '@/navigation/Navigator'
 import store from '@/redux/store/store'
-import { ExtendedDarkTheme, ExtendedLightTheme } from '@/theme'
+import { CustomDarkTheme, CustomLightTheme } from '@/theme'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
@@ -55,7 +55,7 @@ export default function App() {
           onReady={onLayoutRootView}
           theme={scheme === 'dark' ? DarkTheme : DefaultTheme} // To prevent white flashes while navigating.
         >
-          <PaperProvider theme={scheme === 'dark' ? ExtendedDarkTheme : ExtendedLightTheme}>
+          <PaperProvider theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
             <AppState>
               <Navigator />
             </AppState>

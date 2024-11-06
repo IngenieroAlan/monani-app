@@ -17,7 +17,7 @@ const EarningsListSection = ({ records, listId }: { records: EarningsRecord; lis
 
     if (isYesterday(records.date)) return 'Ayer'
 
-    if (year === null ? isThisYear(records.date) : isSameYear(records.date, new Date(year, 0, 1))) {
+    if (year ? isSameYear(records.date, new Date(year, 0, 1)) : isThisYear(records.date)) {
       return format(records.date, "dd 'de' MMMM", { locale: es })
     }
 

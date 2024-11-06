@@ -10,6 +10,7 @@ import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { DietRoute } from './routes/Diet';
 import { GenealogyRoute } from './routes/Genealogy';
 import { InfoRoute } from "./routes/Info";
+import { MedicationRoute } from './routes/Medication';
 
 const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
@@ -22,7 +23,7 @@ const SecondRoute = () => (
 const renderScene = SceneMap({
     info: InfoRoute,
     diet: DietRoute,
-    medication: FirstRoute,
+    medication: MedicationRoute,
     weight: SecondRoute,
     milkyProd: FirstRoute,
     genealogy: GenealogyRoute,
@@ -36,14 +37,7 @@ export const Cattle = () => {
     const navigator = useNavigation();
     const { selectedCattle, cattles, cattleInfo } = useAppSelector(state => state.cattles);
     const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        dispatch(getCattles(database))
-        const res = cattles.find(cow => cow.id === selectedCattle);
-        dispatch(setCattleInfo(res))
-    }, [dispatch])
-
-
+    
     const [routes] = React.useState([
         { key: 'info', title: 'Información', icon: <Icon size={iconSize} source={'file-document-outline'} /> },
         { key: 'diet', title: 'Dieta', icon: <Icon size={iconSize} source={'food-apple-outline'} /> },
@@ -53,6 +47,11 @@ export const Cattle = () => {
         { key: 'genealogy', title: 'Genealogía', icon: <Icon size={iconSize} source={'family-tree'} /> },
     ]);
     const [index, setIndex] = React.useState(0);
+    
+    useEffect(() => {
+        const res = cattles.find(cow => cow.id === selectedCattle);
+        dispatch(setCattleInfo(res))
+    }, [dispatch])
 
     return (<>
         <Appbar.Header>

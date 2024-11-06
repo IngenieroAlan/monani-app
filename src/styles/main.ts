@@ -24,6 +24,7 @@ export const cattleDetails = StyleSheet.create({
     alignContent: "center",
     width: "100%",
     justifyContent: "space-between",
+    marginBottom: 16,
   },
 });
 

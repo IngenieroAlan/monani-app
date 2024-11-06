@@ -1,8 +1,8 @@
 import Cattle from "@/database/models/Cattle"
-import { useAppDispatch } from "@/hooks/useRedux"
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { withObservables } from "@nozbe/watermelondb/react"
 import { useNavigation } from "@react-navigation/native"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { View } from "react-native"
 import { Divider, Icon, IconButton, List, Menu, Text, useTheme } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -11,11 +11,11 @@ const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle 
   cattle
 }))
 
-export const SetMother = ({ mother }: { mother?: Cattle }) => {
+export const SetMother = observeCattle(({ mother, cattle }: { mother?: Cattle, cattle: Cattle }) => {
   const navigation = useNavigation()
+
   const ListItemMenu = () => {
     const theme = useTheme()
-    const dispatch = useAppDispatch()
     const insets = useSafeAreaInsets()
     const [menuVisible, setMenuVisible] = useState(false)
 
@@ -28,6 +28,7 @@ export const SetMother = ({ mother }: { mother?: Cattle }) => {
         anchor={
           <IconButton
             icon='dots-vertical'
+            size={20}
             onPress={() => setMenuVisible(true)}
           />
         }
@@ -45,8 +46,15 @@ export const SetMother = ({ mother }: { mother?: Cattle }) => {
           title='Eliminar'
           leadingIcon='minus'
           onPress={() => {
-            setMenuVisible(false);
-
+            async function setMother() {
+              try {
+                await cattle.removeMother()
+              } catch (error) {
+                console.log(error);
+              }
+              setMenuVisible(false);
+            }
+            setMother()
           }}
         />
       </Menu>
@@ -57,8 +65,9 @@ export const SetMother = ({ mother }: { mother?: Cattle }) => {
     const formattedWeight = `${Math.trunc(cattleWeight)}.${decimals ? decimals.padEnd(3, '0') : '000'}`
 
     return (
-      <View style={{ flexDirection: 'row', gap: 8 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Text variant='labelSmall'>{`${formattedWeight} kg.`}</Text>
+        <ListItemMenu />
       </View>
     )
   }
@@ -74,7 +83,7 @@ export const SetMother = ({ mother }: { mother?: Cattle }) => {
     )
   }
 
-  const CattleItem = observeCattle(({ cattle }: { cattle: Cattle }) => {
+  const CattleItem = ({ cattle }: { cattle: Cattle }) => {
     return (
       <List.Item
         title={<ListItemTitle cattle={cattle} />}
@@ -83,7 +92,7 @@ export const SetMother = ({ mother }: { mother?: Cattle }) => {
         onPress={() => console.log('Navigate to cattle details')}
       />
     )
-  })
+  }
 
   return mother ? (<>
     <CattleItem cattle={mother} />
@@ -97,4 +106,4 @@ export const SetMother = ({ mother }: { mother?: Cattle }) => {
     />
     <Divider />
   </>)
-}
+})

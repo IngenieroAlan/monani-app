@@ -2,7 +2,7 @@ import Cattle from '@/database/models/Cattle'
 import { TableName } from '@/database/schema'
 import { useAppSelector } from '@/hooks/useRedux'
 import { Q } from '@nozbe/watermelondb'
-import { useDatabase } from '@nozbe/watermelondb/react'
+import { useDatabase, withObservables } from '@nozbe/watermelondb/react'
 import { useNavigation } from '@react-navigation/native'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
@@ -59,7 +59,11 @@ const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
   )
 }
 
-const CattleItem = memo(({ cattle, cattleInfo }: { cattle: Cattle, cattleInfo: Cattle }) => {
+const CattleItem = memo(({ cattle, setSearch }:
+  {
+    cattle: Cattle,
+    setSearch: (tagId: string) => void
+  }) => {
   const status = useMemo(() => {
     if (cattle.isActive) {
       return 'Activo'
@@ -86,7 +90,7 @@ const CattleItem = memo(({ cattle, cattleInfo }: { cattle: Cattle, cattleInfo: C
       title={<ListItemTitle cattle={cattle} />}
       description={status}
       left={() => <ListItemLeft iconName={icon} />}
-      onPress={() => { }}
+      onPress={() => { setSearch(cattle.tagId) }}
     />
   )
 })
@@ -96,13 +100,23 @@ const SearchMother = () => {
   const theme = useTheme()
   const database = useDatabase()
   const [search, setSearch] = useState('')
-  const [cattle, setCattle] = useState<Cattle[]>([])
+  const [cattlesList, setCattlesList] = useState<Cattle[]>([])
   const [isFetching, setIsFetching] = useState(false)
-  const { cattleInfo } = useAppSelector(state => state.cattles);
+
+  const { selectedCattle, cattles } = useAppSelector(state => state.cattles);
+  const [cattle, setCattle] = useState<Cattle | undefined>(undefined);
+
+  useEffect(() => {
+    if (selectedCattle) {
+      const selected = cattles.find(cow => cow.id === selectedCattle);
+      selected && setCattle(selected);
+    }
+  }, [selectedCattle, cattles])
+
 
   useEffect(() => {
     if (search === '') {
-      setCattle([])
+      setCattlesList([])
       return
     }
 
@@ -115,16 +129,15 @@ const SearchMother = () => {
         .fetch()
 
       setIsFetching(false)
-      setCattle(results)
+      setCattlesList(results)
     }
 
     fetch()
   }, [search])
 
-  const renderItem = useCallback(({ item }: { item: Cattle }) => {
-    if (!cattleInfo) return null
-    return <CattleItem cattle={item} cattleInfo={cattleInfo} />
-  }, [cattleInfo])
+  const renderItem = ({ item }: { item: Cattle }) => {
+    return <CattleItem cattle={item} setSearch={setSearch} />
+  }
   const keyExtractor = useCallback((item: Cattle) => item.id, [])
   const listEmptyComponent = useCallback(
     () => (
@@ -133,10 +146,19 @@ const SearchMother = () => {
         isFetching={isFetching}
       />
     ),
-    [cattle, isFetching]
+    [cattlesList, isFetching]
   )
 
-  return (<>
+  async function setMother() {
+    try {      
+      await cattle?.setMother(search)
+      navigation.goBack()
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return (
     <SafeAreaView
       style={{
         backgroundColor: theme.colors.elevation.level3,
@@ -155,10 +177,7 @@ const SearchMother = () => {
         right={props =>
           <Button
             {...props}
-            onPress={() => {
-              // await cattleInfo.setMother(cattle.tagId)
-              navigation.goBack
-            }}
+            onPress={setMother}
           // disabled={!isValid || !isDirty || isSubmitting}
           >
             Guardar
@@ -170,13 +189,13 @@ const SearchMother = () => {
       <FlatList
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps='handled'
-        data={cattle}
+        data={cattlesList}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ListEmptyComponent={listEmptyComponent}
       />
     </SafeAreaView>
-  </>)
+  )
 }
 
 export default SearchMother

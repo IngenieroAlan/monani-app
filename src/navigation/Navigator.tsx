@@ -2,18 +2,26 @@ import { Cattle } from '@/components/layout/cattleDetails/Cattle'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
 import { createStackNavigator } from '@react-navigation/stack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import BottomTabsStack from './BottomTabsStack'
 import AddCattleStack from './stacks/AddCattleStack'
 import ResourcesStack from './stacks/ResourcesStack'
 import { RootStackParamList } from './types'
+import { useAppDispatch } from '@/hooks/useRedux'
+import { getCattles } from '@/redux/slices/cattles'
+import database from '@/database'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
 export const Navigator = () => {
   const theme = useTheme()
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getCattles(database))
+}, [dispatch])
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>

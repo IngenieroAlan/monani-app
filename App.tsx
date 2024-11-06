@@ -4,6 +4,7 @@ import seedDatabase from '@/database/seeders/seeder'
 import { Navigator } from '@/navigation/Navigator'
 import store from '@/redux/store/store'
 import { CustomDarkTheme, CustomLightTheme } from '@/theme'
+import notifee, { AuthorizationStatus } from '@notifee/react-native'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
@@ -36,6 +37,12 @@ export default function App() {
       registerTranslation('es', es)
 
       await setDatabase()
+
+      const settings = await notifee.getNotificationSettings()
+      if (settings.authorizationStatus === AuthorizationStatus.DENIED) {
+        await notifee.requestPermission()
+      }
+
       setAppIsReady(true)
     }
 

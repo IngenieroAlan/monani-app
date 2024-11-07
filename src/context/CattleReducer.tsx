@@ -1,4 +1,4 @@
-import { Cattle, Diet, DietFeed, Feed, Genealogy } from "../interfaces/cattleInterfaces";
+import { ACCattle, ACDiet, ACDietFeed, ACFeed, ACGenealogy } from "../interfaces/cattleInterfaces";
 import { CattleInitialState } from "./CattleContext";
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -22,11 +22,11 @@ export enum ActionType {
 type Payload = {
   [ActionType.RESET]: undefined;
   [ActionType.SAVE_CATTLE_INFO]: {
-    cattle: Cattle;
-    genealogy: Genealogy;
+    cattle: ACCattle;
+    genealogy: ACGenealogy;
   };
   [ActionType.SAVE_DIET_FEED]: {
-    dietFeed: DietFeed;
+    dietFeed: ACDietFeed;
   }
   [ActionType.DELETE_DIET_FEED]: {
     dietFeedId: string;
@@ -35,10 +35,10 @@ type Payload = {
 
 export type CattlesActions = ActionMap<Payload>[keyof ActionMap<Payload>];
 export interface CattleState {
-  cattle: Cattle;
-  genealogy: Genealogy;
-  diet: Diet;
-  dietFeeds: DietFeed[];
+  cattle: ACCattle;
+  genealogy: ACGenealogy;
+  diet: ACDiet;
+  dietFeeds: ACDietFeed[];
 }
 
 export const cattlesReducer = (state: CattleState, action: CattlesActions): CattleState => {

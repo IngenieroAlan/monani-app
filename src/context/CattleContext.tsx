@@ -1,15 +1,15 @@
 import { createContext, Dispatch } from "react";
-import { Cattle, Diet, DietFeed, Genealogy } from "../interfaces/cattleInterfaces";
+import { ACCattle, ACDiet, ACDietFeed, ACGenealogy } from "../interfaces/cattleInterfaces";
 import { CattlesActions, CattleState } from "./CattleReducer";
 import { MatterProportion } from "@/database/models/Diet";
 import { CattleStatus, ProductionType } from "@/database/models/Cattle";
 
 type CattleContextProps = {
   //Tus Props
-  cattle: Cattle;
-  genealogy: Genealogy;
-  diet: Diet;
-  dietFeeds: DietFeed[];
+  cattle: ACCattle;
+  genealogy: ACGenealogy;
+  diet: ACDiet;
+  dietFeeds: ACDietFeed[];
 }
 
 export const CattleInitialState: CattleState = {

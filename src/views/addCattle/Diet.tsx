@@ -1,7 +1,7 @@
 import DietFeedsList from "@/components/addCattle/DietFeedsList"
 import useFeeds from "@/hooks/collections/useFeeds"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { DietFeedItem } from "@/interfaces/cattleInterfaces"
+import { ACDietFeedItem } from "@/interfaces/cattleInterfaces"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
 import { setFeeds } from "@/redux/slices/feedsSlice"
@@ -19,7 +19,7 @@ export const Diet = ({ navigation }: AddDietNavigationProps) => {
     const { getFeeds } = useFeeds()
     const dispatch = useAppDispatch()
     const { dietFeeds } = useAppSelector((state: RootState) => state.addCattle)
-    const [currentDietFeeds, setCurrentDietFeeds] = useState<DietFeedItem[]>([])
+    const [currentDietFeeds, setCurrentDietFeeds] = useState<ACDietFeedItem[]>([])
 
     useEffect(() => {
         const fetchFeeds = async () => {

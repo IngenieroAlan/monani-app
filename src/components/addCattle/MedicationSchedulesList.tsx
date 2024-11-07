@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/hooks/useRedux'
-import { MedicationScheduleItem } from '@/interfaces/cattleInterfaces'
+import { ACMedicationScheduleItem } from '@/interfaces/cattleInterfaces'
 import { deleteMedicationSchedule } from '@/redux/slices/addCattleSlice'
 import { MedicationSchedulesNavigationProps } from '@/views/addCattle/Medications'
 import { memo, useState } from 'react'
@@ -56,7 +56,7 @@ const ListItemMenu = (
 }
 
 const ListItem = (
-  { medicationSchedule: medicationSchedule, navigation }: { medicationSchedule: MedicationScheduleItem, navigation: navigationProps }
+  { medicationSchedule: medicationSchedule, navigation }: { medicationSchedule: ACMedicationScheduleItem, navigation: navigationProps }
 ) => {
   return (
     <List.Item
@@ -74,7 +74,7 @@ const ListItem = (
 }
 
 const MedicationSchedulesList = (
-  { medicationSchedules, navigation }: { medicationSchedules: MedicationScheduleItem[], navigation: navigationProps }
+  { medicationSchedules, navigation }: { medicationSchedules: ACMedicationScheduleItem[], navigation: navigationProps }
 ) => {
 
   return (

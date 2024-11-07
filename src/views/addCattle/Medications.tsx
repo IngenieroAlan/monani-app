@@ -2,7 +2,7 @@ import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesL
 import useCattle, { DietFeedFields } from "@/hooks/collections/useCattle"
 import useMedications from "@/hooks/collections/useMedications"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { MedicationScheduleItem } from "@/interfaces/cattleInterfaces"
+import { ACMedicationScheduleItem } from "@/interfaces/cattleInterfaces"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
 import { setMedications } from "@/redux/slices/medicationsSlice"
@@ -20,7 +20,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
   const medications = useAppSelector((state: RootState) => state.medications.records)
   const { getMedications } = useMedications()
   const { cattle, diet, dietFeeds, medicationSchedules } = useAppSelector((state: RootState) => state.addCattle)
-  const [currentMedicationSchedules, setCurrentMedicationSchedules] = useState<MedicationScheduleItem[]>([])
+  const [currentMedicationSchedules, setCurrentMedicationSchedules] = useState<ACMedicationScheduleItem[]>([])
   const { createCattle } = useCattle()
 
   const feeds = useAppSelector((state: RootState) => state.feeds.records)

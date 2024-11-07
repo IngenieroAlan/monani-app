@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/hooks/useRedux'
-import { DietFeedItem } from '@/interfaces/cattleInterfaces'
+import { ACDietFeedItem } from '@/interfaces/cattleInterfaces'
 import { deleteDietFeed } from '@/redux/slices/addCattleSlice'
 import { AddDietNavigationProps } from '@/views/addCattle/Diet'
 import { memo, useState } from 'react'
@@ -56,7 +56,7 @@ const ListItemMenu = (
 }
 
 const ListItem = (
-  { dietFeed, navigation }: { dietFeed: DietFeedItem, navigation: navigationProps }
+  { dietFeed, navigation }: { dietFeed: ACDietFeedItem, navigation: navigationProps }
 ) => {
   return (
     <List.Item
@@ -74,7 +74,7 @@ const ListItem = (
 }
 
 const DietFeedsList = (
-  { dietFeeds, navigation }: { dietFeeds: DietFeedItem[], navigation: navigationProps }
+  { dietFeeds, navigation }: { dietFeeds: ACDietFeedItem[], navigation: navigationProps }
 ) => {
 
   return (

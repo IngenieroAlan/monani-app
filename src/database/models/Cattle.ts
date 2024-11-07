@@ -1,5 +1,6 @@
 import { Model, Q, Query, Relation } from '@nozbe/watermelondb'
 import { children, date, field, immutableRelation, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
+import { Associations } from '@nozbe/watermelondb/Model'
 import { addDays, differenceInCalendarDays, format, getYear, isAfter } from 'date-fns'
 import { TableName } from '../schema'
 import AnnualEarnings from './AnnualEarnings'
@@ -32,14 +33,15 @@ type UpdateCattleData = {
 class Cattle extends Model {
   static table = TableName.CATTLE
 
-  static associations = {
-    [TableName.DIETS]: { type: 'belongs_to' as const, key: 'diet_id' },
-    [TableName.CATTLE_ARCHIVES]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
-    [TableName.MEDICATION_SCHEDULES]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
-    [TableName.WEIGHT_REPORTS]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
-    [TableName.MILK_REPORTS]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
-    [TableName.CATTLE_SALES]: { type: 'has_many' as const, foreignKey: 'cattle_id' },
-    [TableName.NOTIFICATIONS]: { type: 'has_many' as const, foreignKey: 'cattle_id' }
+  static associations: Associations = {
+    [TableName.DIETS]: { type: 'belongs_to', key: 'diet_id' },
+    [TableName.CATTLE_ARCHIVES]: { type: 'has_many', foreignKey: 'cattle_id' },
+    [TableName.MEDICATION_SCHEDULES]: { type: 'has_many', foreignKey: 'cattle_id' },
+    [TableName.WEIGHT_REPORTS]: { type: 'has_many', foreignKey: 'cattle_id' },
+    [TableName.MILK_REPORTS]: { type: 'has_many', foreignKey: 'cattle_id' },
+    [TableName.CATTLE_SALES]: { type: 'has_many', foreignKey: 'cattle_id' },
+    [TableName.NOTIFICATIONS]: { type: 'has_many', foreignKey: 'cattle_id' },
+    [TableName.GENEALOGY]: { type: 'has_many', foreignKey: 'offspring_id' }
   }
 
   @readonly @date('created_at') createdAt!: Date
@@ -84,24 +86,14 @@ class Cattle extends Model {
     .query(Q.where('cattle_id', this.id), Q.take(1))
 
   @lazy
-  mother = this.collections
-    .get<Cattle>(TableName.CATTLE)
-    .query(Q.unsafeSqlQuery(
-      `SELECT ${TableName.CATTLE}.* ` +
-      `FROM ${TableName.GENEALOGY} ` +
-      `LEFT JOIN ${TableName.CATTLE} ON ${TableName.GENEALOGY}.mother_id = ${TableName.CATTLE}.id ` +
-      `WHERE ${TableName.GENEALOGY}.offspring_id = '${this.id}'`
-    ))
-
+  motherRelation = this.collections
+    .get<Genealogy>(TableName.GENEALOGY)
+    .query(Q.where('offspring_id', this.id))
+  
   @lazy
   offsprings = this.collections
     .get<Cattle>(TableName.CATTLE)
-    .query(Q.unsafeSqlQuery(
-      `SELECT ${TableName.CATTLE}.* ` +
-      `FROM ${TableName.GENEALOGY} ` +
-      `LEFT JOIN ${TableName.CATTLE} ON ${TableName.GENEALOGY}.offspring_id = ${TableName.CATTLE}.id ` +
-      `WHERE ${TableName.GENEALOGY}.mother_id = '${this.id}'`
-    ))
+    .query(Q.on(TableName.GENEALOGY, 'mother_id', this.id))
 
   // May not be needed.
   @writer
@@ -315,11 +307,17 @@ class Cattle extends Model {
   }
 
   @writer
-  async setMother(motherId: string) {
+  async setMother(mother: Cattle) {
+    const genealogyRecord = await this.collections.get<Genealogy>(TableName.GENEALOGY)
+      .query(Q.where('offspring_id', this.id))
+      .fetch()
+
+    if (genealogyRecord.length) throw new Error('This cattle already has a mother set.')
+
     await this.collections.get<Genealogy>(TableName.GENEALOGY)
       .create((record) => {
-        record.motherId = motherId
-        record.offspringId = this.id
+        record.mother.set(mother)
+        record.offspring.set(this)
       })
   }
 
@@ -331,18 +329,26 @@ class Cattle extends Model {
         Q.take(1)
       )
       .fetch()
-    
+   
+    if (!genealogyRecord.length) {
+      throw new Error('Cannot delete a mother that doesn\'t exists.')
+    }
+
     await genealogyRecord[0].destroyPermanently()
   }
 
   @writer
-  async setOffsprings(offspringsIds: string[]) {
+  async setOffsprings(offsprings: Cattle[]) {
+    this.collections.get<Genealogy>(TableName.GENEALOGY)
+      .query(Q.where('mother_id', this.id))
+      .destroyAllPermanently()
+
     await this.batch(
-      ...offspringsIds.map((offspringId) => {
+      ...offsprings.map((offspring) => {
         return this.collections.get<Genealogy>(TableName.GENEALOGY)
           .prepareCreate((record) => {
-            record.motherId = this.id
-            record.offspringId = offspringId
+            record.mother.set(this)
+            record.offspring.set(offspring)
           })
       })
     )

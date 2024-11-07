@@ -88,8 +88,8 @@ export const createCattle = async (
       preparedGenealogyRecord = database.collections
         .get<Genealogy>(TableName.GENEALOGY)
         .prepareCreate((record) => {
-          record.motherId = cattleData.motherId!;
-          record.offspringId = cattle.id;
+          record.mother.id = cattleData.motherId!;
+          record.offspring.id = cattle.id;
         });
     }
 

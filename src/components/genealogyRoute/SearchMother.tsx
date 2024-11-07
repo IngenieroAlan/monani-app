@@ -1,12 +1,14 @@
 import Cattle from '@/database/models/Cattle'
 import { TableName } from '@/database/schema'
 import { useAppSelector } from '@/hooks/useRedux'
+import { RootStackParamList } from '@/navigation/types'
 import { Q } from '@nozbe/watermelondb'
-import { useDatabase, withObservables } from '@nozbe/watermelondb/react'
+import { useDatabase } from '@nozbe/watermelondb/react'
 import { useNavigation } from '@react-navigation/native'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { ActivityIndicator, Appbar, Button, Divider, Icon, IconButton, List, Searchbar, Text, useTheme } from 'react-native-paper'
+import { ActivityIndicator, Button, Divider, Icon, List, Searchbar, Text, useTheme } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const ListEmptyComponent = ({ search, isFetching }: { search: string; isFetching: boolean }) => {
@@ -95,31 +97,24 @@ const CattleItem = memo(({ cattle, selectCattle }:
   )
 })
 
-const SearchMother = () => {
+const SearchMother = ({ route }: NativeStackScreenProps<RootStackParamList, 'SearchMother'>) => {
   const navigation = useNavigation()
   const theme = useTheme()
   const database = useDatabase()
   const [search, setSearch] = useState('')
-  const [cattlesList, setCattlesList] = useState<Cattle[]>([])
+  const [cattles, setCattles] = useState<Cattle[]>([])
   const [isFetching, setIsFetching] = useState(false)
-  const [cattleId, setCattleId] = useState<string | undefined>(undefined)
+  const [selectedMother, setSelectedMother] = useState<Cattle | undefined>(undefined)
   const [isValid, setIsValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const editar = route.params?.editar
 
-  const { selectedCattle, cattles } = useAppSelector(state => state.cattles);
-  const [cattle, setCattle] = useState<Cattle | undefined>(undefined);
-
-  useEffect(() => {
-    if (selectedCattle) {
-      const selected = cattles.find(cow => cow.id === selectedCattle);
-      selected && setCattle(selected);
-    }
-  }, [selectedCattle, cattles])
+  const { cattleInfo } = useAppSelector(state => state.cattles);
 
 
   useEffect(() => {
     if (search === '') {
-      setCattlesList([])
+      setCattles([])
       return
     }
 
@@ -132,7 +127,7 @@ const SearchMother = () => {
         .fetch()
 
       setIsFetching(false)
-      setCattlesList(results)
+      setCattles(results)
     }
 
     fetch()
@@ -149,24 +144,29 @@ const SearchMother = () => {
         isFetching={isFetching}
       />
     ),
-    [cattlesList, isFetching]
+    [cattles, isFetching]
   )
 
   async function setMother() {
     setIsSubmitting(true)
-    await cattle?.setMother(cattleId!)
+    if (!cattleInfo || !selectedMother) {
+      setIsSubmitting(false)
+      return
+    }
+    if (editar) await cattleInfo.removeMother()
+    await cattleInfo.setMother(selectedMother)
     setIsSubmitting(false)
     navigation.goBack()
   }
 
   const selectCattle = (cattle: Cattle) => {
-    setCattleId(cattle.id)
+    setSelectedMother(cattle)
     setSearch(cattle.tagId)
   }
 
   useEffect(() => {
-    setIsValid(cattleId !== undefined)
-  }, [cattleId])
+    setIsValid(selectedMother !== undefined)
+  }, [selectedMother])
 
   return (
     <SafeAreaView
@@ -188,7 +188,7 @@ const SearchMother = () => {
           <Button
             {...props}
             onPress={setMother}
-            disabled={!isValid && !isSubmitting}
+            disabled={!isValid && !isSubmitting || !cattleInfo || !selectedMother}
           >
             Guardar
           </Button>
@@ -199,7 +199,7 @@ const SearchMother = () => {
       <FlatList
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps='handled'
-        data={cattlesList}
+        data={cattles}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         ListEmptyComponent={listEmptyComponent}

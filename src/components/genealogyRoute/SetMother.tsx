@@ -1,13 +1,15 @@
 import Cattle from "@/database/models/Cattle"
+import useMother from "@/hooks/collections/useMother"
 import { useNavigation } from "@react-navigation/native"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { View } from "react-native"
 import { Divider, IconButton, List, Menu, Text, useTheme } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 
-export const SetMother = ({ cattle, mother }: { cattle: Cattle, mother: Cattle }) => {
+export const SetMother = ({ cattle }: { cattle: Cattle }) => {
   const navigation = useNavigation()
+  const { mother } = useMother(cattle)
 
   const ListItemMenu = () => {
     const theme = useTheme()
@@ -33,7 +35,7 @@ export const SetMother = ({ cattle, mother }: { cattle: Cattle, mother: Cattle }
           leadingIcon='pencil-outline'
           onPress={() => {
             setMenuVisible(false);
-            navigation.navigate('SearchMother');
+            navigation.navigate('SearchMother', { editar: true });
           }}
         />
         <Menu.Item

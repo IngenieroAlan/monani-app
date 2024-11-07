@@ -1,13 +1,9 @@
 import Cattle from '@/database/models/Cattle'
-import { withObservables } from '@nozbe/watermelondb/react'
+import useOffsprings from '@/hooks/collections/useOffsprings'
 import { FlashList } from '@shopify/flash-list'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
-
-const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
-  cattle
-}))
 
 const ListEmptyComponent = () => {
   return (
@@ -48,7 +44,7 @@ const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
   )
 }
 
-const CattleItem = observeCattle(({ cattle }: { cattle: Cattle }) => {
+const CattleItem = ({ cattle }: { cattle: Cattle }) => {
   return (
     <List.Item
       title={<ListItemTitle cattle={cattle} />}
@@ -57,10 +53,11 @@ const CattleItem = observeCattle(({ cattle }: { cattle: Cattle }) => {
       onPress={() => console.log('Navigate to cattle details')}
     />
   )
-})
+}
 
-const GenealogyList = ({ offspring }: { offspring?: Cattle[] }) => {
+const GenealogyList = ({ cattle }: { cattle: Cattle }) => {
   const [index, setIndex] = useState(0)
+  const { offsprings } = useOffsprings(cattle)
 
   return (<>
     <Text
@@ -75,7 +72,7 @@ const GenealogyList = ({ offspring }: { offspring?: Cattle[] }) => {
     </Text>
     <FlashList
       estimatedItemSize={88}
-      data={offspring}
+      data={offsprings}
       renderItem={({ item }) => <CattleItem cattle={item} />}
       keyExtractor={(item: Cattle) => item.id}
       ListFooterComponent={() => <View style={{ height: 88 }} />}

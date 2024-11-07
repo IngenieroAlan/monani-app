@@ -13,7 +13,7 @@ export type RootStackParamList = {
     difference: number;
   };
   CattleDetailsLayout: undefined;
-  SearchMother: undefined;
+  SearchMother: { editar: boolean } | undefined;
 };
 
 export type BottomTabsParamList = {
@@ -39,23 +39,23 @@ export type AddCattleStackParamsList = {
   Diet: undefined;
   DietSettings: undefined;
   DietFeed:
-    | {
-        medicationScheduleId: string;
-        modify: boolean;
-      }
-    | undefined;
+  | {
+    medicationScheduleId: string;
+    modify: boolean;
+  }
+  | undefined;
   Medications: undefined;
   Medication:
-    | {
-        medicationScheduleId: string;
-        modify: boolean;
-      }
-    | undefined;
+  | {
+    medicationScheduleId: string;
+    modify: boolean;
+  }
+  | undefined;
 };
 export type CattleInfoParamsList = {
   InfoRoute: undefined;
   DietRoute: undefined;
-  MilkyRoute:undefined;
+  MilkyRoute: undefined;
   MedicationRoute: undefined;
   WeightRoute: undefined;
   FirstRoute: undefined;
@@ -64,6 +64,6 @@ export type CattleInfoParamsList = {
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
+    interface RootParamList extends RootStackParamList { }
   }
 }

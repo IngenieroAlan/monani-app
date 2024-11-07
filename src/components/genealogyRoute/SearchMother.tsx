@@ -59,10 +59,10 @@ const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
   )
 }
 
-const CattleItem = memo(({ cattle, setSearch }:
+const CattleItem = memo(({ cattle, selectCattle }:
   {
     cattle: Cattle,
-    setSearch: (tagId: string) => void
+    selectCattle: (cattle: Cattle) => void
   }) => {
   const status = useMemo(() => {
     if (cattle.isActive) {
@@ -90,7 +90,7 @@ const CattleItem = memo(({ cattle, setSearch }:
       title={<ListItemTitle cattle={cattle} />}
       description={status}
       left={() => <ListItemLeft iconName={icon} />}
-      onPress={() => { setSearch(cattle.tagId) }}
+      onPress={() => selectCattle(cattle)}
     />
   )
 })
@@ -102,6 +102,9 @@ const SearchMother = () => {
   const [search, setSearch] = useState('')
   const [cattlesList, setCattlesList] = useState<Cattle[]>([])
   const [isFetching, setIsFetching] = useState(false)
+  const [cattleId, setCattleId] = useState<string | undefined>(undefined)
+  const [isValid, setIsValid] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { selectedCattle, cattles } = useAppSelector(state => state.cattles);
   const [cattle, setCattle] = useState<Cattle | undefined>(undefined);
@@ -136,7 +139,7 @@ const SearchMother = () => {
   }, [search])
 
   const renderItem = ({ item }: { item: Cattle }) => {
-    return <CattleItem cattle={item} setSearch={setSearch} />
+    return <CattleItem cattle={item} selectCattle={selectCattle} />
   }
   const keyExtractor = useCallback((item: Cattle) => item.id, [])
   const listEmptyComponent = useCallback(
@@ -150,13 +153,20 @@ const SearchMother = () => {
   )
 
   async function setMother() {
-    try {      
-      await cattle?.setMother(search)
-      navigation.goBack()
-    } catch (error) {
-      console.log(error);
-    }
+    setIsSubmitting(true)
+    await cattle?.setMother(cattleId!)
+    setIsSubmitting(false)
+    navigation.goBack()
   }
+
+  const selectCattle = (cattle: Cattle) => {
+    setCattleId(cattle.id)
+    setSearch(cattle.tagId)
+  }
+
+  useEffect(() => {
+    setIsValid(cattleId !== undefined)
+  }, [cattleId])
 
   return (
     <SafeAreaView
@@ -178,7 +188,7 @@ const SearchMother = () => {
           <Button
             {...props}
             onPress={setMother}
-          // disabled={!isValid || !isDirty || isSubmitting}
+            disabled={!isValid && !isSubmitting}
           >
             Guardar
           </Button>

@@ -1,17 +1,12 @@
 import Cattle from "@/database/models/Cattle"
-import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { withObservables } from "@nozbe/watermelondb/react"
 import { useNavigation } from "@react-navigation/native"
 import { useEffect, useState } from "react"
 import { View } from "react-native"
-import { Divider, Icon, IconButton, List, Menu, Text, useTheme } from "react-native-paper"
+import { Divider, IconButton, List, Menu, Text, useTheme } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
-  cattle
-}))
 
-export const SetMother = observeCattle(({ mother, cattle }: { mother?: Cattle, cattle: Cattle }) => {
+export const SetMother = ({ cattle, mother }: { cattle: Cattle, mother: Cattle }) => {
   const navigation = useNavigation()
 
   const ListItemMenu = () => {
@@ -45,16 +40,13 @@ export const SetMother = observeCattle(({ mother, cattle }: { mother?: Cattle, c
           theme={{ colors: { onSurface: theme.colors.onSurface } }}
           title='Eliminar'
           leadingIcon='minus'
-          onPress={() => {
-            async function setMother() {
-              try {
-                await cattle.removeMother()
-              } catch (error) {
-                console.log(error);
-              }
-              setMenuVisible(false);
+          onPress={async () => {
+            try {
+              await cattle.removeMother()
+            } catch (error) {
+              console.log(error);
             }
-            setMother()
+            setMenuVisible(false);
           }}
         />
       </Menu>
@@ -106,4 +98,4 @@ export const SetMother = observeCattle(({ mother, cattle }: { mother?: Cattle, c
     />
     <Divider />
   </>)
-})
+}

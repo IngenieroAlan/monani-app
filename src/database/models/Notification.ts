@@ -1,7 +1,9 @@
 import { Database, Model, Q, Relation } from '@nozbe/watermelondb'
-import { date, field, immutableRelation, readonly, writer } from '@nozbe/watermelondb/decorators'
+import { date, field, immutableRelation, nochange, readonly, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
+
+export type NotificationType = 'quarantine' | 'medication' | 'birth'
 
 class Notification extends Model {
   static table = TableName.NOTIFICATIONS
@@ -12,6 +14,8 @@ class Notification extends Model {
 
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
+
+  @nochange @field('type') type!: NotificationType
 
   @date('event_at') eventAt!: Date
   @field('title') title!: string

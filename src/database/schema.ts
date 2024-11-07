@@ -224,6 +224,7 @@ export default appSchema({
         { name: 'cattle_id', type: 'string' },
         { name: 'title', type: 'string' },
         { name: 'description', type: 'string' },
+        { name: 'type', type: 'string' },
         { name: 'icon_name', type: 'string' },
         { name: 'is_marked_as_read', type: 'boolean' },
         { name: 'event_at', type: 'number' },

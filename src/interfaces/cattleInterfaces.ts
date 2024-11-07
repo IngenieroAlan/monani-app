@@ -5,7 +5,7 @@ import { FeedType } from "@/database/models/Feed";
 import { MedicationType } from "@/database/models/Medication";
 import { CattleStatus, ProductionType } from "../database/models/Cattle";
 
-interface Cattle {
+interface ACCattle {
     cattleId: string;
     name?: string;
     tagId: string;
@@ -22,18 +22,18 @@ interface Cattle {
     isSold: boolean;
     dietId: string;
 }
-interface CattleArchive {
+interface ACCattleArchive {
     cattleId: string;
     notes?: string;
     archivedAt: Date;
     reason: ArchiveReason;
 }
-interface CattleSale {
+interface ACCattleSale {
     cattleId: string;
     soldBy: number;
     soldAt: Date;
 }
-interface Diet {
+interface ACDiet {
     dietId: string;
     waterAmount: number;
     matterAmount?: number;
@@ -41,7 +41,7 @@ interface Diet {
     matterProportion: MatterProportion;
     isConcentrateExcluded: boolean;
 }
-interface DietFeed {
+interface ACDietFeed {
     dietFeedId: string;
     dietId: string;
     feedId: string;
@@ -49,41 +49,41 @@ interface DietFeed {
     percentage?: number;
     feedProportion: FeedProportion;
 }
-interface Feed {
+interface ACFeed {
     feedId: string;
     name: string;
     feedType: FeedType;
 }
-interface DietFeedItem extends DietFeed {
+interface ACDietFeedItem extends ACDietFeed {
     FeedName: string;
 }
-interface Genealogy {
+interface ACGenealogy {
     motherId: string;
     offspringId: string;
 }
-interface Medication {
+interface ACMedication {
     medicationId: string;
     name: string;
     medicationType: MedicationType;
 }
-interface MedicationSchedule {
+interface ACMedicationSchedule {
     medicationScheduleId: string;
     cattleId: string;
     medicationId: string;
     nextDoseAt: Date;
     dosesPerYear: number;
 }
-interface MedicationScheduleItem extends MedicationSchedule {
+interface ACMedicationScheduleItem extends ACMedicationSchedule {
     medicationName: string;
     medicationType: MedicationType;
 }
-interface MilkReport {
+interface ACMilkReport {
     cattleId: string;
     milkProductionId: string;
     reportedAt: Date;
     liters: number;
 }
-interface WeightReport {
+interface ACWeightReport {
     cattleId: string;
     weight: number;
     weightDifference: number;
@@ -93,17 +93,17 @@ interface WeightReport {
 }
 
 export type {
-    Cattle,
-    CattleArchive,
-    CattleSale,
-    Diet,
-    DietFeed,
-    Feed,
-    DietFeedItem,
-    Genealogy,
-    Medication,
-    MedicationSchedule,
-    MedicationScheduleItem,
-    MilkReport,
-    WeightReport
+    ACCattle,
+    ACCattleArchive,
+    ACCattleSale,
+    ACDiet,
+    ACDietFeed,
+    ACFeed,
+    ACDietFeedItem,
+    ACGenealogy,
+    ACMedication,
+    ACMedicationSchedule,
+    ACMedicationScheduleItem,
+    ACMilkReport,
+    ACWeightReport
 }

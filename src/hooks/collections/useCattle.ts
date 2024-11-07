@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 type UseCattleProps = {
   cattleStatus?: CattleStatus[] | Set<CattleStatus>;
   productionType?: ProductionType | null;
+  isActive?: boolean;
   take?: number;
 };
 
 const useCattle = ({
   cattleStatus,
   productionType,
+  isActive,
   take,
 }: UseCattleProps = {}) => {
   const database = useDatabase();
@@ -23,15 +25,23 @@ const useCattle = ({
   if (take) {
     cattleQuery = cattleQuery.extend(Q.take(take));
   }
+
   if (cattleStatus && Array.from(cattleStatus).length) {
     cattleQuery = cattleQuery.extend(
       Q.where("cattle_status", Q.oneOf(Array.from(cattleStatus)))
     );
   }
+
   if (productionType) {
     cattleQuery = cattleQuery.extend(
       Q.where("production_type", productionType)
     );
+  }
+
+  if (isActive) {
+    cattleQuery = cattleQuery.extend(
+      Q.where("is_active", isActive)
+    )
   }
 
   useEffect(() => {
@@ -40,7 +50,7 @@ const useCattle = ({
     });
 
     return () => subscription.unsubscribe();
-  }, [database, cattleStatus, productionType, take]);
+  }, [database, cattleStatus, productionType, isActive, take]);
 
   const getCattle = async (extend: Q.Clause[]) => {
     return await database.collections

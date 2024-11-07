@@ -55,25 +55,15 @@ const CattleInfoForm = (
   ]
   const [inQuarantine, setQuarantine] = useState(false);
 
-  const [cattles, setCattles] = useState<Cattle[]>([])
-  const { getCattle } = useCattle()
-
-  useEffect(() => {
-    const fetchCattles = async () => {
-      const queries = [Q.where('is_active', true)]
-      setCattles(await getCattle(queries))
-    }
-
-    if (cattles.length === 0) fetchCattles()
-  }, [cattles])
+  const { cattleRecords } = useCattle();
 
   const motherIds = useMemo(() =>
-    cattles.map(cattle => ({
+    cattleRecords.map(cattle => ({
       id: cattle.id,
       title: cattle.name ? `${cattle.tagId}: ${cattle.name}` : `${cattle.tagId}`,
       value: cattle.id
     })),
-    [cattles]
+    [cattleRecords]
   )
 
   return (

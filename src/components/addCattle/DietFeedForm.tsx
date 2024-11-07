@@ -2,12 +2,11 @@ import useFeeds from "@/hooks/collections/useFeeds";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { setFeeds } from "@/redux/slices/feedsSlice";
 import { RootState } from "@/redux/store/store";
-import DietFeedSchema, { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
+import { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
 import { memo, useEffect, useMemo } from "react";
 import { Control, FormState, useController } from "react-hook-form";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
-import { z } from "zod";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
@@ -48,6 +47,10 @@ const DietFeedForm = (
       value: 'Fija'
     }
   ]
+
+  const equivalentWeight = cattleWeight * (quantity.value / 100)
+  const decimals = equivalentWeight.toString().split('.')[1]
+  const formattedWeight = `${Math.trunc(cattleWeight)}.${decimals ? decimals.padEnd(3, '0') : '000'}`
 
   const feedData: SearchBarDataItem[] =
     useMemo(() =>
@@ -97,7 +100,7 @@ const DietFeedForm = (
       />
       <Text variant='labelSmall'>
         {feedProportion.value === 'Por porcentaje' ?
-          `Equivalente a ${(cattleWeight * (quantity.value / 100))} kg.` : ''}
+          `Equivalente a ${formattedWeight} kg.` : ''}
       </Text>
 
     </View>

@@ -5,45 +5,19 @@ import { es } from 'date-fns/locale';
 import React, { useEffect, useState } from 'react'
 import { FlatList, View } from 'react-native'
 import { IconButton, Menu, Text } from 'react-native-paper';
+import { CattleWeightDetails } from '../Components/CattleWeightDetails';
 
-interface CowWeightReports {
-    weight: number;
-    weightDiference: number;
-    date: Date;
-}
+
 
 export const WeightRoute = () => {
     const { cattleInfo } = useAppSelector(state => state.cattles);
-    const [weightReports, setWeightReports] = useState<CowWeightReports[]>();
-    useEffect(() => {
-        const fetch = async () => {
-            const weightReportss = await cattleInfo?.weightReports;
-            const AllWeightReports = await Promise.all(
-                weightReportss!.map(async (report) => {
-                    return {
-                        weight: report.weight,
-                        weightDiference: report.weightDifference,
-                        date: report.weighedAt,
-                    };
-                })
-            );
-            setWeightReports(AllWeightReports)
-        };
-        fetch();
-    }, []);
-    return (
-        <FlatList
-            data={weightReports}
-            style={[cattleDetails.container, { paddingLeft: 16, paddingTop: 10, gap: 20 }]}
-            renderItem={({ item }) => (
-                <ActionsMenu
-                    weight={item.weight}
-                    weightDiference={item.weightDiference}
-                    date={item.date}
-                />
-            )}
-        />
-    )
+   return(
+    <>
+    {
+        cattleInfo && <CattleWeightDetails cattle={cattleInfo}/>
+    }
+    </>
+   );
 }
 
 interface ActionProps {

@@ -1,7 +1,7 @@
 import Cattle from '@/database/models/Cattle'
 import useCattle from '@/hooks/collections/useCattle'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setSelectedCattle } from '@/redux/slices/cattles'
+import { setCattleInfo, setSelectedCattle } from '@/redux/slices/cattles'
 import { RootState } from '@/redux/store/store'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { useNavigation } from '@react-navigation/native'
@@ -69,7 +69,7 @@ const CattleItem = observeCattle(({ cattle }: { cattle: Cattle }) => {
       description={<Text variant='bodyMedium'>{cattle.cattleStatus}</Text>}
       right={() => <ListItemRight cattleWeight={cattle.weight} />}
       onPress={() => {
-        dispatch(setSelectedCattle(cattle.id))
+        dispatch(setCattleInfo(cattle))
         navigator.navigate('CattleDetailsLayout')
       }}
     />

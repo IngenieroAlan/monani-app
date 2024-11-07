@@ -1,5 +1,5 @@
 import React from 'react'
-import { Cattle } from '@/components/layout/cattleDetails/Cattle'
+import { Cattle } from '@/navigation/stacks/CattleTopStack'
 
 
 

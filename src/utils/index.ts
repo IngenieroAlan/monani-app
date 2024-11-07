@@ -1,0 +1,1 @@
+export { createCattle } from "./createCattle";

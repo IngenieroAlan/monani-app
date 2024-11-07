@@ -1,11 +1,11 @@
 import SearchMother from '@/components/genealogyRoute/SearchMother'
-import { Cattle } from '@/components/layout/cattleDetails/Cattle'
+import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
-import { useTheme } from 'react-native-paper'
+import { Appbar, useTheme } from 'react-native-paper'
 import BottomTabsStack from './BottomTabsStack'
 import AddCattleStack from './stacks/AddCattleStack'
 import ResourcesStack from './stacks/ResourcesStack'
@@ -19,10 +19,9 @@ const Stack = createStackNavigator<RootStackParamList>()
 export const Navigator = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     dispatch(getCattles(database))
-}, [dispatch])
+  }, [dispatch])
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
@@ -49,12 +48,12 @@ export const Navigator = () => {
         />
         <Stack.Screen
           name='CattleDetailsLayout'
-          component={Cattle}
+          component={CattleTopStack}
         />
         <Stack.Screen
           name='SearchMother'
           component={SearchMother}
-          options={{presentation: 'modal'}}
+          options={{ presentation: 'modal' }}
         />
       </Stack.Navigator>
     </View>

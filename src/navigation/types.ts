@@ -1,59 +1,69 @@
-import Cattle from '@/database/models/Cattle'
-import { NavigatorScreenParams } from '@react-navigation/native'
+import { NavigatorScreenParams } from "@react-navigation/native";
 
 export type RootStackParamList = {
-  BottomTabsStack: NavigatorScreenParams<BottomTabsParamList>
-  SearchCattleView: undefined
-  AddCattleStack: undefined
-  ResourcesStack: undefined
+  BottomTabsStack: NavigatorScreenParams<BottomTabsParamList>;
+  SearchCattleView: undefined;
+  AddCattleStack: undefined;
+  ResourcesStack: undefined;
   AnnualEarningsView: {
-    year: number
-    totalEarnings: number
-    totalCattleEarnings: number
-    totalMilkEarnings: number
-    difference: number
-  }
-  CattleDetailsLayout: undefined
-  SearchMother: undefined
-}
+    year: number;
+    totalEarnings: number;
+    totalCattleEarnings: number;
+    totalMilkEarnings: number;
+    difference: number;
+  };
+  CattleDetailsLayout: undefined;
+  SearchMother: undefined;
+};
 
 export type BottomTabsParamList = {
-  Ganado: undefined
-  'Prod. lechera': undefined
-  Ganancias: undefined
-  Notificaciones: undefined
-}
+  Ganado: undefined;
+  "Prod. lechera": undefined;
+  Ganancias: undefined;
+  Notificaciones: undefined;
+};
 
 export type EarningsStackParamList = {
-  EarningsView: undefined
-  EarningsResumeView: undefined
-}
+  EarningsView: undefined;
+  EarningsResumeView: undefined;
+};
 
 export type ResourcesStackParamList = {
-  ResourcesView: undefined
-  FeedsView: undefined
-  MedicationsView: undefined
-}
+  ResourcesView: undefined;
+  FeedsView: undefined;
+  MedicationsView: undefined;
+};
 
 export type AddCattleStackParamsList = {
   CattleInfo: undefined;
   Diet: undefined;
   DietSettings: undefined;
-  DietFeed: {
-    medicationScheduleId: string;
-    modify: boolean;
-  }
-  | undefined;
+  DietFeed:
+    | {
+        medicationScheduleId: string;
+        modify: boolean;
+      }
+    | undefined;
   Medications: undefined;
-  Medication: {
-    medicationScheduleId: string;
-    modify: boolean;
-  }
-  | undefined;
-}
+  Medication:
+    | {
+        medicationScheduleId: string;
+        modify: boolean;
+      }
+    | undefined;
+};
+export type CattleInfoParamsList = {
+  InfoRoute: undefined;
+  DietRoute: undefined;
+  MilkyRoute:undefined;
+  MedicationRoute: undefined;
+  WeightRoute: undefined;
+  FirstRoute: undefined;
+  GenealogyRoute: undefined;
+};
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList { }
+    interface RootParamList extends RootStackParamList {}
   }
 }

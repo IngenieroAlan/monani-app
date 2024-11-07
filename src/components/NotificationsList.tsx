@@ -1,18 +1,20 @@
 import { colors } from '@/utils/colors';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react'
-import { IconButton, List, Menu, Icon } from 'react-native-paper';
+import { IconButton, List, Menu } from 'react-native-paper';
 //import { Navigator } from '../navigation/Navigator';
 import Notification from '@/database/models/Notification';
 import { useAppDispatch } from '../hooks/useRedux';
-import { deleteNotification, getNotifications, markAsReadNoti } from '@/redux/slices/notificationsSlice';
+import { deleteNotification, markAsReadNoti } from '@/redux/slices/notificationsSlice';
 import { useDatabase } from '@nozbe/watermelondb/react';
 import { Database } from '@nozbe/watermelondb';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NotificationsStackParams } from '@/navigation/stacks/NotificationsStack';
-import { setSelectedCattle } from '@/redux/slices/cattles';
+import { setCattleInfo } from '@/redux/slices/cattles';
+import useCattle from '@/hooks/collections/useCattle';
+import { RootStackParamList } from '@/navigation/types';
 
-type ScreenNavigationProp = StackNavigationProp<NotificationsStackParams>
+type ScreenNavigationProp = StackNavigationProp<RootStackParamList>
 
 const MenuItems = [
     {
@@ -33,6 +35,7 @@ interface Props {
 export const NotificationsList = ({ day, dayNotifications }: Props) => {
     const database = useDatabase();
 
+
     return (
         <List.Section>
             <List.Subheader style={{ fontWeight: 'bold', fontSize: 16 }}>{day}</List.Subheader>
@@ -50,20 +53,21 @@ interface itemProps {
     database: Database;
 }
 export const NotificationItemList = ({ dayNotification, database }: itemProps) => {
+    const { cattleRecords } = useCattle();
     const navigator = useNavigation<ScreenNavigationProp>();
     const dispatch = useAppDispatch();
     const [visible, setVisible] = useState(false);
     const onPress = async () => {
         dispatch(markAsReadNoti(dayNotification));
         try {
-            dispatch(setSelectedCattle((await dayNotification.cattle).id))
-            console.log((await dayNotification.cattle).id);
+            const res = cattleRecords.find(cow => cow.id === (dayNotification.cattle).id);
+            dispatch(setCattleInfo(res))
         } catch (error) {
             console.log(error);
 
         }
 
-        navigator.navigate("NotificationsDetailsView")
+        navigator.navigate("CattleDetailsLayout")
     }
     const handleMarkAsRead = (notification: Notification) => {
         dispatch(markAsReadNoti(notification));

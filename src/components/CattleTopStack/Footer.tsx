@@ -1,4 +1,5 @@
 import { useAppSelector } from '@/hooks/useRedux';
+import { useNavigation } from '@react-navigation/native';
 import { useEffect, useMemo, useRef } from 'react';
 import { Animated, StyleSheet } from 'react-native';
 import { Appbar, FAB, useTheme } from 'react-native-paper';
@@ -11,6 +12,7 @@ const Footer = () => {
   const { bottom } = useSafeAreaInsets();
   const theme = useTheme();
   const { screen } = useAppSelector(state => state.ui);
+  const navigation = useNavigation();
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -46,7 +48,7 @@ const Footer = () => {
         console.log('Navigate to add');
         break;
       case 'GenealogyRoute':
-        console.log('Navigate to edit');
+        navigation.navigate('SearchOffspringView');
         break;
       default:
         console.log('Navigate to');

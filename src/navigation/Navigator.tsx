@@ -1,18 +1,19 @@
 import SearchMother from '@/components/genealogyRoute/SearchMother'
+import SearchOffspring from '@/components/genealogyRoute/SearchOffspring'
+import database from '@/database'
+import { useAppDispatch } from '@/hooks/useRedux'
 import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
+import { getCattles } from '@/redux/slices/cattles'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
-import { Appbar, useTheme } from 'react-native-paper'
+import { useTheme } from 'react-native-paper'
 import BottomTabsStack from './BottomTabsStack'
 import AddCattleStack from './stacks/AddCattleStack'
 import ResourcesStack from './stacks/ResourcesStack'
 import { RootStackParamList } from './types'
-import { useAppDispatch } from '@/hooks/useRedux'
-import { getCattles } from '@/redux/slices/cattles'
-import database from '@/database'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -51,8 +52,13 @@ export const Navigator = () => {
           component={CattleTopStack}
         />
         <Stack.Screen
-          name='SearchMother'
+          name='SearchMotherView'
           component={SearchMother}
+          options={{ presentation: 'modal' }}
+        />
+        <Stack.Screen
+          name='SearchOffspringView'
+          component={SearchOffspring}
           options={{ presentation: 'modal' }}
         />
       </Stack.Navigator>

@@ -1,12 +1,10 @@
 import { CattleInfoParamsList } from "@/navigation/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// routes of CattleInfoParamsList
-type Screen = keyof CattleInfoParamsList;
 interface UIState {
   isLoading: boolean;
   msgError: string | null;
-  screen: Screen | null;
+  screen: string | null;
 }
 
 const initialState: UIState = {
@@ -28,7 +26,7 @@ const uiSlice = createSlice({
     setError(state, action: PayloadAction<string | null>) {
       state.msgError = action.payload;
     },
-    setScreen(state, action: PayloadAction<Screen | null>) {
+    setScreen(state, action: PayloadAction<string | null>) {
       state.screen = action.payload;
     },
   }

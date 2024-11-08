@@ -55,11 +55,11 @@ export type AddCattleStackParamsList = {
 export type CattleInfoParamsList = {
   InfoRoute: undefined;
   DietRoute: undefined;
-  MilkyRoute: undefined;
   MedicationRoute: undefined;
   WeightRoute: undefined;
-  FirstRoute: undefined;
+  MilkyRoute: undefined;
   GenealogyRoute: undefined;
+  FirstRoute: undefined;
 };
 
 declare global {

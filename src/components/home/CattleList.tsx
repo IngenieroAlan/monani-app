@@ -1,7 +1,7 @@
 import Cattle from '@/database/models/Cattle'
 import useCattle from '@/hooks/collections/useCattle'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setCattleInfo, setSelectedCattle } from '@/redux/slices/cattles'
+import { setCattleInfo } from '@/redux/slices/cattles'
 import { RootState } from '@/redux/store/store'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { useNavigation } from '@react-navigation/native'
@@ -70,7 +70,9 @@ const CattleItem = observeCattle(({ cattle }: { cattle: Cattle }) => {
       right={() => <ListItemRight cattleWeight={cattle.weight} />}
       onPress={() => {
         dispatch(setCattleInfo(cattle))
-        navigator.navigate('CattleDetailsLayout')
+        navigator.navigate('CattleDetailsLayout', {
+          screen: 'InfoRoute'
+        })
       }}
     />
   )
@@ -82,6 +84,7 @@ const CattleList = ({ onScroll }: { onScroll: (e: NativeSyntheticEvent<NativeScr
   const { cattleRecords } = useCattle({
     cattleStatus: oneOfCattleStatus,
     productionType: eqProductionType,
+    isActive: true,
     take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * index
   })
 

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { AddCattleStackParams } from "@/navigation/stacks/AddCattleStack";
+import { AddCattleStackParamsList } from "@/navigation/types";
 import { setDiet } from "@/redux/slices/addCattleSlice";
 import ACDietSchema, { ACDietFields } from "@/validationSchemas/ACDietSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
 import DietSettingsForm from "./DietSettingsForm";
 
-export default function DietSettings({ navigation }: NativeStackScreenProps<AddCattleStackParams, 'DietSettings'>) {
+export default function DietSettings({ navigation }: NativeStackScreenProps<AddCattleStackParamsList, 'DietSettings'>) {
   const { cattle, diet } = useAppSelector(state => state.addCattle)
   const dispatch = useAppDispatch();
 

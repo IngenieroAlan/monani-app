@@ -1,11 +1,9 @@
 import Cattle from '@/database/models/Cattle'
 import useOffsprings from '@/hooks/collections/useOffsprings'
 import { FlashList } from '@shopify/flash-list'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
-import CattleDetailsBottomSheet from './CattleDetailsBottomSheet'
-import BottomSheet from '@gorhom/bottom-sheet'
 
 const ListEmptyComponent = () => {
   return (
@@ -57,17 +55,9 @@ const CattleItem = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSelectedCa
   </>)
 }
 
-const GenealogyList = ({ cattle }: { cattle: Cattle }) => {
+const GenealogyList = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSelectedCattle: (cattle: Cattle) => void }) => {
   const [index, setIndex] = useState(0)
   const { offsprings } = useOffsprings(cattle)
-  const [cattleBottomSheet, setCattleBottomSheet] = useState(-1)
-  const [selectedCattle, setSelectedCattle] = useState<Cattle | null>(null)
-
-
-  const onSelectedCattle = (cattle: Cattle) => {
-    setSelectedCattle(cattle)
-    setCattleBottomSheet(0)
-  }
 
   return (<>
     <Text
@@ -90,13 +80,6 @@ const GenealogyList = ({ cattle }: { cattle: Cattle }) => {
       onEndReachedThreshold={2}
       onEndReached={() => setIndex(index + 1)}
     />
-    {selectedCattle && (
-      <CattleDetailsBottomSheet
-        cattleBottomSheet={cattleBottomSheet}
-        setCattleBottomSheet={setCattleBottomSheet}
-        cattle={selectedCattle!}
-      />
-    )}
   </>)
 }
 

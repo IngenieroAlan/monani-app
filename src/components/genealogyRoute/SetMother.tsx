@@ -7,7 +7,7 @@ import { Divider, IconButton, List, Menu, Text, useTheme } from "react-native-pa
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 
-export const SetMother = ({ cattle }: { cattle: Cattle }) => {
+export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSelectedCattle: (cattle: Cattle) => void }) => {
   const navigation = useNavigation()
   const { mother } = useMother(cattle)
 
@@ -35,7 +35,7 @@ export const SetMother = ({ cattle }: { cattle: Cattle }) => {
           leadingIcon='pencil-outline'
           onPress={() => {
             setMenuVisible(false);
-            navigation.navigate('SearchMother', { editar: true });
+            navigation.navigate('SearchMotherView', { editar: true });
           }}
         />
         <Menu.Item
@@ -83,7 +83,7 @@ export const SetMother = ({ cattle }: { cattle: Cattle }) => {
         title={<ListItemTitle cattle={cattle} />}
         description={<Text variant='bodyMedium'>{cattle.cattleStatus}</Text>}
         right={() => <ListItemRight cattleWeight={cattle.weight} />}
-        onPress={() => console.log('Navigate to cattle details')}
+        onPress={() => onSelectedCattle(cattle)}
       />
     )
   }
@@ -96,7 +96,7 @@ export const SetMother = ({ cattle }: { cattle: Cattle }) => {
       title='Asignar madre'
       right={() => <List.Icon icon='plus' />}
       style={{ paddingHorizontal: 16, paddingVertical: 8, gap: 16 }}
-      onPress={() => navigation.navigate('SearchMother')}
+      onPress={() => navigation.navigate('SearchMotherView')}
     />
     <Divider />
   </>)

@@ -1,8 +1,8 @@
 import Cattle from "@/database/models/Cattle"
-import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet"
-import { memo, useMemo, useRef } from "react"
-import { View } from "react-native"
-import { Text } from "react-native-paper"
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
+import { useCallback, useMemo } from "react"
+import { StyleSheet, View } from "react-native"
+import { Button, Divider, Text, useTheme } from "react-native-paper"
 import MBottomSheet from "../MBottomSheet"
 
 type BottomSheetProps = {
@@ -12,24 +12,121 @@ type BottomSheetProps = {
 }
 
 const CattleDetailsBottomSheet = ({ cattleBottomSheet, setCattleBottomSheet, cattle }: BottomSheetProps) => {
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["25%"], []);
+  const snapPoints = useMemo(() => ["50", "25%"], []);
+  const theme = useTheme();
+
+  // Transform the date of cattle bornAt to a readable format like this 3 años, 5 meses, 10 días
+  const Age = useMemo(() => {
+    const bornDate = new Date(cattle.bornAt)
+    const currentDate = new Date()
+    const age = currentDate.getTime() - bornDate.getTime()
+    const years = Math.floor(age / 31536000000)
+    const months = Math.floor((age % 31536000000) / 2628000000)
+    const days = Math.floor(((age % 31536000000) % 2628000000) / 86400000)
+    return `${years} años, ${months} meses, ${days} días`
+  }, [cattle.bornAt])
+
+  // Transform the date to a readable format like this Jueves 14 de octubre de 2022
+  const transformDate = useCallback((date: Date) => {
+    const dateObject = new Date(date)
+    return dateObject.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }, [])
+  const bornDate = useMemo(() => transformDate(cattle.bornAt), [cattle.bornAt])
+  const admissionDate = useMemo(() => transformDate(cattle.admittedAt), [cattle.admittedAt])
+
 
   return (
-    <BottomSheet
-      ref={bottomSheetRef}
+    <MBottomSheet
+      id="CattleDetailsBottomSheet"
       index={cattleBottomSheet}
       snapPoints={snapPoints}
-      enablePanDownToClose
       onClose={() => setCattleBottomSheet(-1)}
     >
-      <BottomSheetView>
-        <Text variant='titleMedium' style={{ marginBottom: 5 }}>
-          {cattle.name ? `No. ${cattle.tagId}: ${cattle.name}` : `No. ${cattle.tagId}`}
-        </Text>
-        
-      </BottomSheetView>
-    </BottomSheet>
+      <BottomSheetScrollView scrollEnabled={true}>
+        <View style={{ paddingHorizontal: 16 }}>
+          <Button
+            mode="contained-tonal"
+            style={[styles.button, { backgroundColor: theme.colors.secondaryContainer }]}
+            onPress={() => { }}>
+            Ver mas
+          </Button>
+        </View>
+
+        <View style={{ padding: 16 }}>
+          <View
+            style={[styles.infoContainer, { borderColor: theme.colors.outlineVariant }]}
+          >
+            <Text variant="titleLarge">Información del ganado</Text>
+            <View style={{ paddingHorizontal: 16 }} ><Divider /></View>
+            <View style={styles.dataView}>
+              <Text variant="titleSmall">Nombre</Text>
+              <Text>{cattle.name ? cattle.name : 'Sin nombre'}</Text>
+            </View>
+            <View style={styles.dataView}>
+              <Text variant="titleSmall">No. identificador</Text>
+              <Text>{cattle.tagId}</Text>
+            </View>
+            <View style={styles.dataView}>
+              <Text variant="titleSmall">No. de vaca</Text>
+              <Text>{cattle.tagCattleNumber}</Text>
+            </View>
+            <View style={styles.dataView}>
+              <Text variant="titleSmall">Fecha de ingreso</Text>
+              <Text>{admissionDate}</Text>
+            </View>
+            <View style={styles.dataView}>
+              <Text variant="titleSmall">Peso</Text>
+              <Text>{cattle.weight} kg</Text>
+            </View>
+            <View style={styles.dataView}>
+              <Text variant="titleSmall">Edad</Text>
+              <Text>{Age}</Text>
+            </View>
+            <View style={styles.dataView}>
+              <Text variant="titleSmall">Fecha de nacimiento</Text>
+              <Text>{bornDate}</Text>
+            </View>
+            <View style={styles.dataView}>
+              <Text variant="titleSmall">Producción</Text>
+              <Text>{cattle.productionType}</Text>
+            </View>
+            <View style={styles.dataView}>
+              <Text variant="titleSmall">Estado</Text>
+              <Text>{cattle.cattleStatus}</Text>
+            </View>
+          </View>
+        </View>
+
+      </BottomSheetScrollView>
+    </MBottomSheet>
   )
 }
+
+const styles = StyleSheet.create({
+  infoContainer: {
+    padding: 16,
+    borderWidth: 1,
+    borderRadius: 12,
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 12
+  },
+  button: {
+    width: 'auto',
+    alignSelf: 'flex-end',
+  },
+  dataView: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4
+  }
+})
+
 export default CattleDetailsBottomSheet

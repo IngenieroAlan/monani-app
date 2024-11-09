@@ -1,8 +1,9 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { Icon } from 'react-native-paper';
+import { Icon, useTheme } from 'react-native-paper';
 import { MilkProductionView } from "../../views/milkProduction/MilkProduction";
 import { MilkProductionResumeView } from '../../views/milkProduction/MilkProductionResume';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type MilkProductionStackParams = {
   MilkProductionView: undefined;
@@ -12,14 +13,36 @@ export type MilkProductionStackParams = {
 const Stack = createMaterialTopTabNavigator<MilkProductionStackParams>();
 
 export const MilkProductionStack = () => {
+  const theme = useTheme();
+  const insets = useSafeAreaInsets()
   return (
     <Stack.Navigator
-      screenOptions={{ tabBarStyle: { backgroundColor: "#FEF7FF" }, tabBarActiveTintColor: "#65558F", tabBarInactiveTintColor: "#49454F" }}>
+    style={{ paddingTop: insets.top }}
+    screenOptions={{
+      tabBarActiveTintColor: theme.colors.primary,
+      tabBarInactiveTintColor: theme.colors.onSurface,
+      tabBarStyle: {
+        backgroundColor: theme.colors.surface,
+        elevation: 0,
+        borderBottomWidth: 1,
+        borderBottomColor: theme.colors.surfaceVariant
+      },
+      tabBarLabelStyle:{
+        textTransform:"none"
+      },
+      tabBarIndicatorStyle: {
+        backgroundColor: theme.colors.primary,
+        height: 3,
+        borderRadius: 5
+      },
+      tabBarAndroidRipple: { borderless: false }
+    }}
+      >
       <Stack.Screen
         name="MilkProductionView"
         options={{
           tabBarIcon: ({ color }) => (
-            <Icon source="cup-water" color={color} size={24} />
+            <Icon source="beer-outline" color={color} size={24} />
           ),
           tabBarLabel: "Producción diaria"
         }}
@@ -30,7 +53,7 @@ export const MilkProductionStack = () => {
           tabBarIcon: ({ color }) => (
             <Icon source="script-text-outline" color={color} size={24} />
           ),
-          tabBarLabel: "Resumen"
+          tabBarLabel: "Resumen",
         }}
         component={MilkProductionResumeView} />
     </Stack.Navigator>

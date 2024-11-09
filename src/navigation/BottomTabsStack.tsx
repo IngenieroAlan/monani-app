@@ -15,6 +15,7 @@ const Tab = createMaterialBottomTabNavigator<BottomTabsParamList>()
 const BottomTabsStack = () => {
   const database = useDatabase()
   const dispatch = useAppDispatch()
+  const { showBottomStack } = useAppSelector(state => state.ui);
   const { notificationsCount } = useAppSelector((state) => state.notifications)
   useEffect(() => {
     dispatch(getNotifications(database))
@@ -22,7 +23,9 @@ const BottomTabsStack = () => {
 
   return (
     <Portal.Host>
-      <Tab.Navigator>
+      <Tab.Navigator
+        barStyle={{ display: showBottomStack ? "flex" : "none" }}
+      >
         <Tab.Screen
           name='Ganado'
           component={HomeView}

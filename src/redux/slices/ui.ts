@@ -5,12 +5,14 @@ interface UIState {
   isLoading: boolean;
   msgError: string | null;
   screen: string | null;
+  showBottomStack: boolean;
 }
 
 const initialState: UIState = {
   isLoading: false,
   msgError: null,
   screen: null,
+  showBottomStack:true,
 };
 
 const uiSlice = createSlice({
@@ -29,9 +31,12 @@ const uiSlice = createSlice({
     setScreen(state, action: PayloadAction<string | null>) {
       state.screen = action.payload;
     },
+    setShowBottomStack(state, action:PayloadAction<boolean>){
+      state.showBottomStack = action.payload;
+    }
   }
 });
 
-export const { setError, startLoading, endLoading, setScreen } = uiSlice.actions;
+export const { setError, startLoading, endLoading, setScreen, setShowBottomStack } = uiSlice.actions;
 
 export default uiSlice.reducer;

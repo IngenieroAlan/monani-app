@@ -1,9 +1,11 @@
 import Cattle from '@/database/models/Cattle'
 import useOffsprings from '@/hooks/collections/useOffsprings'
 import { FlashList } from '@shopify/flash-list'
-import React, { useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
+import CattleDetailsBottomSheet from './CattleDetailsBottomSheet'
+import BottomSheet from '@gorhom/bottom-sheet'
 
 const ListEmptyComponent = () => {
   return (
@@ -44,20 +46,28 @@ const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
   )
 }
 
-const CattleItem = ({ cattle }: { cattle: Cattle }) => {
-  return (
+const CattleItem = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSelectedCattle: (cattle: Cattle) => void }) => {
+  return (<>
     <List.Item
       title={<ListItemTitle cattle={cattle} />}
       description={<Text variant='bodyMedium'>{cattle.cattleStatus}</Text>}
       right={() => <ListItemRight cattleWeight={cattle.weight} />}
-      onPress={() => console.log('Navigate to cattle details')}
+      onPress={() => onSelectedCattle(cattle)}
     />
-  )
+  </>)
 }
 
 const GenealogyList = ({ cattle }: { cattle: Cattle }) => {
   const [index, setIndex] = useState(0)
   const { offsprings } = useOffsprings(cattle)
+  const [cattleBottomSheet, setCattleBottomSheet] = useState(-1)
+  const [selectedCattle, setSelectedCattle] = useState<Cattle | null>(null)
+
+
+  const onSelectedCattle = (cattle: Cattle) => {
+    setSelectedCattle(cattle)
+    setCattleBottomSheet(0)
+  }
 
   return (<>
     <Text
@@ -73,13 +83,20 @@ const GenealogyList = ({ cattle }: { cattle: Cattle }) => {
     <FlashList
       estimatedItemSize={88}
       data={offsprings}
-      renderItem={({ item }) => <CattleItem cattle={item} />}
+      renderItem={({ item }) => <CattleItem cattle={item} onSelectedCattle={onSelectedCattle} />}
       keyExtractor={(item: Cattle) => item.id}
       ListFooterComponent={() => <View style={{ height: 88 }} />}
       ListEmptyComponent={() => <ListEmptyComponent />}
       onEndReachedThreshold={2}
       onEndReached={() => setIndex(index + 1)}
     />
+    {selectedCattle && (
+      <CattleDetailsBottomSheet
+        cattleBottomSheet={cattleBottomSheet}
+        setCattleBottomSheet={setCattleBottomSheet}
+        cattle={selectedCattle!}
+      />
+    )}
   </>)
 }
 

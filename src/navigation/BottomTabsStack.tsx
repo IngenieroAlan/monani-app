@@ -9,6 +9,7 @@ import { EarningsStack } from './stacks/EarningsStack'
 import { MilkProductionStack } from './stacks/MilkProductionStack'
 import { NotificationsStack } from './stacks/NotificationsStack'
 import { BottomTabsParamList } from './types'
+import { setShowBottomStack } from '@/redux/slices/ui'
 
 const Tab = createMaterialBottomTabNavigator<BottomTabsParamList>()
 
@@ -25,6 +26,7 @@ const BottomTabsStack = () => {
     <Portal.Host>
       <Tab.Navigator
         barStyle={{ display: showBottomStack ? "flex" : "none" }}
+        screenListeners={{blur:()=>{dispatch(setShowBottomStack(true))}}}
       >
         <Tab.Screen
           name='Ganado'
@@ -43,6 +45,7 @@ const BottomTabsStack = () => {
           name='Prod. lechera'
           component={MilkProductionStack}
           options={{
+            
             tabBarIcon: ({ color }) => (
               <Icon
                 source='beer-outline'

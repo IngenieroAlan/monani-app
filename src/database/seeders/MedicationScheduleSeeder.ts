@@ -1,3 +1,4 @@
+import { createMedicationNotification } from '@/notifee/constructors'
 import { faker } from '@faker-js/faker/.'
 import { DirtyRaw } from '@nozbe/watermelondb'
 import database from '..'
@@ -17,21 +18,29 @@ const getMeds = (medications: Medication[]) => {
   return shuffled.slice(0, numOfMedications)
 }
 
-const createMedicationScheduleRecords = async (cattleId: string, medicationsToSchedule: Medication[]) => {
+const createMedicationScheduleRecords = async (cattle: Cattle, medicationsToSchedule: Medication[]) => {
   NUM_OF_RECORDS += medicationsToSchedule.length
 
   const medicationScheduleRecords: DirtyRaw[] = []
 
   for (const medicationToSchedule of medicationsToSchedule) {
     const dosesPerYear = faker.number.int({ min: 1, max: 3 })
-    const nextDoseAt = new Date()
+    const nextDoseAt = new Date().setMonth(new Date().getMonth() + 12 / dosesPerYear)
 
     medicationScheduleRecords.push({
-      cattle_id: cattleId,
+      cattle_id: cattle.id,
       medication_id: medicationToSchedule.id,
-      next_dose_at: nextDoseAt.setMonth(nextDoseAt.getMonth() + 12 / dosesPerYear),
+      next_dose_at: nextDoseAt,
       doses_per_year: dosesPerYear
     })
+
+    createMedicationNotification(
+      cattle,
+      medicationToSchedule.name,
+      medicationToSchedule.id,
+      12 / dosesPerYear,
+      nextDoseAt
+    )
   }
 
   await database.write(async () => {
@@ -52,7 +61,7 @@ const MedicationScheduleSeeder = async () => {
   for (const cow of cattle) {
     const medicationsToSchedule = getMeds(medications)
 
-    createMedicationScheduleRecords(cow.id, medicationsToSchedule)
+    createMedicationScheduleRecords(cow, medicationsToSchedule)
   }
 
   console.log(`Medication schedules table seeded with ${NUM_OF_RECORDS} records.`)

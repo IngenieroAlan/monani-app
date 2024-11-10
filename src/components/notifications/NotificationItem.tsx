@@ -89,7 +89,7 @@ const NotificationItem = observeNotification(({ notification }: { notification: 
       right={() => <ItemMenu notification={notification} />}
       onPress={onNotificationPress}
       style={{
-        backgroundColor: notification.isMarkedAsRead ? theme.colors.surface : theme.colors.secondaryContainer,
+        backgroundColor: notification.isMarkedAsRead ? theme.colors.surface : theme.colors.notificationContainer,
         paddingStart: 16,
         paddingRight: 4
       }}

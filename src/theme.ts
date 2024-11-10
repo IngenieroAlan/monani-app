@@ -48,7 +48,8 @@ const LightThemeColors = {
     success: 'rgb(16, 109, 32)',
     onSuccess: 'rgb(255, 255, 255)',
     successContainer: 'rgb(157, 248, 152)',
-    onSuccessContainer: 'rgb(0, 34, 4)'
+    onSuccessContainer: 'rgb(0, 34, 4)',
+    notificationContainer: 'rgba(195, 241, 141, 0.3)' // Secondary container with 0.5 opacity.
   }
 }
 
@@ -99,7 +100,8 @@ const DarkThemeColors = {
     success: 'rgb(130, 219, 126)',
     onSuccess: 'rgb(0, 57, 10)',
     successContainer: 'rgb(0, 83, 18)',
-    onSuccessContainer: 'rgb(157, 248, 152)'
+    onSuccessContainer: 'rgb(157, 248, 152)',
+    notificationContainer: 'rgba(46, 79, 0, 0.3)' // Secondary container with 0.5 opacity.
   }
 }
 

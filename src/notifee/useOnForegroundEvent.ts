@@ -58,8 +58,6 @@ const useOnForegroundEvent = () => {
               break
           }
       }
-
-      console.log('Foreground event fired. Type:', type)
     })
   }, [])
 }

@@ -49,8 +49,6 @@ const onBackgroundEventHandler = async ({ type, detail }: Event) => {
       }
     }
   }
-
-  console.log('Backgrond event fired. Type:', type)
 }
 
 export default onBackgroundEventHandler

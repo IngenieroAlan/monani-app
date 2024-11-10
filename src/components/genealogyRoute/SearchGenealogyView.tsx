@@ -64,6 +64,8 @@ const CattleItem = memo(({ cattle, selectCattle, editOffspring }:
     selectCattle: (cattle: Cattle) => void
     editOffspring?: boolean
   }) => {
+  const theme = useTheme()
+
   const status = useMemo(() => {
     if (cattle.isActive) {
       return 'Activo'
@@ -92,6 +94,7 @@ const CattleItem = memo(({ cattle, selectCattle, editOffspring }:
       left={() => <ListItemLeft iconName={icon} />}
       right={() => editOffspring && <Icon size={24} source='close' />}
       onPress={() => selectCattle(cattle)}
+      style={{ backgroundColor: editOffspring ? theme.colors.elevation.level1 : theme.colors.elevation.level3 }}
     />
   )
 })
@@ -254,6 +257,7 @@ const SearchGenealogyView = ({
         />
         <Divider bold />
       </>)}
+      <List.Subheader>Resultados</List.Subheader>
       <FlatList
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps='handled'
@@ -266,7 +270,7 @@ const SearchGenealogyView = ({
   )
 }
 
-export default SearchGenealogyView
+export default memo(SearchGenealogyView)
 
 const styles = StyleSheet.create({
   emtpyListContainer: {

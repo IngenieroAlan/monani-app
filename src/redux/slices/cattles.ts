@@ -51,13 +51,11 @@ const cattlesSlice = createSlice({
       if (state.cattleInfo) {
         state.nestedCattles = [...state.nestedCattles, state.cattleInfo];
         state.cattleInfo = action.payload;
-        console.log(state.nestedCattles);
       }
     },
     unnestOneCattle(state) {
       state.cattleInfo = state.nestedCattles[state.nestedCattles.length - 1];
       state.nestedCattles.pop();
-      console.log(state.nestedCattles);
     },
   },
 });

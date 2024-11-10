@@ -1,5 +1,5 @@
 import { Database, Model, Q, Relation } from '@nozbe/watermelondb'
-import { date, field, immutableRelation, nochange, readonly, writer } from '@nozbe/watermelondb/decorators'
+import { date, field, immutableRelation, json, nochange, readonly, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
 
@@ -16,18 +16,19 @@ class Notification extends Model {
   @readonly @date('updated_at') updatedAt!: Date
 
   @nochange @field('type') type!: NotificationType
+  @nochange @field('notifee_id') notifeeId!: string
+
+  @json('extra_info', (json) => json) extraInfo?: string[]
 
   @date('event_at') eventAt!: Date
-  @field('title') title!: string
-  @field('description') description!: string
-  @field('icon_name') iconName?: string
   @field('is_marked_as_read') isMarkedAsRead!: boolean
+  @field('foreign_id') foreignId?: string
 
   @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
 
   @writer async markAsRead() {
-    await this.update((noti) => {
-      noti.isMarkedAsRead = true
+    await this.update((record) => {
+      record.isMarkedAsRead = true
     })
   }
 

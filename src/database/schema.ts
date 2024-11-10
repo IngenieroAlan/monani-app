@@ -221,12 +221,12 @@ export default appSchema({
     tableSchema({
       name: TableName.NOTIFICATIONS,
       columns: [
-        { name: 'cattle_id', type: 'string' },
-        { name: 'title', type: 'string' },
-        { name: 'description', type: 'string' },
-        { name: 'type', type: 'string' },
-        { name: 'icon_name', type: 'string' },
+        { name: 'notifee_id', type: 'string', isIndexed: true },
+        { name: 'cattle_id', type: 'string', isIndexed: true },
         { name: 'is_marked_as_read', type: 'boolean' },
+        { name: 'type', type: 'string' },
+        { name: 'foreign_id', type: 'string', isOptional: true },
+        { name: 'extra_info', type: 'string', isOptional: true },
         { name: 'event_at', type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }

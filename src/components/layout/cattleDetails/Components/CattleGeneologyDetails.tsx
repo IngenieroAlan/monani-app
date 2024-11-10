@@ -1,5 +1,6 @@
 import CattleDetailsBottomSheet from "@/components/genealogyRoute/CattleDetailsBottomSheet";
 import GenealogyList from "@/components/genealogyRoute/GenealogyList";
+import GenealogySnackbarContainer from "@/components/genealogyRoute/GenealogySnackbarContainer";
 import { SetMother } from "@/components/genealogyRoute/SetMother";
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
@@ -34,5 +35,6 @@ export const CattleGeneologyDetails = observeCattle(({ cattle }: { cattle: Cattl
         cattle={selectedCattle!}
       />
     )}
+    <GenealogySnackbarContainer />
   </>)
 })

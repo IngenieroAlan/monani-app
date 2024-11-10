@@ -1,7 +1,7 @@
 import Cattle from '@/database/models/Cattle'
 import { TableName } from '@/database/schema'
-import useOffsprings from '@/hooks/collections/useOffsprings'
-import { useAppSelector } from '@/hooks/useRedux'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useNavigation } from '@react-navigation/native'
@@ -9,6 +9,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Button, Divider, Icon, List, Searchbar, Text, useTheme } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import GenealogySnackbarContainer, { GenealogySnackbarId } from './GenealogySnackbarContainer'
 
 // CattleItem components - start
 const ListEmptyComponent = ({ search, isFetching }: { search: string; isFetching: boolean }) => {
@@ -159,8 +160,8 @@ const SearchGenealogyView = ({
   const [isFetching, setIsFetching] = useState(false)
   const [isValid, setIsValid] = useState(false)
   const [isDirty, setIsDirty] = useState(false)
-
   const { cattleInfo } = useAppSelector(state => state.cattles);
+  const dispatch = useAppDispatch()
 
   // Fetch cattles
   useEffect(() => {
@@ -190,7 +191,10 @@ const SearchGenealogyView = ({
       const exists = offsprings?.find(offspring => offspring.id === cattle.id)
       if (!exists) {
         setOffsprings!([...offsprings!, cattle])
-      } else return
+      } else {
+        dispatch(show(GenealogySnackbarId.SAME_CATTLE))
+        return
+      }
     }
     editOffspring ? setSearch('') : setSearch(cattle.tagId)
     setSelectedCattle(cattle)
@@ -266,6 +270,7 @@ const SearchGenealogyView = ({
         keyExtractor={keyExtractor}
         ListEmptyComponent={listEmptyComponent}
       />
+      <GenealogySnackbarContainer />
     </SafeAreaView>
   )
 }

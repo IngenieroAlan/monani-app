@@ -1,15 +1,19 @@
 import Cattle from "@/database/models/Cattle"
 import useMother from "@/hooks/collections/useMother"
+import { useAppDispatch } from "@/hooks/useRedux"
+import { show } from "@/redux/slices/uiVisibilitySlice"
 import { useNavigation } from "@react-navigation/native"
 import { useState } from "react"
 import { View } from "react-native"
 import { Divider, IconButton, List, Menu, Text, useTheme } from "react-native-paper"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { GenealogySnackbarId } from "./GenealogySnackbarContainer"
 
 
 export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSelectedCattle: (cattle: Cattle) => void }) => {
   const navigation = useNavigation()
   const { mother } = useMother(cattle)
+  const dispatch = useAppDispatch()
 
   // CattleItem components - start
   const ListItemMenu = () => {
@@ -26,7 +30,7 @@ export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSele
         anchor={
           <IconButton
             icon='dots-vertical'
-            size={20}
+            size={24}
             onPress={() => setMenuVisible(true)}
           />
         }
@@ -46,6 +50,7 @@ export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSele
           onPress={async () => {
             try {
               await cattle.removeMother()
+              dispatch(show(GenealogySnackbarId.REMOVED_MOTHER))
             } catch (error) {
               console.log(error);
             }

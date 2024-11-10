@@ -1,7 +1,9 @@
 import Cattle from '@/database/models/Cattle'
-import { useAppSelector } from '@/hooks/useRedux'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
+import { GenealogySnackbarId } from './GenealogySnackbarContainer'
 import SearchGenealogyView from './SearchGenealogyView'
 
 const SearchOffspring = () => {
@@ -10,6 +12,7 @@ const SearchOffspring = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { cattleInfo } = useAppSelector(state => state.cattles);
   const [offsprings, setOffsprings] = useState<Cattle[]>([])
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     const fetch = async () => {
@@ -27,6 +30,7 @@ const SearchOffspring = () => {
       return
     }
     await cattleInfo.setOffsprings([...offsprings])
+    dispatch(show(GenealogySnackbarId.UPDATED_OFFSPRING))
     setIsSubmitting(false)
     navigation.goBack()
   }

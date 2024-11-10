@@ -13,6 +13,9 @@ const MAX_QUARANTINE_DAYS = 40
 const MIN_DATE_ADMITTED_AT = subYears(new Date(), 2)
 const MAX_DATE_ADMITTED_AT = subMonths(new Date(), 6)
 
+const MIN_DATE_PREGNANCY = subMonths(new Date(), 6)
+const MAX_DATE_PREGNANCY = new Date()
+
 const MIN_WEIGHT = 600
 const MAX_WEIGHT = 800
 
@@ -28,7 +31,7 @@ const setCattleStatus = () => {
   return faker.helpers.arrayElement(status)
 }
 
-const setQuarantine = () => {
+const setQuarantineEndsAt = () => {
   const days = faker.helpers.maybe(() => faker.number.int({ min: MIN_QUARANTINE_DAYS, max: MAX_QUARANTINE_DAYS }), {
     probability: PROBABILITY_OF_QUARANTINE
   })
@@ -42,10 +45,13 @@ const CattleFactory = (numOfRecords: number = 1) => {
     tag_id: faker.string.numeric(4),
     tag_cattle_number: faker.helpers.replaceSymbols('## ## ####'),
     weight: faker.number.float({ min: MIN_WEIGHT, max: MAX_WEIGHT, fractionDigits: faker.number.int(3) }),
-    quarantine_ends_at: setQuarantine(),
+    quarantine_ends_at: setQuarantineEndsAt(),
     admitted_at: faker.date.between({ from: MIN_DATE_ADMITTED_AT, to: MAX_DATE_ADMITTED_AT }).getTime(),
     born_at: faker.date.past({ years: 4 }).getTime(),
-    pregnant_at: faker.helpers.maybe(() => faker.date.past().getTime(), { probability: PROBABILITY_OF_PREGNANCY }),
+    pregnant_at: faker.helpers.maybe(
+      () => faker.date.between({ from: MIN_DATE_PREGNANCY, to: MAX_DATE_PREGNANCY }).getTime(),
+      { probability: PROBABILITY_OF_PREGNANCY }
+    ),
     production_type: setProductionType(),
     cattle_status: setCattleStatus(),
     is_active: true,

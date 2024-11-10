@@ -30,7 +30,7 @@ export const HomeView = () => {
             onPress={() => navigation.navigate('SearchCattleView')}
           />
           <Appbar.Action
-            icon='hammer-screwdriver'
+            icon='shape-outline'
             onPress={() => navigation.navigate('ResourcesStack')}
           />
         </Appbar.Header>

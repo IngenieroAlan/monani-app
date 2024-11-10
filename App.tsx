@@ -1,10 +1,12 @@
-import { CattleProvider } from '@/context/CattleProvider'
 import database, { initializeDatabase, resetDatabase } from '@/database'
 import seedDatabase from '@/database/seeders/seeder'
 import { Navigator } from '@/navigation/Navigator'
+import onBackgroundEventHandler from '@/notifee/eventHandlers/onBackgroundEventHandler'
+import { CattleNotificationEventType } from '@/notifee/types'
+import useOnForegroundEvent from '@/notifee/useOnForegroundEvent'
 import store from '@/redux/store/store'
 import { CustomDarkTheme, CustomLightTheme } from '@/theme'
-import notifee, { AuthorizationStatus } from '@notifee/react-native'
+import notifee, { AndroidImportance, AndroidVisibility, AuthorizationStatus } from '@notifee/react-native'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
@@ -15,11 +17,9 @@ import { PaperProvider } from 'react-native-paper'
 import { es, registerTranslation } from 'react-native-paper-dates'
 import { Provider } from 'react-redux'
 
-interface Props {
-  children: JSX.Element | JSX.Element[]
-}
+const setup = async () => {
+  await notifee.cancelAllNotifications()
 
-const setDatabase = async () => {
   await resetDatabase()
   await initializeDatabase()
   await seedDatabase()
@@ -27,6 +27,26 @@ const setDatabase = async () => {
 
 enableMapSet()
 SplashScreen.preventAutoHideAsync()
+
+notifee.onBackgroundEvent(onBackgroundEventHandler)
+
+notifee.createChannel({
+  id: 'monani',
+  name: 'Monani',
+  importance: AndroidImportance.HIGH,
+  visibility: AndroidVisibility.PUBLIC
+})
+notifee.setNotificationCategories([
+  {
+    id: 'monani',
+    actions: [
+      {
+        id: CattleNotificationEventType.MARK_AS_READ,
+        title: 'Marcar como leído'
+      }
+    ]
+  }
+])
 
 export default function App() {
   const scheme = useColorScheme()
@@ -36,10 +56,13 @@ export default function App() {
     async function prepare() {
       registerTranslation('es', es)
 
-      await setDatabase()
+      await setup()
 
       const settings = await notifee.getNotificationSettings()
-      if (settings.authorizationStatus === AuthorizationStatus.DENIED) {
+      if (
+        settings.authorizationStatus === AuthorizationStatus.DENIED ||
+        settings.authorizationStatus < AuthorizationStatus.AUTHORIZED
+      ) {
         await notifee.requestPermission()
       }
 
@@ -73,6 +96,8 @@ export default function App() {
   )
 }
 
-const AppState = ({ children }: Props) => {
-  return <CattleProvider>{children}</CattleProvider>
+const AppState = ({ children }: { children: JSX.Element }) => {
+  useOnForegroundEvent()
+
+  return children
 }

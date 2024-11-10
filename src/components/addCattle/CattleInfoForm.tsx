@@ -4,13 +4,13 @@ import { Q } from "@nozbe/watermelondb";
 import { memo, useEffect, useMemo, useState } from "react";
 import { Control, Controller, FormState, useController } from "react-hook-form";
 import { FlatList, View } from "react-native";
-import { Checkbox, Divider, HelperText, Text, useTheme } from "react-native-paper";
+import { Checkbox, Divider, HelperText, Icon, IconButton, Text, TextInput, useTheme } from "react-native-paper";
 import { DatePickerInput } from "react-native-paper-dates";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import MSearchBar from "../MSearchBar";
 import { CattleInfoFields } from "@/redux/slices/addCattleSlice";
-// import { FlatList } from "react-native-gesture-handler";
+import MDatePickerInput from "../MDatePickerInput";
 
 const CattleInfoForm = (
   { control, formState, motherId }:
@@ -66,7 +66,7 @@ const CattleInfoForm = (
     [cattleRecords]
   )
 
-  return (
+  return (<>
     <FlatList
       style={{
         flexGrow: 1,
@@ -90,7 +90,7 @@ const CattleInfoForm = (
           <CustomTextInput
             name="name"
             control={control}
-            label={'Nombre*'}
+            label={'Nombre'}
             errors={errors.name}
             helperText={errors.name?.message ? errors.name.message : ''}
           />
@@ -101,7 +101,8 @@ const CattleInfoForm = (
             errors={errors.tagId}
             helperText={errors.tagId?.message ? errors.tagId.message : ''}
             more={{
-              keyboardType: "numeric"
+              keyboardType: "numeric",
+              maxLength: 4
             }}
           />
           <CustomTextInput
@@ -111,24 +112,17 @@ const CattleInfoForm = (
             errors={errors.tagCattleNumber}
             helperText={errors.tagCattleNumber?.message ? errors.tagCattleNumber.message : ''}
             more={{
-              keyboardType: "numeric"
+              keyboardType: "numeric",
+              maxLength: 10
             }}
           />
-          <Controller
-            name="admittedAt"
+          <MDatePickerInput
+            label="Fecha de ingreso*"
+            inputMode="start"
             control={control}
-            render={({ field: { onChange, value } }) => {
-              return (
-                <DatePickerInput
-                  locale="es"
-                  label="Fecha de ingreso"
-                  value={value}
-                  onChange={(d) => onChange(d)}
-                  inputMode="start"
-                  mode="outlined"
-                />
-              )
-            }}
+            name="admittedAt"
+            errors={errors.bornAt}
+            maxDate={new Date()}
           />
 
           <Divider style={{ marginVertical: 10 }} />
@@ -141,25 +135,18 @@ const CattleInfoForm = (
             errors={errors.weight}
             helperText={errors.weight?.message ? errors.weight.message : ''}
             more={{
-              keyboardType: "numeric"
+              keyboardType: "numeric",
+              maxLength: 4
             }}
           />
 
-          <Controller
-            name="bornAt"
+          <MDatePickerInput
+            label="Fecha de nacimiento*"
+            inputMode="start"
             control={control}
-            render={({ field: { onChange, value } }) => {
-              return (
-                <DatePickerInput
-                  locale="es"
-                  label="Fecha de nacimiento"
-                  value={value}
-                  onChange={(d) => onChange(d)}
-                  inputMode="start"
-                  mode="outlined"
-                />
-              )
-            }}
+            name="bornAt"
+            errors={errors.bornAt}
+            maxDate={new Date()}
           />
 
           <Divider style={{ marginVertical: 10 }} />
@@ -178,21 +165,13 @@ const CattleInfoForm = (
           />
 
           {cattleStatusField.value === 'Gestante' && (
-            <Controller
-              name="pregnantAt"
+            <MDatePickerInput
+              label="Fecha de gestación"
+              inputMode="start"
               control={control}
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <DatePickerInput
-                    locale="es"
-                    label="Fecha de gestación"
-                    value={value}
-                    onChange={(d) => onChange(d)}
-                    inputMode="start"
-                    mode="outlined"
-                  />
-                )
-              }}
+              name="pregnantAt"
+              errors={errors.bornAt}
+              maxDate={new Date()}
             />
           )}
 
@@ -254,7 +233,7 @@ const CattleInfoForm = (
       )}
     >
     </FlatList>
-  )
+  </>)
 }
 
 export default memo(CattleInfoForm);

@@ -9,10 +9,10 @@ const ProductionTypeEnum = z.enum(["Lechera", "De carne"]) satisfies z.ZodType<P
 
 const CattleInfoSchema = z.object({
   name: z.string().optional(),
-  tagId: z.string(),
-  tagCattleNumber: z.string(),
+  tagId: z.string().length(4),
+  tagCattleNumber: z.string().regex(/^\d{2}\s\d{2}\s\d{4}$/),
   admittedAt: z.date(),
-  weight: z.coerce.number(),
+  weight: z.coerce.number().lte(9999),
   bornAt: z.date(),
   cattleStatus: CattleStatusEnum,
   pregnantAt: z.date().optional(),

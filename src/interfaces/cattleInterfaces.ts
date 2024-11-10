@@ -12,8 +12,8 @@ interface ACCattle {
     tagCattleNumber: string;
     weight: number;
     quarantineDaysLeft?: number;
-    admittedAt: Date;
-    bornAt: Date;
+    admittedAt: Date | undefined;
+    bornAt: Date | undefined;
     pregnantAt?: Date;
     productionType: ProductionType;
     cattleStatus: CattleStatus;
@@ -35,7 +35,7 @@ interface ACCattleSale {
 }
 interface ACDiet {
     dietId: string;
-    waterAmount: number;
+    waterAmount: number | undefined;
     matterAmount?: number;
     percentage?: number;
     matterProportion: MatterProportion;

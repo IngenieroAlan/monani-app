@@ -8,12 +8,14 @@ interface CattleState {
   selectedCattle: string | null;
   cattles: Cattle[];
   cattleInfo: Cattle | null;
+  nestedCattles: Cattle[];
 }
 
 const initialState: CattleState = {
   selectedCattle: null,
   cattles: [],
   cattleInfo: null,
+  nestedCattles: [],
 };
 
 const cattlesSlice = createSlice({
@@ -44,6 +46,18 @@ const cattlesSlice = createSlice({
       state.cattles = state.cattles.filter(
         (cattle) => cattle.id !== payload.id
       );
+    },
+    nestCattle(state, action) {
+      if (state.cattleInfo) {
+        state.nestedCattles = [...state.nestedCattles, state.cattleInfo];
+        state.cattleInfo = action.payload;
+        console.log(state.nestedCattles);
+      }
+    },
+    unnestOneCattle(state) {
+      state.cattleInfo = state.nestedCattles[state.nestedCattles.length - 1];
+      state.nestedCattles.pop();
+      console.log(state.nestedCattles);
     },
   },
 });
@@ -81,6 +95,8 @@ export const {
   addCattle,
   replaceCattle,
   deleteCattleFromList,
+  nestCattle,
+  unnestOneCattle,
 } = cattlesSlice.actions;
 
 export default cattlesSlice.reducer;

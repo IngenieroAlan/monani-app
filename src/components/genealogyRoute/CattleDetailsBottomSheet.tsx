@@ -1,6 +1,9 @@
 import Cattle from "@/database/models/Cattle"
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
-import { useCallback, useMemo } from "react"
+import { useAppDispatch } from "@/hooks/useRedux"
+import { nestCattle } from "@/redux/slices/cattles"
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet"
+import { useNavigation } from "@react-navigation/native"
+import { memo, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { Button, Divider, Text, useTheme } from "react-native-paper"
 import MBottomSheet from "../MBottomSheet"
@@ -14,6 +17,10 @@ type BottomSheetProps = {
 const CattleDetailsBottomSheet = ({ cattleBottomSheet, setCattleBottomSheet, cattle }: BottomSheetProps) => {
   const snapPoints = useMemo(() => ["50", "25%"], []);
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [isPressed, setIsPressed] = useState(false)
 
   // Transform the date of cattle bornAt to a readable format like this 3 años, 5 meses, 10 días
   const Age = useMemo(() => {
@@ -42,17 +49,24 @@ const CattleDetailsBottomSheet = ({ cattleBottomSheet, setCattleBottomSheet, cat
 
   return (
     <MBottomSheet
-      id="CattleDetailsBottomSheet"
+      ref={bottomSheetRef}
       index={cattleBottomSheet}
       snapPoints={snapPoints}
       onClose={() => setCattleBottomSheet(-1)}
     >
-      <BottomSheetScrollView scrollEnabled={true}>
+      <BottomSheetScrollView scrollEnabled={false}>
         <View style={{ paddingHorizontal: 16 }}>
           <Button
             mode="contained-tonal"
             style={[styles.button, { backgroundColor: theme.colors.secondaryContainer }]}
-            onPress={() => { }}>
+            disabled={isPressed}
+            onPress={() => {
+              setIsPressed(true)
+              bottomSheetRef.current?.close()
+              dispatch(nestCattle(cattle))
+              navigation.navigate('CattleDetailsLayout', { screen: 'InfoRoute' })
+              setIsPressed(false)
+            }}>
             Ver mas
           </Button>
         </View>
@@ -129,4 +143,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default CattleDetailsBottomSheet
+export default memo(CattleDetailsBottomSheet)

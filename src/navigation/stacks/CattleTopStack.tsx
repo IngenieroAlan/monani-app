@@ -3,6 +3,7 @@ import { GenealogyRoute } from '@/components/layout/cattleDetails/routes/Genealo
 import { WeightRoute } from '@/components/layout/cattleDetails/routes/Weight';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
 import { CattleInfoParamsList } from '@/navigation/types';
+import { unnestOneCattle } from '@/redux/slices/cattles';
 import { setScreen } from '@/redux/slices/ui';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useNavigation } from '@react-navigation/native';
@@ -18,13 +19,20 @@ const Stack = createMaterialTopTabNavigator<CattleInfoParamsList>()
 export const CattleTopStack = () => {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
-  const { cattleInfo } = useAppSelector(state => state.cattles);
+  const { cattleInfo, nestedCattles } = useAppSelector(state => state.cattles);
   const navigator = useNavigation();
   const dispatch = useAppDispatch();
 
   const renderHeader = () => (
     <Appbar.Header>
-      <Appbar.BackAction onPress={() => navigator.goBack()} />
+      <Appbar.BackAction onPress={() => {
+        if (nestedCattles.length > 0) {
+          navigator.navigate('CattleDetailsLayout', { screen: 'InfoRoute' })
+          dispatch(unnestOneCattle())
+        } else {
+          navigator.goBack()
+        }
+      }} />
       <Appbar.Content title={`No. ${cattleInfo?.tagId || 'Sin ID'}`} />
     </Appbar.Header>
   );

@@ -2,7 +2,7 @@ import Cattle from '@/database/models/Cattle'
 import { useAppSelector } from '@/hooks/useRedux'
 import { useNavigation } from '@react-navigation/native'
 import { useEffect, useState } from 'react'
-import SearchGenealogy from './SearchGenealogy'
+import SearchGenealogyView from './SearchGenealogyView'
 
 const SearchOffspring = () => {
   const navigation = useNavigation()
@@ -22,17 +22,25 @@ const SearchOffspring = () => {
 
   async function setOffspring() {
     setIsSubmitting(true)
-    if (!cattleInfo || !selectedOffspring) {
+    if (!cattleInfo) {
       setIsSubmitting(false)
       return
     }
-    await cattleInfo.setOffsprings([...offsprings, selectedOffspring])
+    await cattleInfo.setOffsprings([...offsprings])
     setIsSubmitting(false)
     navigation.goBack()
   }
 
   return (
-    <SearchGenealogy action={setOffspring} isSubmitting={isSubmitting} setSelectedCattle={setSelectedOffspring} selectedCattle={selectedOffspring} />
+    <SearchGenealogyView
+      action={setOffspring}
+      isSubmitting={isSubmitting}
+      setSelectedCattle={setSelectedOffspring}
+      selectedCattle={selectedOffspring}
+      editOffspring={true}
+      offsprings={offsprings}
+      setOffsprings={setOffsprings}
+    />
   )
 }
 

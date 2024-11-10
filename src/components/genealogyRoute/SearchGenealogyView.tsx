@@ -1,5 +1,6 @@
 import Cattle from '@/database/models/Cattle'
 import { TableName } from '@/database/schema'
+import useOffsprings from '@/hooks/collections/useOffsprings'
 import { useAppSelector } from '@/hooks/useRedux'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
@@ -9,6 +10,7 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Button, Divider, Icon, List, Searchbar, Text, useTheme } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+// CattleItem components - start
 const ListEmptyComponent = ({ search, isFetching }: { search: string; isFetching: boolean }) => {
   return (
     <View style={styles.emtpyListContainer}>
@@ -36,7 +38,6 @@ const ListEmptyComponent = ({ search, isFetching }: { search: string; isFetching
     </View>
   )
 }
-
 const ListItemLeft = ({ iconName }: { iconName: string }) => {
   return (
     <View style={{ paddingStart: 16 }}>
@@ -47,7 +48,6 @@ const ListItemLeft = ({ iconName }: { iconName: string }) => {
     </View>
   )
 }
-
 const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
   const title = cattle.name ? `No. ${cattle.tagId}: ${cattle.name}` : `No. ${cattle.tagId}`
 
@@ -58,11 +58,11 @@ const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
     </View>
   )
 }
-
-const CattleItem = memo(({ cattle, selectCattle }:
+const CattleItem = memo(({ cattle, selectCattle, editOffspring }:
   {
     cattle: Cattle,
     selectCattle: (cattle: Cattle) => void
+    editOffspring?: boolean
   }) => {
   const status = useMemo(() => {
     if (cattle.isActive) {
@@ -90,17 +90,63 @@ const CattleItem = memo(({ cattle, selectCattle }:
       title={<ListItemTitle cattle={cattle} />}
       description={status}
       left={() => <ListItemLeft iconName={icon} />}
+      right={() => editOffspring && <Icon size={24} source='close' />}
       onPress={() => selectCattle(cattle)}
     />
   )
 })
+// CattleItem components - end
 
-const SearchGenealogy = ({ action, isSubmitting, setSelectedCattle, selectedCattle }: {
+const OffspringsList = ({ offsprings, setOffsprings, setIsDirty }: {
+  offsprings: Cattle[],
+  setOffsprings: (offsprings: Cattle[]) => void
+  setIsDirty: (isDirty: boolean) => void
+}
+) => {
+  const theme = useTheme()
+  return (
+    <List.Accordion
+      title='Descendencia'
+      left={() => (<>
+        <View style={{ paddingStart: 16, alignSelf: 'center' }}>
+          <Icon source='cow' size={24} />
+        </View>
+      </>)}
+      style={{ backgroundColor: theme.colors.elevation.level1 }}
+    >
+      {offsprings.map((cattle) => (
+        <CattleItem
+          key={cattle.id}
+          cattle={cattle}
+          editOffspring
+          selectCattle={() => {
+            setOffsprings(offsprings.filter(offspring => offspring.id !== cattle.id))
+            setIsDirty(true)
+          }} />
+      ))}
+    </List.Accordion>
+  )
+}
+
+type SearchGenealogyViewProps = {
   action: () => void;
   isSubmitting?: boolean;
   selectedCattle?: Cattle;
   setSelectedCattle: (cattle: Cattle) => void;
+  editOffspring?: boolean;
+  offsprings?: Cattle[];
+  setOffsprings?: (offsprings: Cattle[]) => void;
 }
+
+const SearchGenealogyView = ({
+  action,
+  isSubmitting,
+  setSelectedCattle,
+  selectedCattle,
+  editOffspring,
+  offsprings,
+  setOffsprings
+}: SearchGenealogyViewProps
 ) => {
   const navigation = useNavigation()
   const theme = useTheme()
@@ -109,9 +155,11 @@ const SearchGenealogy = ({ action, isSubmitting, setSelectedCattle, selectedCatt
   const [cattles, setCattles] = useState<Cattle[]>([])
   const [isFetching, setIsFetching] = useState(false)
   const [isValid, setIsValid] = useState(false)
+  const [isDirty, setIsDirty] = useState(false)
 
   const { cattleInfo } = useAppSelector(state => state.cattles);
 
+  // Fetch cattles
   useEffect(() => {
     if (search === '') {
       setCattles([])
@@ -133,11 +181,20 @@ const SearchGenealogy = ({ action, isSubmitting, setSelectedCattle, selectedCatt
     fetch()
   }, [search])
 
+  // Actions on select cattle
   const selectCattle = (cattle: Cattle) => {
+    if (editOffspring) {
+      const exists = offsprings?.find(offspring => offspring.id === cattle.id)
+      if (!exists) {
+        setOffsprings!([...offsprings!, cattle])
+      } else return
+    }
+    editOffspring ? setSearch('') : setSearch(cattle.tagId)
     setSelectedCattle(cattle)
-    setSearch(cattle.tagId)
+    setIsDirty(true)
   }
 
+  // List components
   const renderItem = ({ item }: { item: Cattle }) => {
     return <CattleItem cattle={item} selectCattle={selectCattle} />
   }
@@ -152,9 +209,14 @@ const SearchGenealogy = ({ action, isSubmitting, setSelectedCattle, selectedCatt
     [cattles, isFetching]
   )
 
+  // Validation
   useEffect(() => {
     setIsValid(selectedCattle !== undefined)
   }, [selectedCattle])
+
+  useEffect(() => {
+    setIsValid(true)
+  }, [isDirty])
 
   return (
     <SafeAreaView
@@ -176,7 +238,7 @@ const SearchGenealogy = ({ action, isSubmitting, setSelectedCattle, selectedCatt
           <Button
             {...props}
             onPress={action}
-            disabled={!isValid && !isSubmitting || !cattleInfo || !selectedCattle}
+            disabled={!isValid && !isSubmitting || !isDirty || !cattleInfo}
           >
             Guardar
           </Button>
@@ -184,6 +246,14 @@ const SearchGenealogy = ({ action, isSubmitting, setSelectedCattle, selectedCatt
         style={{ paddingVertical: 8 }}
       />
       <Divider bold />
+      {editOffspring && (<>
+        <OffspringsList
+          offsprings={offsprings!}
+          setOffsprings={setOffsprings!}
+          setIsDirty={setIsDirty}
+        />
+        <Divider bold />
+      </>)}
       <FlatList
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps='handled'
@@ -196,7 +266,7 @@ const SearchGenealogy = ({ action, isSubmitting, setSelectedCattle, selectedCatt
   )
 }
 
-export default SearchGenealogy
+export default SearchGenealogyView
 
 const styles = StyleSheet.create({
   emtpyListContainer: {

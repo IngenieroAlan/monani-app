@@ -13,7 +13,7 @@ export type RootStackParamList = {
     difference: number;
   };
   CattleDetailsLayout: NavigatorScreenParams<CattleInfoParamsList>;
-  SearchMotherView: { editar: boolean } | undefined;
+  SearchMotherView: { edit: boolean } | undefined;
   SearchOffspringView: undefined;
 };
 

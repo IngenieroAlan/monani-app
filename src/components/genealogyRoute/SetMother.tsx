@@ -11,6 +11,7 @@ export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSele
   const navigation = useNavigation()
   const { mother } = useMother(cattle)
 
+  // CattleItem components - start
   const ListItemMenu = () => {
     const theme = useTheme()
     const insets = useSafeAreaInsets()
@@ -35,7 +36,7 @@ export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSele
           leadingIcon='pencil-outline'
           onPress={() => {
             setMenuVisible(false);
-            navigation.navigate('SearchMotherView', { editar: true });
+            navigation.navigate('SearchMotherView', { edit: true });
           }}
         />
         <Menu.Item
@@ -65,7 +66,6 @@ export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSele
       </View>
     )
   }
-
   const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
     const title = cattle.name ? `No. ${cattle.tagId}: ${cattle.name}` : `No. ${cattle.tagId}`
 
@@ -76,7 +76,6 @@ export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSele
       </View>
     )
   }
-
   const CattleItem = ({ cattle }: { cattle: Cattle }) => {
     return (
       <List.Item
@@ -87,7 +86,9 @@ export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSele
       />
     )
   }
+  // CattleItem components - end
 
+  // Render
   return mother ? (<>
     <CattleItem cattle={mother} />
     <Divider />

@@ -1,32 +1,30 @@
+import useNotifications from '@/hooks/collections/useNotifications'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { getNotifications } from '@/redux/slices/notificationsSlice'
+import { setShowBottomStack } from '@/redux/slices/ui'
 import { HomeView } from '@/views/home/Home'
-import { useDatabase } from '@nozbe/watermelondb/react'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Icon, Portal } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { EarningsStack } from './stacks/EarningsStack'
 import { MilkProductionStack } from './stacks/MilkProductionStack'
 import { NotificationsStack } from './stacks/NotificationsStack'
 import { BottomTabsParamList } from './types'
-import { setShowBottomStack } from '@/redux/slices/ui'
 
 const Tab = createMaterialBottomTabNavigator<BottomTabsParamList>()
 
 const BottomTabsStack = () => {
-  const database = useDatabase()
   const dispatch = useAppDispatch()
-  const { showBottomStack } = useAppSelector(state => state.ui);
-  const { notificationsCount } = useAppSelector((state) => state.notifications)
-  useEffect(() => {
-    dispatch(getNotifications(database))
-  }, [dispatch])
+  const { showBottomStack } = useAppSelector((state) => state.ui)
 
   return (
     <Portal.Host>
       <Tab.Navigator
-        barStyle={{ display: showBottomStack ? "flex" : "none" }}
-        screenListeners={{blur:()=>{dispatch(setShowBottomStack(true))}}}
+        barStyle={{ display: showBottomStack ? 'flex' : 'none' }}
+        screenListeners={{
+          blur: () => {
+            dispatch(setShowBottomStack(true))
+          }
+        }}
       >
         <Tab.Screen
           name='Ganado'
@@ -45,7 +43,6 @@ const BottomTabsStack = () => {
           name='Prod. lechera'
           component={MilkProductionStack}
           options={{
-            
             tabBarIcon: ({ color }) => (
               <Icon
                 source='beer-outline'
@@ -71,15 +68,20 @@ const BottomTabsStack = () => {
         <Tab.Screen
           name='Notificaciones'
           component={NotificationsStack}
-          options={{
-            tabBarBadge: notificationsCount > 0 ? notificationsCount : undefined,
-            tabBarIcon: ({ color }) => (
-              <Icon
-                source='bell-outline'
-                color={color}
-                size={24}
-              />
-            )
+          options={() => {
+            // To prevent re rendering the whole bottom tab.
+            const { notifications } = useNotifications({ isMarkedAsRead: false })
+
+            return {
+              tabBarBadge: notifications.length || undefined,
+              tabBarIcon: ({ color }) => (
+                <Icon
+                  source='bell-outline'
+                  color={color}
+                  size={24}
+                />
+              )
+            }
           }}
         />
       </Tab.Navigator>

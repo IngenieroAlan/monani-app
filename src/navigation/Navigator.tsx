@@ -10,7 +10,8 @@ import NotificationsTestStack from '@/views/notificationsTest/NotificationsTestS
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
-import { useTheme } from 'react-native-paper'
+import { Appbar, useTheme } from 'react-native-paper'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import BottomTabsStack from './BottomTabsStack'
 import AddCattleStack from './stacks/AddCattleStack'
 import ResourcesStack from './stacks/ResourcesStack'
@@ -20,13 +21,20 @@ const Stack = createStackNavigator<RootStackParamList>()
 
 export const Navigator = () => {
   const theme = useTheme()
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
+  const insets = useSafeAreaInsets()
   useEffect(() => {
     dispatch(getCattles(database))
   }, [dispatch])
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
+      <Appbar
+        elevated
+        style={{ paddingTop: insets.top }}
+      >
+        <Appbar.Content title='NOTIFICATIONS TEST BRANCH' />
+      </Appbar>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name='BottomTabsStack'

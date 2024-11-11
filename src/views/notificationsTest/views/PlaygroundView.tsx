@@ -11,7 +11,6 @@ import { StatusBar } from 'expo-status-bar'
 import { useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import { Button, Divider, Icon, List, Text, TextInput } from 'react-native-paper'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const types: NotificationType[] = ['birth', 'medication', 'quarantine']
 
@@ -126,11 +125,9 @@ const NotificationScheduler = () => {
 }
 
 const PlaygroundView = () => {
-  const insets = useSafeAreaInsets()
-
   return (
     <ScrollView
-      style={{ flex: 1, paddingTop: insets.top + 16 }}
+      style={{ flex: 1, paddingTop: 16 }}
       contentContainerStyle={{ gap: 16 }}
     >
       <StatusBar />

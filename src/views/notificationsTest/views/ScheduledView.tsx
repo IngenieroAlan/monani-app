@@ -8,7 +8,7 @@ import { StatusBar } from 'expo-status-bar'
 import { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { IconButton, List, Menu, Text } from 'react-native-paper'
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { interval } from 'rxjs'
 
 const NotificationMenu = ({ notification }: { notification: Notification }) => {
@@ -74,7 +74,7 @@ const ScheduledView = () => {
   }, [])
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <StatusBar />
       <FlashList
         estimatedItemSize={100}
@@ -110,7 +110,7 @@ const ScheduledView = () => {
           />
         )}
       />
-    </SafeAreaView>
+    </View>
   )
 }
 

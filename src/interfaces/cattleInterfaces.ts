@@ -1,7 +1,7 @@
 import { ArchiveReason } from "@/database/models/CattleArchive";
 import { MatterProportion } from "@/database/models/Diet";
 import { FeedProportion } from "@/database/models/DietFeed";
-import { FeedType } from "@/database/models/Feed";
+import Feed, { FeedType } from "@/database/models/Feed";
 import { MedicationType } from "@/database/models/Medication";
 import { CattleStatus, ProductionType } from "../database/models/Cattle";
 
@@ -44,7 +44,7 @@ interface ACDiet {
 interface ACDietFeed {
     dietFeedId: string;
     dietId: string;
-    feedId: string;
+    feed: Feed
     feedAmount: number;
     percentage?: number;
     feedProportion: FeedProportion;

@@ -11,7 +11,7 @@ const ListEmptyComponent = () => {
       <Icon
         size={56}
         source='cow-off'
-      ></Icon>
+      />
       <Text
         style={{ textAlign: 'center' }}
         variant='titleMedium'

@@ -1,9 +1,7 @@
-import useFeeds from "@/hooks/collections/useFeeds";
-import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { setFeeds } from "@/redux/slices/feedsSlice";
+import { useAppSelector } from "@/hooks/useRedux";
 import { RootState } from "@/redux/store/store";
 import { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
-import { memo, useEffect, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { Control, FormState, useController } from "react-hook-form";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
@@ -25,17 +23,13 @@ const DietFeedForm = (
   const { field: feedProportion } = useController({ name: 'feedProportion', control });
   const { field: quantity } = useController({ name: 'quantity', control });
 
+  const formattedWeight = useMemo(() => {
+    const equivalentWeight = cattleWeight * ((quantity.value ?? 0) / 100)
+    const decimals = equivalentWeight.toString().split('.')[2]
+    return `${Math.trunc(equivalentWeight)}.${decimals ? decimals.padEnd(3, '0') : '000'}`
+  }, [quantity.value])
+
   const feeds = useAppSelector((state: RootState) => state.feeds.records)
-  const { getFeeds } = useFeeds()
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    const fetchFeeds = async () => {
-      dispatch(setFeeds(await getFeeds()))
-    }
-
-    if (feeds.length === 0) fetchFeeds()
-  }, [feeds])
 
   const dropdownOptions = [
     {
@@ -48,31 +42,25 @@ const DietFeedForm = (
     }
   ]
 
-  const equivalentWeight = cattleWeight * (quantity.value / 100)
-  const decimals = equivalentWeight.toString().split('.')[1]
-  const formattedWeight = `${Math.trunc(cattleWeight)}.${decimals ? decimals.padEnd(3, '0') : '000'}`
-
-  const feedData: SearchBarDataItem[] =
-    useMemo(() =>
-      feeds.map(feed => ({
-        id: feed.id,
-        title: feed.name,
-        description: feed.feedType,
-        value: feed.id
-      }))
-      , [feeds])
+  const feedData: SearchBarDataItem[] = useMemo(() =>
+    feeds.map(feed => ({
+      id: feed.id,
+      title: feed.name,
+      description: feed.feedType,
+      value: feed
+    })), [feeds])
 
   return (
-    <View style={{ padding: 16, gap: 10, flex: 1 }}>
+    <View style={{ padding: 16, gap: 10, flex: 1, backgroundColor: theme.colors.surface }}>
       <MSearchBar
-        name='feedId'
+        name='feed'
         control={control}
         placeholder="Alimento"
         initialQuery={feedName}
         mode="bar"
         theme={{ roundness: 1 }}
         data={feedData}
-        errroMessage={errors.feedId?.message ? errors.feedId?.message : ''}
+        errroMessage={errors.feed?.message ? String(errors.feed.message) : ''}
         maxHeight={500}
       />
       <MDropdown
@@ -82,9 +70,6 @@ const DietFeedForm = (
         options={dropdownOptions}
         error={errors.feedProportion !== undefined}
         errroMessage={errors.feedProportion?.message}
-        theme={{
-          colors: { background: theme.colors.elevation.level3 }
-        }}
       />
 
       <CustomTextInput
@@ -94,7 +79,7 @@ const DietFeedForm = (
         errors={errors.quantity}
         helperText={errors.quantity?.message ? errors.quantity?.message : ''}
         more={{
-          theme: { colors: { background: theme.colors.elevation.level3 } },
+          theme: { colors: { background: theme.colors.elevation.level0 } },
           keyboardType: 'numeric'
         }}
       />

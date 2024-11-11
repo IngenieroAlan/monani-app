@@ -1,4 +1,4 @@
-import MedicationForm from "@/components/addCattle/MedicationForm";
+import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
 import { modifyMedicationSchedule, saveMedicationSchedule } from "@/redux/slices/addCattleSlice";
@@ -80,7 +80,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       <Appbar.Content title={modify ? 'Ajustar medicación' : 'Agregar medicación'} />
       <Button onPress={handleSubmit(onSubmit)} disabled={!isValid || !isDirty || isSubmitting}>Guardar</Button>
     </Appbar.Header>
-    <MedicationForm
+    <CattleMedicationForm
       control={control}
       formState={formState}
       medicationName={medicationName}

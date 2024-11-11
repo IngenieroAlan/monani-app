@@ -6,7 +6,7 @@ import { HelperText, Searchbar, useTheme } from "react-native-paper";
 import { z } from "zod";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
-import SearchFeedList from "./SearchFeedList";
+import SearchFeedList from "../addCattle/SearchFeedList";
 import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import useFeeds from "@/hooks/collections/useFeeds";
@@ -18,7 +18,7 @@ import useMedications from "@/hooks/collections/useMedications";
 import { setMedications } from "@/redux/slices/medicationsSlice";
 
 
-const MedicationForm = (
+const CattleMedicationForm = (
   { control, formState, medicationName }:
     {
       control: Control<ACMedication>;
@@ -109,4 +109,4 @@ const MedicationForm = (
   )
 }
 
-export default memo(MedicationForm);
+export default memo(CattleMedicationForm);

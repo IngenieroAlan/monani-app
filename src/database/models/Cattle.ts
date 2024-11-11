@@ -7,13 +7,13 @@ import AnnualEarnings from './AnnualEarnings'
 import CattleArchive, { ArchiveReason } from './CattleArchive'
 import CattleSale from './CattleSale'
 import Diet from './Diet'
+import DietFeed from './DietFeed'
 import Genealogy from './Genealogy'
 import MedicationSchedule from './MedicationSchedule'
 import MilkProduction from './MilkProduction'
 import MilkReport from './MilkReport'
 import Notification from './Notification'
 import WeightReport from './WeightReport'
-import DietFeed from './DietFeed'
 
 export type ProductionType = 'Lechera' | 'De carne'
 export type CattleStatus = 'Gestante' | 'En producción' | 'De reemplazo' | 'De deshecho'
@@ -89,7 +89,7 @@ class Cattle extends Model {
   @lazy
   dietFeeds = this.collections
     .get<DietFeed>(TableName.DIET_FEED)
-    .query(Q.on(TableName.DIETS, 'diet_id', this.id))
+    .query(Q.where('diet_id', this.diet.id))
 
   @lazy
   motherRelation = this.collections

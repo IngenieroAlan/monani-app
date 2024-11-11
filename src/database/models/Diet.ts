@@ -1,7 +1,8 @@
-import { Model, Q } from '@nozbe/watermelondb'
-import { date, field, lazy, readonly, writer } from '@nozbe/watermelondb/decorators'
+import { Model, Q, Relation } from '@nozbe/watermelondb'
+import { date, field, lazy, readonly, relation, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
+import DietFeed, { FeedProportion } from './DietFeed'
 import Feed from './Feed'
 
 export type MatterProportion = 'Porcentaje de peso' | 'Fija' | 'Sin definir'
@@ -29,11 +30,40 @@ class Diet extends Model {
   cattle = this.collections
     .get<Cattle>(TableName.CATTLE)
     .query(Q.where('diet_id', this.id), Q.take(1))
-  
+
   @lazy
   feeds = this.collections
     .get<Feed>(TableName.FEEDS)
     .query(Q.on(TableName.DIET_FEED, 'diet_id', this.id))
+
+  @lazy
+  dietFeeds = this.collections
+    .get(TableName.DIET_FEED)
+    .query(Q.where('diet_id', this.id))
+
+  @writer
+  async createDietFeed({ feed, feedAmount, percentage, feedProportion }: {
+    feed: Feed
+    feedAmount: number
+    percentage?: number
+    feedProportion: FeedProportion
+  }) {
+    const existingDietFeed = await this.dietFeeds
+      .extend(Q.where('feed_id', feed.id))
+      .fetchCount()
+
+    if (existingDietFeed > 0) throw new Error('This feed is already part of the diet.')
+
+    await this.collections.get<DietFeed>(TableName.DIET_FEED)
+      .create((record) => {
+        record.diet.set(this)
+        record.feed.set(feed)
+
+        record.feedAmount = feedAmount
+        record.percentage = percentage
+        record.feedProportion = feedProportion
+      })
+  }
 
   @writer
   async updateDiet({

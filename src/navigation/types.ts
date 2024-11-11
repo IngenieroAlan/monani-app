@@ -12,7 +12,12 @@ export type RootStackParamList = {
     totalMilkEarnings: number;
     difference: number;
   };
+
   CattleDetailsLayout: NavigatorScreenParams<CattleInfoParamsList>;
+  DietFeedRoute: {
+    dietFeedId: string;
+    modify: boolean;
+  } | undefined;
   SearchMotherView: { edit: boolean } | undefined;
   SearchOffspringView: undefined;
 };

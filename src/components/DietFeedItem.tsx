@@ -1,15 +1,8 @@
 import DietFeed, { FeedProportion } from '@/database/models/DietFeed'
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { ACDietFeed, ACDietFeedItem } from '@/interfaces/cattleInterfaces'
-import { AddCattleStackParamsList, RootStackParamList } from '@/navigation/types'
-import { deleteDietFeed } from '@/redux/slices/addCattleSlice'
-import { AddDietNavigationProps } from '@/views/addCattle/Diet'
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { memo, useCallback, useState } from 'react'
-import { View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
-import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
+import { TableName } from '@/database/schema'
+import { withObservables } from '@nozbe/watermelondb/react'
+import { memo, useState } from 'react'
+import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type DietFeedItem = {
@@ -20,19 +13,21 @@ type DietFeedItem = {
   percentage?: number;
   feedProportion: FeedProportion;
 }
-type ScreenContext = 'AddCattle' | 'CattleDetails'
 
-// type navigationProps = NativeStackScreenProps<AddCattleStackParamsList & RootStackParamList, 'Diet'>
-type ScreenProps = NativeStackScreenProps<RootStackParamList & AddCattleStackParamsList>['navigation']
+const observeDietFeed = withObservables([TableName.DIET_FEED], ({ diet_feed }: { diet_feed: DietFeed }) => ({
+  diet_feed
+}))
 
 const ListItemMenu = (
-  { dietFeedId, screenContext }: { dietFeedId: string, screenContext: ScreenContext }
+  { dietFeedId, onEdit, onDelete }: {
+    dietFeedId: string,
+    onEdit: (dietFeedId: string) => void,
+    onDelete: (dietFeedId: string) => void
+  }
 ) => {
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const insets = useSafeAreaInsets()
   const [menuVisible, setMenuVisible] = useState(false)
-  const navigation = useNavigation<ScreenProps>()
 
   return (
     <Menu
@@ -51,17 +46,8 @@ const ListItemMenu = (
         title='Editar'
         leadingIcon='pencil-outline'
         onPress={() => {
+          onEdit(dietFeedId)
           setMenuVisible(false);
-          if (screenContext === 'AddCattle')
-            navigation.navigate('DietFeed', {
-              dietFeedId: dietFeedId,
-              modify: true
-            });
-          else if (screenContext === 'CattleDetails')
-            navigation.navigate('DietFeed', {
-              dietFeedId: dietFeedId,
-              modify: true
-            });
         }}
       />
       <Menu.Item
@@ -69,8 +55,8 @@ const ListItemMenu = (
         title='Eliminar'
         leadingIcon='minus'
         onPress={() => {
+          onDelete(dietFeedId)
           setMenuVisible(false);
-          dispatch(deleteDietFeed({ dietFeedId }))
         }}
       />
     </Menu>
@@ -78,52 +64,27 @@ const ListItemMenu = (
 }
 
 type DietFeedProps = {
-  props: {
-    id: string;
-    feedAmount: number;
-    percentage?: number;
-    feedProportion: FeedProportion;
-  },
+  diet_feed: DietFeed,
   feedName: string,
-  screenContext: ScreenContext
+  onEdit: (dietFeedId: string) => void,
+  onDelete: (dietFeedId: string) => void
 }
 
-const DietFeedItem = (
-  { props: props, screenContext, feedName }: DietFeedProps) => {
+const DietFeedItem = observeDietFeed(({ diet_feed, feedName, onEdit, onDelete }: DietFeedProps) => {
   return (
     <List.Item
       style={{ paddingVertical: 2, paddingRight: 8 }}
       title={feedName}
-      description={props.feedProportion === 'Por porcentaje' ? `${props.percentage}%` : `${props.feedAmount} kg`}
+      description={diet_feed.feedProportion === 'Por porcentaje' ? `${diet_feed.percentage}%` : `${diet_feed.feedAmount} kg`}
       right={() => (
         <ListItemMenu
-          dietFeedId={props.id}
-          screenContext={screenContext}
+          dietFeedId={diet_feed.id}
+          onEdit={onEdit}
+          onDelete={onDelete}
         />
       )}
     />
   )
-}
-
-// const DietFeedsList = (
-//   { dietFeeds, navigation }: { dietFeeds: DietFeed[], navigation: navigationProps }
-// ) => {
-//   const feeds = useAppSelector(state => state.feeds.records)
-//   const findFeedName = useCallback((feedId: string) => feeds.find(feed => feed.id === feedId)?.name || '', [feeds])
-//   return (
-//     <FlatList
-//       data={dietFeeds}
-//       renderItem={({ item }) => (
-//         <ListItem
-//           dietFeed={item}
-//           feedName={findFeedName(item.feed.id)}
-//           navigation={navigation}
-//         />
-//       )}
-//       keyExtractor={(item) => item.dietFeedId}
-//       ListFooterComponent={() => <View style={{ height: 88 }} />}
-//     />
-//   )
-// }
+})
 
 export default memo(DietFeedItem)

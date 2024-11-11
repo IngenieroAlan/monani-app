@@ -1,3 +1,4 @@
+import DietFeedRoute from '@/components/dietFeedRoute/DietFeedRoute'
 import SearchMother from '@/components/genealogyRoute/SearchMother'
 import SearchOffspring from '@/components/genealogyRoute/SearchOffspring'
 import database from '@/database'
@@ -47,9 +48,15 @@ export const Navigator = () => {
           name='AnnualEarningsView'
           component={AnnualEarningsView}
         />
+
         <Stack.Screen
           name='CattleDetailsLayout'
           component={CattleTopStack}
+        />
+        <Stack.Screen
+          name='DietFeedRoute'
+          component={DietFeedRoute}
+          options={{ presentation: 'modal' }}
         />
         <Stack.Screen
           name='SearchMotherView'

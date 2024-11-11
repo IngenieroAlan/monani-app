@@ -1,5 +1,5 @@
 
-import React, { memo, ReactNode, useState } from "react";
+import React, { memo, ReactNode, useEffect, useState } from "react";
 import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { FlatList, SafeAreaView, StyleSheet, View } from "react-native";
 // import { FlatList } from "react-native-gesture-handler";
@@ -55,6 +55,10 @@ const RenderController = (
   const [searchBarFocused, setSearchBarFocused] = useState(false)
   const [activeList, setActiveList] = useState(false)
 
+  useEffect(() => {
+    setSearchQuery(props.initialQuery || '')
+  }, [props.initialQuery])
+
   const renderItem = ({ item }: { item: SearchBarDataItem }) => {
     // if the searchQuery is empty, return null
     if (searchQuery === "") {
@@ -74,19 +78,19 @@ const RenderController = (
     }
     // filter of the description
     // if the description is not null and a string and the description includes the searchQuery
-    if (item.description &&
-      typeof item.description === 'string' &&
-      item.description.toUpperCase().includes(searchQuery.toUpperCase().trim().replace(/\s/g, ""))) {
-      return <Item
-        id={item.id}
-        title={item.title}
-        description={item.description}
-        value={item.value}
-        onChange={props.onChange}
-        setSearchQuery={setSearchQuery}
-        setSearchBarFocused={setSearchBarFocused}
-      />;
-    }
+    // if (item.description &&
+    //   typeof item.description === 'string' &&
+    //   item.description.toUpperCase().includes(searchQuery.toUpperCase().trim().replace(/\s/g, ""))) {
+    //   return <Item
+    //     id={item.id}
+    //     title={item.title}
+    //     description={item.description}
+    //     value={item.value}
+    //     onChange={props.onChange}
+    //     setSearchQuery={setSearchQuery}
+    //     setSearchBarFocused={setSearchBarFocused}
+    //   />;
+    // }
     return null;
   }
 

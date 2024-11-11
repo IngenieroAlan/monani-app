@@ -66,7 +66,7 @@ const DietFeedForm = (
       <MDropdown
         name='feedProportion'
         control={control}
-        label='Tipo de alimento*'
+        label='Proporción*'
         options={dropdownOptions}
         error={errors.feedProportion !== undefined}
         errroMessage={errors.feedProportion?.message}
@@ -80,7 +80,9 @@ const DietFeedForm = (
         helperText={errors.quantity?.message ? errors.quantity?.message : ''}
         more={{
           theme: { colors: { background: theme.colors.elevation.level0 } },
-          keyboardType: 'numeric'
+          keyboardType: 'numeric',
+          value: quantity.value ? String(quantity.value) : '',
+          onChangeText: (value: string) => quantity.onChange(parseFloat(value)),
         }}
       />
       <Text variant='labelSmall'>
@@ -92,4 +94,4 @@ const DietFeedForm = (
   )
 }
 
-export default memo(DietFeedForm);
+export default DietFeedForm;

@@ -1,6 +1,7 @@
 import useNotifications from '@/hooks/collections/useNotifications'
 import { deleteAllNotifications, markAllAsRead } from '@/utils/notifications'
 import notifee from '@notifee/react-native'
+import { useNavigation } from '@react-navigation/native'
 import { useCallback } from 'react'
 import { Appbar, Tooltip } from 'react-native-paper'
 
@@ -27,6 +28,7 @@ const CheckAllAction = () => {
 
 const NotificationsAppbar = () => {
   const { notifications } = useNotifications()
+  const navigation = useNavigation()
 
   const onDeleteAll = useCallback(async () => {
     await notifee.cancelDisplayedNotifications()
@@ -46,6 +48,10 @@ const NotificationsAppbar = () => {
           </Tooltip>
         </>
       )}
+      <Appbar.Action
+        icon='application-braces-outline'
+        onPress={() => navigation.navigate('NotificationsTest')}
+      />
     </Appbar>
   )
 }

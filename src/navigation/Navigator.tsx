@@ -6,6 +6,7 @@ import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
 import { getCattles } from '@/redux/slices/cattles'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
+import NotificationsTestStack from '@/views/notificationsTest/NotificationsTestStack'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
@@ -60,6 +61,10 @@ export const Navigator = () => {
           name='SearchOffspringView'
           component={SearchOffspring}
           options={{ presentation: 'modal' }}
+        />
+        <Stack.Screen
+          name='NotificationsTest'
+          component={NotificationsTestStack}
         />
       </Stack.Navigator>
     </View>

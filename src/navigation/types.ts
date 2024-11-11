@@ -15,6 +15,7 @@ export type RootStackParamList = {
   CattleDetailsLayout: NavigatorScreenParams<CattleInfoParamsList>;
   SearchMotherView: { edit: boolean } | undefined;
   SearchOffspringView: undefined;
+  NotificationsTest: undefined
 };
 
 export type BottomTabsParamList = {

@@ -42,10 +42,10 @@ export const CattleDietDetails = observeCattle(({ cattle }: { cattle: Cattle }) 
   const [index, setIndex] = useState(0);
   const navigation = useNavigation()
   const [totalAmount, setTotalAmount] = useState(0)
+
   const feeds = useAppSelector((state: RootState) => state.feeds.records)
   const { getFeeds } = useFeeds()
   const dispatch = useAppDispatch()
-
   useEffect(() => {
     const fetchFeeds = async () => {
       dispatch(setFeeds(await getFeeds()))
@@ -54,7 +54,6 @@ export const CattleDietDetails = observeCattle(({ cattle }: { cattle: Cattle }) 
     if (feeds.length === 0) fetchFeeds()
   }, [feeds])
 
-  const findFeedName = useCallback((feedId: string) => feeds.find(feed => feed.id === feedId)?.name || '', [feeds])
 
   const onEdit = useCallback((dietFeedId: string) => {
     navigation.navigate('DietFeedRoute', { dietFeedId, modify: true });
@@ -85,7 +84,6 @@ export const CattleDietDetails = observeCattle(({ cattle }: { cattle: Cattle }) 
         renderItem={({ item }) => (
           <DietFeedItem
             diet_feed={item}
-            feedName={findFeedName(item.feed.id)}
             onEdit={onEdit}
             onDelete={onDelete}
           />

@@ -55,7 +55,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
     const { feedProportion, feed, quantity } = getValues();
     const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined;
     const feedAmount = feedProportion === 'Fija' ? quantity : cattleInfo!.weight * (quantity / 100);
-
+    
     const Action = async () => {
       try {
         if (modify && dietFeed) {
@@ -84,7 +84,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
 
     Action();
     navigation.goBack();
-  }, [cattleInfo, diet, dietFeed, getValues, modify, navigation, reset]);
+  }, [cattleInfo, diet, dietFeed, currentFeed, getValues, modify, navigation, reset]);
 
   return (
     <>

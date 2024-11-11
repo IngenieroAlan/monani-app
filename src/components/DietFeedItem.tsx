@@ -1,7 +1,9 @@
 import DietFeed, { FeedProportion } from '@/database/models/DietFeed'
 import { TableName } from '@/database/schema'
+import { useAppSelector } from '@/hooks/useRedux'
+import { RootState } from '@/redux/store/store'
 import { withObservables } from '@nozbe/watermelondb/react'
-import { memo, useState } from 'react'
+import { memo, useCallback, useState } from 'react'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -65,16 +67,17 @@ const ListItemMenu = (
 
 type DietFeedProps = {
   diet_feed: DietFeed,
-  feedName: string,
   onEdit: (dietFeedId: string) => void,
   onDelete: (dietFeedId: string) => void
 }
 
-const DietFeedItem = observeDietFeed(({ diet_feed, feedName, onEdit, onDelete }: DietFeedProps) => {
+const DietFeedItem = observeDietFeed(({ diet_feed, onEdit, onDelete }: DietFeedProps) => {
+  const feeds = useAppSelector((state: RootState) => state.feeds.records)
+  const findFeedName = useCallback((feedId: string) => feeds.find(feed => feed.id === feedId)?.name || '', [feeds])
   return (
     <List.Item
       style={{ paddingVertical: 2, paddingRight: 8 }}
-      title={feedName}
+      title={findFeedName(diet_feed.feed.id)}
       description={diet_feed.feedProportion === 'Por porcentaje' ? `${diet_feed.percentage}%` : `${diet_feed.feedAmount} kg`}
       right={() => (
         <ListItemMenu

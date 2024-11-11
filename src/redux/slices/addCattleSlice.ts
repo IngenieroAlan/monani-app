@@ -17,7 +17,7 @@ export interface CattleState {
 const initialState: CattleState = {
 	cattle: {
 		name: '',
-		weight: 500,
+		weight: undefined as any,
 		bornAt: undefined,
 		tagId: '',
 		tagCattleNumber: '',

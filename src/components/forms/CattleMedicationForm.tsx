@@ -1,33 +1,27 @@
-import DietFeedSchema from "@/validationSchemas/DietFeedSchema";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { Control, Controller, FormState } from "react-hook-form";
-import { FlatList, View } from "react-native";
-import { HelperText, Searchbar, useTheme } from "react-native-paper";
-import { z } from "zod";
-import { CustomTextInput } from "../CustomTextInput";
-import MDropdown from "../MDropdown";
-import SearchFeedList from "../addCattle/SearchFeedList";
-import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
+import useMedications from "@/hooks/collections/useMedications";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import useFeeds from "@/hooks/collections/useFeeds";
-import { setFeeds } from "@/redux/slices/feedsSlice";
+import { setMedications } from "@/redux/slices/medicationsSlice";
 import { RootState } from "@/redux/store/store";
 import { ACMedication } from "@/validationSchemas/ACMedicationSchema";
+import { memo, useEffect, useMemo } from "react";
+import { Control, Controller, FormState, useController } from "react-hook-form";
+import { View } from "react-native";
+import { useTheme } from "react-native-paper";
 import { DatePickerInput } from "react-native-paper-dates";
-import useMedications from "@/hooks/collections/useMedications";
-import { setMedications } from "@/redux/slices/medicationsSlice";
+import { CustomTextInput } from "../CustomTextInput";
+import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
+import MDatePickerInput from "../MDatePickerInput";
 
 
-const CattleMedicationForm = (
-  { control, formState, medicationName }:
-    {
-      control: Control<ACMedication>;
-      formState: FormState<ACMedication>;
-      medicationName?: string;
-    }
+const CattleMedicationForm = ({ control, formState, medicationName }: {
+  control: Control<ACMedication>;
+  formState: FormState<ACMedication>;
+  medicationName?: string;
+}
 ) => {
   const theme = useTheme();
   const { errors } = formState;
+  const { field: dosesPerYear } = useController({ name: 'dosesPerYear', control });
 
   const medications = useAppSelector((state: RootState) => state.medications.records)
   const { getMedications } = useMedications()
@@ -72,28 +66,14 @@ const CattleMedicationForm = (
         maxHeight={500}
         style={{ backgroundColor: theme.colors.surface, borderWidth: 1 }}
       />
-      <View style={{
-        flexDirection: 'row',
-      }}>
-        <Controller
-          name="nextDoseAt"
-          control={control}
-          render={({ field: { onChange, value } }) => {
-            return (
-              <DatePickerInput
-                locale="es"
-                label="Fecha de próxima dosis"
-                value={value}
-                onChange={(d) => onChange(d)}
-                inputMode="start"
-                mode="outlined"
-                style={{ flexDirection: 'row', justifyContent: 'flex-start', alignSelf: 'flex-start' }}
-              />
-            )
-          }}
-        />
-      </View>
-
+      <MDatePickerInput
+        label="Fecha de próxima dosis*"
+        inputMode="start"
+        control={control}
+        name="nextDoseAt"
+        errors={errors.nextDoseAt}
+        minDate={new Date()}
+      />
       <CustomTextInput
         name='dosesPerYear'
         control={control}
@@ -103,6 +83,8 @@ const CattleMedicationForm = (
         more={{
           theme: { colors: { background: theme.colors.surface } },
           keyboardType: 'numeric',
+          value: dosesPerYear.value ? String(dosesPerYear.value) : '',
+          onChangeText: (value: string) => dosesPerYear.onChange(parseFloat(value)),
         }}
       />
     </View>

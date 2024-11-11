@@ -1,13 +1,15 @@
-import { useAppSelector } from "@/hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { RootState } from "@/redux/store/store";
 import { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo } from "react";
 import { Control, FormState, useController } from "react-hook-form";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { CustomTextInput } from "../CustomTextInput";
 import MDropdown from "../MDropdown";
 import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
+import useFeeds from "@/hooks/collections/useFeeds";
+import { setFeeds } from "@/redux/slices/feedsSlice";
 
 const DietFeedForm = (
   { control, formState, feedName, cattleWeight }:
@@ -30,6 +32,16 @@ const DietFeedForm = (
   }, [quantity.value])
 
   const feeds = useAppSelector((state: RootState) => state.feeds.records)
+  const { getFeeds } = useFeeds()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    const fetchFeeds = async () => {
+      dispatch(setFeeds(await getFeeds()))
+    }
+
+    if (feeds.length === 0) fetchFeeds()
+  }, [feeds])
 
   const dropdownOptions = [
     {

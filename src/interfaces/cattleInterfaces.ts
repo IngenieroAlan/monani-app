@@ -22,17 +22,6 @@ interface ACCattle {
     isSold: boolean;
     dietId: string;
 }
-interface ACCattleArchive {
-    cattleId: string;
-    notes?: string;
-    archivedAt: Date;
-    reason: ArchiveReason;
-}
-interface ACCattleSale {
-    cattleId: string;
-    soldBy: number;
-    soldAt: Date;
-}
 interface ACDiet {
     dietId: string;
     waterAmount: number | undefined;
@@ -54,13 +43,6 @@ interface ACFeed {
     name: string;
     feedType: FeedType;
 }
-interface ACDietFeedItem extends ACDietFeed {
-    FeedName: string;
-}
-interface ACGenealogy {
-    motherId: string;
-    offspringId: string;
-}
 interface ACMedication {
     medicationId: string;
     name: string;
@@ -77,33 +59,13 @@ interface ACMedicationScheduleItem extends ACMedicationSchedule {
     medicationName: string;
     medicationType: MedicationType;
 }
-interface ACMilkReport {
-    cattleId: string;
-    milkProductionId: string;
-    reportedAt: Date;
-    liters: number;
-}
-interface ACWeightReport {
-    cattleId: string;
-    weight: number;
-    weightDifference: number;
-    daysPassed: number;
-    avgDailyDifference: number;
-    weighedAt: Date;
-}
 
 export type {
     ACCattle,
-    ACCattleArchive,
-    ACCattleSale,
     ACDiet,
     ACDietFeed,
     ACFeed,
-    ACDietFeedItem,
-    ACGenealogy,
     ACMedication,
     ACMedicationSchedule,
     ACMedicationScheduleItem,
-    ACMilkReport,
-    ACWeightReport
 }

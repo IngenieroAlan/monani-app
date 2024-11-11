@@ -1,5 +1,4 @@
 import DietFeedForm from "@/components/forms/DietFeedForm";
-import Feed from "@/database/models/Feed";
 import useDiet from "@/hooks/collections/useDiet";
 import useDietFeeds from "@/hooks/collections/useDietFeeds";
 import { useAppSelector } from "@/hooks/useRedux";

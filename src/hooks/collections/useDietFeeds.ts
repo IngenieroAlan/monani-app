@@ -15,7 +15,7 @@ const useDietFeeds = (cattle: Cattle) => {
     return () => subscription.unsubscribe()
   }, [database, cattle.dietFeeds])
 
-  return { dietFeeds: dietFeeds }
+  return { dietFeeds }
 }
 
 export default useDietFeeds

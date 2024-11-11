@@ -9,16 +9,13 @@ import { useAppDispatch } from '@/hooks/useRedux'
 import useScrollFab from '@/hooks/useScrollFab'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
-import { useRef } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
 import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
 
 const Medications = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
-  const flatListRef = useRef<FlatList>(null)
   const { onScroll, isFabExtended } = useScrollFab()
 
   return (
@@ -27,10 +24,7 @@ const Medications = () => {
         <Appbar.BackAction onPress={navigation.goBack} />
         <Appbar.Content title='Medicamentos' />
       </Appbar.Header>
-      <MedicationsList
-        ref={flatListRef}
-        onScroll={onScroll}
-      />
+      <MedicationsList onScroll={onScroll} />
       <AnimatedFAB
         style={styles.animatedFab}
         icon='plus'

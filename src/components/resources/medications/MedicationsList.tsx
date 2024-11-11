@@ -1,12 +1,12 @@
 import Medication from '@/database/models/Medication'
 import useMedications from '@/hooks/collections/useMedications'
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setMedications, setSelectedMedication } from '@/redux/slices/medicationsSlice'
+import { useAppDispatch } from '@/hooks/useRedux'
+import { setSelectedMedication } from '@/redux/slices/medicationsSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
-import { RootState } from '@/redux/store/store'
 import { withObservables } from '@nozbe/watermelondb/react'
-import { forwardRef, memo, Ref, useEffect, useState } from 'react'
-import { FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
+import { FlashList } from '@shopify/flash-list'
+import { memo, useEffect, useState } from 'react'
+import { NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DELETE_MEDICATION_DIALOG_ID } from './DeleteMedicationDialog'
@@ -79,38 +79,23 @@ const ListItemMenu = ({ medication }: { medication: Medication }) => {
   )
 }
 
-const ListItem = memo(
-  observeMedtication(({ medication }: { medication: Medication }) => {
-    return (
-      <List.Item
-        style={{ paddingVertical: 2, paddingRight: 8 }}
-        title={medication.name}
-        description={medication.medicationType}
-        right={() => <ListItemMenu medication={medication} />}
-      />
-    )
-  })
-)
+const ListItem = observeMedtication(({ medication }: { medication: Medication }) => {
+  return (
+    <List.Item
+      style={{ paddingRight: 4 }}
+      title={medication.name}
+      description={medication.medicationType}
+      right={() => <ListItemMenu medication={medication} />}
+    />
+  )
+})
 
-const MedicationsList = (
-  { onScroll }: { onScroll?: (e: NativeSyntheticEvent<NativeScrollEvent>) => void },
-  ref?: Ref<FlatList>
-) => {
-  const dispatch = useAppDispatch()
-  const { getMedications } = useMedications()
-  const medications = useAppSelector((state: RootState) => state.medications.records)
-
-  useEffect(() => {
-    const fetchMedications = async () => {
-      dispatch(setMedications(await getMedications()))
-    }
-
-    if (medications.length === 0) fetchMedications()
-  }, [medications])
+const MedicationsList = ({ onScroll }: { onScroll?: (e: NativeSyntheticEvent<NativeScrollEvent>) => void }) => {
+  const { medications } = useMedications()
 
   return (
-    <FlatList
-      ref={ref}
+    <FlashList
+      estimatedItemSize={81}
       onScroll={onScroll}
       data={medications}
       renderItem={({ item }) => <ListItem medication={item} />}
@@ -120,4 +105,4 @@ const MedicationsList = (
   )
 }
 
-export default memo(forwardRef(MedicationsList))
+export default memo(MedicationsList)

@@ -1,10 +1,9 @@
 import DismissDialog from '@/components/DismissDialog'
 import MedicationForm, { MedicationFields } from '@/components/forms/MedicationForm'
-import useMedications from '@/hooks/collections/useMedications'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { addMedication } from '@/redux/slices/medicationsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
+import { createMedication } from '@/utils/medications'
 import MedicationSchema from '@/validationSchemas/MedicationSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCallback } from 'react'
@@ -19,7 +18,6 @@ const DISMISS_DIALOG_ID = 'createMedicationDismissDialog'
 
 const CreateMedicationDialog = () => {
   const dispatch = useAppDispatch()
-  const { createMedication } = useMedications()
   const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[CREATE_MEDICATION_DIALOG_ID])
   const { control, handleSubmit, reset, formState } = useForm<MedicationFields>({
     defaultValues: {
@@ -44,7 +42,7 @@ const CreateMedicationDialog = () => {
   }, [])
 
   const onSubmit = useCallback(async (data: MedicationFields) => {
-    dispatch(addMedication(await createMedication(data)))
+    await createMedication(data)
 
     dispatch(show(MedicationsSnackbarId.STORED_MEDICATION))
     dismissChanges()

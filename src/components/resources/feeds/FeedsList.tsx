@@ -1,12 +1,12 @@
 import Feed from '@/database/models/Feed'
 import useFeeds from '@/hooks/collections/useFeeds'
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setFeeds, setSelectedFeed } from '@/redux/slices/feedsSlice'
+import { useAppDispatch } from '@/hooks/useRedux'
+import { setSelectedFeed } from '@/redux/slices/feedsSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
-import { RootState } from '@/redux/store/store'
 import { withObservables } from '@nozbe/watermelondb/react'
-import { forwardRef, memo, Ref, useEffect, useState } from 'react'
-import { FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
+import { FlashList } from '@shopify/flash-list'
+import { memo, useEffect, useState } from 'react'
+import { NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
 import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DELETE_FEED_DIALOG_ID } from './DeleteFeedDialog'
@@ -79,38 +79,23 @@ const ListItemMenu = ({ feed }: { feed: Feed }) => {
   )
 }
 
-const ListItem = memo(
-  observeFeed(({ feed }: { feed: Feed }) => {
-    return (
-      <List.Item
-        style={{ paddingVertical: 2, paddingRight: 8 }}
-        title={feed.name}
-        description={feed.feedType}
-        right={() => <ListItemMenu feed={feed} />}
-      />
-    )
-  })
-)
+const ListItem = observeFeed(({ feed }: { feed: Feed }) => {
+  return (
+    <List.Item
+      style={{ paddingRight: 4 }}
+      title={feed.name}
+      description={feed.feedType}
+      right={() => <ListItemMenu feed={feed} />}
+    />
+  )
+})
 
-const FeedsList = (
-  { onScroll }: { onScroll?: (e: NativeSyntheticEvent<NativeScrollEvent>) => void },
-  ref?: Ref<FlatList>
-) => {
-  const dispatch = useAppDispatch()
-  const feeds = useAppSelector((state: RootState) => state.feeds.records)
-  const { getFeeds } = useFeeds()
-
-  useEffect(() => {
-    const fetchFeeds = async () => {
-      dispatch(setFeeds(await getFeeds()))
-    }
-
-    if (feeds.length === 0) fetchFeeds()
-  }, [feeds])
+const FeedsList = ({ onScroll }: { onScroll?: (e: NativeSyntheticEvent<NativeScrollEvent>) => void }) => {
+  const { feeds } = useFeeds()
 
   return (
-    <FlatList
-      ref={ref}
+    <FlashList
+      estimatedItemSize={81}
       onScroll={onScroll}
       data={feeds}
       renderItem={({ item }) => <ListItem feed={item} />}
@@ -120,4 +105,4 @@ const FeedsList = (
   )
 }
 
-export default memo(forwardRef(FeedsList))
+export default memo(FeedsList)

@@ -1,13 +1,14 @@
 import Cattle from '@/database/models/Cattle'
-import notifee, { AndroidDefaults, TimestampTrigger, TriggerType } from '@notifee/react-native'
+import notifee, { AndroidDefaults, Notification, TimestampTrigger, TriggerType } from '@notifee/react-native'
 import { CattleNotificationEventType, NotificationData } from './types'
 
 type NotificationProps = {
+  id?: string
   title: string
   subtitle?: string
   body: string
   data: NotificationData
-  triggerTimestamp: number 
+  triggerTimestamp: number
 }
 
 export const createTriggerNotification = async (notificationProps: NotificationProps) => {
@@ -16,42 +17,45 @@ export const createTriggerNotification = async (notificationProps: NotificationP
     timestamp: notificationProps.triggerTimestamp
   }
 
-  await notifee.createTriggerNotification(
-    {
-      title: notificationProps.title,
-      subtitle: notificationProps.subtitle,
-      body: notificationProps.body,
-      data: notificationProps.data,
-      android: {
-        defaults: [AndroidDefaults.SOUND],
-        channelId: 'monani',
-        showTimestamp: true,
-        pressAction: { id: 'default' },
-        actions: [
-          {
-            title: 'Marcar como leído',
-            pressAction: { id: CattleNotificationEventType.MARK_AS_READ }
-          }
-        ]
-      },
-      ios: { categoryId: 'monani' }
+  const notification: Notification = {
+    title: notificationProps.title,
+    subtitle: notificationProps.subtitle,
+    body: notificationProps.body,
+    data: notificationProps.data,
+    android: {
+      defaults: [AndroidDefaults.SOUND],
+      channelId: 'monani',
+      showTimestamp: true,
+      pressAction: { id: 'default' },
+      actions: [
+        {
+          title: 'Marcar como leído',
+          pressAction: { id: CattleNotificationEventType.MARK_AS_READ }
+        }
+      ]
     },
-    trigger
-  )
+    ios: { categoryId: 'monani' }
+  }
+
+  if (notificationProps.id) notification['id'] = notificationProps.id
+
+  await notifee.createTriggerNotification(notification, trigger)
 }
 
 export const createQuarantineNotification = async (
   cattle: Cattle | { id: string; name?: string; tagId: string },
-  triggerTimestamp: number
+  triggerTimestamp: number,
+  id?: string
 ) => {
-  const { id, name, tagId } = cattle
+  const { id: cattleId, name, tagId } = cattle
 
   await createTriggerNotification({
+    id,
     title: 'Cuarentena terminada',
     subtitle: name ?? `No. ${tagId}`,
     body: `La cuarentena de la vaca con <b>No. ${tagId}</b> termina hoy.`,
     data: {
-      cattleId: id,
+      cattleId,
       type: 'quarantine',
       timestamp: triggerTimestamp,
       extraInfo: JSON.stringify([tagId])
@@ -62,16 +66,18 @@ export const createQuarantineNotification = async (
 
 export const createPregnancyNotification = async (
   cattle: Cattle | { id: string; name?: string; tagId: string },
-  triggerTimestamp: number
+  triggerTimestamp: number,
+  id?: string
 ) => {
-  const { id, name, tagId } = cattle
+  const { id: cattleId, name, tagId } = cattle
 
   await createTriggerNotification({
+    id,
     title: 'Día de parto',
     subtitle: name ?? `No. ${tagId}`,
     body: `La vaca con <b>No. ${tagId}</b> tiene un parto programado para hoy.`,
     data: {
-      cattleId: id,
+      cattleId,
       type: 'birth',
       timestamp: triggerTimestamp,
       extraInfo: JSON.stringify([tagId])
@@ -85,16 +91,18 @@ export const createMedicationNotification = async (
   medicationName: string,
   foreignId: string,
   monthInterval: number,
-  triggerTimestamp: number
+  triggerTimestamp: number,
+  id?: string
 ) => {
-  const { id, name, tagId } = cattle
+  const { id: cattleId, name, tagId } = cattle
 
   await createTriggerNotification({
+    id,
     title: 'Medicación programada',
     subtitle: name ?? `No. ${tagId}`,
     body: `Dosis de <b>${medicationName}</b> programada para la vaca con <b>No. ${tagId}</b>.`,
     data: {
-      cattleId: id,
+      cattleId,
       type: 'medication',
       timestamp: triggerTimestamp,
       extraInfo: JSON.stringify([medicationName, tagId]),

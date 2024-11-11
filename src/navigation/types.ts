@@ -41,7 +41,7 @@ export type AddCattleStackParamsList = {
   DietSettings: undefined;
   DietFeed:
   | {
-    medicationScheduleId: string;
+    dietFeedId: string;
     modify: boolean;
   }
   | undefined;

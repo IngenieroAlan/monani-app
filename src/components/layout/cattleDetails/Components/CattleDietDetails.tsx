@@ -3,10 +3,6 @@ import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import useDiet from "@/hooks/collections/useDiet";
 import useDietFeeds from "@/hooks/collections/useDietFeeds";
-import useFeeds from "@/hooks/collections/useFeeds";
-import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { setFeeds } from "@/redux/slices/feedsSlice";
-import { RootState } from "@/redux/store/store";
 import { cattleDetails } from "@/styles/main";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { useNavigation } from "@react-navigation/native";
@@ -42,18 +38,6 @@ export const CattleDietDetails = observeCattle(({ cattle }: { cattle: Cattle }) 
   const [index, setIndex] = useState(0);
   const navigation = useNavigation()
   const [totalAmount, setTotalAmount] = useState(0)
-
-  const feeds = useAppSelector((state: RootState) => state.feeds.records)
-  const { getFeeds } = useFeeds()
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    const fetchFeeds = async () => {
-      dispatch(setFeeds(await getFeeds()))
-    }
-
-    if (feeds.length === 0) fetchFeeds()
-  }, [feeds])
-
 
   const onEdit = useCallback((dietFeedId: string) => {
     navigation.navigate('DietFeedRoute', { dietFeedId, modify: true });

@@ -1,10 +1,10 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
+import useFeeds from '@/hooks/collections/useFeeds'
 import useMedications from "@/hooks/collections/useMedications"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { ACMedicationScheduleItem } from "@/interfaces/cattleInterfaces"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
-import { setMedications } from "@/redux/slices/medicationsSlice"
 import { RootState } from "@/redux/store/store"
 import { createCattle } from "@/utils"
 import { DietFeedFields } from "@/utils/createCattle"
@@ -18,20 +18,10 @@ export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattl
 export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const medications = useAppSelector((state: RootState) => state.medications.records)
-  const { getMedications } = useMedications()
+  const { medications } = useMedications()
+  const { feeds } = useFeeds()
   const { cattle, diet, dietFeeds, medicationSchedules } = useAppSelector((state: RootState) => state.addCattle)
   const [currentMedicationSchedules, setCurrentMedicationSchedules] = useState<ACMedicationScheduleItem[]>([])
-
-  const feeds = useAppSelector((state: RootState) => state.feeds.records)
-
-  useEffect(() => {
-    const fetchMedications = async () => {
-      dispatch(setMedications(await getMedications()))
-    }
-
-    if (medications.length === 0) fetchMedications()
-  }, [medications])
 
   useEffect(() => {
     setCurrentMedicationSchedules(

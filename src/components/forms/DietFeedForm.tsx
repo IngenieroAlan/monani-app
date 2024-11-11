@@ -1,29 +1,28 @@
-import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { RootState } from "@/redux/store/store";
-import { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
-import { memo, useEffect, useMemo } from "react";
-import { Control, FormState, useController } from "react-hook-form";
-import { View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
-import { CustomTextInput } from "../CustomTextInput";
-import MDropdown from "../MDropdown";
-import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
-import useFeeds from "@/hooks/collections/useFeeds";
-import { setFeeds } from "@/redux/slices/feedsSlice";
+import useFeeds from '@/hooks/collections/useFeeds'
+import { DietFeedFields } from '@/validationSchemas/DietFeedSchema'
+import { useMemo } from 'react'
+import { Control, FormState, useController } from 'react-hook-form'
+import { View } from 'react-native'
+import { Text, useTheme } from 'react-native-paper'
+import { CustomTextInput } from '../CustomTextInput'
+import MDropdown from '../MDropdown'
+import MSearchBar, { SearchBarDataItem } from '../MSearchBar'
 
-const DietFeedForm = (
-  { control, formState, feedName, cattleWeight }:
-    {
-      control: Control<DietFeedFields>;
-      formState: FormState<DietFeedFields>;
-      feedName?: string;
-      cattleWeight: number;
-    }
-) => {
-  const theme = useTheme();
-  const { errors } = formState;
-  const { field: feedProportion } = useController({ name: 'feedProportion', control });
-  const { field: quantity } = useController({ name: 'quantity', control });
+const DietFeedForm = ({
+  control,
+  formState,
+  feedName,
+  cattleWeight
+}: {
+  control: Control<DietFeedFields>
+  formState: FormState<DietFeedFields>
+  feedName?: string
+  cattleWeight: number
+}) => {
+  const theme = useTheme()
+  const { errors } = formState
+  const { field: feedProportion } = useController({ name: 'feedProportion', control })
+  const { field: quantity } = useController({ name: 'quantity', control })
 
   const formattedWeight = useMemo(() => {
     const equivalentWeight = cattleWeight * ((quantity.value ?? 0) / 100)
@@ -31,17 +30,7 @@ const DietFeedForm = (
     return `${Math.trunc(equivalentWeight)}.${decimals ? decimals.padEnd(3, '0') : '000'}`
   }, [quantity.value])
 
-  const feeds = useAppSelector((state: RootState) => state.feeds.records)
-  const { getFeeds } = useFeeds()
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    const fetchFeeds = async () => {
-      dispatch(setFeeds(await getFeeds()))
-    }
-
-    if (feeds.length === 0) fetchFeeds()
-  }, [feeds])
+  const { feeds } = useFeeds()
 
   const dropdownOptions = [
     {
@@ -54,22 +43,25 @@ const DietFeedForm = (
     }
   ]
 
-  const feedData: SearchBarDataItem[] = useMemo(() =>
-    feeds.map(feed => ({
-      id: feed.id,
-      title: feed.name,
-      description: feed.feedType,
-      value: feed
-    })), [feeds])
+  const feedData: SearchBarDataItem[] = useMemo(
+    () =>
+      feeds.map((feed) => ({
+        id: feed.id,
+        title: feed.name,
+        description: feed.feedType,
+        value: feed
+      })),
+    [feeds]
+  )
 
   return (
     <View style={{ padding: 16, gap: 10, flex: 1, backgroundColor: theme.colors.surface }}>
       <MSearchBar
         name='feed'
         control={control}
-        placeholder="Alimento"
+        placeholder='Alimento'
         initialQuery={feedName}
-        mode="bar"
+        mode='bar'
         theme={{ roundness: 1 }}
         data={feedData}
         errroMessage={errors.feed?.message ? String(errors.feed.message) : ''}
@@ -94,16 +86,14 @@ const DietFeedForm = (
           theme: { colors: { background: theme.colors.elevation.level0 } },
           keyboardType: 'numeric',
           value: quantity.value ? String(quantity.value) : '',
-          onChangeText: (value: string) => quantity.onChange(parseFloat(value)),
+          onChangeText: (value: string) => quantity.onChange(parseFloat(value))
         }}
       />
       <Text variant='labelSmall'>
-        {feedProportion.value === 'Por porcentaje' ?
-          `Equivalente a ${formattedWeight} kg.` : ''}
+        {feedProportion.value === 'Por porcentaje' ? `Equivalente a ${formattedWeight} kg.` : ''}
       </Text>
-
     </View>
   )
 }
 
-export default DietFeedForm;
+export default DietFeedForm

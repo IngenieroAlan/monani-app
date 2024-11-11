@@ -1,6 +1,7 @@
 import DietFeedForm from "@/components/forms/DietFeedForm";
 import useDiet from "@/hooks/collections/useDiet";
 import useDietFeeds from "@/hooks/collections/useDietFeeds";
+import useFeeds from '@/hooks/collections/useFeeds';
 import { useAppSelector } from "@/hooks/useRedux";
 import { RootStackParamList } from "@/navigation/types";
 import { RootState } from "@/redux/store/store";
@@ -13,7 +14,7 @@ import { Appbar, Button, IconButton } from "react-native-paper";
 
 export default function DietFeedRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'DietFeedRoute'>) {
   const { cattleInfo } = useAppSelector((state: RootState) => state.cattles);
-  const feeds = useAppSelector((state: RootState) => state.feeds.records);
+  const { feeds } = useFeeds()
   const { dietFeeds } = useDietFeeds(cattleInfo!);
   const { diet } = useDiet(cattleInfo!);
 

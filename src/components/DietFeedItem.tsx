@@ -1,7 +1,6 @@
 import DietFeed, { FeedProportion } from '@/database/models/DietFeed'
 import { TableName } from '@/database/schema'
-import { useAppSelector } from '@/hooks/useRedux'
-import { RootState } from '@/redux/store/store'
+import useFeeds from '@/hooks/collections/useFeeds'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { memo, useCallback, useState } from 'react'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
@@ -72,7 +71,7 @@ type DietFeedProps = {
 }
 
 const DietFeedItem = observeDietFeed(({ diet_feed, onEdit, onDelete }: DietFeedProps) => {
-  const feeds = useAppSelector((state: RootState) => state.feeds.records)
+  const { feeds } = useFeeds()
   const findFeedName = useCallback((feedId: string) => feeds.find(feed => feed.id === feedId)?.name || '', [feeds])
   return (
     <List.Item

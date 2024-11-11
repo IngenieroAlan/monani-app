@@ -1,16 +1,12 @@
 import useMedications from "@/hooks/collections/useMedications";
-import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { setMedications } from "@/redux/slices/medicationsSlice";
-import { RootState } from "@/redux/store/store";
 import { ACMedication } from "@/validationSchemas/ACMedicationSchema";
-import { memo, useEffect, useMemo } from "react";
-import { Control, Controller, FormState, useController } from "react-hook-form";
+import { memo, useMemo } from "react";
+import { Control, FormState, useController } from "react-hook-form";
 import { View } from "react-native";
 import { useTheme } from "react-native-paper";
-import { DatePickerInput } from "react-native-paper-dates";
 import { CustomTextInput } from "../CustomTextInput";
-import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
 import MDatePickerInput from "../MDatePickerInput";
+import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
 
 
 const CattleMedicationForm = ({ control, formState, medicationName }: {
@@ -22,18 +18,7 @@ const CattleMedicationForm = ({ control, formState, medicationName }: {
   const theme = useTheme();
   const { errors } = formState;
   const { field: dosesPerYear } = useController({ name: 'dosesPerYear', control });
-
-  const medications = useAppSelector((state: RootState) => state.medications.records)
-  const { getMedications } = useMedications()
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    const fetchMedications = async () => {
-      dispatch(setMedications(await getMedications()))
-    }
-
-    if (medications.length === 0) fetchMedications()
-  }, [medications])
+  const { medications } = useMedications()
 
   const medicationData: SearchBarDataItem[] =
     useMemo(() =>

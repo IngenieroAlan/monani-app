@@ -1,13 +1,11 @@
-import DietFeedsItem from "@/components/DietFeedItem"
-import useFeeds from "@/hooks/collections/useFeeds"
+import DietFeedList from "@/components/addCattle/DietFeedList"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
-import { setFeeds } from "@/redux/slices/feedsSlice"
 import { RootState } from "@/redux/store/store"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useCallback, useEffect, useState } from "react"
-import { FlatList, StyleSheet, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { Appbar, Button, List, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
@@ -23,19 +21,13 @@ export const Diet = ({ navigation }: AddDietNavigationProps) => {
   useEffect(() => {
     if (diet.matterProportion === undefined || diet.waterAmount === undefined || dietFeeds.length === 0) {
       setIsValid(false)
-      console.log('1');
-
       return
     }
     if (dietFeeds.length > 0 && diet.matterProportion === 'Sin definir') {
-      console.log('2');
-
       setIsValid(true)
       return
     }
     if (dietFeeds.length > 0) {
-      console.log(totalAmount === diet.matterAmount);
-
       setIsValid(totalAmount === diet.matterAmount)
     }
   }, [dietFeeds, diet, totalAmount])
@@ -44,10 +36,10 @@ export const Diet = ({ navigation }: AddDietNavigationProps) => {
     setTotalAmount(dietFeeds.reduce((acc, dietFeed) => acc + parseFloat(dietFeed.feedAmount.toString()), 0))
   }, [dietFeeds, diet])
 
-  const goBack = () => {
+  const goBack = useCallback(() => {
     dispatch(reset())
     navigation.navigate('Ganado')
-  }
+  }, [dispatch, navigation])
 
   return (<>
     <Appbar.Header>
@@ -58,19 +50,10 @@ export const Diet = ({ navigation }: AddDietNavigationProps) => {
     </Appbar.Header>
 
     <SafeAreaProvider style={{ backgroundColor: theme.colors.surface }}>
-      <List.Subheader>{totalAmount}kg. en alimentos de {diet.matterAmount}kg. </List.Subheader>
-      <FlatList
-        data={dietFeeds}
-        renderItem={({ item }) => (
-          <DietFeedsItem
-            props={{ feedAmount: item.feedAmount, feedProportion: item.feedProportion, id: item.dietFeedId, percentage: item.percentage }}
-            feedName={item.feed.name}
-            screenContext={'AddCattle'}
-          />
-        )}
-        keyExtractor={(item) => item.dietFeedId}
-        ListFooterComponent={() => <View style={{ height: 88 }} />}
-      />
+      {diet.matterProportion !== 'Sin definir' &&
+        <List.Subheader>{totalAmount}kg. en alimentos de {diet.matterAmount}kg. </List.Subheader>
+      }
+      <DietFeedList dietFeeds={dietFeeds} />
       <View style={styles.navigationButtons}>
         <Button
           icon="arrow-left"

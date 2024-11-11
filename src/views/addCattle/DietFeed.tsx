@@ -2,31 +2,22 @@ import DietFeedForm from "@/components/forms/DietFeedForm";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
 import { modifyFeedDiet, saveDietFeed } from "@/redux/slices/addCattleSlice";
-import { RootState } from "@/redux/store/store";
 import DietFeedSchema, { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
 
 export default function DietFeed({ navigation, route }: NativeStackScreenProps<AddCattleStackParamsList, 'DietFeed'>) {
-  const { cattle, dietFeeds } = useAppSelector(state => state.addCattle)
-  const feeds = useAppSelector((state: RootState) => state.feeds.records)
-  const dispatch = useAppDispatch()
+  const { cattle, dietFeeds } = useAppSelector(state => state.addCattle);
+  const dispatch = useAppDispatch();
 
-  const dietFeedId = route.params?.dietFeedId || undefined;
+  const dietFeedId = route.params?.dietFeedId;
   const modify = route.params?.modify || false;
 
-  const dietFeed = dietFeedId ? dietFeeds.find(dietFeed => dietFeed.dietFeedId === dietFeedId) : undefined
-  const feed = undefined
-
-  const initialDietFeedValues: DietFeedFields | undefined = dietFeed ? {
-    feed: feed,
-    feedProportion: dietFeed.feedProportion,
-    quantity: dietFeed.feedProportion === 'Fija' ? dietFeed.feedAmount : dietFeed.percentage || 0
-  } : undefined
-  const feedName = dietFeed ? useMemo(() => (dietFeed.feed.name), [dietFeed]) : undefined
+  const dietFeed = useMemo(() => dietFeedId ? dietFeeds.find(dietFeed => dietFeed.dietFeedId === dietFeedId) : undefined, [dietFeedId, dietFeeds]);
+  const feedName = useMemo(() => dietFeed ? (dietFeed.feed.name) : undefined, [dietFeed])
 
   const {
     control,
@@ -35,27 +26,20 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
     getValues,
     formState
   } = useForm<DietFeedFields>({
-    defaultValues: initialDietFeedValues || {
+    defaultValues: {
       feed: undefined,
-      feedProportion: 'Por porcentaje',
-      quantity: undefined
+      feedProportion: dietFeed?.feedProportion || 'Por porcentaje',
+      quantity: dietFeed?.feedProportion === 'Fija' ? dietFeed.feedAmount : dietFeed?.percentage || undefined
     },
     resolver: zodResolver(DietFeedSchema),
     mode: 'onTouched'
   })
-  const { isSubmitting, isValid, errors, isDirty } = formState
+  const { isSubmitting, isValid, isDirty } = formState
 
   const onSubmit = useCallback(() => {
-    const feedProportion = getValues('feedProportion')
-    const feed = getValues('feed')
-    const quantity = getValues('quantity')
-    const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined
-    let feedAmount: number = 0;
-    if (feedProportion === 'Fija') {
-      feedAmount = quantity
-    } else if (feedProportion === 'Por porcentaje') {
-      feedAmount = cattle.weight * (quantity / 100)
-    }
+    const { feedProportion, feed, quantity } = getValues();
+    const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined;
+    const feedAmount = feedProportion === 'Fija' ? quantity : cattle!.weight * (quantity / 100);
 
     if (modify && dietFeedId) {
       dispatch(modifyFeedDiet({
@@ -83,7 +67,7 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
     }
 
     navigation.goBack()
-  }, [])
+  }, [dispatch, dietFeedId, modify, cattle, dietFeed, getValues, reset, navigation])
 
   return (<>
     <Appbar.Header>

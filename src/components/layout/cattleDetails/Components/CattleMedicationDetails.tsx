@@ -1,4 +1,4 @@
-import { MedicationSnackbarId } from "@/components/dietFeedRoute/MedicationSnackbarContainer";
+import { MedicationSnackbarId } from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer";
 import MedicationScheduleItem from "@/components/medicationSchedulesRoute/MedicationScheduleItem";
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";

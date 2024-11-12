@@ -10,7 +10,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
-import { MedicationSnackbarId } from "../dietFeedRoute/MedicationSnackbarContainer";
+import { MedicationSnackbarId } from "./MedicationSnackbarContainer";
 
 export default function MedicationScheduleRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'MedicationScheduleRoute'>) {
   const { cattleInfo } = useAppSelector(state => state.cattles)

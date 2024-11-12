@@ -69,8 +69,6 @@ export default function DietSettingsRoute({ navigation }: NativeStackScreenProps
 
     navigation.goBack()
   }, [diet, dispatch, getValues, cattleInfo, navigation])
-  console.log(diet);
-
 
   return (<>
     <Appbar.Header>

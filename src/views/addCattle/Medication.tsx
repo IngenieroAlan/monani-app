@@ -1,4 +1,4 @@
-import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/dietFeedRoute/MedicationSnackbarContainer";
+import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer";
 import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
 import useMedications from '@/hooks/collections/useMedications';
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";

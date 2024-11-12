@@ -1,4 +1,4 @@
-import DietSnackBarContainer from "@/components/dietFeedRoute/DietSnackBarContainer";
+import DietSnackBarContainer from "@/components/dietFeedRoute/DietContainerSnackbar";
 import { useAppSelector } from "@/hooks/useRedux";
 import { CattleDietDetails } from "../Components/CattleDietDetails";
 

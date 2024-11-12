@@ -12,7 +12,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
-import DietSnackBarContainer, { DietSnackbarId } from "./DietSnackBarContainer";
+import DietSnackBarContainer, { DietSnackbarId } from "./DietContainerSnackbar";
 
 export default function DietFeedRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'DietFeedRoute'>) {
   const { cattleInfo } = useAppSelector((state: RootState) => state.cattles);

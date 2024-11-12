@@ -6,7 +6,7 @@ import { withObservables } from '@nozbe/watermelondb/react'
 import { memo, useState } from 'react'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { DietSnackbarId } from './DietSnackBarContainer'
+import { DietSnackbarId } from './DietContainerSnackbar'
 
 const observeDietFeed = withObservables([TableName.DIET_FEED], ({ diet_feed }: { diet_feed: DietFeed }) => ({
   diet_feed

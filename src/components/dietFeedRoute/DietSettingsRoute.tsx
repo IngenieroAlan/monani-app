@@ -8,7 +8,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
-import DietSnackBarContainer, { DietSnackbarId } from "../dietFeedRoute/DietSnackBarContainer";
+import DietSnackBarContainer, { DietSnackbarId } from "./DietContainerSnackbar";
 import DietSettingsForm from "../forms/DietSettingsForm";
 import useDiet from "@/hooks/collections/useDiet";
 

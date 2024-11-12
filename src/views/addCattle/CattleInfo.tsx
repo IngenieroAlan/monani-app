@@ -1,4 +1,4 @@
-import CattleInfoForm from "@/components/addCattle/CattleInfoForm"
+import CattleInfoForm from "@/components/forms/CattleInfoForm"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList } from "@/navigation/types"
 import { CattleInfoFields, reset as resetCattle, saveCattleInfo } from "@/redux/slices/addCattleSlice"

@@ -1,14 +1,12 @@
 
 import Feed from "@/database/models/Feed";
 import useFeeds from "@/hooks/collections/useFeeds";
-import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { setFeeds } from "@/redux/slices/feedsSlice";
-import { RootState } from "@/redux/store/store";
+import { useAppDispatch } from "@/hooks/useRedux";
 import DietFeedSchema from "@/validationSchemas/DietFeedSchema";
-import React, { memo, useEffect } from "react";
-import { Control, Controller, FieldError, FieldPath, FieldValues } from "react-hook-form";
+import React, { memo } from "react";
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 import { FlatList, SafeAreaView, StyleSheet, View } from "react-native";
-import { HelperText, List, TouchableRipple, useTheme } from "react-native-paper";
+import { List, TouchableRipple } from "react-native-paper";
 import { z } from "zod";
 
 // definition of the Item, which will be rendered in the FlatList
@@ -56,17 +54,8 @@ const SearchFeedList = <T extends FieldValues>({
   name,
   control
 }: ListProps<T>) => {
-  const feeds = useAppSelector((state: RootState) => state.feeds.records)
-  const { getFeeds } = useFeeds()
+  const { feeds } = useFeeds()
   const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    const fetchFeeds = async () => {
-      dispatch(setFeeds(await getFeeds()))
-    }
-
-    if (feeds.length === 0) fetchFeeds()
-  }, [feeds])
 
   const renderItem = (
     { item, onChange }: {

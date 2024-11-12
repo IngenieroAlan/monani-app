@@ -1,15 +1,6 @@
 import Cattle from '@/database/models/Cattle'
 import notifee, { AndroidDefaults, Notification, TimestampTrigger, TriggerType } from '@notifee/react-native'
-import { CattleNotificationEventType, NotificationData } from './types'
-
-type NotificationProps = {
-  id?: string
-  title: string
-  subtitle?: string
-  body: string
-  data: NotificationData
-  triggerTimestamp: number
-}
+import { CattleNotificationEventType, NotificationProps } from './types'
 
 export const createTriggerNotification = async (notificationProps: NotificationProps) => {
   const trigger: TimestampTrigger = {
@@ -90,7 +81,7 @@ export const createMedicationNotification = async (
   cattle: Cattle | { id: string; name?: string; tagId: string },
   medicationName: string,
   foreignId: string,
-  monthInterval: number,
+  timesPerYear: number,
   triggerTimestamp: number,
   id?: string
 ) => {
@@ -106,7 +97,7 @@ export const createMedicationNotification = async (
       type: 'medication',
       timestamp: triggerTimestamp,
       extraInfo: JSON.stringify([medicationName, tagId]),
-      monthInterval: monthInterval,
+      timesPerYear,
       foreignId
     },
     triggerTimestamp

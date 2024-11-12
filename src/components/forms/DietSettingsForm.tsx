@@ -34,6 +34,10 @@ const DietSettingsForm = (
     }
   ]
 
+  const equivalentWeight = cattleWeight * ((quantity.value ?? 0) / 100)
+  const decimals = equivalentWeight.toString().split('.')[1]
+  const formattedWeight = `${Math.trunc(equivalentWeight)}.${decimals ? decimals.padEnd(3, '0') : '000'}`
+
   return (
     <View style={{ padding: 16, gap: 10, flex: 1 }}>
       <CustomTextInput
@@ -43,7 +47,7 @@ const DietSettingsForm = (
         errors={errors.waterAmount}
         helperText={errors.waterAmount?.message ? errors.waterAmount?.message : ''}
         more={{
-          theme: { colors: { background: theme.colors.elevation.level3 } },
+          theme: { colors: { background: theme.colors.elevation.level1 } },
           keyboardType: 'numeric'
         }}
       />
@@ -60,7 +64,7 @@ const DietSettingsForm = (
           }
         }}
         theme={{
-          colors: { background: theme.colors.elevation.level3 }
+          colors: { background: theme.colors.elevation.level1 }
         }}
       />
 
@@ -71,14 +75,14 @@ const DietSettingsForm = (
         errors={errors.quantity}
         helperText={errors.quantity?.message ? errors.quantity?.message : ''}
         more={{
-          theme: { colors: { background: theme.colors.elevation.level3 } },
+          theme: { colors: { background: theme.colors.elevation.level1 } },
           keyboardType: 'numeric',
           disabled: matterProportion.value === 'Sin definir'
         }}
       />
       <Text variant="labelSmall">
         {matterProportion.value === 'Porcentaje de peso' ?
-          `Equivalente a ${(cattleWeight * ((quantity.value ?? 0) / 100))} kg.` : ''}
+          `Equivalente a ${formattedWeight} kg.` : ''}
       </Text>
 
       <Controller

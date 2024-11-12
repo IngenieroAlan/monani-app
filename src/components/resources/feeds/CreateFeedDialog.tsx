@@ -1,8 +1,7 @@
-import useFeeds from '@/hooks/collections/useFeeds'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { addFeed } from '@/redux/slices/feedsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
+import { createFeed } from '@/utils/feeds'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { memo, useCallback } from 'react'
@@ -19,7 +18,6 @@ const DISMISS_DIALOG_ID = 'createFeedDismissDialog'
 
 const CreateFeedDialog = () => {
   const dispatch = useAppDispatch()
-  const { createFeed } = useFeeds()
   const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[CREATE_FEED_DIALOG_ID])
   const { control, handleSubmit, reset, formState } = useForm<FeedFields>({
     defaultValues: {
@@ -44,7 +42,7 @@ const CreateFeedDialog = () => {
   }, [])
 
   const onSubmit = useCallback(async (data: FeedFields) => {
-    dispatch(addFeed(await createFeed(data)))
+    await createFeed(data)
 
     dispatch(show(FeedsSnackbarId.STORED_FEED))
     dismissChanges()

@@ -36,10 +36,10 @@ const Footer = () => {
         console.log('Navigate to edit');
         break;
       case 'DietRoute':
-        console.log('Navigate to add');
+        navigation.navigate('DietFeedRoute');
         break;
       case 'MedicationRoute':
-        console.log('Navigate to add');
+        navigation.navigate('MedicationScheduleRoute');
         break;
       case 'WeightRoute':
         console.log('Navigate to add');

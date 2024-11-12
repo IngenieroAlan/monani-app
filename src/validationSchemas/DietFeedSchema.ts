@@ -4,7 +4,7 @@ import { z } from "zod";
 const FeedProportionEnum = z.enum(['Por porcentaje', 'Fija']) satisfies z.ZodType<FeedProportion>;
 
 const DietFeedSchema = z.object({
-  feedId: z.string(),
+  feed: z.any(),
   feedProportion: FeedProportionEnum,
   quantity: z.coerce.number()
 })

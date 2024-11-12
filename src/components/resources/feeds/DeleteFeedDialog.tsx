@@ -1,5 +1,4 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { removeFeed } from '@/redux/slices/feedsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import { useCallback, useState } from 'react'
@@ -19,7 +18,6 @@ const DeleteFeedDialog = () => {
     await selectedFeed?.delete()
     setIsDeleting(false)
 
-    dispatch(removeFeed(selectedFeed!))
     dispatch(hide(DELETE_FEED_DIALOG_ID))
     dispatch(show(FeedsSnackbarId.DELETED_FEED))
   }, [selectedFeed])

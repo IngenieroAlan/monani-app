@@ -23,6 +23,7 @@ const CattleInfoForm = (
   const theme = useTheme();
   const { errors } = formState;
   const { field: cattleStatusField } = useController({ name: 'cattleStatus', control });
+  const { field: weight } = useController({ name: 'weight', control });
   const { field: quarantineDaysLeft } = useController({ name: 'quarantineDaysLeft', control });
 
   const cattleStatusOptions = [
@@ -136,7 +137,9 @@ const CattleInfoForm = (
             helperText={errors.weight?.message ? errors.weight.message : ''}
             more={{
               keyboardType: "numeric",
-              maxLength: 4
+              maxLength: 4,
+              value: weight.value ? String(weight.value) : '',
+              onChangeText: (value: string) => weight.onChange(parseFloat(value)),
             }}
           />
 
@@ -200,7 +203,7 @@ const CattleInfoForm = (
             name="motherId"
             control={control}
             placeholder='No. identenficador de la madre'
-            errroMessage={errors.motherId?.message ? errors.motherId?.message : ''}
+            erroMessage={errors.motherId?.message ? errors.motherId?.message : ''}
             data={motherIds}
             initialQuery={motherId}
             theme={{ roundness: 1 }}
@@ -226,7 +229,9 @@ const CattleInfoForm = (
             helperText={errors.quarantineDaysLeft?.message ? errors.quarantineDaysLeft.message : ''}
             more={{
               keyboardType: "numeric",
-              disabled: !inQuarantine
+              disabled: !inQuarantine,
+              value: quarantineDaysLeft.value ? String(quarantineDaysLeft.value) : '',
+              onChangeText: (value: string) => quarantineDaysLeft.onChange(parseFloat(value)),
             }}
           />
         </View>

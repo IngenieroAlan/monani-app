@@ -7,6 +7,7 @@ import AnnualEarnings from './AnnualEarnings'
 import CattleArchive, { ArchiveReason } from './CattleArchive'
 import CattleSale from './CattleSale'
 import Diet from './Diet'
+import DietFeed from './DietFeed'
 import Genealogy from './Genealogy'
 import MedicationSchedule from './MedicationSchedule'
 import MilkProduction from './MilkProduction'
@@ -86,14 +87,20 @@ class Cattle extends Model {
     .query(Q.where('cattle_id', this.id), Q.take(1))
 
   @lazy
+  dietFeeds = this.collections
+    .get<DietFeed>(TableName.DIET_FEED)
+    .query(Q.where('diet_id', this.diet.id))
+
+  @lazy
   motherRelation = this.collections
     .get<Genealogy>(TableName.GENEALOGY)
     .query(Q.where('offspring_id', this.id))
-  
+
   @lazy
   offsprings = this.collections
     .get<Cattle>(TableName.CATTLE)
     .query(Q.on(TableName.GENEALOGY, 'mother_id', this.id))
+
 
   // May not be needed.
   @writer
@@ -173,7 +180,7 @@ class Cattle extends Model {
     await this.batch(
       this.prepareUpdate((record) => {
         record.isActive = false,
-        record.isSold = true
+          record.isSold = true
       }),
       this.collections.get<CattleSale>(TableName.CATTLE_SALES)
         .prepareCreate((record) => {
@@ -181,7 +188,7 @@ class Cattle extends Model {
 
           record.kg = latestWeightReport ? latestWeightReport.weight : this.weight
           record.details = `No. ${this.tagId}${this.name ? `: ${this.name}` : ''}`,
-          record.soldBy = soldBy
+            record.soldBy = soldBy
           record.soldAt = soldAt
         }),
       annualEarningsBatch
@@ -194,7 +201,7 @@ class Cattle extends Model {
    */
   @writer
   async weigh({ weight, weighedAt }: { weight: number, weighedAt: Date }) {
-    if (isAfter(weighedAt, this.admittedAt)){
+    if (isAfter(weighedAt, this.admittedAt)) {
       throw new Error(
         `A weight report can't have a date after ${format(this.admittedAt, 'yyyy/MM/dd')}.`
       )
@@ -329,7 +336,7 @@ class Cattle extends Model {
         Q.take(1)
       )
       .fetch()
-   
+
     if (!genealogyRecord.length) {
       throw new Error('Cannot delete a mother that doesn\'t exists.')
     }
@@ -389,7 +396,7 @@ class Cattle extends Model {
       record.pregnantAt = pregnantAt
       record.productionType = productionType
       record.cattleStatus = cattleStatus
-      
+
       if (weight) record.weight = weight
 
       if (quarantineDays) {
@@ -404,7 +411,7 @@ class Cattle extends Model {
     if (this.isSold) throw new Error("Can't delete a cattle that has been sold.")
 
     await this.medicationSchedules.destroyAllPermanently()
-  
+
     if (this.isArchived) await this.archive.destroyAllPermanently()
 
     await this.destroyPermanently()

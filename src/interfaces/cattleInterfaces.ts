@@ -1,7 +1,7 @@
 import { ArchiveReason } from "@/database/models/CattleArchive";
 import { MatterProportion } from "@/database/models/Diet";
 import { FeedProportion } from "@/database/models/DietFeed";
-import { FeedType } from "@/database/models/Feed";
+import Feed, { FeedType } from "@/database/models/Feed";
 import { MedicationType } from "@/database/models/Medication";
 import { CattleStatus, ProductionType } from "../database/models/Cattle";
 
@@ -22,17 +22,6 @@ interface ACCattle {
     isSold: boolean;
     dietId: string;
 }
-interface ACCattleArchive {
-    cattleId: string;
-    notes?: string;
-    archivedAt: Date;
-    reason: ArchiveReason;
-}
-interface ACCattleSale {
-    cattleId: string;
-    soldBy: number;
-    soldAt: Date;
-}
 interface ACDiet {
     dietId: string;
     waterAmount: number | undefined;
@@ -44,7 +33,7 @@ interface ACDiet {
 interface ACDietFeed {
     dietFeedId: string;
     dietId: string;
-    feedId: string;
+    feed: Feed
     feedAmount: number;
     percentage?: number;
     feedProportion: FeedProportion;
@@ -53,13 +42,6 @@ interface ACFeed {
     feedId: string;
     name: string;
     feedType: FeedType;
-}
-interface ACDietFeedItem extends ACDietFeed {
-    FeedName: string;
-}
-interface ACGenealogy {
-    motherId: string;
-    offspringId: string;
 }
 interface ACMedication {
     medicationId: string;
@@ -77,33 +59,13 @@ interface ACMedicationScheduleItem extends ACMedicationSchedule {
     medicationName: string;
     medicationType: MedicationType;
 }
-interface ACMilkReport {
-    cattleId: string;
-    milkProductionId: string;
-    reportedAt: Date;
-    liters: number;
-}
-interface ACWeightReport {
-    cattleId: string;
-    weight: number;
-    weightDifference: number;
-    daysPassed: number;
-    avgDailyDifference: number;
-    weighedAt: Date;
-}
 
 export type {
     ACCattle,
-    ACCattleArchive,
-    ACCattleSale,
     ACDiet,
     ACDietFeed,
     ACFeed,
-    ACDietFeedItem,
-    ACGenealogy,
     ACMedication,
     ACMedicationSchedule,
     ACMedicationScheduleItem,
-    ACMilkReport,
-    ACWeightReport
 }

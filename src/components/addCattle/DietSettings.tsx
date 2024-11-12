@@ -7,7 +7,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
-import DietSettingsForm from "./DietSettingsForm";
+import DietSettingsForm from "../forms/DietSettingsForm";
 
 export default function DietSettings({ navigation }: NativeStackScreenProps<AddCattleStackParamsList, 'DietSettings'>) {
   const { cattle, diet } = useAppSelector(state => state.addCattle)

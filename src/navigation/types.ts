@@ -12,7 +12,16 @@ export type RootStackParamList = {
     totalMilkEarnings: number;
     difference: number;
   };
+
   CattleDetailsLayout: NavigatorScreenParams<CattleInfoParamsList>;
+  DietFeedRoute: {
+    dietFeedId: string;
+    modify: boolean;
+  } | undefined;
+  MedicationScheduleRoute: {
+    medicationScheduleId: string;
+    modify: boolean;
+  } | undefined;
   SearchMotherView: { edit: boolean } | undefined;
   SearchOffspringView: undefined;
   NotificationsTest: undefined
@@ -40,19 +49,15 @@ export type AddCattleStackParamsList = {
   CattleInfo: undefined;
   Diet: undefined;
   DietSettings: undefined;
-  DietFeed:
-  | {
-    medicationScheduleId: string;
+  DietFeed: {
+    dietFeedId: string;
     modify: boolean;
-  }
-  | undefined;
+  } | undefined;
   Medications: undefined;
-  Medication:
-  | {
+  Medication: {
     medicationScheduleId: string;
     modify: boolean;
-  }
-  | undefined;
+  } | undefined;
 };
 export type CattleInfoParamsList = {
   InfoRoute: undefined;

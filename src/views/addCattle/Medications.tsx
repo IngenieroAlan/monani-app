@@ -1,12 +1,13 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
-import useCattle, { DietFeedFields } from "@/hooks/collections/useCattle"
+import useFeeds from '@/hooks/collections/useFeeds'
 import useMedications from "@/hooks/collections/useMedications"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { ACMedicationScheduleItem } from "@/interfaces/cattleInterfaces"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
-import { setMedications } from "@/redux/slices/medicationsSlice"
 import { RootState } from "@/redux/store/store"
+import { createCattle } from "@/utils"
+import { DietFeedFields } from "@/utils/createCattle"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
@@ -17,21 +18,10 @@ export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattl
 export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const medications = useAppSelector((state: RootState) => state.medications.records)
-  const { getMedications } = useMedications()
+  const { medications } = useMedications()
+  const { feeds } = useFeeds()
   const { cattle, diet, dietFeeds, medicationSchedules } = useAppSelector((state: RootState) => state.addCattle)
   const [currentMedicationSchedules, setCurrentMedicationSchedules] = useState<ACMedicationScheduleItem[]>([])
-  const { createCattle } = useCattle()
-
-  const feeds = useAppSelector((state: RootState) => state.feeds.records)
-
-  useEffect(() => {
-    const fetchMedications = async () => {
-      dispatch(setMedications(await getMedications()))
-    }
-
-    if (medications.length === 0) fetchMedications()
-  }, [medications])
 
   useEffect(() => {
     setCurrentMedicationSchedules(
@@ -54,7 +44,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
   const handleSave = () => {
     const dietFeedsFields: DietFeedFields[] = dietFeeds.map(dietFeed => {
-      const feed = feeds.find(feed => feed.id === dietFeed.feedId)
+      const feed = feeds.find(feed => feed.id === dietFeed.feed.id)
       return {
         feed: feed!,
         feedAmount: dietFeed.feedAmount,
@@ -73,12 +63,21 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
     const createCattleFunction = async () => {
       try {
-        await createCattle(
-          cattle,
-          diet,
-          dietFeedsFields,
-          medicationSchedulesFields
-        )
+        if (cattle.admittedAt && cattle.bornAt && diet.waterAmount) {
+          await createCattle(
+            {
+              ...cattle,
+              admittedAt: cattle.admittedAt,
+              bornAt: cattle.bornAt
+            },
+            {
+              ...diet,
+              waterAmount: diet.waterAmount ?? 0 // Ensure waterAmount is a number
+            },
+            dietFeedsFields,
+            medicationSchedulesFields
+          )
+        }
       } catch (error) {
         console.error(error);
       }

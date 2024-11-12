@@ -1,8 +1,7 @@
-/**AC = add cattle ~ */
 import { z } from "zod";
 
 const ACMedicationSchema = z.object({
-  medicationId: z.string(),
+  medication: z.any(),
   nextDoseAt: z.date(),
   dosesPerYear: z.coerce.number(),
 })

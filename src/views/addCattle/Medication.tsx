@@ -1,8 +1,8 @@
-import MedicationForm from "@/components/addCattle/MedicationForm";
+import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
+import useMedications from '@/hooks/collections/useMedications';
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
 import { modifyMedicationSchedule, saveMedicationSchedule } from "@/redux/slices/addCattleSlice";
-import { RootState } from "@/redux/store/store";
 import ACMedicationSchema, { ACMedication } from "@/validationSchemas/ACMedicationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -12,7 +12,7 @@ import { Appbar, Button, IconButton } from "react-native-paper";
 
 export default function Medication({ navigation, route }: NativeStackScreenProps<AddCattleStackParamsList, 'Medication'>) {
   const { medicationSchedules, cattle } = useAppSelector(state => state.addCattle)
-  const medications = useAppSelector((state: RootState) => state.medications.records)
+  const { medications } = useMedications()
   const dispatch = useAppDispatch();
 
   const medicationScheduleId = route.params?.medicationScheduleId || '';
@@ -20,7 +20,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
 
   const medicationSchedule = useMemo(() => medicationSchedules.find(medicationSchedule => medicationSchedule.medicationScheduleId === medicationScheduleId), [medicationSchedules, medicationScheduleId])
   const initialMedicationScheduleValues = medicationSchedule ? {
-    medicationId: medicationSchedule.medicationId,
+    medication: medicationSchedule.medicationId,
     nextDoseAt: medicationSchedule.nextDoseAt,
     dosesPerYear: medicationSchedule.dosesPerYear
   } : undefined
@@ -34,7 +34,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
     formState
   } = useForm<ACMedication>({
     defaultValues: initialMedicationScheduleValues || {
-      medicationId: undefined,
+      medication: undefined,
       nextDoseAt: undefined,
       dosesPerYear: undefined
     },
@@ -44,7 +44,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
   const { isSubmitting, isValid, errors, isDirty } = formState
 
   const onSubmit = useCallback(() => {
-    const medicationId = getValues('medicationId')
+    const medication = getValues('medication')
     const nextDoseAt = getValues('nextDoseAt')
     const dosesPerYear = getValues('dosesPerYear')
 
@@ -52,7 +52,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       dispatch(modifyMedicationSchedule({
         medicationSchedule: {
           medicationScheduleId: medicationScheduleId,
-          medicationId,
+          medicationId: medication,
           nextDoseAt,
           dosesPerYear,
           cattleId: cattle.tagId,
@@ -62,7 +62,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       dispatch(saveMedicationSchedule({
         medicationSchedule: {
           medicationScheduleId: Math.random().toString(),
-          medicationId,
+          medicationId: medication,
           nextDoseAt,
           dosesPerYear,
           cattleId: cattle.tagId,
@@ -80,7 +80,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       <Appbar.Content title={modify ? 'Ajustar medicación' : 'Agregar medicación'} />
       <Button onPress={handleSubmit(onSubmit)} disabled={!isValid || !isDirty || isSubmitting}>Guardar</Button>
     </Appbar.Header>
-    <MedicationForm
+    <CattleMedicationForm
       control={control}
       formState={formState}
       medicationName={medicationName}

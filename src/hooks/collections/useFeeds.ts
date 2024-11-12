@@ -1,36 +1,28 @@
-import { FeedFields } from '@/components/forms/FeedForm'
 import Feed from '@/database/models/Feed'
 import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
+import { useEffect, useState } from 'react'
 
 const useFeeds = () => {
   const database = useDatabase()
+  const [feeds, setFeeds] = useState<Feed[]>([])
 
-  const getFeeds = async () => {
-    return await database.collections
-      .get<Feed>(TableName.FEEDS)
-      .query(Q.sortBy('name', Q.asc))
-      .fetch()
-  }
+  let feedsQuery = database.collections
+    .get<Feed>(TableName.FEEDS)
+    .query(
+      Q.sortBy('name', Q.asc)
+    )
 
-  const createFeed = async (data: FeedFields) => {
-    const createdFeed = await database.write(async () => {
-      return await database.collections
-        .get<Feed>(TableName.FEEDS)
-        .create((model) => {
-          model.name = data.name
-          model.feedType = data.feedType
-        })
+  useEffect(() => {
+    const subscription = feedsQuery.observe().subscribe((data) => {
+      setFeeds(data)
     })
 
-    return createdFeed
-  }
+    return () => subscription.unsubscribe()
+  }, [database])
 
-  return {
-    getFeeds,
-    createFeed
-  }
+  return { feeds }
 }
 
 export default useFeeds

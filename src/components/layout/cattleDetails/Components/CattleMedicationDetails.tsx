@@ -1,4 +1,4 @@
-import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/dietFeedRoute/MedicationSnackbarContainer";
+import { MedicationSnackbarId } from "@/components/dietFeedRoute/MedicationSnackbarContainer";
 import MedicationScheduleItem from "@/components/medicationSchedulesRoute/MedicationScheduleItem";
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
@@ -72,7 +72,6 @@ export const CattleMedicationsDetails = observeCattle(({ cattle }: { cattle: Cat
         onEndReachedThreshold={2}
         onEndReached={() => setIndex(index + 1)}
       />
-      <MedicationSnackbarContainer />
     </ScrollView>
   )
 })

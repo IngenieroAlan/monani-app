@@ -1,7 +1,9 @@
 import DietFeedList from "@/components/addCattle/DietFeedList"
+import DismissDialog from "@/components/DismissDialog"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
+import { show } from "@/redux/slices/uiVisibilitySlice"
 import { RootState } from "@/redux/store/store"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useCallback, useEffect, useState } from "react"
@@ -10,6 +12,7 @@ import { Appbar, Button, List, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
 export type AddDietNavigationProps = NativeStackScreenProps<AddCattleStackParamsList & BottomTabsParamList, 'Diet'>;
+const DISMISS_DIALOG_ID = 'createCattleDismissDialog'
 
 export const Diet = ({ navigation }: AddDietNavigationProps) => {
   const theme = useTheme()
@@ -43,7 +46,7 @@ export const Diet = ({ navigation }: AddDietNavigationProps) => {
 
   return (<>
     <Appbar.Header>
-      <Appbar.BackAction onPress={goBack} />
+      <Appbar.BackAction onPress={() => dispatch(show(DISMISS_DIALOG_ID))} />
       <Appbar.Content title='Dieta' />
       <Appbar.Action icon="plus" onPress={() => navigation.navigate('DietFeed')} />
       <Appbar.Action icon="cog" onPress={() => navigation.navigate('DietSettings')} />
@@ -71,6 +74,12 @@ export const Diet = ({ navigation }: AddDietNavigationProps) => {
           Siguiente
         </Button>
       </View>
+      <DismissDialog
+        id={DISMISS_DIALOG_ID}
+        snackbarOnDismiss
+        onConfirm={goBack}
+        onCancel={() => { }}
+      />
     </SafeAreaProvider>
   </>)
 }

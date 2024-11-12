@@ -1,7 +1,9 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
+import DismissDialog from "@/components/DismissDialog"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
+import { show } from "@/redux/slices/uiVisibilitySlice"
 import { RootState } from "@/redux/store/store"
 import { createCattle } from "@/utils"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -10,6 +12,8 @@ import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
 export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattleStackParamsList & BottomTabsParamList, 'Medications'>;
+const DISMISS_DIALOG_ID = 'createCattleDismissDialog'
+
 export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -50,7 +54,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
   return (<>
     <Appbar.Header>
-      <Appbar.BackAction onPress={goBack} />
+      <Appbar.BackAction onPress={() => dispatch(show(DISMISS_DIALOG_ID))} />
       <Appbar.Content title='Medicación' />
       <Appbar.Action icon="plus" onPress={() => navigation.navigate('Medication')} />
     </Appbar.Header>
@@ -75,6 +79,12 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
           Guardar
         </Button>
       </View>
+      <DismissDialog
+        id={DISMISS_DIALOG_ID}
+        snackbarOnDismiss
+        onConfirm={goBack}
+        onCancel={() => { }}
+      />
     </SafeAreaProvider>
   </>
   )

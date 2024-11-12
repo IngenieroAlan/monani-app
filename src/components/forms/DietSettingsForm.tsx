@@ -18,6 +18,7 @@ const DietSettingsForm = (
   const { errors } = formState;
   const { field: matterProportion } = useController({ name: 'matterProportion', control });
   const { field: quantity } = useController({ name: 'quantity', control });
+  const { field: waterAmount } = useController({ name: 'waterAmount', control });
 
   const dropdownOptions = [
     {
@@ -48,7 +49,9 @@ const DietSettingsForm = (
         helperText={errors.waterAmount?.message ? errors.waterAmount?.message : ''}
         more={{
           theme: { colors: { background: theme.colors.elevation.level1 } },
-          keyboardType: 'numeric'
+          keyboardType: 'numeric',
+          value: waterAmount.value ? String(waterAmount.value) : '',
+          onChangeText: (value: string) => waterAmount.onChange(parseFloat(value))
         }}
       />
       <MDropdown

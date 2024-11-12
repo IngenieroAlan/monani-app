@@ -75,7 +75,7 @@ const Footer = () => {
         <Appbar.Action
           icon="cog-outline"
           onPress={() => {
-            screen === 'DietRoute' && console.log('Navigate to settings');
+            screen === 'DietRoute' && navigation.navigate('DietSettingsRoute');
           }} />
       </Animated.View>
 

@@ -1,34 +1,30 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { AddCattleStackParamsList } from "@/navigation/types";
+import { RootStackParamList } from "@/navigation/types";
 import { setDiet } from "@/redux/slices/addCattleSlice";
 import { show } from "@/redux/slices/uiVisibilitySlice";
 import ACDietSchema, { ACDietFields } from "@/validationSchemas/ACDietSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
 import DietSnackBarContainer, { DietSnackbarId } from "../dietFeedRoute/DietSnackBarContainer";
 import DietSettingsForm from "../forms/DietSettingsForm";
+import useDiet from "@/hooks/collections/useDiet";
 
-export default function DietSettings({ navigation }: NativeStackScreenProps<AddCattleStackParamsList, 'DietSettings'>) {
-  const { cattle, diet } = useAppSelector(state => state.addCattle)
+export default function DietSettingsRoute({ navigation }: NativeStackScreenProps<RootStackParamList, 'DietSettingsRoute'>) {
+  const { cattleInfo } = useAppSelector(state => state.cattles)
+  const { diet } = useDiet(cattleInfo!)
   const dispatch = useAppDispatch();
-
-  const initialDietFeedValues = diet ? {
-    waterAmount: diet.waterAmount ?? 0,
-    matterProportion: diet.matterProportion,
-    quantity: diet.matterProportion === 'Fija' ? diet.matterAmount : diet.percentage,
-    isConcentrateExcluded: diet.isConcentrateExcluded ?? false
-  } : undefined
 
   const {
     control,
     handleSubmit,
     getValues,
-    formState
+    formState,
+    reset
   } = useForm<ACDietFields>({
-    defaultValues: initialDietFeedValues || {
+    defaultValues: {
       waterAmount: undefined,
       matterProportion: 'Sin definir',
       quantity: undefined,
@@ -39,6 +35,16 @@ export default function DietSettings({ navigation }: NativeStackScreenProps<AddC
   })
   const { isSubmitting, isValid, errors, isDirty } = formState
 
+  useEffect(() => {
+    if (diet)
+      reset({
+        waterAmount: diet.waterAmount !== undefined ? diet.waterAmount : undefined,
+        matterProportion: diet.matterProportion,
+        quantity: diet.matterProportion === 'Fija' ? diet.matterAmount : diet.percentage,
+        isConcentrateExcluded: diet.isConcentrateExcluded ?? false
+      })
+  }, [diet, reset]);
+
   const onSubmit = useCallback(() => {
     const { matterProportion, waterAmount, quantity, isConcentrateExcluded } = getValues()
     const percentage = matterProportion === 'Porcentaje de peso' ? quantity : undefined
@@ -48,24 +54,23 @@ export default function DietSettings({ navigation }: NativeStackScreenProps<AddC
       if (matterProportion === 'Fija') {
         matterAmount = quantity
       } else if (matterProportion === 'Porcentaje de peso') {
-        matterAmount = cattle.weight * (quantity / 100)
+        matterAmount = cattleInfo!.weight * (quantity / 100)
       }
     }
 
-    dispatch(setDiet({
-      diet: {
-        dietId: diet.dietId,
-        matterAmount: matterAmount,
-        matterProportion,
-        waterAmount,
-        isConcentrateExcluded,
-        percentage
-      }
-    }))
+    diet?.updateDiet({
+      matterAmount: matterAmount,
+      matterProportion,
+      waterAmount,
+      isConcentrateExcluded,
+      percentage
+    })
     dispatch(show(DietSnackbarId.UPDATED_DIET))
 
     navigation.goBack()
-  }, [])
+  }, [diet, dispatch, getValues, cattleInfo, navigation])
+  console.log(diet);
+
 
   return (<>
     <Appbar.Header>
@@ -73,11 +78,13 @@ export default function DietSettings({ navigation }: NativeStackScreenProps<AddC
       <Appbar.Content title='Ajuste de proporciones' />
       <Button onPress={handleSubmit(onSubmit)} disabled={!isValid || !isDirty || isSubmitting}>Guardar</Button>
     </Appbar.Header>
-    <DietSettingsForm
-      control={control}
-      formState={formState}
-      cattleWeight={cattle.weight}
-    />
+    {cattleInfo &&
+      <DietSettingsForm
+        control={control}
+        formState={formState}
+        cattleWeight={cattleInfo.weight}
+      />
+    }
     <DietSnackBarContainer />
   </>)
 }

@@ -10,7 +10,7 @@ export const DietSnackbarId = {
   SAME_DIETFEED: 'sameDietFeedSnackbar',
 }
 
-const DietSnackbarContainer = () => {
+const DietSnackBarContainer = () => {
   return (
     <SnackbarContainer dismissSnackbar>
       <MSnackbar id={DietSnackbarId.UPDATED_DIET}>Dieta actualizada con éxito.</MSnackbar>
@@ -22,4 +22,4 @@ const DietSnackbarContainer = () => {
   )
 }
 
-export default memo(DietSnackbarContainer)
+export default memo(DietSnackBarContainer)

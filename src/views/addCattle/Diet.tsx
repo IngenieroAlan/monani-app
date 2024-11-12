@@ -1,4 +1,5 @@
 import DietFeedList from "@/components/addCattle/DietFeedList"
+import DietSnackBarContainer from "@/components/dietFeedRoute/DietSnackBarContainer"
 import DismissDialog from "@/components/DismissDialog"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
@@ -80,6 +81,7 @@ export const Diet = ({ navigation }: AddDietNavigationProps) => {
         onConfirm={goBack}
         onCancel={() => { }}
       />
+      <DietSnackBarContainer />
     </SafeAreaProvider>
   </>)
 }

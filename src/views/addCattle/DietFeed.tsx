@@ -1,11 +1,13 @@
+import DietSnackBarContainer, { DietSnackbarId } from "@/components/dietFeedRoute/DietSnackBarContainer";
 import DietFeedForm from "@/components/forms/DietFeedForm";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
 import { modifyFeedDiet, saveDietFeed } from "@/redux/slices/addCattleSlice";
+import { show } from "@/redux/slices/uiVisibilitySlice";
 import DietFeedSchema, { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
 
@@ -53,6 +55,7 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
             percentage
           }
         }))
+      dispatch(show(DietSnackbarId.UPDATED_DIETFEED))
       } else {
         dispatch(saveDietFeed({
           dietFeed: {
@@ -65,10 +68,11 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
           }
         }))
         reset();
+        dispatch(show(DietSnackbarId.STORED_DIETFEED))
       }
     } catch (error) {
       console.error(error);
-      // Handle error, e.g., show a snackbar with the error message
+      dispatch(show(DietSnackbarId.SAME_DIETFEED))
       return;
     }
 
@@ -87,5 +91,6 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
       feedName={feedName}
       cattleWeight={cattle.weight}
     />
+    <DietSnackBarContainer />
   </>)
 }

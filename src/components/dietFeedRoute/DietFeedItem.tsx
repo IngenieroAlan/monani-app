@@ -1,10 +1,13 @@
 import DietFeed, { FeedProportion } from '@/database/models/DietFeed'
 import { TableName } from '@/database/schema'
 import useFeeds from '@/hooks/collections/useFeeds'
+import { useAppDispatch } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { memo, useCallback, useState } from 'react'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { DietSnackbarId } from './DietSnackBarContainer'
 
 const observeDietFeed = withObservables([TableName.DIET_FEED], ({ diet_feed }: { diet_feed: DietFeed }) => ({
   diet_feed
@@ -20,6 +23,7 @@ const ListItemMenu = (
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const [menuVisible, setMenuVisible] = useState(false)
+  const dispatch = useAppDispatch()
 
   return (
     <Menu
@@ -48,6 +52,7 @@ const ListItemMenu = (
         leadingIcon='minus'
         onPress={() => {
           onDelete(dietFeedId)
+          dispatch(show(DietSnackbarId.REMOVED_DIETFEED))
           setMenuVisible(false);
         }}
       />

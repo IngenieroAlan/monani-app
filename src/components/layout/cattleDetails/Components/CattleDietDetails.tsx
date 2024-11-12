@@ -1,4 +1,5 @@
 import DietFeedItem from "@/components/dietFeedRoute/DietFeedItem";
+import DietSnackBarContainer from "@/components/dietFeedRoute/DietSnackBarContainer";
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import useDiet from "@/hooks/collections/useDiet";
@@ -78,6 +79,7 @@ export const CattleDietDetails = observeCattle(({ cattle }: { cattle: Cattle }) 
         onEndReachedThreshold={2}
         onEndReached={() => setIndex(index + 1)}
       />
+      <DietSnackBarContainer />
     </ScrollView>
   )
 })

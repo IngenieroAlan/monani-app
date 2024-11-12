@@ -4,6 +4,7 @@ import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import useDiet from "@/hooks/collections/useDiet";
 import useDietFeeds from "@/hooks/collections/useDietFeeds";
+import useFeeds from "@/hooks/collections/useFeeds";
 import { cattleDetails } from "@/styles/main";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { useNavigation } from "@react-navigation/native";
@@ -39,6 +40,7 @@ export const CattleDietDetails = observeCattle(({ cattle }: { cattle: Cattle }) 
   const [index, setIndex] = useState(0);
   const navigation = useNavigation()
   const [totalAmount, setTotalAmount] = useState(0)
+  const { feeds } = useFeeds()
 
   const onEdit = useCallback((dietFeedId: string) => {
     navigation.navigate('DietFeedRoute', { dietFeedId, modify: true });
@@ -56,6 +58,8 @@ export const CattleDietDetails = observeCattle(({ cattle }: { cattle: Cattle }) 
     setTotalAmount(dietFeeds.reduce((acc, dietFeed) => acc + parseFloat(dietFeed.feedAmount.toString()), 0))
   }, [dietFeeds, diet])
 
+  const findFeedName = useCallback((feedId: string) => feeds.find(feed => feed.id === feedId)?.name || '', [feeds])
+
   return (
     <ScrollView style={[cattleDetails.container, cattleDetails.cardsContainer]}>
       {diet && diet.matterProportion !== 'Sin definir' && (<>
@@ -71,6 +75,7 @@ export const CattleDietDetails = observeCattle(({ cattle }: { cattle: Cattle }) 
             diet_feed={item}
             onEdit={onEdit}
             onDelete={onDelete}
+            findFeedName={findFeedName}
           />
         )}
         keyExtractor={(item) => item.id}

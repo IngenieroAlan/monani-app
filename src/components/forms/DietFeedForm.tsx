@@ -43,16 +43,14 @@ const DietFeedForm = ({
     }
   ]
 
-  const feedData: SearchBarDataItem[] = useMemo(
-    () =>
-      feeds.map((feed) => ({
-        id: feed.id,
-        title: feed.name,
-        description: feed.feedType,
-        value: feed
-      })),
-    [feeds]
-  )
+  const feedData: SearchBarDataItem[] = useMemo(() =>
+    feeds.map((feed) => ({
+      id: feed.id,
+      title: feed.name,
+      description: feed.feedType,
+      value: feed
+    })),
+    [feeds])
 
   return (
     <View style={{ padding: 16, gap: 10, flex: 1, backgroundColor: theme.colors.surface }}>
@@ -64,7 +62,7 @@ const DietFeedForm = ({
         mode='bar'
         theme={{ roundness: 1 }}
         data={feedData}
-        errroMessage={errors.feed?.message ? String(errors.feed.message) : ''}
+        erroMessage={errors.feed?.message ? String(errors.feed.message) : ''}
         maxHeight={500}
       />
       <MDropdown

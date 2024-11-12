@@ -1,30 +1,26 @@
 import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
 import useMedications from '@/hooks/collections/useMedications';
+import useMedicationSchedules from "@/hooks/collections/useMedicationSchedule";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { RootStackParamList } from "@/navigation/types";
-import { modifyMedicationSchedule, saveMedicationSchedule } from "@/redux/slices/addCattleSlice";
 import ACMedicationSchema, { ACMedication } from "@/validationSchemas/ACMedicationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
 
 export default function MedicationScheduleRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'MedicationScheduleRoute'>) {
-  const { medicationSchedules, cattle } = useAppSelector(state => state.addCattle)
+  const { cattleInfo } = useAppSelector(state => state.cattles)
+  const { medicationSchedules } = useMedicationSchedules(cattleInfo!)
   const { medications } = useMedications()
   const dispatch = useAppDispatch();
 
-  const medicationScheduleId = route.params?.medicationScheduleId || '';
+  const medicationScheduleId = route.params?.medicationScheduleId;
   const modify = route.params?.modify || false;
 
-  const medicationSchedule = useMemo(() => medicationSchedules.find(medicationSchedule => medicationSchedule.medicationScheduleId === medicationScheduleId), [medicationSchedules, medicationScheduleId])
-  const initialMedicationScheduleValues = medicationSchedule ? {
-    medicationId: medicationSchedule.medicationId,
-    nextDoseAt: medicationSchedule.nextDoseAt,
-    dosesPerYear: medicationSchedule.dosesPerYear
-  } : undefined
-  const medicationName = useMemo(() => (medications.find(medication => medication.id === medicationSchedule?.medicationId)?.name), [medications, medicationSchedule])
+  const medicationSchedule = useMemo(() => medicationSchedules?.find(medicationSchedule => medicationSchedule.id === medicationScheduleId), [medicationSchedules, medicationScheduleId])
+  const medicationName = useMemo(() => (medications.find(medication => medication.id === medicationSchedule?.medication.id)?.name), [medications, medicationSchedule])
 
   const {
     control,
@@ -33,8 +29,8 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
     getValues,
     formState
   } = useForm<ACMedication>({
-    defaultValues: initialMedicationScheduleValues || {
-      medicationId: undefined,
+    defaultValues: {
+      medication: undefined,
       nextDoseAt: undefined,
       dosesPerYear: undefined
     },
@@ -43,33 +39,37 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
   })
   const { isSubmitting, isValid, errors, isDirty } = formState
 
-  const onSubmit = useCallback(() => {
-    const medicationId = getValues('medicationId')
-    const nextDoseAt = getValues('nextDoseAt')
-    const dosesPerYear = getValues('dosesPerYear')
+  useEffect(() => {
+    if (medicationSchedule)
+      reset({
+        medication: medicationSchedule.id,
+        nextDoseAt: medicationSchedule.nextDoseAt,
+        dosesPerYear: medicationSchedule.dosesPerYear
+      })
+  }, [medicationSchedule]);
 
-    if (modify) {
-      dispatch(modifyMedicationSchedule({
-        medicationSchedule: {
-          medicationScheduleId: medicationScheduleId,
-          medicationId,
-          nextDoseAt,
-          dosesPerYear,
-          cattleId: cattle.tagId,
-        }
-      }))
-    } else {
-      dispatch(saveMedicationSchedule({
-        medicationSchedule: {
-          medicationScheduleId: Math.random().toString(),
-          medicationId,
-          nextDoseAt,
-          dosesPerYear,
-          cattleId: cattle.tagId,
-        }
-      }))
-      reset();
-    }
+  const onSubmit = useCallback(() => {
+    const { medication, nextDoseAt, dosesPerYear } = getValues()
+
+    // if (modify) {
+    //   dispatch(modifyMedicationSchedule({
+    //     medication,
+    //     nextDoseAt,
+    //     dosesPerYear,
+    //     cattleId: cattle.tagId,
+    //   }))
+    // } else {
+    //   dispatch(saveMedicationSchedule({
+    //     medicationSchedule: {
+    //       medicationScheduleId: Math.random().toString(),
+    //       medication,
+    //       nextDoseAt,
+    //       dosesPerYear,
+    //       cattleId: cattle.tagId,
+    //     }
+    //   }))
+    //   reset();
+    // }
 
     navigation.goBack()
   }, [])

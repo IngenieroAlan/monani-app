@@ -145,7 +145,7 @@ const MSearchBar = <T extends FieldValues>(
   props: Omit<SearchbarProps, 'value'> & {
     name: FieldPath<T>
     control?: Control<T>
-    errroMessage?: string
+    erroMessage?: string
     data: ArrayLike<SearchBarDataItem> | null | undefined;
     initialQuery?: string,
     maxHeight?: number
@@ -163,7 +163,7 @@ const MSearchBar = <T extends FieldValues>(
           />
         )}
       />
-      {props.errroMessage && <HelperText type='error'>{props.errroMessage}</HelperText>}
+      {props.erroMessage && <HelperText type='error'>{props.erroMessage}</HelperText>}
     </View>
   )
 }

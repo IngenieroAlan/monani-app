@@ -20,7 +20,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
 
   const medicationSchedule = useMemo(() => medicationSchedules.find(medicationSchedule => medicationSchedule.medicationScheduleId === medicationScheduleId), [medicationSchedules, medicationScheduleId])
   const initialMedicationScheduleValues = medicationSchedule ? {
-    medicationId: medicationSchedule.medicationId,
+    medication: medicationSchedule.medicationId,
     nextDoseAt: medicationSchedule.nextDoseAt,
     dosesPerYear: medicationSchedule.dosesPerYear
   } : undefined
@@ -34,7 +34,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
     formState
   } = useForm<ACMedication>({
     defaultValues: initialMedicationScheduleValues || {
-      medicationId: undefined,
+      medication: undefined,
       nextDoseAt: undefined,
       dosesPerYear: undefined
     },
@@ -44,7 +44,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
   const { isSubmitting, isValid, errors, isDirty } = formState
 
   const onSubmit = useCallback(() => {
-    const medicationId = getValues('medicationId')
+    const medication = getValues('medication')
     const nextDoseAt = getValues('nextDoseAt')
     const dosesPerYear = getValues('dosesPerYear')
 
@@ -52,7 +52,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       dispatch(modifyMedicationSchedule({
         medicationSchedule: {
           medicationScheduleId: medicationScheduleId,
-          medicationId,
+          medicationId: medication,
           nextDoseAt,
           dosesPerYear,
           cattleId: cattle.tagId,
@@ -62,7 +62,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       dispatch(saveMedicationSchedule({
         medicationSchedule: {
           medicationScheduleId: Math.random().toString(),
-          medicationId,
+          medicationId: medication,
           nextDoseAt,
           dosesPerYear,
           cattleId: cattle.tagId,

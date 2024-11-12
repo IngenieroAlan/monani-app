@@ -40,14 +40,14 @@ const CattleMedicationForm = ({ control, formState, medicationName }: {
       justifyContent: 'flex-start'
     }}>
       <MSearchBar
-        name='medicationId'
+        name='medication'
         control={control}
         placeholder="Medicación"
         initialQuery={medicationName}
         mode="bar"
         theme={{ roundness: 1 }}
         data={medicationData}
-        errroMessage={errors.medicationId?.message ? errors.medicationId?.message : ''}
+        erroMessage={errors.medication?.message ? String(errors.medication.message) : undefined}
         maxHeight={500}
         style={{ backgroundColor: theme.colors.surface, borderWidth: 1 }}
       />

@@ -1,8 +1,7 @@
-import { ArchiveReason } from "@/database/models/CattleArchive";
 import { MatterProportion } from "@/database/models/Diet";
 import { FeedProportion } from "@/database/models/DietFeed";
 import Feed, { FeedType } from "@/database/models/Feed";
-import { MedicationType } from "@/database/models/Medication";
+import Medication, { MedicationType } from "@/database/models/Medication";
 import { CattleStatus, ProductionType } from "../database/models/Cattle";
 
 interface ACCattle {
@@ -51,21 +50,16 @@ interface ACMedication {
 interface ACMedicationSchedule {
     medicationScheduleId: string;
     cattleId: string;
-    medicationId: string;
+    medication: Medication;
     nextDoseAt: Date;
     dosesPerYear: number;
 }
-interface ACMedicationScheduleItem extends ACMedicationSchedule {
-    medicationName: string;
-    medicationType: MedicationType;
-}
 
 export type {
-    ACCattle,
-    ACDiet,
-    ACDietFeed,
-    ACFeed,
-    ACMedication,
-    ACMedicationSchedule,
-    ACMedicationScheduleItem,
-}
+  ACCattle,
+  ACDiet,
+  ACDietFeed,
+  ACFeed,
+  ACMedication,
+  ACMedicationSchedule,
+};

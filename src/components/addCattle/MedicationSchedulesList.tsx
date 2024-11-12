@@ -1,14 +1,14 @@
 import { useAppDispatch } from '@/hooks/useRedux'
-import { ACMedicationScheduleItem } from '@/interfaces/cattleInterfaces'
+import { ACMedicationSchedule, } from '@/interfaces/cattleInterfaces'
 import { deleteMedicationSchedule } from '@/redux/slices/addCattleSlice'
 import { MedicationSchedulesNavigationProps } from '@/views/addCattle/Medications'
 import { memo, useState } from 'react'
 import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
-import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
+import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-type navigationProps = MedicationSchedulesNavigationProps['navigation']// |  MedicationsNavigationProps['navigation']
+type navigationProps = MedicationSchedulesNavigationProps['navigation']
 
 const ListItemMenu = (
   { medicationScheduleId, navigation }: { medicationScheduleId: string, navigation: navigationProps }
@@ -56,13 +56,13 @@ const ListItemMenu = (
 }
 
 const ListItem = (
-  { medicationSchedule: medicationSchedule, navigation }: { medicationSchedule: ACMedicationScheduleItem, navigation: navigationProps }
+  { medicationSchedule: medicationSchedule, navigation }: { medicationSchedule: ACMedicationSchedule, navigation: navigationProps }
 ) => {
   return (
     <List.Item
       style={{ paddingVertical: 2, paddingRight: 8 }}
-      title={medicationSchedule.medicationName}
-      description={medicationSchedule.medicationType}
+      title={medicationSchedule.medication.name}
+      description={medicationSchedule.medication.medicationType}
       right={() => (
         <ListItemMenu
           medicationScheduleId={medicationSchedule.medicationScheduleId}
@@ -74,9 +74,8 @@ const ListItem = (
 }
 
 const MedicationSchedulesList = (
-  { medicationSchedules, navigation }: { medicationSchedules: ACMedicationScheduleItem[], navigation: navigationProps }
+  { medicationSchedules, navigation }: { medicationSchedules: ACMedicationSchedule[], navigation: navigationProps }
 ) => {
-
   return (
     <FlatList
       data={medicationSchedules}

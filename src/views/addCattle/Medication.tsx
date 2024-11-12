@@ -19,12 +19,14 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
   const modify = route.params?.modify || false;
 
   const medicationSchedule = useMemo(() => medicationSchedules.find(medicationSchedule => medicationSchedule.medicationScheduleId === medicationScheduleId), [medicationSchedules, medicationScheduleId])
+  const currentMedication = useMemo(() => medications.find(medication => medication.id === medicationSchedule?.medication.id), [medications, medicationSchedule])
+  const medicationName = useMemo(() => (currentMedication ? currentMedication.name : undefined), [currentMedication])
+
   const initialMedicationScheduleValues = medicationSchedule ? {
-    medication: medicationSchedule.medicationId,
+    medication: undefined,
     nextDoseAt: medicationSchedule.nextDoseAt,
     dosesPerYear: medicationSchedule.dosesPerYear
   } : undefined
-  const medicationName = useMemo(() => (medications.find(medication => medication.id === medicationSchedule?.medicationId)?.name), [medications, medicationSchedule])
 
   const {
     control,
@@ -52,7 +54,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       dispatch(modifyMedicationSchedule({
         medicationSchedule: {
           medicationScheduleId: medicationScheduleId,
-          medicationId: medication,
+          medication: medication ? medication : currentMedication,
           nextDoseAt,
           dosesPerYear,
           cattleId: cattle.tagId,
@@ -62,7 +64,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       dispatch(saveMedicationSchedule({
         medicationSchedule: {
           medicationScheduleId: Math.random().toString(),
-          medicationId: medication,
+          medication: medication,
           nextDoseAt,
           dosesPerYear,
           cattleId: cattle.tagId,

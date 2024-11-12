@@ -1,10 +1,12 @@
 import { FeedProportion } from '@/database/models/DietFeed'
+import Medication from '@/database/models/Medication'
 import MedicationSchedule from '@/database/models/MedicationSchedule'
 import { TableName } from '@/database/schema'
 import useMedications from '@/hooks/collections/useMedications'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { memo, useCallback, useState } from 'react'
-import { IconButton, List, Menu, useTheme } from 'react-native-paper'
+import { View } from 'react-native'
+import { IconButton, List, Menu, Text, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type DietFeedItem = {
@@ -65,6 +67,16 @@ const ListItemMenu = (
   )
 }
 
+const ListItemTitle = ({ medication }: { medication: Medication }) => {
+
+  return (
+    <View>
+      <Text variant='labelMedium'>{medication.medicationType}</Text>
+      <Text variant='bodyLarge'>{medication.name}</Text>
+    </View>
+  )
+}
+
 type MedicationScheduleProps = {
   medication_schedules: MedicationSchedule,
   onEdit: (MedicationScheduleId: string) => void,
@@ -73,11 +85,11 @@ type MedicationScheduleProps = {
 
 const MedicationScheduleItem = observeMedicationSchedule(({ medication_schedules, onEdit, onDelete }: MedicationScheduleProps) => {
   const { medications } = useMedications()
-  const findMedicationName = useCallback((MedicationId: string) => medications.find(medication => medication.id === MedicationId)?.name || '', [medications])
+  const findMedication = useCallback((MedicationId: string) => medications.find(medication => medication.id === MedicationId) || '', [medications])
   return (
     <List.Item
       style={{ paddingVertical: 2, paddingRight: 8 }}
-      title={findMedicationName(medication_schedules.medication.id)}
+      title={<ListItemTitle medication={findMedication(medication_schedules.medication.id) as Medication} />}
       description={medication_schedules.nextDoseAt.toLocaleString()}
       right={() => (
         <ListItemMenu

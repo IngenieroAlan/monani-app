@@ -1,6 +1,7 @@
 import DietFeedRoute from '@/components/dietFeedRoute/DietFeedRoute'
 import SearchMother from '@/components/genealogyRoute/SearchMother'
 import SearchOffspring from '@/components/genealogyRoute/SearchOffspring'
+import MedicationScheduleRoute from '@/components/medicationSchedulesRoute/MedicationScheduleRoute'
 import database from '@/database'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
@@ -56,6 +57,11 @@ export const Navigator = () => {
         <Stack.Screen
           name='DietFeedRoute'
           component={DietFeedRoute}
+          options={{ presentation: 'modal' }}
+        />
+        <Stack.Screen
+          name='MedicationScheduleRoute'
+          component={MedicationScheduleRoute}
           options={{ presentation: 'modal' }}
         />
         <Stack.Screen

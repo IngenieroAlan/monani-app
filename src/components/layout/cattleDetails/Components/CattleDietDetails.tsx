@@ -1,4 +1,4 @@
-import DietFeedItem from "@/components/DietFeedItem";
+import DietFeedItem from "@/components/dietFeedRoute/DietFeedItem";
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import useDiet from "@/hooks/collections/useDiet";

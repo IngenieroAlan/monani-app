@@ -41,29 +41,35 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
     const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined;
     const feedAmount = feedProportion === 'Fija' ? quantity : cattle!.weight * (quantity / 100);
 
-    if (modify && dietFeedId) {
-      dispatch(modifyFeedDiet({
-        dietFeed: {
-          dietFeedId,
-          dietId: "0",
-          feed: feed !== undefined ? feed : dietFeed?.feed,
-          feedProportion,
-          feedAmount,
-          percentage
-        }
-      }))
-    } else {
-      dispatch(saveDietFeed({
-        dietFeed: {
-          dietFeedId: Math.random().toString(),
-          dietId: "0",
-          feed,
-          feedProportion,
-          feedAmount,
-          percentage
-        }
-      }))
-      reset();
+    try {
+      if (modify && dietFeedId) {
+        dispatch(modifyFeedDiet({
+          dietFeed: {
+            dietFeedId,
+            dietId: "0",
+            feed: feed !== undefined ? feed : dietFeed?.feed,
+            feedProportion,
+            feedAmount,
+            percentage
+          }
+        }))
+      } else {
+        dispatch(saveDietFeed({
+          dietFeed: {
+            dietFeedId: Math.random().toString(),
+            dietId: "0",
+            feed,
+            feedProportion,
+            feedAmount,
+            percentage
+          }
+        }))
+        reset();
+      }
+    } catch (error) {
+      console.error(error);
+      // Handle error, e.g., show a snackbar with the error message
+      return;
     }
 
     navigation.goBack()

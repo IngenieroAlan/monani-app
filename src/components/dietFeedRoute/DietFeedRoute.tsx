@@ -78,7 +78,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
           // Add a snackbar
         }
       } catch (error) {
-        console.error("Failed to update diet feed:", error);
+        console.error(error);
         // Handle error, e.g., show a snackbar with the error message
         return;
       }

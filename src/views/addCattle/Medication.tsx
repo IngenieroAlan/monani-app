@@ -50,27 +50,33 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
     const nextDoseAt = getValues('nextDoseAt')
     const dosesPerYear = getValues('dosesPerYear')
 
-    if (modify) {
-      dispatch(modifyMedicationSchedule({
-        medicationSchedule: {
-          medicationScheduleId: medicationScheduleId,
-          medication: medication ? medication : currentMedication,
-          nextDoseAt,
-          dosesPerYear,
-          cattleId: cattle.tagId,
-        }
-      }))
-    } else {
-      dispatch(saveMedicationSchedule({
-        medicationSchedule: {
-          medicationScheduleId: Math.random().toString(),
-          medication: medication,
-          nextDoseAt,
-          dosesPerYear,
-          cattleId: cattle.tagId,
-        }
-      }))
-      reset();
+    try {
+      if (modify) {
+        dispatch(modifyMedicationSchedule({
+          medicationSchedule: {
+            medicationScheduleId: medicationScheduleId,
+            medication: medication ? medication : currentMedication,
+            nextDoseAt,
+            dosesPerYear,
+            cattleId: cattle.tagId,
+          }
+        }))
+      } else {
+        dispatch(saveMedicationSchedule({
+          medicationSchedule: {
+            medicationScheduleId: Math.random().toString(),
+            medication: medication,
+            nextDoseAt,
+            dosesPerYear,
+            cattleId: cattle.tagId,
+          }
+        }))
+        reset();
+      }
+    } catch (error) {
+      console.error(error);
+      // Handle error, e.g., show a snackbar with the error message
+      return;
     }
 
     navigation.goBack()

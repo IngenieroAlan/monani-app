@@ -32,7 +32,6 @@ export const onDeliveredHandler = async (notification: Notification, isMarkedAsR
       : addDays(data.timestamp, interval * AVG_DAYS_PER_MONTH).getTime()
 
   createTriggerNotification({
-    id: notification.id,
     title: notification.title!,
     subtitle: notification.subtitle,
     body: notification.body!,

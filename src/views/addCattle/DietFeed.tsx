@@ -1,3 +1,4 @@
+import DietSnackbarContainer, { DietSnackbarId } from "@/components/dietFeedRoute/DietSnackbarContainer";
 import DietFeedForm from "@/components/forms/DietFeedForm";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
@@ -54,7 +55,7 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
             percentage
           }
         }))
-      // dispatch(show(DietSnackbarId.UPDATED_DIETFEED))
+      dispatch(show(DietSnackbarId.UPDATED_DIETFEED))
       } else {
         dispatch(saveDietFeed({
           dietFeed: {
@@ -67,11 +68,11 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
           }
         }))
         reset();
-        // dispatch(show(DietSnackbarId.STORED_DIETFEED))
+        dispatch(show(DietSnackbarId.STORED_DIETFEED))
       }
     } catch (error) {
       console.error(error);
-      // dispatch(show(DietSnackbarId.SAME_DIETFEED))
+      dispatch(show(DietSnackbarId.SAME_DIETFEED))
       return;
     }
 
@@ -90,6 +91,6 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
       feedName={feedName}
       cattleWeight={cattle.weight}
     />
-    {/* <DietSnackbarContainer /> */}
+    <DietSnackbarContainer />
   </>)
 }

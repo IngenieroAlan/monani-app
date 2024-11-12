@@ -12,6 +12,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
+import DietSnackbarContainer, { DietSnackbarId } from "./DietSnackbarContainer";
 
 export default function DietFeedRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'DietFeedRoute'>) {
   const { cattleInfo } = useAppSelector((state: RootState) => state.cattles);
@@ -68,7 +69,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
             percentage,
             feedProportion
           });
-          // dispatch(show(DietSnackbarId.UPDATED_DIETFEED));
+          dispatch(show(DietSnackbarId.UPDATED_DIETFEED));
         } else {
           await diet?.createDietFeed({
             feed,
@@ -77,11 +78,11 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
             percentage
           });
           reset();
-          // dispatch(show(DietSnackbarId.STORED_DIETFEED));
+          dispatch(show(DietSnackbarId.STORED_DIETFEED));
         }
       } catch (error) {
         console.error(error);
-        // dispatch(show(DietSnackbarId.SAME_DIETFEED))
+        dispatch(show(DietSnackbarId.SAME_DIETFEED))
         return;
       }
     };
@@ -105,7 +106,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
           cattleWeight={cattleInfo.weight}
         />
       )}
-      {/* <DietSnackbarContainer /> */}
+      <DietSnackbarContainer />
     </>
   );
 }

@@ -1,3 +1,4 @@
+import DietSnackbarContainer from "@/components/dietFeedRoute/DietSnackbarContainer";
 import { useAppSelector } from "@/hooks/useRedux";
 import { CattleDietDetails } from "../Components/CattleDietDetails";
 
@@ -6,7 +7,7 @@ export const DietRoute = () => {
   return (
     <>
       {cattleInfo && <CattleDietDetails cattle={cattleInfo} />}
-      {/* <DietSnackbarContainer /> */}
+      <DietSnackbarContainer />
     </>
   )
 }

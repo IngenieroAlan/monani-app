@@ -1,4 +1,5 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
+import MedicationSnackbarContainer from "@/components/dietFeedRoute/MedicationSnackbarContainer"
 import DismissDialog from "@/components/DismissDialog"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
@@ -85,6 +86,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
         onConfirm={goBack}
         onCancel={() => { }}
       />
+      <MedicationSnackbarContainer />
     </SafeAreaProvider>
   </>
   )

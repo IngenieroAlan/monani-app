@@ -1,8 +1,10 @@
+import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/dietFeedRoute/MedicationSnackbarContainer";
 import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
 import useMedications from '@/hooks/collections/useMedications';
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
 import { modifyMedicationSchedule, saveMedicationSchedule } from "@/redux/slices/addCattleSlice";
+import { show } from "@/redux/slices/uiVisibilitySlice";
 import ACMedicationSchema, { ACMedication } from "@/validationSchemas/ACMedicationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -49,18 +51,19 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
     const medication = getValues('medication')
     const nextDoseAt = getValues('nextDoseAt')
     const dosesPerYear = getValues('dosesPerYear')
-
+    
     try {
       if (modify) {
         dispatch(modifyMedicationSchedule({
           medicationSchedule: {
             medicationScheduleId: medicationScheduleId,
-            medication: medication ? medication : currentMedication,
+            medication: medication !== undefined ? medication : currentMedication,
             nextDoseAt,
             dosesPerYear,
             cattleId: cattle.tagId,
           }
         }))
+        dispatch(show(MedicationSnackbarId.UPDATED_MEDICATION))
       } else {
         dispatch(saveMedicationSchedule({
           medicationSchedule: {
@@ -72,15 +75,16 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
           }
         }))
         reset();
+        dispatch(show(MedicationSnackbarId.STORED_MEDICATION))
       }
     } catch (error) {
       console.error(error);
-      // Handle error, e.g., show a snackbar with the error message
+      dispatch(show(MedicationSnackbarId.SAME_MEDICATION))
       return;
     }
 
     navigation.goBack()
-  }, [])
+  }, [currentMedication, dispatch, medicationScheduleId, modify, getValues, reset, cattle.tagId])
 
   return (<>
     <Appbar.Header>
@@ -93,5 +97,6 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       formState={formState}
       medicationName={medicationName}
     />
+    <MedicationSnackbarContainer />
   </>)
 }

@@ -3,12 +3,14 @@ import useMedications from '@/hooks/collections/useMedications';
 import useMedicationSchedules from "@/hooks/collections/useMedicationSchedule";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { RootStackParamList } from "@/navigation/types";
+import { show } from "@/redux/slices/uiVisibilitySlice";
 import ACMedicationSchema, { ACMedication } from "@/validationSchemas/ACMedicationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
+import { MedicationSnackbarId } from "../dietFeedRoute/MedicationSnackbarContainer";
 
 export default function MedicationScheduleRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'MedicationScheduleRoute'>) {
   const { cattleInfo } = useAppSelector(state => state.cattles)
@@ -60,7 +62,7 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
             nextDoseAt,
             dosesPerYear,
           });
-          // Add a snackbar
+        dispatch(show(MedicationSnackbarId.UPDATED_MEDICATION))
         } else {
           await cattleInfo?.createMedicationSchedule({
             medication,
@@ -68,11 +70,11 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
             dosesPerYear,
           });
           reset();
-          // Add a snackbar
+          dispatch(show(MedicationSnackbarId.STORED_MEDICATION))
         }
       } catch (error) {
         console.error("Failed to update diet feed:", error);
-        // Handle error, e.g., show a snackbar with the error message
+        dispatch(show(MedicationSnackbarId.SAME_MEDICATION))
         return;
       }
     };

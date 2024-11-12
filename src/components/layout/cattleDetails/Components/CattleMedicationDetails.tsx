@@ -1,7 +1,10 @@
+import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/dietFeedRoute/MedicationSnackbarContainer";
 import MedicationScheduleItem from "@/components/medicationSchedulesRoute/MedicationScheduleItem";
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import useMedicationSchedules from "@/hooks/collections/useMedicationSchedule";
+import { useAppDispatch } from "@/hooks/useRedux";
+import { show } from "@/redux/slices/uiVisibilitySlice";
 import { cattleDetails } from "@/styles/main";
 import { withObservables } from "@nozbe/watermelondb/react";
 import { useNavigation } from "@react-navigation/native";
@@ -35,6 +38,7 @@ export const CattleMedicationsDetails = observeCattle(({ cattle }: { cattle: Cat
   const { medicationSchedules } = useMedicationSchedules(cattle)
   const [index, setIndex] = useState(0);
   const navigation = useNavigation()
+  const dispatch = useAppDispatch();
 
   const onEdit = useCallback((medicationScheduleId: string) => {
     navigation.navigate('MedicationScheduleRoute', { medicationScheduleId, modify: true });
@@ -44,6 +48,7 @@ export const CattleMedicationsDetails = observeCattle(({ cattle }: { cattle: Cat
     const medicationSchedule = medicationSchedules?.find(medicationSchedule => medicationSchedule.id === medicationScheduleId);
     const deleteDietFeed = async () => {
       medicationSchedule && await medicationSchedule.delete();
+      dispatch(show(MedicationSnackbarId.REMOVED_MEDICATION));
     }
     deleteDietFeed();
   }, [medicationSchedules])
@@ -67,6 +72,7 @@ export const CattleMedicationsDetails = observeCattle(({ cattle }: { cattle: Cat
         onEndReachedThreshold={2}
         onEndReached={() => setIndex(index + 1)}
       />
+      <MedicationSnackbarContainer />
     </ScrollView>
   )
 })

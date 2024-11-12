@@ -1,12 +1,14 @@
 import { useAppDispatch } from '@/hooks/useRedux'
 import { ACMedicationSchedule, } from '@/interfaces/cattleInterfaces'
 import { deleteMedicationSchedule } from '@/redux/slices/addCattleSlice'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { MedicationSchedulesNavigationProps } from '@/views/addCattle/Medications'
 import { memo, useState } from 'react'
 import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { MedicationSnackbarId } from '../dietFeedRoute/MedicationSnackbarContainer'
 
 type navigationProps = MedicationSchedulesNavigationProps['navigation']
 
@@ -48,6 +50,7 @@ const ListItemMenu = (
         leadingIcon='minus'
         onPress={() => {
           setMenuVisible(false);
+          dispatch(show(MedicationSnackbarId.REMOVED_MEDICATION))
           dispatch(deleteMedicationSchedule({ medicationScheduleId: medicationScheduleId }))
         }}
       />

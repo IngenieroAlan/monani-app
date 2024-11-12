@@ -5,8 +5,17 @@ export type NotificationData = {
   type: NotificationType
   timestamp: number // Needed for iOS.
   foreignId?: string
-  monthInterval?: number // To reschedule notifications like medications.
+  timesPerYear?: number // To reschedule notifications like medications.
   extraInfo?: string
+}
+
+export type NotificationProps = {
+  id?: string
+  title: string
+  subtitle?: string
+  body: string
+  data: NotificationData
+  triggerTimestamp: number
 }
 
 export enum CattleNotificationEventType {

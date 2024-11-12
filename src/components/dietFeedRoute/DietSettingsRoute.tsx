@@ -8,7 +8,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
-import DietSnackBarContainer, { DietSnackbarId } from "./DietContainerSnackbar";
 import DietSettingsForm from "../forms/DietSettingsForm";
 import useDiet from "@/hooks/collections/useDiet";
 
@@ -65,7 +64,7 @@ export default function DietSettingsRoute({ navigation }: NativeStackScreenProps
       isConcentrateExcluded,
       percentage
     })
-    dispatch(show(DietSnackbarId.UPDATED_DIET))
+    // dispatch(show(DietSnackbarId.UPDATED_DIET))
 
     navigation.goBack()
   }, [diet, dispatch, getValues, cattleInfo, navigation])
@@ -83,6 +82,6 @@ export default function DietSettingsRoute({ navigation }: NativeStackScreenProps
         cattleWeight={cattleInfo.weight}
       />
     }
-    <DietSnackBarContainer />
+    {/* <DietSnackbarContainer /> */}
   </>)
 }

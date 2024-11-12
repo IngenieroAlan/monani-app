@@ -11,7 +11,6 @@ import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { DietSnackbarId } from '../dietFeedRoute/DietContainerSnackbar'
 
 type DietFeedItem = {
   dietFeedId: string;
@@ -61,7 +60,7 @@ const ListItemMenu = (
         leadingIcon='minus'
         onPress={() => {
           dispatch(deleteDietFeed({ dietFeedId }))
-          dispatch(show(DietSnackbarId.REMOVED_DIETFEED))
+          // dispatch(show(DietSnackbarId.REMOVED_DIETFEED))
           setMenuVisible(false);
         }}
       />

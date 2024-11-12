@@ -115,19 +115,21 @@ export const CattleTopStack = () => {
               focus: () => dispatch(setScreen('WeightRoute'))
             }}
           />
-          <Stack.Screen
-            name={"MilkyRoute"}
-            options={{
-              tabBarIcon: ({ color }) => (
-                <Icon size={iconSize} color={color} source={'beer-outline'} />
-              ),
-              tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Prod. Lechera</Text>
-            }}
-            component={InfoRoute}
-            listeners={{
-              focus: () => dispatch(setScreen('MilkyRoute'))
-            }}
-          />
+          {cattleInfo?.productionType === 'Lechera' &&
+            <Stack.Screen
+              name={"MilkyRoute"}
+              options={{
+                tabBarIcon: ({ color }) => (
+                  <Icon size={iconSize} color={color} source={'beer-outline'} />
+                ),
+                tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Prod. Lechera</Text>
+              }}
+              component={InfoRoute}
+              listeners={{
+                focus: () => dispatch(setScreen('MilkyRoute'))
+              }}
+            />
+          }
           <Stack.Screen
             name={"GenealogyRoute"}
             options={{

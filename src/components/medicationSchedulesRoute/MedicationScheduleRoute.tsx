@@ -20,7 +20,8 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
   const modify = route.params?.modify || false;
 
   const medicationSchedule = useMemo(() => medicationSchedules?.find(medicationSchedule => medicationSchedule.id === medicationScheduleId), [medicationSchedules, medicationScheduleId])
-  const medicationName = useMemo(() => (medications.find(medication => medication.id === medicationSchedule?.medication.id)?.name), [medications, medicationSchedule])
+  const currentMedication = useMemo(() => medications.find(medication => medication.id === medicationSchedule?.medication.id), [medicationSchedule, medications])
+  const medicationName = useMemo(() => (currentMedication ? currentMedication.name : undefined), [currentMedication])
 
   const {
     control,
@@ -51,26 +52,32 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
   const onSubmit = useCallback(() => {
     const { medication, nextDoseAt, dosesPerYear } = getValues()
 
-    // if (modify) {
-    //   dispatch(modifyMedicationSchedule({
-    //     medication,
-    //     nextDoseAt,
-    //     dosesPerYear,
-    //     cattleId: cattle.tagId,
-    //   }))
-    // } else {
-    //   dispatch(saveMedicationSchedule({
-    //     medicationSchedule: {
-    //       medicationScheduleId: Math.random().toString(),
-    //       medication,
-    //       nextDoseAt,
-    //       dosesPerYear,
-    //       cattleId: cattle.tagId,
-    //     }
-    //   }))
-    //   reset();
-    // }
+    const Action = async () => {
+      try {
+        if (modify) {
+          await medicationSchedule?.updateMedicationSchedule({
+            medication: medication ? medication : currentMedication,
+            nextDoseAt,
+            dosesPerYear,
+          });
+          // Add a snackbar
+        } else {
+          await cattleInfo?.createMedicationSchedule({
+            medication,
+            nextDoseAt,
+            dosesPerYear,
+          });
+          reset();
+          // Add a snackbar
+        }
+      } catch (error) {
+        console.error("Failed to update diet feed:", error);
+        // Handle error, e.g., show a snackbar with the error message
+        return;
+      }
+    };
 
+    Action();
     navigation.goBack()
   }, [])
 

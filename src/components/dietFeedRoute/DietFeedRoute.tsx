@@ -56,11 +56,11 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
     const { feedProportion, feed, quantity } = getValues();
     const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined;
     const feedAmount = feedProportion === 'Fija' ? quantity : cattleInfo!.weight * (quantity / 100);
-    
+
     const Action = async () => {
       try {
         if (modify && dietFeed) {
-          await dietFeed?.updateDietFeed({
+          await dietFeed.updateDietFeed({
             feed: feed ? feed : currentFeed,
             feedAmount,
             percentage,
@@ -80,6 +80,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
       } catch (error) {
         console.error("Failed to update diet feed:", error);
         // Handle error, e.g., show a snackbar with the error message
+        return;
       }
     };
 

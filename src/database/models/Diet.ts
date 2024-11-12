@@ -52,7 +52,7 @@ class Diet extends Model {
       .extend(Q.where('feed_id', feed.id))
       .fetchCount()
 
-    if (existingDietFeed > 0) throw new Error('This feed is already part of the diet.')
+    if (existingDietFeed > 0) throw new Error('Este alimento ya es parte de la dieta.')
 
     await this.collections.get<DietFeed>(TableName.DIET_FEED)
       .create((record) => {

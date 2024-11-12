@@ -6,15 +6,6 @@ import { memo, useCallback, useState } from 'react'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-type DietFeedItem = {
-  dietFeedId: string;
-  dietId: string;
-  feedId: string;
-  feedAmount: number;
-  percentage?: number;
-  feedProportion: FeedProportion;
-}
-
 const observeDietFeed = withObservables([TableName.DIET_FEED], ({ diet_feed }: { diet_feed: DietFeed }) => ({
   diet_feed
 }))

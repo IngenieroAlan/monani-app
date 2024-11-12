@@ -38,7 +38,7 @@ const createMedicationScheduleRecords = async (cattle: Cattle, medicationsToSche
       cattle,
       medicationToSchedule.name,
       medicationToSchedule.id,
-      12 / dosesPerYear,
+      dosesPerYear,
       nextDoseAt
     )
   }

@@ -36,7 +36,10 @@ export const onDeliveredHandler = async (notification: Notification, isMarkedAsR
     title: notification.title!,
     subtitle: notification.subtitle,
     body: notification.body!,
-    data: notification.data as NotificationData,
+    data: {
+      ...(notification.data as NotificationData),
+      timestamp: nextTriggerTimestamp
+    },
     triggerTimestamp: nextTriggerTimestamp
   })
 }

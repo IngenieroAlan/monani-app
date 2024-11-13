@@ -3,12 +3,14 @@ import useMedications from '@/hooks/collections/useMedications';
 import useMedicationSchedules from "@/hooks/collections/useMedicationSchedule";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { RootStackParamList } from "@/navigation/types";
+import { show } from "@/redux/slices/uiVisibilitySlice";
 import ACMedicationSchema, { ACMedication } from "@/validationSchemas/ACMedicationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
+import { MedicationSnackbarId } from "./MedicationSnackbarContainer";
 
 export default function MedicationScheduleRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'MedicationScheduleRoute'>) {
   const { cattleInfo } = useAppSelector(state => state.cattles)
@@ -20,7 +22,8 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
   const modify = route.params?.modify || false;
 
   const medicationSchedule = useMemo(() => medicationSchedules?.find(medicationSchedule => medicationSchedule.id === medicationScheduleId), [medicationSchedules, medicationScheduleId])
-  const medicationName = useMemo(() => (medications.find(medication => medication.id === medicationSchedule?.medication.id)?.name), [medications, medicationSchedule])
+  const currentMedication = useMemo(() => medications.find(medication => medication.id === medicationSchedule?.medication.id), [medicationSchedule, medications])
+  const medicationName = useMemo(() => (currentMedication ? currentMedication.name : undefined), [currentMedication])
 
   const {
     control,
@@ -51,26 +54,32 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
   const onSubmit = useCallback(() => {
     const { medication, nextDoseAt, dosesPerYear } = getValues()
 
-    // if (modify) {
-    //   dispatch(modifyMedicationSchedule({
-    //     medication,
-    //     nextDoseAt,
-    //     dosesPerYear,
-    //     cattleId: cattle.tagId,
-    //   }))
-    // } else {
-    //   dispatch(saveMedicationSchedule({
-    //     medicationSchedule: {
-    //       medicationScheduleId: Math.random().toString(),
-    //       medication,
-    //       nextDoseAt,
-    //       dosesPerYear,
-    //       cattleId: cattle.tagId,
-    //     }
-    //   }))
-    //   reset();
-    // }
+    const Action = async () => {
+      try {
+        if (modify) {
+          await medicationSchedule?.updateMedicationSchedule({
+            medication: medication ? medication : currentMedication,
+            nextDoseAt,
+            dosesPerYear,
+          });
+        dispatch(show(MedicationSnackbarId.UPDATED_MEDICATION))
+        } else {
+          await cattleInfo?.createMedicationSchedule({
+            medication,
+            nextDoseAt,
+            dosesPerYear,
+          });
+          reset();
+          dispatch(show(MedicationSnackbarId.STORED_MEDICATION))
+        }
+      } catch (error) {
+        console.error("Failed to update diet feed:", error);
+        dispatch(show(MedicationSnackbarId.SAME_MEDICATION))
+        return;
+      }
+    };
 
+    Action();
     navigation.goBack()
   }, [])
 

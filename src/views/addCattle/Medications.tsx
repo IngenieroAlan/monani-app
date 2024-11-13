@@ -1,41 +1,24 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
-import useFeeds from '@/hooks/collections/useFeeds'
-import useMedications from "@/hooks/collections/useMedications"
+import MedicationSnackbarContainer from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer"
+import DismissDialog from "@/components/DismissDialog"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { ACMedicationScheduleItem } from "@/interfaces/cattleInterfaces"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
+import { show } from "@/redux/slices/uiVisibilitySlice"
 import { RootState } from "@/redux/store/store"
 import { createCattle } from "@/utils"
-import { DietFeedFields } from "@/utils/createCattle"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
 export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattleStackParamsList & BottomTabsParamList, 'Medications'>;
+const DISMISS_DIALOG_ID = 'createCattleDismissDialog'
+
 export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { medications } = useMedications()
-  const { feeds } = useFeeds()
   const { cattle, diet, dietFeeds, medicationSchedules } = useAppSelector((state: RootState) => state.addCattle)
-  const [currentMedicationSchedules, setCurrentMedicationSchedules] = useState<ACMedicationScheduleItem[]>([])
-
-  useEffect(() => {
-    setCurrentMedicationSchedules(
-      medicationSchedules.map(medicationSchedule => {
-        const medication = medications.find(medication => medication.id === medicationSchedule.medicationId)
-        return {
-          ...medicationSchedule,
-          medicationType: medication?.medicationType || 'Otro',
-          medicationName: medication?.name || '',
-        }
-      })
-    )
-  }, [medicationSchedules])
-
 
   const goBack = () => {
     dispatch(reset())
@@ -43,24 +26,6 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
   }
 
   const handleSave = () => {
-    const dietFeedsFields: DietFeedFields[] = dietFeeds.map(dietFeed => {
-      const feed = feeds.find(feed => feed.id === dietFeed.feed.id)
-      return {
-        feed: feed!,
-        feedAmount: dietFeed.feedAmount,
-        feedProportion: dietFeed.feedProportion
-      }
-    })
-
-    const medicationSchedulesFields = medicationSchedules.map(medicationSchedule => {
-      const medication = medications.find(medication => medication.id === medicationSchedule.medicationId)
-      return {
-        medication: medication!,
-        nextDoseAt: medicationSchedule.nextDoseAt,
-        dosesPerYear: medicationSchedule.dosesPerYear
-      }
-    })
-
     const createCattleFunction = async () => {
       try {
         if (cattle.admittedAt && cattle.bornAt && diet.waterAmount) {
@@ -72,10 +37,10 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
             },
             {
               ...diet,
-              waterAmount: diet.waterAmount ?? 0 // Ensure waterAmount is a number
+              waterAmount: diet.waterAmount
             },
-            dietFeedsFields,
-            medicationSchedulesFields
+            dietFeeds,
+            medicationSchedules
           )
         }
       } catch (error) {
@@ -84,22 +49,20 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
     };
 
     createCattleFunction();
-
     dispatch(reset());
-
     navigation.navigate('Ganado');
   }
 
   return (<>
     <Appbar.Header>
-      <Appbar.BackAction onPress={goBack} />
+      <Appbar.BackAction onPress={() => dispatch(show(DISMISS_DIALOG_ID))} />
       <Appbar.Content title='Medicación' />
       <Appbar.Action icon="plus" onPress={() => navigation.navigate('Medication')} />
     </Appbar.Header>
     <SafeAreaProvider style={{ backgroundColor: theme.colors.surface }}>
       <MedicationSchedulesList
         navigation={navigation}
-        medicationSchedules={currentMedicationSchedules}
+        medicationSchedules={medicationSchedules}
       />
       <View style={styles.navigationButtons}>
         <Button
@@ -117,6 +80,13 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
           Guardar
         </Button>
       </View>
+      <DismissDialog
+        id={DISMISS_DIALOG_ID}
+        snackbarOnDismiss
+        onConfirm={goBack}
+        onCancel={() => { }}
+      />
+      <MedicationSnackbarContainer />
     </SafeAreaProvider>
   </>
   )

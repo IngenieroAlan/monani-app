@@ -52,6 +52,10 @@ const addCattleSlice = createSlice({
       state.cattle = action.payload.cattle
     },
     saveDietFeed: (state, action: PayloadAction<{ dietFeed: ACDietFeed }>) => {
+      // if feed is alredy in the list, do not add it
+      if (state.dietFeeds.some((dietFeed) => dietFeed.feed.id === action.payload.dietFeed.feed.id)) {
+        throw new Error('Este alimento ya es parte de la dieta.')
+      }
       state.dietFeeds.push(action.payload.dietFeed)
     },
     modifyFeedDiet: (state, action: PayloadAction<{ dietFeed: ACDietFeed }>) => {
@@ -62,6 +66,10 @@ const addCattleSlice = createSlice({
       state.dietFeeds = state.dietFeeds.filter((dietFeed) => dietFeed.dietFeedId !== action.payload.dietFeedId)
     },
     saveMedicationSchedule: (state, action: PayloadAction<{ medicationSchedule: ACMedicationSchedule }>) => {
+      // if medication is alredy in the list, do not add it
+      if (state.medicationSchedules.some((medicationSchedule) => medicationSchedule.medicationScheduleId === action.payload.medicationSchedule.medicationScheduleId)) {
+        throw new Error(`Ya existe una programación para el medicamento ${action.payload.medicationSchedule.medication.name}.`)
+      }
       state.medicationSchedules.push(action.payload.medicationSchedule)
     },
     modifyMedicationSchedule: (state, action: PayloadAction<{ medicationSchedule: ACMedicationSchedule }>) => {

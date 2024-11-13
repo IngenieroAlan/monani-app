@@ -14,6 +14,7 @@ import MilkProduction from './MilkProduction'
 import MilkReport from './MilkReport'
 import Notification from './Notification'
 import WeightReport from './WeightReport'
+import Medication from './Medication'
 
 export type ProductionType = 'Lechera' | 'De carne'
 export type CattleStatus = 'Gestante' | 'En producción' | 'De reemplazo' | 'De deshecho'
@@ -359,6 +360,30 @@ class Cattle extends Model {
           })
       })
     )
+  }
+
+  @writer
+  async createMedicationSchedule({ medication, nextDoseAt, dosesPerYear }: { medication: Medication, nextDoseAt: Date, dosesPerYear: number }) {
+    const medicationSchedule = await this.collections.get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
+      .query(
+        Q.where('cattle_id', this.id),
+        Q.where('medication_id', medication.id),
+        Q.take(1)
+      )
+      .fetch()
+
+    if (medicationSchedule.length > 0) {
+      throw new Error(`Ya existe una programación para el medicamento ${medication.name}.`)
+    }
+
+    await this.collections.get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
+      .create((record) => {
+        record.cattle.set(this)
+        record.medication.set(medication)
+
+        record.nextDoseAt = nextDoseAt
+        record.dosesPerYear = dosesPerYear
+      })
   }
 
   @writer

@@ -1,7 +1,9 @@
+import DismissDialog from "@/components/DismissDialog"
 import CattleInfoForm from "@/components/forms/CattleInfoForm"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList } from "@/navigation/types"
 import { CattleInfoFields, reset as resetCattle, saveCattleInfo } from "@/redux/slices/addCattleSlice"
+import { show } from "@/redux/slices/uiVisibilitySlice"
 import CattleInfoSchema from "@/validationSchemas/cattleInfoSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -10,6 +12,8 @@ import { useForm } from "react-hook-form"
 import { View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
+
+const DISMISS_DIALOG_ID = 'createCattleDismissDialog'
 
 type Props = NativeStackScreenProps<AddCattleStackParamsList, 'CattleInfo'>;
 export const CattlInfo = ({ navigation }: Props) => {
@@ -58,7 +62,7 @@ export const CattlInfo = ({ navigation }: Props) => {
 
   return (<>
     <Appbar.Header>
-      <Appbar.BackAction onPress={goBack} />
+      <Appbar.BackAction onPress={() => isDirty ? dispatch(show(DISMISS_DIALOG_ID)) : goBack()} />
       <Appbar.Content title='Información' />
     </Appbar.Header>
     <SafeAreaProvider>
@@ -78,6 +82,12 @@ export const CattlInfo = ({ navigation }: Props) => {
           Siguiente
         </Button>
       </View>
+      <DismissDialog
+        id={DISMISS_DIALOG_ID}
+        snackbarOnDismiss
+        onConfirm={goBack}
+        onCancel={() => { }}
+      />
     </SafeAreaProvider>
   </>)
 }

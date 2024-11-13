@@ -2,8 +2,9 @@ import DietFeedForm from "@/components/forms/DietFeedForm";
 import useDiet from "@/hooks/collections/useDiet";
 import useDietFeeds from "@/hooks/collections/useDietFeeds";
 import useFeeds from '@/hooks/collections/useFeeds';
-import { useAppSelector } from "@/hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { RootStackParamList } from "@/navigation/types";
+import { show } from "@/redux/slices/uiVisibilitySlice";
 import { RootState } from "@/redux/store/store";
 import DietFeedSchema, { DietFeedFields } from "@/validationSchemas/DietFeedSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,12 +12,14 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
+import DietSnackbarContainer, { DietSnackbarId } from "./DietSnackbarContainer";
 
 export default function DietFeedRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'DietFeedRoute'>) {
   const { cattleInfo } = useAppSelector((state: RootState) => state.cattles);
   const { feeds } = useFeeds()
   const { dietFeeds } = useDietFeeds(cattleInfo!);
   const { diet } = useDiet(cattleInfo!);
+  const dispatch = useAppDispatch();
 
   const dietFeedId = route.params?.dietFeedId;
   const modify = route.params?.modify || false;
@@ -56,17 +59,17 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
     const { feedProportion, feed, quantity } = getValues();
     const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined;
     const feedAmount = feedProportion === 'Fija' ? quantity : cattleInfo!.weight * (quantity / 100);
-    
+
     const Action = async () => {
       try {
         if (modify && dietFeed) {
-          await dietFeed?.updateDietFeed({
+          await dietFeed.updateDietFeed({
             feed: feed ? feed : currentFeed,
             feedAmount,
             percentage,
             feedProportion
           });
-          // Add a snackbar
+          dispatch(show(DietSnackbarId.UPDATED_DIETFEED));
         } else {
           await diet?.createDietFeed({
             feed,
@@ -75,11 +78,12 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
             percentage
           });
           reset();
-          // Add a snackbar
+          dispatch(show(DietSnackbarId.STORED_DIETFEED));
         }
       } catch (error) {
-        console.error("Failed to update diet feed:", error);
-        // Handle error, e.g., show a snackbar with the error message
+        console.error(error);
+        dispatch(show(DietSnackbarId.SAME_DIETFEED))
+        return;
       }
     };
 
@@ -102,6 +106,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
           cattleWeight={cattleInfo.weight}
         />
       )}
+      <DietSnackbarContainer />
     </>
   );
 }

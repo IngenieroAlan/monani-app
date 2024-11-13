@@ -26,9 +26,8 @@ const CattleMedicationForm = ({ control, formState, medicationName }: {
         id: medication.id,
         title: medication.name,
         description: medication.medicationType,
-        value: medication.id
-      }))
-      , [medications])
+        value: medication
+      })), [medications])
 
   return (
     <View style={{

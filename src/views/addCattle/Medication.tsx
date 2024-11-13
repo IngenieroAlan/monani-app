@@ -1,8 +1,10 @@
+import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer";
 import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
 import useMedications from '@/hooks/collections/useMedications';
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
 import { modifyMedicationSchedule, saveMedicationSchedule } from "@/redux/slices/addCattleSlice";
+import { show } from "@/redux/slices/uiVisibilitySlice";
 import ACMedicationSchema, { ACMedication } from "@/validationSchemas/ACMedicationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -19,12 +21,14 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
   const modify = route.params?.modify || false;
 
   const medicationSchedule = useMemo(() => medicationSchedules.find(medicationSchedule => medicationSchedule.medicationScheduleId === medicationScheduleId), [medicationSchedules, medicationScheduleId])
+  const currentMedication = useMemo(() => medications.find(medication => medication.id === medicationSchedule?.medication.id), [medications, medicationSchedule])
+  const medicationName = useMemo(() => (currentMedication ? currentMedication.name : undefined), [currentMedication])
+
   const initialMedicationScheduleValues = medicationSchedule ? {
-    medication: medicationSchedule.medicationId,
+    medication: undefined,
     nextDoseAt: medicationSchedule.nextDoseAt,
     dosesPerYear: medicationSchedule.dosesPerYear
   } : undefined
-  const medicationName = useMemo(() => (medications.find(medication => medication.id === medicationSchedule?.medicationId)?.name), [medications, medicationSchedule])
 
   const {
     control,
@@ -47,32 +51,40 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
     const medication = getValues('medication')
     const nextDoseAt = getValues('nextDoseAt')
     const dosesPerYear = getValues('dosesPerYear')
-
-    if (modify) {
-      dispatch(modifyMedicationSchedule({
-        medicationSchedule: {
-          medicationScheduleId: medicationScheduleId,
-          medicationId: medication,
-          nextDoseAt,
-          dosesPerYear,
-          cattleId: cattle.tagId,
-        }
-      }))
-    } else {
-      dispatch(saveMedicationSchedule({
-        medicationSchedule: {
-          medicationScheduleId: Math.random().toString(),
-          medicationId: medication,
-          nextDoseAt,
-          dosesPerYear,
-          cattleId: cattle.tagId,
-        }
-      }))
-      reset();
+    
+    try {
+      if (modify) {
+        dispatch(modifyMedicationSchedule({
+          medicationSchedule: {
+            medicationScheduleId: medicationScheduleId,
+            medication: medication !== undefined ? medication : currentMedication,
+            nextDoseAt,
+            dosesPerYear,
+            cattleId: cattle.tagId,
+          }
+        }))
+        dispatch(show(MedicationSnackbarId.UPDATED_MEDICATION))
+      } else {
+        dispatch(saveMedicationSchedule({
+          medicationSchedule: {
+            medicationScheduleId: Math.random().toString(),
+            medication: medication,
+            nextDoseAt,
+            dosesPerYear,
+            cattleId: cattle.tagId,
+          }
+        }))
+        reset();
+        dispatch(show(MedicationSnackbarId.STORED_MEDICATION))
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch(show(MedicationSnackbarId.SAME_MEDICATION))
+      return;
     }
 
     navigation.goBack()
-  }, [])
+  }, [currentMedication, dispatch, medicationScheduleId, modify, getValues, reset, cattle.tagId])
 
   return (<>
     <Appbar.Header>
@@ -85,5 +97,6 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       formState={formState}
       medicationName={medicationName}
     />
+    <MedicationSnackbarContainer />
   </>)
 }

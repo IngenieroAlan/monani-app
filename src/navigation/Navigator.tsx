@@ -18,6 +18,7 @@ import BottomTabsStack from './BottomTabsStack'
 import AddCattleStack from './stacks/AddCattleStack'
 import ResourcesStack from './stacks/ResourcesStack'
 import { RootStackParamList } from './types'
+import DietSettingsRoute from '@/components/dietFeedRoute/DietSettingsRoute'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -62,6 +63,11 @@ export const Navigator = () => {
         <Stack.Screen
           name='CattleDetailsLayout'
           component={CattleTopStack}
+        />
+        <Stack.Screen
+          name='DietSettingsRoute'
+          component={DietSettingsRoute}
+          options={{ presentation: 'modal' }}
         />
         <Stack.Screen
           name='DietFeedRoute'

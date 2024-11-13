@@ -3,6 +3,7 @@ import { useAppDispatch } from '@/hooks/useRedux'
 import { ACDietFeed } from '@/interfaces/cattleInterfaces'
 import { AddCattleStackParamsList, BottomTabsParamList } from '@/navigation/types'
 import { deleteDietFeed } from '@/redux/slices/addCattleSlice'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { memo, useState } from 'react'
@@ -10,6 +11,7 @@ import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { DietSnackbarId } from '../dietFeedRoute/DietSnackbarContainer'
 
 type DietFeedItem = {
   dietFeedId: string;
@@ -59,6 +61,7 @@ const ListItemMenu = (
         leadingIcon='minus'
         onPress={() => {
           dispatch(deleteDietFeed({ dietFeedId }))
+          dispatch(show(DietSnackbarId.REMOVED_DIETFEED))
           setMenuVisible(false);
         }}
       />

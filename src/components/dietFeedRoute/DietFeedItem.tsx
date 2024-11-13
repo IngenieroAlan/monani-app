@@ -1,19 +1,12 @@
-import DietFeed, { FeedProportion } from '@/database/models/DietFeed'
+import DietFeed from '@/database/models/DietFeed'
 import { TableName } from '@/database/schema'
-import useFeeds from '@/hooks/collections/useFeeds'
+import { useAppDispatch } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { withObservables } from '@nozbe/watermelondb/react'
-import { memo, useCallback, useState } from 'react'
+import { memo, useState } from 'react'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-
-type DietFeedItem = {
-  dietFeedId: string;
-  dietId: string;
-  feedId: string;
-  feedAmount: number;
-  percentage?: number;
-  feedProportion: FeedProportion;
-}
+import { DietSnackbarId } from './DietSnackbarContainer'
 
 const observeDietFeed = withObservables([TableName.DIET_FEED], ({ diet_feed }: { diet_feed: DietFeed }) => ({
   diet_feed
@@ -29,6 +22,7 @@ const ListItemMenu = (
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const [menuVisible, setMenuVisible] = useState(false)
+  const dispatch = useAppDispatch()
 
   return (
     <Menu
@@ -57,6 +51,7 @@ const ListItemMenu = (
         leadingIcon='minus'
         onPress={() => {
           onDelete(dietFeedId)
+          dispatch(show(DietSnackbarId.REMOVED_DIETFEED))
           setMenuVisible(false);
         }}
       />
@@ -68,11 +63,10 @@ type DietFeedProps = {
   diet_feed: DietFeed,
   onEdit: (dietFeedId: string) => void,
   onDelete: (dietFeedId: string) => void
+  findFeedName: (feedId: string) => string
 }
 
-const DietFeedItem = observeDietFeed(({ diet_feed, onEdit, onDelete }: DietFeedProps) => {
-  const { feeds } = useFeeds()
-  const findFeedName = useCallback((feedId: string) => feeds.find(feed => feed.id === feedId)?.name || '', [feeds])
+const DietFeedItem = observeDietFeed(({ diet_feed, onEdit, onDelete, findFeedName }: DietFeedProps) => {
   return (
     <List.Item
       style={{ paddingVertical: 2, paddingRight: 8 }}

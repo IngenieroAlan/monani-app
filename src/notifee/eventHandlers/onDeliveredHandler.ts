@@ -1,4 +1,4 @@
-import { createNotification } from '@/utils/notifications'
+import { createNotification } from '@/utils/sentNotifications'
 import { Notification } from '@notifee/react-native'
 import { addDays, addMonths } from 'date-fns'
 import { createTriggerNotification } from '../constructors'

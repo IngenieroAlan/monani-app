@@ -1,7 +1,7 @@
 import NotificationsAppbar from '@/components/notifications/NotificationsAppbar'
 import NotificationsSection from '@/components/notifications/NotificationsSection'
 import SentNotification from '@/database/models/SentNotification'
-import useNotifications from '@/hooks/collections/useNotifications'
+import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import useAppTheme from '@/theme'
 import { FlashList } from '@shopify/flash-list'
 import { format } from 'date-fns'
@@ -46,7 +46,7 @@ const ITEMS_PER_PAGE = 25
 export const NotificationsView = () => {
   const theme = useAppTheme()
   const [index, setIndex] = useState(0)
-  const { notifications } = useNotifications({
+  const { notifications } = useSentNotifications({
     take: ITEMS_PER_PAGE + ITEMS_PER_PAGE * index
   })
 

@@ -9,7 +9,7 @@ type UseNotificationsProps = {
   take?: number
 }
 
-const useNotifications = ({ take, isMarkedAsRead }: UseNotificationsProps = {}) => {
+const useSentNotifications = ({ take, isMarkedAsRead }: UseNotificationsProps = {}) => {
   const database = useDatabase()
   const [notifications, setNotifications] = useState<SentNotification[]>([])
 
@@ -36,4 +36,4 @@ const useNotifications = ({ take, isMarkedAsRead }: UseNotificationsProps = {}) 
   return { notifications }
 }
 
-export default useNotifications
+export default useSentNotifications

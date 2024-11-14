@@ -52,7 +52,7 @@ export const CattlInfo = ({ navigation }: Props) => {
       productionType: undefined,
       pregnantAt: undefined,
       motherId: undefined,
-      quarantineDaysLeft: undefined,
+      quarantineDays: undefined,
     },
     resolver: zodResolver(CattleInfoSchema),
     mode: 'onTouched'

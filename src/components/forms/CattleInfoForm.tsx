@@ -1,16 +1,13 @@
-import Cattle from "@/database/models/Cattle";
 import useCattle from "@/hooks/collections/useCattle";
-import { Q } from "@nozbe/watermelondb";
-import { memo, useEffect, useMemo, useState } from "react";
-import { Control, Controller, FormState, useController } from "react-hook-form";
+import { CattleInfoFields } from "@/redux/slices/addCattleSlice";
+import { memo, useMemo, useState } from "react";
+import { Control, FormState, useController } from "react-hook-form";
 import { FlatList, View } from "react-native";
-import { Checkbox, Divider, HelperText, Icon, IconButton, Text, TextInput, useTheme } from "react-native-paper";
-import { DatePickerInput } from "react-native-paper-dates";
+import { Checkbox, Divider, HelperText, Text, useTheme } from "react-native-paper";
 import { CustomTextInput } from "../CustomTextInput";
+import MDatePickerInput from "../MDatePickerInput";
 import MDropdown from "../MDropdown";
 import MSearchBar from "../MSearchBar";
-import { CattleInfoFields } from "@/redux/slices/addCattleSlice";
-import MDatePickerInput from "../MDatePickerInput";
 
 const CattleInfoForm = (
   { control, formState, motherId }:
@@ -24,7 +21,7 @@ const CattleInfoForm = (
   const { errors } = formState;
   const { field: cattleStatusField } = useController({ name: 'cattleStatus', control });
   const { field: weight } = useController({ name: 'weight', control });
-  const { field: quarantineDaysLeft } = useController({ name: 'quarantineDaysLeft', control });
+  const { field: quarantineDays } = useController({ name: 'quarantineDays', control });
 
   const cattleStatusOptions = [
     {
@@ -218,20 +215,19 @@ const CattleInfoForm = (
             status={inQuarantine ? 'checked' : 'unchecked'}
             onPress={() => {
               setQuarantine(!inQuarantine);
-              quarantineDaysLeft.onChange(inQuarantine ? 0 : undefined as any)
+              quarantineDays.onChange(inQuarantine ? 0 : undefined as any)
             }}
           />
           <CustomTextInput
-            name="quarantineDaysLeft"
+            name="quarantineDays"
             control={control}
             label={'Días de cuarentena'}
-            errors={errors.quarantineDaysLeft}
-            helperText={errors.quarantineDaysLeft?.message ? errors.quarantineDaysLeft.message : ''}
+            errors={errors.quarantineDays}
+            helperText={errors.quarantineDays?.message ? errors.quarantineDays.message : ''}
             more={{
               keyboardType: "numeric",
               disabled: !inQuarantine,
-              value: quarantineDaysLeft.value ? String(quarantineDaysLeft.value) : '',
-              onChangeText: (value: string) => quarantineDaysLeft.onChange(parseFloat(value)),
+              onChangeText: (value: string) => quarantineDays.onChange(parseFloat(value)),
             }}
           />
         </View>

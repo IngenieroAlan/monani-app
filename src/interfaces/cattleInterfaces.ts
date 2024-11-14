@@ -10,7 +10,7 @@ interface ACCattle {
     tagId: string;
     tagCattleNumber: string;
     weight: number;
-    quarantineDaysLeft?: number;
+    quarantineDays?: number;
     admittedAt: Date | undefined;
     bornAt: Date | undefined;
     pregnantAt?: Date;

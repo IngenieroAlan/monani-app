@@ -1,4 +1,4 @@
-import useNotifications from '@/hooks/collections/useNotifications'
+import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { NotificationsView } from '../notifications/Notifications'
 import PlaygroundView from './views/PlaygroundView'
@@ -27,7 +27,7 @@ const NotificationsTestStack = () => {
         name='notifications'
         component={NotificationsView}
         options={() => {
-          const { notifications } = useNotifications({ isMarkedAsRead: false })
+          const { notifications } = useSentNotifications({ isMarkedAsRead: false })
 
           return {
             tabBarLabel: 'Entregadas',

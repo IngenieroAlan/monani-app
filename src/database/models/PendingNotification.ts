@@ -16,7 +16,6 @@ class PendingNotification extends Model {
   @readonly @date('updated_at') updatedAt!: Date
 
   @nochange @field('type') type!: NotificationType
-  @nochange @field('notifee_id') notifeeId!: string
 
   @field('foreign_id') foreignId?: string
 

@@ -8,8 +8,8 @@ export const createPendingNotification = async (data: NotificationData, notifeeI
     await database.collections
       .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
       .create((record) => {
+        record._raw.id = notifeeId
         record.cattle.id = data.cattleId
-        record.notifeeId = notifeeId
         record.type = data.type
         record.foreignId = data.foreignId
       })

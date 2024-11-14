@@ -235,7 +235,6 @@ export default appSchema({
     tableSchema({
       name: TableName.PENDING_NOTIFICATIONS,
       columns: [
-        { name: 'notifee_id', type: 'string', isIndexed: true },
         { name: 'type', type: 'string' },
         { name: 'foreign_id', type: 'string', isOptional: true },
         { name: 'cattle_id', type: 'string', isIndexed: true },

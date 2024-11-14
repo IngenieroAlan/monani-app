@@ -18,7 +18,6 @@ export const onDeliveredHandler = async (notification: Notification, isMarkedAsR
     eventAt: new Date(data.timestamp!),
     cattleId: data.cattleId,
     type: data.type,
-    foreignId: data.foreignId,
     isMarkedAsRead: isMarkedAsRead,
     extraInfo: data.extraInfo ? JSON.parse(data.extraInfo) : undefined
   })

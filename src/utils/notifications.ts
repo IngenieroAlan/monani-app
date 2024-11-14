@@ -8,7 +8,6 @@ type NotificationData = {
   eventAt: Date
   cattleId: string
   type: NotificationType
-  foreignId?: string
   isMarkedAsRead: boolean
   extraInfo?: string[]
 }
@@ -22,7 +21,6 @@ export const createNotification = async (data: NotificationData) => {
         record.eventAt = data.eventAt
         record.cattle.id = data.cattleId
         record.type = data.type
-        record.foreignId = data.foreignId
         record.isMarkedAsRead = data.isMarkedAsRead
         record.extraInfo = data.extraInfo
       })

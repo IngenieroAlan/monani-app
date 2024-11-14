@@ -22,7 +22,6 @@ class SentNotification extends Model {
 
   @date('event_at') eventAt!: Date
   @field('is_marked_as_read') isMarkedAsRead!: boolean
-  @field('foreign_id') foreignId?: string
 
   @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
 

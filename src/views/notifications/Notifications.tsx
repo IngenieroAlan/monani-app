@@ -1,6 +1,6 @@
 import NotificationsAppbar from '@/components/notifications/NotificationsAppbar'
 import NotificationsSection from '@/components/notifications/NotificationsSection'
-import SentNotification from '@/database/models/Notification'
+import SentNotification from '@/database/models/SentNotification'
 import useNotifications from '@/hooks/collections/useNotifications'
 import useAppTheme from '@/theme'
 import { FlashList } from '@shopify/flash-list'

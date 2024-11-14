@@ -18,7 +18,7 @@ import MilkProductionSummary from './models/MilkProductionSummary'
 import MilkReport from './models/MilkReport'
 import MilkSale from './models/MilkSale'
 import MonthlyMilkProduction from './models/MonthlyMilkProduction'
-import SentNotification from './models/Notification'
+import SentNotification from './models/SentNotification'
 import WeightReport from './models/WeightReport'
 import schema, { TableName } from './schema'
 

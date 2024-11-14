@@ -1,4 +1,4 @@
-import SentNotification from '@/database/models/Notification'
+import SentNotification from '@/database/models/SentNotification'
 import { Text } from 'react-native-paper'
 
 const NotificationDescription = ({ notification }: { notification: SentNotification }) => {

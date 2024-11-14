@@ -1,6 +1,6 @@
 import database from '@/database'
 import Cattle from '@/database/models/Cattle'
-import SentNotification from '@/database/models/Notification'
+import SentNotification from '@/database/models/SentNotification'
 import { TableName } from '@/database/schema'
 import { setCattleInfo } from '@/redux/slices/cattles'
 import { Notification as Notifeecation } from '@notifee/react-native'

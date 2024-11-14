@@ -1,4 +1,4 @@
-import { NotificationType } from '@/database/models/Notification'
+import { NotificationType } from '@/database/models/SentNotification'
 
 type NotificationMap = { [key in NotificationType]: string }
 

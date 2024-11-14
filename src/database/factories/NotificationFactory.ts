@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { subMonths } from 'date-fns'
 import Cattle from '../models/Cattle'
 import Medication from '../models/Medication'
-import { NotificationType } from '../models/Notification'
+import { NotificationType } from '../models/SentNotification'
 
 const MIN_EVENT_AT = subMonths(new Date(), 6)
 const MAX_EVENT_AT = new Date()

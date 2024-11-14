@@ -1,4 +1,4 @@
-import SentNotification from '@/database/models/Notification'
+import SentNotification from '@/database/models/SentNotification'
 import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'

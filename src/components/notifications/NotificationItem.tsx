@@ -1,5 +1,5 @@
 import Cattle from '@/database/models/Cattle'
-import SentNotification from '@/database/models/Notification'
+import SentNotification from '@/database/models/SentNotification'
 import { TableName } from '@/database/schema'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { setCattleInfo } from '@/redux/slices/cattles'

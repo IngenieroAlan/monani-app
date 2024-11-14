@@ -1,4 +1,4 @@
-import SentNotification from '@/database/models/Notification'
+import SentNotification from '@/database/models/SentNotification'
 import { useMemo } from 'react'
 import { List } from 'react-native-paper'
 import NotificationItem from './NotificationItem'

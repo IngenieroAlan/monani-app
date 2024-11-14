@@ -1,5 +1,5 @@
 import database from '@/database'
-import SentNotification, { NotificationType } from '@/database/models/Notification'
+import SentNotification, { NotificationType } from '@/database/models/SentNotification'
 import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 

@@ -4,7 +4,7 @@ import database from '..'
 import NotificationFactory from '../factories/NotificationFactory'
 import Cattle from '../models/Cattle'
 import Medication from '../models/Medication'
-import SentNotification from '../models/Notification'
+import SentNotification from '../models/SentNotification'
 import { TableName } from '../schema'
 
 const NotificationSeeder = async () => {

@@ -1,6 +1,6 @@
 import NotificationsAppbar from '@/components/notifications/NotificationsAppbar'
 import NotificationsSection from '@/components/notifications/NotificationsSection'
-import Notification from '@/database/models/Notification'
+import SentNotification from '@/database/models/Notification'
 import useNotifications from '@/hooks/collections/useNotifications'
 import useAppTheme from '@/theme'
 import { FlashList } from '@shopify/flash-list'
@@ -28,8 +28,8 @@ const formatNotificationDate = (timestamp: Date) => {
   }
 }
 
-const groupNotificationsByDay = (notifications: Notification[]): Record<string, Notification[]> => {
-  return notifications.reduce((acc: Record<string, Notification[]>, notification) => {
+const groupNotificationsByDay = (notifications: SentNotification[]): Record<string, SentNotification[]> => {
+  return notifications.reduce((acc: Record<string, SentNotification[]>, notification) => {
     const dateKey: string = formatNotificationDate(notification.eventAt)
 
     if (!acc[dateKey]) {

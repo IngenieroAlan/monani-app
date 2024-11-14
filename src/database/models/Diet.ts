@@ -1,5 +1,5 @@
-import { Model, Q, Relation } from '@nozbe/watermelondb'
-import { date, field, lazy, readonly, relation, writer } from '@nozbe/watermelondb/decorators'
+import { Model, Q } from '@nozbe/watermelondb'
+import { date, field, lazy, readonly, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
 import DietFeed, { FeedProportion } from './DietFeed'
@@ -23,8 +23,6 @@ class Diet extends Model {
   @field('percentage') percentage?: number
   @field('matter_proportion') matterProportion!: MatterProportion
   @field('is_concentrate_excluded') isConcentrateExcluded!: boolean
-
-  // @children(TableName.CATTLE) cattleRelation!: Relation<Cattle>
 
   @lazy
   cattle = this.collections

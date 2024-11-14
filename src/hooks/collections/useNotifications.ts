@@ -1,4 +1,4 @@
-import Notification from '@/database/models/Notification'
+import SentNotification from '@/database/models/Notification'
 import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
@@ -11,10 +11,10 @@ type UseNotificationsProps = {
 
 const useNotifications = ({ take, isMarkedAsRead }: UseNotificationsProps = {}) => {
   const database = useDatabase()
-  const [notifications, setNotifications] = useState<Notification[]>([])
+  const [notifications, setNotifications] = useState<SentNotification[]>([])
 
   let notificationsQuery = database.collections
-    .get<Notification>(TableName.NOTIFICATIONS)
+    .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
     .query(Q.sortBy('event_at', Q.desc))
 
   if (isMarkedAsRead !== undefined) {

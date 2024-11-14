@@ -1,12 +1,12 @@
-import { Database, Model, Q, Relation } from '@nozbe/watermelondb'
+import { Model, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, json, nochange, readonly, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
 
 export type NotificationType = 'quarantine' | 'medication' | 'birth'
 
-class Notification extends Model {
-  static table = TableName.NOTIFICATIONS
+class SentNotification extends Model {
+  static table = TableName.SENT_NOTIFICATIONS
 
   static associations = {
     [TableName.CATTLE]: { type: 'belongs_to' as const, key: 'cattle_id' }
@@ -35,14 +35,6 @@ class Notification extends Model {
   @writer async deleteNoti() {
     await this.destroyPermanently()
   }
-
-  static async countNotifications(database: Database): Promise<number> {
-    const notifications = await database.collections
-      .get<Notification>(TableName.NOTIFICATIONS)
-      .query(Q.where('is_marked_as_read', false))
-      .fetch()
-    return notifications.length
-  }
 }
 
-export default Notification
+export default SentNotification

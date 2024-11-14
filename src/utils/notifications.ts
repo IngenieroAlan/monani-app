@@ -1,5 +1,5 @@
 import database from '@/database'
-import Notification, { NotificationType } from '@/database/models/Notification'
+import SentNotification, { NotificationType } from '@/database/models/Notification'
 import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 
@@ -16,7 +16,7 @@ type NotificationData = {
 export const createNotification = async (data: NotificationData) => {
   const notification = await database.write(async () => {
     return await database.collections
-      .get<Notification>(TableName.NOTIFICATIONS)
+      .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
       .create((record) => {
         record.notifeeId = data.notifeeId
         record.eventAt = data.eventAt
@@ -32,10 +32,9 @@ export const createNotification = async (data: NotificationData) => {
 }
 
 export const markAllAsRead = async () => {
-  const notifications = await database.collections.get<Notification>(TableName.NOTIFICATIONS)
-    .query(
-      Q.where('is_marked_as_read', false)
-    )
+  const notifications = await database.collections
+    .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
+    .query(Q.where('is_marked_as_read', false))
     .fetch()
 
   await database.write(async () => {
@@ -49,7 +48,8 @@ export const markAllAsRead = async () => {
 
 export const deleteAllNotifications = async () => {
   await database.write(async () => {
-    await database.collections.get<Notification>(TableName.NOTIFICATIONS)
+    await database.collections
+      .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
       .query()
       .destroyAllPermanently()
   })

@@ -1,7 +1,7 @@
-import Notification from '@/database/models/Notification'
+import SentNotification from '@/database/models/Notification'
 import { Text } from 'react-native-paper'
 
-const NotificationDescription = ({ notification }: { notification: Notification }) => {
+const NotificationDescription = ({ notification }: { notification: SentNotification }) => {
   if (notification.type === 'quarantine') {
     return (
       <Text>

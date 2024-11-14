@@ -1,6 +1,6 @@
 import database from '@/database'
 import Cattle from '@/database/models/Cattle'
-import Notification from '@/database/models/Notification'
+import SentNotification from '@/database/models/Notification'
 import { TableName } from '@/database/schema'
 import { setCattleInfo } from '@/redux/slices/cattles'
 import { Notification as Notifeecation } from '@notifee/react-native'
@@ -22,7 +22,7 @@ export const androidPressHandler = async (notification: Notifeecation, navigatio
   })
 
   const appNotification = await database
-    .get<Notification>(TableName.NOTIFICATIONS)
+    .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
     .query(Q.where('notifee_id', notification!.id!))
     .fetch()
   await appNotification[0].markAsRead()
@@ -30,7 +30,7 @@ export const androidPressHandler = async (notification: Notifeecation, navigatio
 
 export const androidMarkAsReadHandler = async (notification: Notifeecation) => {
   const appNotification = await database
-    .get<Notification>(TableName.NOTIFICATIONS)
+    .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
     .query(Q.where('notifee_id', notification.id!))
     .fetch()
 

@@ -4,7 +4,7 @@ import database from '..'
 import NotificationFactory from '../factories/NotificationFactory'
 import Cattle from '../models/Cattle'
 import Medication from '../models/Medication'
-import Notification from '../models/Notification'
+import SentNotification from '../models/Notification'
 import { TableName } from '../schema'
 
 const NotificationSeeder = async () => {
@@ -20,13 +20,13 @@ const NotificationSeeder = async () => {
     await database.batch(
       notificationsRecords.map((notification) => {
         return database
-          .get<Notification>(TableName.NOTIFICATIONS)
+          .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
           .prepareCreateFromDirtyRaw(notification)
       })
     )
   })
 
-  console.log(`Notifications table seeded with ${notificationsRecords.length} records.`)
+  console.log(`Sent notifications table seeded with ${notificationsRecords.length} records.`)
 }
 
 export default NotificationSeeder

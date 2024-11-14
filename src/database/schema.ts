@@ -18,7 +18,7 @@ export enum TableName {
   MILK_SALES = 'milk_sales',
   EARNINGS_SUMMARY = 'earnings_summary',
   ANNUAL_EARNINGS = 'annual_earnings',
-  NOTIFICATIONS = 'notifications'
+  SENT_NOTIFICATIONS = 'sent_notifications'
 }
 
 export default appSchema({
@@ -219,7 +219,7 @@ export default appSchema({
       ]
     }),
     tableSchema({
-      name: TableName.NOTIFICATIONS,
+      name: TableName.SENT_NOTIFICATIONS,
       columns: [
         { name: 'notifee_id', type: 'string', isIndexed: true },
         { name: 'cattle_id', type: 'string', isIndexed: true },

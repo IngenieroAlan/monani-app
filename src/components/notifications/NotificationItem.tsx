@@ -1,5 +1,5 @@
 import Cattle from '@/database/models/Cattle'
-import Notification from '@/database/models/Notification'
+import SentNotification from '@/database/models/SentNotification'
 import { TableName } from '@/database/schema'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { setCattleInfo } from '@/redux/slices/cattles'
@@ -15,11 +15,11 @@ import { NotificationIcon, NotificationTitle } from './typesMapping'
 
 const MENU_OFFSET = 4
 
-const observeNotification = withObservables(['notification'], ({ notification }: { notification: Notification }) => ({
+const observeNotification = withObservables(['notification'], ({ notification }: { notification: SentNotification }) => ({
   notification
 }))
 
-const ItemMenu = ({ notification }: { notification: Notification }) => {
+const ItemMenu = ({ notification }: { notification: SentNotification }) => {
   const [visible, setVisible] = useState(false)
   const insets = useSafeAreaInsets()
 
@@ -65,7 +65,7 @@ const ItemMenu = ({ notification }: { notification: Notification }) => {
   )
 }
 
-const NotificationItem = observeNotification(({ notification }: { notification: Notification }) => {
+const NotificationItem = observeNotification(({ notification }: { notification: SentNotification }) => {
   const theme = useAppTheme()
   const dispatch = useAppDispatch()
   const database = useDatabase()

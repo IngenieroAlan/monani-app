@@ -1,4 +1,4 @@
-import { createNotification } from '@/utils/notifications'
+import { createNotification } from '@/utils/sentNotifications'
 import { Notification } from '@notifee/react-native'
 import { addDays, addMonths } from 'date-fns'
 import { createTriggerNotification } from '../constructors'
@@ -18,7 +18,6 @@ export const onDeliveredHandler = async (notification: Notification, isMarkedAsR
     eventAt: new Date(data.timestamp!),
     cattleId: data.cattleId,
     type: data.type,
-    foreignId: data.foreignId,
     isMarkedAsRead: isMarkedAsRead,
     extraInfo: data.extraInfo ? JSON.parse(data.extraInfo) : undefined
   })

@@ -1,4 +1,4 @@
-import useNotifications from '@/hooks/collections/useNotifications'
+import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { setShowBottomStack } from '@/redux/slices/ui'
 import { HomeView } from '@/views/home/Home'
@@ -70,7 +70,7 @@ const BottomTabsStack = () => {
           component={NotificationsStack}
           options={() => {
             // To prevent re rendering the whole bottom tab.
-            const { notifications } = useNotifications({ isMarkedAsRead: false })
+            const { notifications } = useSentNotifications({ isMarkedAsRead: false })
 
             return {
               tabBarBadge: notifications.length || undefined,

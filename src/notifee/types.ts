@@ -1,4 +1,4 @@
-import { NotificationType } from '@/database/models/Notification'
+import { NotificationType } from '@/database/models/SentNotification'
 
 export type NotificationData = {
   cattleId: string

@@ -1,6 +1,6 @@
 import database from '@/database'
 import Cattle from '@/database/models/Cattle'
-import Notification from '@/database/models/Notification'
+import SentNotification from '@/database/models/SentNotification'
 import { TableName } from '@/database/schema'
 import { setCattleInfo } from '@/redux/slices/cattles'
 import { Notification as Notifeecation } from '@notifee/react-native'
@@ -16,7 +16,7 @@ type Navigation = Omit<NavigationProp<ReactNavigation.RootParamList>, 'getState'
 
 const fetchByNotifeeId = async (notifeeId: string) => {
   return await database
-    .get<Notification>(TableName.NOTIFICATIONS)
+    .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
     .query(Q.where('notifee_id', notifeeId))
     .fetch()
 }

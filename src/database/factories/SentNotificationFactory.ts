@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { subMonths } from 'date-fns'
 import Cattle from '../models/Cattle'
 import Medication from '../models/Medication'
-import { NotificationType } from '../models/Notification'
+import { NotificationType } from '../models/SentNotification'
 
 const MIN_EVENT_AT = subMonths(new Date(), 6)
 const MAX_EVENT_AT = new Date()
@@ -13,7 +13,7 @@ const getType = () => {
   return faker.helpers.arrayElement(types)
 }
 
-const NotificationFactory = (cattle: Cattle, medication: Medication) => {
+const SentNotificationFactory = (cattle: Cattle, medication: Medication) => {
   const type = getType()
 
   return {
@@ -21,9 +21,8 @@ const NotificationFactory = (cattle: Cattle, medication: Medication) => {
     is_marked_as_read: faker.datatype.boolean(),
     cattle_id: cattle.id,
     extra_info: JSON.stringify(type === 'medication' ? [medication.name, cattle.tagId] : [cattle.tagId]),
-    type,
-    foreign_id: medication.id
+    type
   }
 }
 
-export default NotificationFactory
+export default SentNotificationFactory

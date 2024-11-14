@@ -9,12 +9,12 @@ import CattleSale from './CattleSale'
 import Diet from './Diet'
 import DietFeed from './DietFeed'
 import Genealogy from './Genealogy'
+import Medication from './Medication'
 import MedicationSchedule from './MedicationSchedule'
 import MilkProduction from './MilkProduction'
 import MilkReport from './MilkReport'
-import Notification from './Notification'
+import SentNotification from './SentNotification'
 import WeightReport from './WeightReport'
-import Medication from './Medication'
 
 export type ProductionType = 'Lechera' | 'De carne'
 export type CattleStatus = 'Gestante' | 'En producción' | 'De reemplazo' | 'De deshecho'
@@ -42,7 +42,7 @@ class Cattle extends Model {
     [TableName.WEIGHT_REPORTS]: { type: 'has_many', foreignKey: 'cattle_id' },
     [TableName.MILK_REPORTS]: { type: 'has_many', foreignKey: 'cattle_id' },
     [TableName.CATTLE_SALES]: { type: 'has_many', foreignKey: 'cattle_id' },
-    [TableName.NOTIFICATIONS]: { type: 'has_many', foreignKey: 'cattle_id' },
+    [TableName.SENT_NOTIFICATIONS]: { type: 'has_many', foreignKey: 'cattle_id' },
     [TableName.GENEALOGY]: { type: 'has_many', foreignKey: 'offspring_id' }
   }
 
@@ -68,7 +68,7 @@ class Cattle extends Model {
   @children(TableName.WEIGHT_REPORTS) weightReports!: Query<WeightReport>
   @children(TableName.MILK_REPORTS) milkReports!: Query<MilkReport>
   @children(TableName.MEDICATION_SCHEDULES) medicationSchedules!: Query<MedicationSchedule>
-  @children(TableName.NOTIFICATIONS) notifications!: Query<Notification>
+  @children(TableName.SENT_NOTIFICATIONS) notifications!: Query<SentNotification>
 
   @lazy
   latestWeightReport = this.weightReports

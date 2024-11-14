@@ -1,12 +1,12 @@
-import useNotifications from '@/hooks/collections/useNotifications'
-import { deleteAllNotifications, markAllAsRead } from '@/utils/notifications'
+import useSentNotifications from '@/hooks/collections/useSentNotifications'
+import { deleteAllNotifications, markAllAsRead } from '@/utils/sentNotifications'
 import notifee from '@notifee/react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useCallback } from 'react'
 import { Appbar, Tooltip } from 'react-native-paper'
 
 const CheckAllAction = () => {
-  const { notifications } = useNotifications({
+  const { notifications } = useSentNotifications({
     isMarkedAsRead: false
   })
 
@@ -27,7 +27,7 @@ const CheckAllAction = () => {
 }
 
 const NotificationsAppbar = () => {
-  const { notifications } = useNotifications()
+  const { notifications } = useSentNotifications()
   const navigation = useNavigation()
 
   const onDeleteAll = useCallback(async () => {

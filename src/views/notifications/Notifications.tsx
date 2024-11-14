@@ -1,7 +1,7 @@
 import NotificationsAppbar from '@/components/notifications/NotificationsAppbar'
 import NotificationsSection from '@/components/notifications/NotificationsSection'
-import Notification from '@/database/models/Notification'
-import useNotifications from '@/hooks/collections/useNotifications'
+import SentNotification from '@/database/models/SentNotification'
+import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import useAppTheme from '@/theme'
 import { FlashList } from '@shopify/flash-list'
 import { format } from 'date-fns'
@@ -28,8 +28,8 @@ const formatNotificationDate = (timestamp: Date) => {
   }
 }
 
-const groupNotificationsByDay = (notifications: Notification[]): Record<string, Notification[]> => {
-  return notifications.reduce((acc: Record<string, Notification[]>, notification) => {
+const groupNotificationsByDay = (notifications: SentNotification[]): Record<string, SentNotification[]> => {
+  return notifications.reduce((acc: Record<string, SentNotification[]>, notification) => {
     const dateKey: string = formatNotificationDate(notification.eventAt)
 
     if (!acc[dateKey]) {
@@ -46,7 +46,7 @@ const ITEMS_PER_PAGE = 25
 export const NotificationsView = () => {
   const theme = useAppTheme()
   const [index, setIndex] = useState(0)
-  const { notifications } = useNotifications({
+  const { notifications } = useSentNotifications({
     take: ITEMS_PER_PAGE + ITEMS_PER_PAGE * index
   })
 

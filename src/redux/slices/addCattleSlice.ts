@@ -24,7 +24,7 @@ const initialState: CattleState = {
     admittedAt: undefined,
     cattleStatus: '' as CattleStatus,
     productionType: '' as ProductionType,
-    quarantineDaysLeft: undefined,
+    quarantineDays: undefined,
     pregnantAt: undefined,
     motherId: '',
   },

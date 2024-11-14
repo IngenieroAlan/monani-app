@@ -18,7 +18,7 @@ const CattleInfoSchema = z.object({
   pregnantAt: z.date().optional(),
   productionType: ProductionTypeEnum,
   motherId: z.string().optional(),
-  quarantineDaysLeft: z.coerce.number().optional(),
+  quarantineDays: z.coerce.number().optional(),
 })
 
 export default CattleInfoSchema;

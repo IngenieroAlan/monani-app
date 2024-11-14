@@ -18,6 +18,7 @@ import MilkProductionSummary from './models/MilkProductionSummary'
 import MilkReport from './models/MilkReport'
 import MilkSale from './models/MilkSale'
 import MonthlyMilkProduction from './models/MonthlyMilkProduction'
+import PendingNotification from './models/PendingNotification'
 import SentNotification from './models/SentNotification'
 import WeightReport from './models/WeightReport'
 import schema, { TableName } from './schema'
@@ -53,7 +54,8 @@ const database = new Database({
     MonthlyMilkProduction,
     EarningsSummary,
     AnnualEarnings,
-    SentNotification
+    SentNotification,
+    PendingNotification
   ]
 })
 

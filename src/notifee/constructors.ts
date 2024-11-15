@@ -1,5 +1,5 @@
 import Cattle from '@/database/models/Cattle'
-import { createPendingNotification } from '@/utils/pendingNotifications'
+import { createPendingNotification } from '@/utils/collections/pendingNotifications'
 import notifee, { AndroidDefaults, Notification, TimestampTrigger, TriggerType } from '@notifee/react-native'
 import { CattleNotificationEventType, NotificationProps } from './types'
 

@@ -1,7 +1,7 @@
 import database from '@/database'
 import PendingNotification from '@/database/models/PendingNotification'
 import { TableName } from '@/database/schema'
-import { createNotification } from '@/utils/sentNotifications'
+import { createNotification } from '@/utils/collections/sentNotifications'
 import { Notification } from '@notifee/react-native'
 import { addDays, addMonths } from 'date-fns'
 import { createTriggerNotification } from '../constructors'

@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
-import { createFeed } from '@/utils/feeds'
+import { createFeed } from '@/utils/collections/feeds'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { memo, useCallback } from 'react'

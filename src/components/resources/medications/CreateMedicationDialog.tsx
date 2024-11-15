@@ -3,7 +3,7 @@ import MedicationForm, { MedicationFields } from '@/components/forms/MedicationF
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
-import { createMedication } from '@/utils/medications'
+import { createMedication } from '@/utils/collections/medications'
 import MedicationSchema from '@/validationSchemas/MedicationSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCallback } from 'react'

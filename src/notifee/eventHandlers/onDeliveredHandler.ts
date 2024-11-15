@@ -1,4 +1,7 @@
-import { createNotification } from '@/utils/sentNotifications'
+import database from '@/database'
+import PendingNotification from '@/database/models/PendingNotification'
+import { TableName } from '@/database/schema'
+import { createNotification } from '@/utils/collections/sentNotifications'
 import { Notification } from '@notifee/react-native'
 import { addDays, addMonths } from 'date-fns'
 import { createTriggerNotification } from '../constructors'
@@ -13,7 +16,7 @@ const AVG_DAYS_PER_MONTH = 30.437
 export const onDeliveredHandler = async (notification: Notification, isMarkedAsRead: boolean = false) => {
   const data = notification.data as NotificationData
 
-  await createNotification({
+  const createdNotification = await createNotification({
     notifeeId: notification!.id!,
     eventAt: new Date(data.timestamp!),
     cattleId: data.cattleId,
@@ -21,6 +24,12 @@ export const onDeliveredHandler = async (notification: Notification, isMarkedAsR
     isMarkedAsRead: isMarkedAsRead,
     extraInfo: data.extraInfo ? JSON.parse(data.extraInfo) : undefined
   })
+
+  const pendingNotification = await database.collections
+    .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
+    .find(createdNotification.notifeeId)
+
+  await pendingNotification.delete()
 
   if (!data.timesPerYear || data.timesPerYear <= 0) return
 

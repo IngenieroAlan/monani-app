@@ -1,5 +1,4 @@
 import Cattle from '@/database/models/Cattle'
-import { createPendingNotification } from '@/utils/collections/pendingNotifications'
 import notifee, { AndroidDefaults, Notification, TimestampTrigger, TriggerType } from '@notifee/react-native'
 import { CattleNotificationEventType, NotificationProps } from './types'
 
@@ -31,8 +30,7 @@ export const createTriggerNotification = async (notificationProps: NotificationP
 
   if (notificationProps.id) notification['id'] = notificationProps.id
 
-  const notifeeId = await notifee.createTriggerNotification(notification, trigger)
-  await createPendingNotification(notificationProps.data, notifeeId)
+  await notifee.createTriggerNotification(notification, trigger)
 }
 
 export const createQuarantineNotification = async (

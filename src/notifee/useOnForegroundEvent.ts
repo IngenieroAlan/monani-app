@@ -6,6 +6,7 @@ import { Platform } from 'react-native'
 import { androidMarkAsReadHandler, androidPressHandler } from './eventHandlers/androidEventHandlers'
 import { iosMarkAsReadHandler, iosPressHandler, iosSafeDeliveredHandler } from './eventHandlers/iosEventHandlers'
 import { onDeliveredHandler } from './eventHandlers/onDeliveredHandler'
+import { onTriggerNotificationCreatedHandler } from './eventHandlers/onTriggerNotificationCreatedHandler'
 import { CattleNotificationEventType } from './types'
 
 const useOnForegroundEvent = () => {
@@ -21,6 +22,11 @@ const useOnForegroundEvent = () => {
       switch (type) {
         case EventType.DELIVERED:
           await onDeliveredHandler(notification)
+
+          break
+
+        case EventType.TRIGGER_NOTIFICATION_CREATED:
+          await onTriggerNotificationCreatedHandler(notification)
 
           break
 

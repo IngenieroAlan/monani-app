@@ -2,6 +2,7 @@ import database from '@/database'
 import PendingNotification from '@/database/models/PendingNotification'
 import { TableName } from '@/database/schema'
 import { Notification } from '@notifee/react-native'
+import { Q } from '@nozbe/watermelondb'
 import { NotificationData } from '../types'
 
 export const onTriggerNotificationCreatedHandler = async (notification: Notification) => {
@@ -12,9 +13,10 @@ export const onTriggerNotificationCreatedHandler = async (notification: Notifica
 
   const pendingNotification = await database
     .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
-    .find(notification.id)
+    .query(Q.where('id', notification.id))
+    .fetch()
 
-  if (pendingNotification) return
+  if (pendingNotification.length > 0) return
 
   const data = notification.data as NotificationData
 

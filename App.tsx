@@ -5,14 +5,14 @@ import onBackgroundEventHandler from '@/notifee/eventHandlers/onBackgroundEventH
 import { CattleNotificationEventType } from '@/notifee/types'
 import useOnForegroundEvent from '@/notifee/useOnForegroundEvent'
 import store from '@/redux/store/store'
-import { CustomDarkTheme, CustomLightTheme } from '@/theme'
+import useAppTheme, { CustomDarkTheme, CustomLightTheme } from '@/theme'
 import notifee, { AndroidImportance, AndroidVisibility, AuthorizationStatus } from '@notifee/react-native'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
 import { enableMapSet } from 'immer'
 import { useCallback, useEffect, useState } from 'react'
-import { useColorScheme } from 'react-native'
+import { useColorScheme, View } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { es, registerTranslation } from 'react-native-paper-dates'
 import { Provider } from 'react-redux'
@@ -50,7 +50,29 @@ notifee.setNotificationCategories([
 
 export default function App() {
   const scheme = useColorScheme()
+
+  return (
+    <Provider store={store}>
+      <DatabaseProvider database={database}>
+        <NavigationContainer
+          theme={scheme === 'dark' ? DarkTheme : DefaultTheme} // To prevent white flashes while navigating.
+        >
+          <PaperProvider theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
+            <AppState>
+              <Navigator />
+            </AppState>
+          </PaperProvider>
+        </NavigationContainer>
+      </DatabaseProvider>
+    </Provider>
+  )
+}
+
+const AppState = ({ children }: { children: JSX.Element }) => {
+  const theme = useAppTheme()
   const [appIsReady, setAppIsReady] = useState(false)
+
+  useOnForegroundEvent()
 
   useEffect(() => {
     async function prepare() {
@@ -79,25 +101,11 @@ export default function App() {
   if (!appIsReady) return null
 
   return (
-    <Provider store={store}>
-      <DatabaseProvider database={database}>
-        <NavigationContainer
-          onReady={onLayoutRootView}
-          theme={scheme === 'dark' ? DarkTheme : DefaultTheme} // To prevent white flashes while navigating.
-        >
-          <PaperProvider theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
-            <AppState>
-              <Navigator />
-            </AppState>
-          </PaperProvider>
-        </NavigationContainer>
-      </DatabaseProvider>
-    </Provider>
+    <View
+      style={{ backgroundColor: theme.colors.surface, flex: 1 }}
+      onLayout={onLayoutRootView}
+    >
+      {children}
+    </View>
   )
-}
-
-const AppState = ({ children }: { children: JSX.Element }) => {
-  useOnForegroundEvent()
-
-  return children
 }

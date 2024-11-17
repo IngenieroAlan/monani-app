@@ -29,28 +29,33 @@ const createMedicationScheduleRecords = async (cattle: Cattle, medicationsToSche
 
     medicationScheduleRecords.push({
       cattle_id: cattle.id,
+      medication_name: medicationToSchedule.name,
       medication_id: medicationToSchedule.id,
       next_dose_at: nextDoseAt,
       doses_per_year: dosesPerYear
     })
-
-    createMedicationNotification(
-      cattle,
-      medicationToSchedule.name,
-      medicationToSchedule.id,
-      dosesPerYear,
-      nextDoseAt
-    )
   }
 
   await database.write(async () => {
-    await database.batch(
-      medicationScheduleRecords.map((medicationSchedule) => {
-        return database
-          .get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
-          .prepareCreateFromDirtyRaw(medicationSchedule)
-      })
-    )
+    medicationScheduleRecords.map(async (medicationSchedule) => {
+      const createdMedicationSchedule = await database
+        .get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
+        .create((record) => {
+          record.cattle.set(cattle)
+
+          record.medication.id = medicationSchedule.medication_id
+          record.nextDoseAt = medicationSchedule.next_dose_at
+          record.dosesPerYear = medicationSchedule.doses_per_year
+        })
+
+      createMedicationNotification(
+        cattle,
+        medicationSchedule.medication_name,
+        createdMedicationSchedule.id,
+        medicationSchedule.doses_per_year,
+        medicationSchedule.next_dose_at
+      )
+    })
   })
 }
 

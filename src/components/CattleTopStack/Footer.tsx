@@ -1,109 +1,99 @@
-import { useAppSelector } from '@/hooks/useRedux';
-import { useNavigation } from '@react-navigation/native';
-import { useEffect, useMemo, useRef } from 'react';
-import { Animated, StyleSheet } from 'react-native';
-import { Appbar, FAB, useTheme } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAppSelector } from '@/hooks/useRedux'
+import { useNavigation } from '@react-navigation/native'
+import { useEffect, useMemo, useRef } from 'react'
+import { Animated } from 'react-native'
+import { Appbar, FAB } from 'react-native-paper'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const BOTTOM_APPBAR_HEIGHT = 60;
-const MEDIUM_FAB_HEIGHT = 46;
+const BOTTOM_APPBAR_HEIGHT = 80
 
 const Footer = () => {
-  const { bottom } = useSafeAreaInsets();
-  const theme = useTheme();
-  const { screen } = useAppSelector(state => state.ui);
-  const navigation = useNavigation();
-
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const { bottom } = useSafeAreaInsets()
+  const screen = useAppSelector((state) => state.ui.screen)
+  const navigation = useNavigation()
+  const fadeAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: screen === 'DietRoute' ? 1 : 0,
       duration: 100,
-      useNativeDriver: true,
-    }).start();
-  }, [screen]);
+      useNativeDriver: true
+    }).start()
+  }, [screen])
 
-  const FABICON = useMemo(() => {
+  const fabIcon = useMemo(() => {
     if (screen === 'InfoRoute' || screen === 'GenealogyRoute') {
-      return 'pencil';
-    } else return 'plus';
-  }, [screen]);
+      return 'pencil'
+    }
+
+    return 'plus'
+  }, [screen])
 
   const navigateTo = () => {
     switch (screen) {
       case 'InfoRoute':
-        console.log('Navigate to edit');
-        break;
+        console.log('Navigate to edit')
+        break
       case 'DietRoute':
-        navigation.navigate('DietFeedRoute');
-        break;
+        navigation.navigate('DietFeedRoute')
+        break
       case 'MedicationRoute':
-        navigation.navigate('MedicationScheduleRoute');
-        break;
+        navigation.navigate('MedicationScheduleRoute')
+        break
       case 'WeightRoute':
-        console.log('Navigate to add');
-        break;
+        console.log('Navigate to add')
+        break
       case 'MilkyRoute':
-        console.log('Navigate to add');
-        break;
+        console.log('Navigate to add')
+        break
       case 'GenealogyRoute':
-        navigation.navigate('SearchOffspringView');
-        break;
+        navigation.navigate('SearchOffspringView')
+        break
       default:
-        console.log('Navigate to');
-        break;
+        console.log('Navigate to')
+        break
     }
   }
 
   return (
     <Appbar
-      style={[
-        styles.bottom,
-        {
-          height: BOTTOM_APPBAR_HEIGHT + bottom,
-          backgroundColor: theme.colors.elevation.level2,
-        },
-      ]}
+      elevated
       safeAreaInsets={{ bottom }}
+      style={{ height: BOTTOM_APPBAR_HEIGHT + bottom }}
     >
-      <Appbar.Action icon="trash-can-outline" onPress={() => { }} />
-      <Appbar.Action icon="package-down" onPress={() => { }} />
-      <Appbar.Action icon="tag-outline" onPress={() => { }} />
+      <Appbar.Action
+        icon='trash-can-outline'
+        onPress={() => {}}
+      />
+      <Appbar.Action
+        icon='package-down'
+        onPress={() => {}}
+      />
+      <Appbar.Action
+        icon='tag-outline'
+        onPress={() => {}}
+      />
 
       <Animated.View style={{ opacity: fadeAnim }}>
         <Appbar.Action
-          icon="cog-outline"
+          icon='cog-outline'
           onPress={() => {
-            screen === 'DietRoute' && navigation.navigate('DietSettingsRoute');
-          }} />
+            screen === 'DietRoute' && navigation.navigate('DietSettingsRoute')
+          }}
+        />
       </Animated.View>
 
       <FAB
-        mode="flat"
-        icon={FABICON}
-        customSize={MEDIUM_FAB_HEIGHT}
+        mode='flat'
+        icon={fabIcon}
         onPress={navigateTo}
-        style={[
-          styles.fab,
-          { top: (BOTTOM_APPBAR_HEIGHT - MEDIUM_FAB_HEIGHT) / 2 },
-        ]}
+        style={{
+          marginLeft: 'auto',
+          marginRight: 12
+        }}
       />
     </Appbar>
-  );
-};
+  )
+}
 
-const styles = StyleSheet.create({
-  bottom: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  fab: {
-    position: 'absolute',
-    right: 16,
-  },
-});
-
-export default Footer;
+export default Footer

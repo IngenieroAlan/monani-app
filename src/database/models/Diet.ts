@@ -88,7 +88,7 @@ class Diet extends Model {
 
   @writer
   async delete() {
-    await this.feeds.destroyAllPermanently()
+    await this.dietFeeds.destroyAllPermanently()
     await this.destroyPermanently()
   }
 }

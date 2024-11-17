@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { Animated } from 'react-native'
 import { Appbar, FAB } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import DeleteCattleAction from './DeleteCattleAction'
 
 const BOTTOM_APPBAR_HEIGHT = 80
 
@@ -61,10 +62,7 @@ const CattleBottomAppBar = () => {
       safeAreaInsets={{ bottom }}
       style={{ height: BOTTOM_APPBAR_HEIGHT + bottom }}
     >
-      <Appbar.Action
-        icon='trash-can-outline'
-        onPress={() => {}}
-      />
+      <DeleteCattleAction />
       <Appbar.Action
         icon='package-down'
         onPress={() => {}}

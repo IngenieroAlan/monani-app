@@ -1,3 +1,4 @@
+import MSnackbar from '@/components/MSnackbar'
 import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { setShowBottomStack } from '@/redux/slices/ui'
@@ -85,6 +86,17 @@ const BottomTabsStack = () => {
           }}
         />
       </Tab.Navigator>
+      <MSnackbar
+        id='DeletedCattleSnackbar'
+        style={{
+          position: 'absolute',
+          bottom: 168,
+          margin: 0,
+          marginHorizontal: 16
+        }}
+      >
+        Ganado eliminado con éxito.
+      </MSnackbar>
     </Portal.Host>
   )
 }

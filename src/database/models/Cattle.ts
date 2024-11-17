@@ -493,6 +493,16 @@ class Cattle extends Model {
 
     if (this.isArchived) await this.archive.destroyAllPermanently()
 
+    await this.collections
+      .get<Genealogy>(TableName.GENEALOGY)
+      .query(
+        Q.or(
+          Q.where('mother_id', this.id),
+          Q.where('offspring_id', this.id)
+        )
+      )
+      .destroyAllPermanently()
+
     await this.destroyPermanently()
 
     const diet = await this.diet

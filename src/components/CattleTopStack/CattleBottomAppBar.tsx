@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const BOTTOM_APPBAR_HEIGHT = 80
 
-const Footer = () => {
+const CattleBottomAppBar = () => {
   const { bottom } = useSafeAreaInsets()
   const screen = useAppSelector((state) => state.ui.screen)
   const navigation = useNavigation()
@@ -96,4 +96,4 @@ const Footer = () => {
   )
 }
 
-export default Footer
+export default CattleBottomAppBar

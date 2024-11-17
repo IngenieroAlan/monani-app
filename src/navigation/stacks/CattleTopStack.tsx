@@ -1,4 +1,4 @@
-import Footer from '@/components/CattleTopStack/Footer';
+import CattleBottomAppBar from '@/components/CattleTopStack/CattleBottomAppBar';
 import { GenealogyRoute } from '@/components/layout/cattleDetails/routes/Genealogy';
 import { WeightRoute } from '@/components/layout/cattleDetails/routes/Weight';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
@@ -145,7 +145,7 @@ export const CattleTopStack = () => {
             }}
           />
         </Stack.Navigator>
-        <Footer />
+        <CattleBottomAppBar />
       </Portal.Host>
     </>
   )

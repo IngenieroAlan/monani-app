@@ -1,3 +1,4 @@
+import { createMedicationNotification, createPregnancyNotification, createQuarantineNotification } from '@/notifee/constructors'
 import { Model, Q, Query, Relation } from '@nozbe/watermelondb'
 import { children, date, field, immutableRelation, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
 import { Associations } from '@nozbe/watermelondb/Model'
@@ -15,6 +16,8 @@ import MilkProduction from './MilkProduction'
 import MilkReport from './MilkReport'
 import SentNotification from './SentNotification'
 import WeightReport from './WeightReport'
+import PendingNotification from './PendingNotification'
+import notifee from '@notifee/react-native'
 
 export type ProductionType = 'Lechera' | 'De carne'
 export type CattleStatus = 'Gestante' | 'En producción' | 'De reemplazo' | 'De deshecho'
@@ -363,8 +366,11 @@ class Cattle extends Model {
   }
 
   @writer
-  async createMedicationSchedule({ medication, nextDoseAt, dosesPerYear }: { medication: Medication, nextDoseAt: Date, dosesPerYear: number }) {
-    const medicationSchedule = await this.collections.get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
+  async addMedicationSchedule(
+    { medication, nextDoseAt, dosesPerYear }: { medication: Medication, nextDoseAt: Date, dosesPerYear: number }
+  ) {
+    const medicationSchedule = await this.collections
+      .get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
       .query(
         Q.where('cattle_id', this.id),
         Q.where('medication_id', medication.id),
@@ -376,7 +382,8 @@ class Cattle extends Model {
       throw new Error(`Ya existe una programación para el medicamento ${medication.name}.`)
     }
 
-    await this.collections.get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
+    const createdMedicationSchedule = await this.collections
+      .get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
       .create((record) => {
         record.cattle.set(this)
         record.medication.set(medication)
@@ -384,6 +391,14 @@ class Cattle extends Model {
         record.nextDoseAt = nextDoseAt
         record.dosesPerYear = dosesPerYear
       })
+
+    await createMedicationNotification(
+      this,
+      medication.name,
+      createdMedicationSchedule.id,
+      dosesPerYear,
+      nextDoseAt.getTime()
+    )
   }
 
   @writer
@@ -403,7 +418,7 @@ class Cattle extends Model {
       const weightReports = await this.collections
         .get<WeightReport>(TableName.WEIGHT_REPORTS)
         .query(Q.where('cattle_id', this.id))
-        .fetchCount()
+        .count
 
       if (weightReports > 0) {
         throw new Error(
@@ -418,17 +433,56 @@ class Cattle extends Model {
       record.tagCattleNumber = tagCattleNumber
       record.admittedAt = admittedAt
       record.bornAt = bornAt
-      record.pregnantAt = pregnantAt
       record.productionType = productionType
       record.cattleStatus = cattleStatus
 
       if (weight) record.weight = weight
 
-      if (quarantineDays) {
+      record.pregnantAt = pregnantAt
+
+      if (quarantineDays && quarantineDays > 0) {
         const quarantineEndsAt = addDays(Date.now(), quarantineDays)
         record.quarantineEndsAt = quarantineEndsAt
+      } else {
+        record.quarantineEndsAt = undefined
       }
     })
+
+    const pendingPregnancyNotification = (
+      await this.collections
+        .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
+        .query(
+          Q.where('cattle_id', this.id),
+          Q.where('type', 'birth')
+        )
+    )[0]
+
+    if (pregnantAt) {
+      await createPregnancyNotification(this, addDays(pregnantAt, 283).getTime(), pendingPregnancyNotification?.id || undefined)
+    } else {
+      if (pendingPregnancyNotification) {
+        await notifee.cancelTriggerNotification(pendingPregnancyNotification.id)
+      }
+    }
+
+    const pendingQuarantineNotification = (
+      await this.collections
+        .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
+        .query(
+          Q.where('cattle_id', this.id),
+          Q.where('type', 'quarantine')
+        )
+    )[0]
+
+    if (quarantineDays && quarantineDays > 0) {
+      const quarantineEndsAt = addDays(Date.now(), quarantineDays)
+
+      await createQuarantineNotification(this, quarantineEndsAt.getTime(), pendingQuarantineNotification?.id || undefined)
+    } else {
+      if (pendingQuarantineNotification) {
+        await notifee.cancelTriggerNotification(pendingQuarantineNotification.id)
+      }
+    }
   }
 
   @writer
@@ -443,6 +497,13 @@ class Cattle extends Model {
 
     const diet = await this.diet
     await this.callWriter(() => diet.delete())
+
+    const pendingNotificationsIdsQuery = this.collections
+      .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
+      .query(Q.where('cattle_id', this.id))
+
+    await notifee.cancelTriggerNotifications(await pendingNotificationsIdsQuery.fetchIds())
+    await pendingNotificationsIdsQuery.destroyAllPermanently()
   }
 }
 

@@ -64,7 +64,7 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
           });
         dispatch(show(MedicationSnackbarId.UPDATED_MEDICATION))
         } else {
-          await cattleInfo?.createMedicationSchedule({
+          await cattleInfo?.addMedicationSchedule({
             medication,
             nextDoseAt,
             dosesPerYear,

@@ -1,8 +1,11 @@
-import { Model, Relation } from '@nozbe/watermelondb'
+import { createMedicationNotification } from '@/notifee/constructors'
+import { Model, Q, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, readonly, relation, writer } from '@nozbe/watermelondb/decorators'
 import { TableName } from '../schema'
 import Cattle from './Cattle'
 import Medication from './Medication'
+import PendingNotification from './PendingNotification'
+import notifee from '@notifee/react-native'
 
 class MedicationSchedule extends Model {
   static table = TableName.MEDICATION_SCHEDULES
@@ -38,11 +41,41 @@ class MedicationSchedule extends Model {
       record.nextDoseAt = nextDoseAt
       record.dosesPerYear = dosesPerYear
     })
+
+    const cattle = await this.cattle
+    const pendingNotification = (
+      await this.collections
+        .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
+        .query(
+          Q.where('cattle_id', cattle.id),
+          Q.where('type', 'medication'),
+          Q.where('foreign_id', this.id)
+        )
+    )[0]
+
+    await createMedicationNotification(
+      cattle,
+      medication.name,
+      this.id,
+      dosesPerYear,
+      nextDoseAt.getTime(),
+      pendingNotification.id
+    )
   }
 
   @writer
   async delete() {
     await this.destroyPermanently()
+
+    const pendingNotification = await this.collections
+      .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
+      .query(
+        Q.where('type', 'medication'),
+        Q.where('foreign_id', this.id)
+      )
+      .fetchIds()
+
+    await notifee.cancelTriggerNotifications(pendingNotification)
   }
 }
 

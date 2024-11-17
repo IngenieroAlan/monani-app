@@ -49,7 +49,12 @@ export const CattleTopStack = () => {
               borderBottomWidth: 1,
               borderBottomColor: theme.colors.surfaceVariant,
             },
-            tabBarItemStyle: { width: 100 },
+            tabBarItemStyle: { width: 'auto', paddingHorizontal: 24 },
+            tabBarIndicatorContainerStyle: {
+              borderWidth: 1,
+              borderBottomWidth: 0,
+              borderColor: theme.colors.surface,
+            },
             tabBarIndicatorStyle: {
               backgroundColor: theme.colors.primary,
               height: 3,

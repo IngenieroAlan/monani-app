@@ -80,6 +80,8 @@ const DietSettingsForm = (
         more={{
           theme: { colors: { background: theme.colors.elevation.level1 } },
           keyboardType: 'numeric',
+          value: quantity.value ? String(quantity.value) : '',
+          onChangeText: (value: string) => quantity.onChange(parseFloat(value)),
           disabled: matterProportion.value === 'Sin definir'
         }}
       />

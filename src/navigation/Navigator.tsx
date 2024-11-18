@@ -1,4 +1,5 @@
 import DietFeedRoute from '@/components/dietFeedRoute/DietFeedRoute'
+import DietSettingsRoute from '@/components/dietFeedRoute/DietSettingsRoute'
 import SearchMother from '@/components/genealogyRoute/SearchMother'
 import SearchOffspring from '@/components/genealogyRoute/SearchOffspring'
 import MedicationScheduleRoute from '@/components/medicationSchedulesRoute/MedicationScheduleRoute'
@@ -6,6 +7,7 @@ import database from '@/database'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
 import { getCattles } from '@/redux/slices/cattles'
+import ArchiveCattleView from '@/views/cattleArchive/ArchiveCattleView'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -16,7 +18,6 @@ import BottomTabsStack from './BottomTabsStack'
 import AddCattleStack from './stacks/AddCattleStack'
 import ResourcesStack from './stacks/ResourcesStack'
 import { RootStackParamList } from './types'
-import DietSettingsRoute from '@/components/dietFeedRoute/DietSettingsRoute'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -78,6 +79,11 @@ export const Navigator = () => {
         <Stack.Screen
           name='SearchOffspringView'
           component={SearchOffspring}
+          options={{ presentation: 'modal' }}
+        />
+        <Stack.Screen
+          name='ArchiveCattleView'
+          component={ArchiveCattleView}
           options={{ presentation: 'modal' }}
         />
       </Stack.Navigator>

@@ -64,8 +64,8 @@ const CattleBottomAppBar = () => {
     >
       <DeleteCattleAction />
       <Appbar.Action
-        icon='package-down'
-        onPress={() => {}}
+        icon='archive-arrow-down-outline'
+        onPress={() => navigation.navigate('ArchiveCattleView')}
       />
       <Appbar.Action
         icon='tag-outline'

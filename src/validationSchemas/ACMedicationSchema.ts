@@ -1,7 +1,8 @@
+import Medication from "@/database/models/Medication";
 import { z } from "zod";
 
 const ACMedicationSchema = z.object({
-  medication: z.any(),
+  medication: z.string(),
   nextDoseAt: z.date(),
   dosesPerYear: z.coerce.number(),
 })

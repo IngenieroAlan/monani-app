@@ -1,5 +1,5 @@
-import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer";
 import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
+import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer";
 import useMedications from '@/hooks/collections/useMedications';
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
@@ -25,7 +25,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
   const medicationName = useMemo(() => (currentMedication ? currentMedication.name : undefined), [currentMedication])
 
   const initialMedicationScheduleValues = medicationSchedule ? {
-    medication: undefined,
+    medication: medicationSchedule.medication.id,
     nextDoseAt: medicationSchedule.nextDoseAt,
     dosesPerYear: medicationSchedule.dosesPerYear
   } : undefined
@@ -48,16 +48,15 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
   const { isSubmitting, isValid, errors, isDirty } = formState
 
   const onSubmit = useCallback(() => {
-    const medication = getValues('medication')
-    const nextDoseAt = getValues('nextDoseAt')
-    const dosesPerYear = getValues('dosesPerYear')
-    
+    const { medication, nextDoseAt, dosesPerYear } = getValues()
+    const findedMed = medication ? medications.find(FMedication => FMedication.id === medication) : undefined
+
     try {
       if (modify) {
         dispatch(modifyMedicationSchedule({
           medicationSchedule: {
             medicationScheduleId: medicationScheduleId,
-            medication: medication !== undefined ? medication : currentMedication,
+            medication: findedMed ? findedMed : currentMedication!,
             nextDoseAt,
             dosesPerYear,
             cattleId: cattle.tagId,
@@ -68,7 +67,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
         dispatch(saveMedicationSchedule({
           medicationSchedule: {
             medicationScheduleId: Math.random().toString(),
-            medication: medication,
+            medication: findedMed!,
             nextDoseAt,
             dosesPerYear,
             cattleId: cattle.tagId,
@@ -84,7 +83,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
     }
 
     navigation.goBack()
-  }, [currentMedication, dispatch, medicationScheduleId, modify, getValues, reset, cattle.tagId])
+  }, [currentMedication, medicationScheduleId, cattle.tagId, medications])
 
   return (<>
     <Appbar.Header>

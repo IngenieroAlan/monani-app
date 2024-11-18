@@ -45,7 +45,7 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
   useEffect(() => {
     if (medicationSchedule)
       reset({
-        medication: medicationSchedule.id,
+        medication: medicationSchedule.medication.id,
         nextDoseAt: medicationSchedule.nextDoseAt,
         dosesPerYear: medicationSchedule.dosesPerYear
       })
@@ -53,19 +53,20 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
 
   const onSubmit = useCallback(() => {
     const { medication, nextDoseAt, dosesPerYear } = getValues()
+    const findedMed = medication ? medications.find(FMedication => FMedication.id === medication) : undefined
 
     const Action = async () => {
       try {
         if (modify) {
           await medicationSchedule?.updateMedicationSchedule({
-            medication: medication ? medication : currentMedication,
+            medication: findedMed ? findedMed : currentMedication!,
             nextDoseAt,
             dosesPerYear,
           });
-        dispatch(show(MedicationSnackbarId.UPDATED_MEDICATION))
+          dispatch(show(MedicationSnackbarId.UPDATED_MEDICATION))
         } else {
           await cattleInfo?.addMedicationSchedule({
-            medication,
+            medication: findedMed!,
             nextDoseAt,
             dosesPerYear,
           });
@@ -81,7 +82,7 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
 
     Action();
     navigation.goBack()
-  }, [])
+  }, [medicationSchedule, currentMedication, medications]);
 
   return (<>
     <Appbar.Header>

@@ -7,6 +7,7 @@ import { useTheme } from "react-native-paper";
 import { CustomTextInput } from "../CustomTextInput";
 import MDatePickerInput from "../MDatePickerInput";
 import MSearchBar, { SearchBarDataItem } from "../MSearchBar";
+import dayjs from "dayjs";
 
 
 const CattleMedicationForm = ({ control, formState, medicationName }: {
@@ -18,6 +19,7 @@ const CattleMedicationForm = ({ control, formState, medicationName }: {
   const theme = useTheme();
   const { errors } = formState;
   const { field: dosesPerYear } = useController({ name: 'dosesPerYear', control });
+  const { field: nextDoseAt } = useController({ name: 'nextDoseAt', control });
   const { medications } = useMedications()
 
   const medicationData: SearchBarDataItem[] =
@@ -26,7 +28,7 @@ const CattleMedicationForm = ({ control, formState, medicationName }: {
         id: medication.id,
         title: medication.name,
         description: medication.medicationType,
-        value: medication
+        value: medication.id
       })), [medications])
 
   return (
@@ -57,6 +59,11 @@ const CattleMedicationForm = ({ control, formState, medicationName }: {
         name="nextDoseAt"
         errors={errors.nextDoseAt}
         minDate={new Date()}
+        // moreDateTimePicker={{
+        //   mode: 'single',
+        //   // if there is no current value then current date+1 day
+        //   date: nextDoseAt.value ? dayjs(nextDoseAt.value).toDate() : dayjs(new Date().setDate(new Date().getDate() + 1)),
+        // }}
       />
       <CustomTextInput
         name='dosesPerYear'

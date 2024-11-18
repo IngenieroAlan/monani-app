@@ -48,7 +48,7 @@ const DietFeedForm = ({
       id: feed.id,
       title: feed.name,
       description: feed.feedType,
-      value: feed
+      value: feed.id
     })),
     [feeds])
 

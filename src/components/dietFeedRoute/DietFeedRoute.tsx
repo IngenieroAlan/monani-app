@@ -49,7 +49,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
   useEffect(() => {
     if (dietFeed)
       reset({
-        feed: undefined,
+        feed: dietFeed.feed.id,
         feedProportion: dietFeed.feedProportion,
         quantity: dietFeed.feedProportion === 'Fija' ? dietFeed.feedAmount : dietFeed.percentage || 0
       })
@@ -59,12 +59,13 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
     const { feedProportion, feed, quantity } = getValues();
     const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined;
     const feedAmount = feedProportion === 'Fija' ? quantity : cattleInfo!.weight * (quantity / 100);
+    const findedFeed = feed ? feeds.find(F => F.id === feed) : undefined;
 
     const Action = async () => {
       try {
         if (modify && dietFeed) {
           await dietFeed.updateDietFeed({
-            feed: feed ? feed : currentFeed,
+            feed: findedFeed ? findedFeed : currentFeed!,
             feedAmount,
             percentage,
             feedProportion
@@ -72,7 +73,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
           dispatch(show(DietSnackbarId.UPDATED_DIETFEED));
         } else {
           await diet?.createDietFeed({
-            feed,
+            feed: findedFeed!,
             feedProportion,
             feedAmount,
             percentage
@@ -89,7 +90,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
 
     Action();
     navigation.goBack();
-  }, [cattleInfo, diet, dietFeed, currentFeed, getValues, modify, navigation, reset]);
+  }, [cattleInfo, diet, dietFeed, currentFeed, feeds]);
 
   return (
     <>

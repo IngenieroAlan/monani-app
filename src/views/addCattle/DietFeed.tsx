@@ -1,5 +1,6 @@
 import DietSnackbarContainer, { DietSnackbarId } from "@/components/dietFeedRoute/DietSnackbarContainer";
 import DietFeedForm from "@/components/forms/DietFeedForm";
+import useFeeds from "@/hooks/collections/useFeeds";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
 import { modifyFeedDiet, saveDietFeed } from "@/redux/slices/addCattleSlice";
@@ -14,6 +15,7 @@ import { Appbar, Button, IconButton } from "react-native-paper";
 export default function DietFeed({ navigation, route }: NativeStackScreenProps<AddCattleStackParamsList, 'DietFeed'>) {
   const { cattle, dietFeeds } = useAppSelector(state => state.addCattle);
   const dispatch = useAppDispatch();
+  const { feeds } = useFeeds();
 
   const dietFeedId = route.params?.dietFeedId;
   const modify = route.params?.modify || false;
@@ -29,7 +31,7 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
     formState
   } = useForm<DietFeedFields>({
     defaultValues: {
-      feed: undefined,
+      feed: dietFeed?.feed.id || undefined,
       feedProportion: dietFeed?.feedProportion || 'Por porcentaje',
       quantity: dietFeed?.feedProportion === 'Fija' ? dietFeed.feedAmount : dietFeed?.percentage || undefined
     },
@@ -42,6 +44,7 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
     const { feedProportion, feed, quantity } = getValues();
     const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined;
     const feedAmount = feedProportion === 'Fija' ? quantity : cattle!.weight * (quantity / 100);
+    const findedFeed = feed ? feeds.find(F => F.id === feed) : undefined;
 
     try {
       if (modify && dietFeedId) {
@@ -49,19 +52,19 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
           dietFeed: {
             dietFeedId,
             dietId: "0",
-            feed: feed !== undefined ? feed : dietFeed?.feed,
+            feed: findedFeed ? findedFeed : dietFeed!.feed,
             feedProportion,
             feedAmount,
             percentage
           }
         }))
-      dispatch(show(DietSnackbarId.UPDATED_DIETFEED))
+        dispatch(show(DietSnackbarId.UPDATED_DIETFEED))
       } else {
         dispatch(saveDietFeed({
           dietFeed: {
             dietFeedId: Math.random().toString(),
             dietId: "0",
-            feed,
+            feed: findedFeed!,
             feedProportion,
             feedAmount,
             percentage
@@ -77,7 +80,7 @@ export default function DietFeed({ navigation, route }: NativeStackScreenProps<A
     }
 
     navigation.goBack()
-  }, [dispatch, dietFeedId, modify, cattle, dietFeed, getValues, reset, navigation])
+  }, [dietFeedId, cattle, dietFeed, feeds])
 
   return (<>
     <Appbar.Header>

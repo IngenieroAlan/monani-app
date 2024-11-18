@@ -8,7 +8,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
-import DietSettingsForm from "../forms/DietSettingsForm";
+import DietSettingsForm from "../../../../forms/DietSettingsForm";
 import DietSnackbarContainer, { DietSnackbarId } from "./DietSnackbarContainer";
 
 export default function DietSettingsRoute({ navigation }: NativeStackScreenProps<RootStackParamList, 'DietSettingsRoute'>) {

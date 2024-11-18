@@ -1,5 +1,5 @@
-import DietFeedItem from "@/components/dietFeedRoute/DietFeedItem";
-import DietSnackbarContainer from "@/components/dietFeedRoute/DietSnackbarContainer";
+import DietFeedItem from "@/components/layout/cattleDetails/Components/dietFeed/DietFeedItem";
+import DietSnackbarContainer from "@/components/layout/cattleDetails/Components/dietFeed/DietSnackbarContainer";
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import useDiet from "@/hooks/collections/useDiet";

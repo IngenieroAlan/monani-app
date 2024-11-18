@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native"
 import { memo, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import { Button, Divider, Text, useTheme } from "react-native-paper"
-import MBottomSheet from "../MBottomSheet"
+import MBottomSheet from "../../../../MBottomSheet"
 
 type BottomSheetProps = {
   cattleBottomSheet: number

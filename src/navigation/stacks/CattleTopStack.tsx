@@ -1,4 +1,4 @@
-import CattleBottomAppBar from '@/components/CattleTopStack/CattleBottomAppBar';
+import CattleBottomAppBar from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleBottomAppBar';
 import { GenealogyRoute } from '@/components/layout/cattleDetails/routes/Genealogy';
 import { WeightRoute } from '@/components/layout/cattleDetails/routes/Weight';
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';

@@ -11,7 +11,7 @@ import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { DietSnackbarId } from '../dietFeedRoute/DietSnackbarContainer'
+import { DietSnackbarId } from '../layout/cattleDetails/Components/dietFeed/DietSnackbarContainer'
 
 type DietFeedItem = {
   dietFeedId: string;

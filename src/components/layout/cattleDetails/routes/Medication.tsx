@@ -1,5 +1,5 @@
-import MedicationScheduleItem from "@/components/medicationSchedulesRoute/MedicationScheduleItem";
-import MedicationSnackbarContainer, { MedicationSnackbarId } from '@/components/medicationSchedulesRoute/MedicationSnackbarContainer';
+import MedicationScheduleItem from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationScheduleItem";
+import MedicationSnackbarContainer, { MedicationSnackbarId } from '@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSnackbarContainer';
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import useMedicationSchedules from "@/hooks/collections/useMedicationSchedule";

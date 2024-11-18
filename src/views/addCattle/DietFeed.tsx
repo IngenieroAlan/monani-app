@@ -1,4 +1,4 @@
-import DietSnackbarContainer, { DietSnackbarId } from "@/components/dietFeedRoute/DietSnackbarContainer";
+import DietSnackbarContainer, { DietSnackbarId } from "@/components/layout/cattleDetails/Components/dietFeed/DietSnackbarContainer";
 import DietFeedForm from "@/components/forms/DietFeedForm";
 import useFeeds from "@/hooks/collections/useFeeds";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";

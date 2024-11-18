@@ -1,5 +1,5 @@
 import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
-import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer";
+import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSnackbarContainer";
 import useMedications from '@/hooks/collections/useMedications';
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";

@@ -1,5 +1,5 @@
 import DietFeedList from "@/components/addCattle/DietFeedList"
-import DietSnackbarContainer from "@/components/dietFeedRoute/DietSnackbarContainer"
+import DietSnackbarContainer from "@/components/layout/cattleDetails/Components/dietFeed/DietSnackbarContainer"
 import DismissDialog from "@/components/DismissDialog"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"

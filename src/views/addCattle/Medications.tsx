@@ -1,6 +1,6 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
 import DismissDialog from "@/components/DismissDialog"
-import MedicationSnackbarContainer from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer"
+import MedicationSnackbarContainer from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSnackbarContainer"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList, RootStackParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"

@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import SnackbarContainer from '../SnackbarContainer'
-import MSnackbar from '../MSnackbar'
+import SnackbarContainer from '../../../../SnackbarContainer'
+import MSnackbar from '../../../../MSnackbar'
 
 export const DietSnackbarId = {
   UPDATED_DIET: 'updatedDietSnackbar',

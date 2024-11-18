@@ -1,7 +1,7 @@
-import CattleDetailsBottomSheet from "@/components/genealogyRoute/CattleDetailsBottomSheet";
-import GenealogyList from "@/components/genealogyRoute/GenealogyList";
-import GenealogySnackbarContainer from "@/components/genealogyRoute/GenealogySnackbarContainer";
-import { SetMother } from "@/components/genealogyRoute/SetMother";
+import CattleDetailsBottomSheet from "@/components/layout/cattleDetails/Components/genealogy/CattleDetailsBottomSheet";
+import GenealogyList from "@/components/layout/cattleDetails/Components/genealogy/GenealogyList";
+import GenealogySnackbarContainer from "@/components/layout/cattleDetails/Components/genealogy/GenealogySnackbarContainer";
+import { SetMother } from "@/components/layout/cattleDetails/Components/genealogy/SetMother";
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import { useAppSelector } from '@/hooks/useRedux';

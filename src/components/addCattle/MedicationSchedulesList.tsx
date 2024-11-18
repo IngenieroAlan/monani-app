@@ -8,7 +8,7 @@ import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { MedicationSnackbarId } from '../medicationSchedulesRoute/MedicationSnackbarContainer'
+import { MedicationSnackbarId } from '../layout/cattleDetails/Components/medicationSchedules/MedicationSnackbarContainer'
 
 type navigationProps = MedicationSchedulesNavigationProps['navigation']
 

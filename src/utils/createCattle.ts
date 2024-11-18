@@ -154,6 +154,8 @@ export const createCattle = async (
       ...prepareMedicationSchedules(medicationScheduleData, cattle),
       preparedGenealogyRecord
     )
+
+    return cattle
   })
 
   return createdCattle

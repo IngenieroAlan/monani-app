@@ -1,9 +1,10 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
-import MedicationSnackbarContainer from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer"
 import DismissDialog from "@/components/DismissDialog"
+import MedicationSnackbarContainer from "@/components/medicationSchedulesRoute/MedicationSnackbarContainer"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { AddCattleStackParamsList, BottomTabsParamList } from "@/navigation/types"
+import { AddCattleStackParamsList, RootStackParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
+import { setCattleInfo } from "@/redux/slices/cattles"
 import { show } from "@/redux/slices/uiVisibilitySlice"
 import { RootState } from "@/redux/store/store"
 import { createCattle } from "@/utils"
@@ -12,7 +13,7 @@ import { StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
-export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattleStackParamsList & BottomTabsParamList, 'Medications'>;
+export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattleStackParamsList & RootStackParamList, 'Medications'>;
 const DISMISS_DIALOG_ID = 'createCattleDismissDialog'
 
 export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) => {
@@ -22,7 +23,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
   const goBack = () => {
     dispatch(reset())
-    navigation.navigate('Ganado')
+    navigation.navigate('BottomTabsStack', { screen: 'Ganado' })
   }
 
   const handleSave = () => {
@@ -41,7 +42,12 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
             },
             dietFeeds,
             medicationSchedules
-          )
+          ).then(createdCattle => {
+            dispatch(setCattleInfo(createdCattle))
+            navigation.navigate('CattleDetailsLayout', {
+              screen: 'InfoRoute'
+            })
+          })
         }
       } catch (error) {
         console.error(error);
@@ -50,7 +56,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
     createCattleFunction();
     dispatch(reset());
-    navigation.navigate('Ganado');
+    navigation.navigate('BottomTabsStack', { screen: 'Ganado' });
   }
 
   return (<>

@@ -1,6 +1,6 @@
 import useCattle from "@/hooks/collections/useCattle";
 import { CattleInfoFields } from "@/redux/slices/addCattleSlice";
-import { memo, useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { Control, FormState, useController } from "react-hook-form";
 import { FlatList, View } from "react-native";
 import { Checkbox, Divider, HelperText, Text, useTheme } from "react-native-paper";
@@ -20,6 +20,7 @@ const CattleInfoForm = (
   const theme = useTheme();
   const { errors } = formState;
   const { field: cattleStatusField } = useController({ name: 'cattleStatus', control });
+  const { field: tagCattleNumber } = useController({ name: 'tagCattleNumber', control });
   const { field: weight } = useController({ name: 'weight', control });
   const { field: quarantineDays } = useController({ name: 'quarantineDays', control });
 
@@ -63,6 +64,18 @@ const CattleInfoForm = (
     })),
     [cattleRecords]
   )
+
+  const formatTagCattleNumber = useCallback((value: string) => {
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length <= 2) {
+      return cleaned;
+    } else if (cleaned.length <= 4) {
+      return `${cleaned.slice(0, 2)} ${cleaned.slice(2)}`;
+    } else if (cleaned.length <= 8) {
+      return `${cleaned.slice(0, 2)} ${cleaned.slice(2, 4)} ${cleaned.slice(4)}`;
+    }
+    return `${cleaned.slice(0, 2)} ${cleaned.slice(2, 4)} ${cleaned.slice(4, 8)}`;
+  },[]);
 
   return (<>
     <FlatList
@@ -111,9 +124,15 @@ const CattleInfoForm = (
             helperText={errors.tagCattleNumber?.message ? errors.tagCattleNumber.message : ''}
             more={{
               keyboardType: "numeric",
-              maxLength: 10
+              maxLength: 10,
+              value: tagCattleNumber.value ? tagCattleNumber.value : '',
+              onChangeText: (value: string) => {
+                const formattedValue = formatTagCattleNumber(value);
+                tagCattleNumber.onChange(formattedValue);
+              }
             }}
           />
+
           <MDatePickerInput
             label="Fecha de ingreso*"
             inputMode="start"

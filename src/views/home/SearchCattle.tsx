@@ -1,8 +1,10 @@
 import Cattle from '@/database/models/Cattle'
 import { TableName } from '@/database/schema'
+import { useAppDispatch } from '@/hooks/useRedux'
+import { setCattleInfo } from '@/redux/slices/cattles'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
-import { useNavigation } from '@react-navigation/native'
+import { StackActions, useNavigation } from '@react-navigation/native'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Icon, List, Searchbar, Text, useTheme } from 'react-native-paper'
@@ -59,7 +61,8 @@ const ListItemTitle = ({ cattle }: { cattle: Cattle }) => {
 }
 
 const CattleItem = memo(({ cattle }: { cattle: Cattle }) => {
-  console.log('Rendering item')
+  const navigation = useNavigation()
+  const dispatch = useAppDispatch()
 
   const status = useMemo(() => {
     if (cattle.isActive) {
@@ -87,7 +90,14 @@ const CattleItem = memo(({ cattle }: { cattle: Cattle }) => {
       title={<ListItemTitle cattle={cattle} />}
       description={status}
       left={() => <ListItemLeft iconName={icon} />}
-      onPress={() => {}}
+      onPress={() => {
+        dispatch(setCattleInfo(cattle))
+        navigation.dispatch(
+          StackActions.replace('CattleDetailsLayout', {
+            screen: 'InfoRoute'
+          })
+        )
+      }}
     />
   )
 })

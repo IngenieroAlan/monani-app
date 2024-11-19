@@ -38,6 +38,7 @@ export const Navigator = () => {
         <Stack.Screen
           name='SearchCattleView'
           component={SearchCattle}
+          options={{ presentation: 'modal' }}
         />
         <Stack.Screen
           name='AddCattleStack'

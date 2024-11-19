@@ -4,6 +4,7 @@ import useAppTheme from '@/theme'
 import CattleArchiveSchema from '@/validationSchemas/CattleArchiveSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigation } from '@react-navigation/native'
+import { set } from 'date-fns'
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { View } from 'react-native'
@@ -16,7 +17,7 @@ const ArchiveCattleView = () => {
   const { control, handleSubmit, reset, formState } = useForm<CattleArchiveFields>({
     defaultValues: {
       reason: undefined,
-      archivedAt: new Date(),
+      archivedAt: set(new Date(), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }),
       notes: undefined
     },
     resolver: zodResolver(CattleArchiveSchema),
@@ -28,9 +29,11 @@ const ArchiveCattleView = () => {
   useEffect(() => reset(), [])
 
   const onSubmit = useCallback(async (data: CattleArchiveFields) => {
-    await cattle?.markAsArchived(data)
+    if (!cattle) return
+
+    await cattle.markAsArchived(data)
     navigation.goBack()
-  }, [])
+  }, [cattle])
 
   return (
     <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>

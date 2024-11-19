@@ -25,7 +25,8 @@ export type RootStackParamList = {
   } | undefined;
   SearchMotherView: { edit: boolean } | undefined;
   SearchOffspringView: undefined;
-  ArchiveCattleView: undefined
+  ArchiveCattleView: undefined;
+  EditCattleArchiveView: undefined;
 };
 
 export type BottomTabsParamList = {

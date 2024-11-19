@@ -8,6 +8,7 @@ import { useAppDispatch } from '@/hooks/useRedux'
 import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
 import { getCattles } from '@/redux/slices/cattles'
 import ArchiveCattleView from '@/views/cattleArchive/ArchiveCattleView'
+import EditCattleArchiveView from '@/views/cattleArchive/EditCattleArchiveView'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -23,7 +24,7 @@ const Stack = createStackNavigator<RootStackParamList>()
 
 export const Navigator = () => {
   const theme = useTheme()
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(getCattles(database))
   }, [dispatch])
@@ -36,13 +37,12 @@ export const Navigator = () => {
           component={BottomTabsStack}
         />
         <Stack.Screen
-          name='SearchCattleView'
-          component={SearchCattle}
-          options={{ presentation: 'modal' }}
-        />
-        <Stack.Screen
           name='AddCattleStack'
           component={AddCattleStack}
+        />
+        <Stack.Screen
+          name='CattleDetailsLayout'
+          component={CattleTopStack}
         />
         <Stack.Screen
           name='ResourcesStack'
@@ -52,41 +52,40 @@ export const Navigator = () => {
           name='AnnualEarningsView'
           component={AnnualEarningsView}
         />
-
-        <Stack.Screen
-          name='CattleDetailsLayout'
-          component={CattleTopStack}
-        />
-        <Stack.Screen
-          name='DietSettingsRoute'
-          component={DietSettingsRoute}
-          options={{ presentation: 'modal' }}
-        />
-        <Stack.Screen
-          name='DietFeedRoute'
-          component={DietFeedRoute}
-          options={{ presentation: 'modal' }}
-        />
-        <Stack.Screen
-          name='MedicationScheduleRoute'
-          component={MedicationScheduleRoute}
-          options={{ presentation: 'modal' }}
-        />
-        <Stack.Screen
-          name='SearchMotherView'
-          component={SearchMother}
-          options={{ presentation: 'modal' }}
-        />
-        <Stack.Screen
-          name='SearchOffspringView'
-          component={SearchOffspring}
-          options={{ presentation: 'modal' }}
-        />
-        <Stack.Screen
-          name='ArchiveCattleView'
-          component={ArchiveCattleView}
-          options={{ presentation: 'modal' }}
-        />
+        <Stack.Group screenOptions={{ presentation: 'modal' }}>
+          <Stack.Screen
+            name='SearchCattleView'
+            component={SearchCattle}
+          />
+          <Stack.Screen
+            name='DietSettingsRoute'
+            component={DietSettingsRoute}
+          />
+          <Stack.Screen
+            name='DietFeedRoute'
+            component={DietFeedRoute}
+          />
+          <Stack.Screen
+            name='MedicationScheduleRoute'
+            component={MedicationScheduleRoute}
+          />
+          <Stack.Screen
+            name='SearchMotherView'
+            component={SearchMother}
+          />
+          <Stack.Screen
+            name='SearchOffspringView'
+            component={SearchOffspring}
+          />
+          <Stack.Screen
+            name='ArchiveCattleView'
+            component={ArchiveCattleView}
+          />
+          <Stack.Screen
+            name='EditCattleArchiveView'
+            component={EditCattleArchiveView}
+          />
+        </Stack.Group>
       </Stack.Navigator>
     </View>
   )

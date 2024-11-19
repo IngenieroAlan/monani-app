@@ -72,6 +72,9 @@ const DietFeedForm = ({
         options={dropdownOptions}
         error={errors.feedProportion !== undefined}
         errroMessage={errors.feedProportion?.message}
+        theme={{
+          colors: { background: theme.colors.elevation.level1 }
+        }}
       />
 
       <CustomTextInput
@@ -81,7 +84,7 @@ const DietFeedForm = ({
         errors={errors.quantity}
         helperText={errors.quantity?.message ? errors.quantity?.message : ''}
         more={{
-          theme: { colors: { background: theme.colors.elevation.level0 } },
+          theme: { colors: { background: theme.colors.elevation.level1 } },
           keyboardType: 'numeric',
           value: quantity.value ? String(quantity.value) : '',
           onChangeText: (value: string) => quantity.onChange(parseFloat(value))

@@ -75,7 +75,7 @@ const CattleInfoForm = (
       return `${cleaned.slice(0, 2)} ${cleaned.slice(2, 4)} ${cleaned.slice(4)}`;
     }
     return `${cleaned.slice(0, 2)} ${cleaned.slice(2, 4)} ${cleaned.slice(4, 8)}`;
-  },[]);
+  }, []);
 
   return (<>
     <FlatList
@@ -104,6 +104,9 @@ const CattleInfoForm = (
             label={'Nombre'}
             errors={errors.name}
             helperText={errors.name?.message ? errors.name.message : ''}
+            more={{
+              theme: { colors: { background: theme.colors.elevation.level1 } }
+            }}
           />
           <CustomTextInput
             name="tagId"
@@ -113,7 +116,8 @@ const CattleInfoForm = (
             helperText={errors.tagId?.message ? errors.tagId.message : ''}
             more={{
               keyboardType: "numeric",
-              maxLength: 4
+              maxLength: 4,
+              theme: { colors: { background: theme.colors.elevation.level1 } }
             }}
           />
           <CustomTextInput
@@ -129,7 +133,8 @@ const CattleInfoForm = (
               onChangeText: (value: string) => {
                 const formattedValue = formatTagCattleNumber(value);
                 tagCattleNumber.onChange(formattedValue);
-              }
+              },
+              theme: { colors: { background: theme.colors.elevation.level1 } },
             }}
           />
 
@@ -140,6 +145,9 @@ const CattleInfoForm = (
             name="admittedAt"
             errors={errors.bornAt}
             maxDate={new Date()}
+            more={{
+              theme: { colors: { background: theme.colors.elevation.level1 } }
+            }}
           />
 
           <Divider style={{ marginVertical: 10 }} />
@@ -156,6 +164,7 @@ const CattleInfoForm = (
               maxLength: 4,
               value: weight.value ? String(weight.value) : '',
               onChangeText: (value: string) => weight.onChange(parseFloat(value)),
+              theme: { colors: { background: theme.colors.elevation.level1 } }
             }}
           />
 
@@ -166,6 +175,9 @@ const CattleInfoForm = (
             name="bornAt"
             errors={errors.bornAt}
             maxDate={new Date()}
+            more={{
+              theme: { colors: { background: theme.colors.elevation.level1 } }
+            }}
           />
 
           <Divider style={{ marginVertical: 10 }} />
@@ -179,7 +191,7 @@ const CattleInfoForm = (
             error={errors.cattleStatus !== undefined}
             errroMessage={errors.cattleStatus?.message}
             theme={{
-              colors: { background: theme.colors.elevation.level3 }
+              colors: { background: theme.colors.elevation.level1 }
             }}
           />
 
@@ -191,6 +203,9 @@ const CattleInfoForm = (
               name="pregnantAt"
               errors={errors.bornAt}
               maxDate={new Date()}
+              more={{
+                theme: { colors: { background: theme.colors.elevation.level1 } }
+              }}
             />
           )}
 
@@ -208,7 +223,7 @@ const CattleInfoForm = (
             error={errors.productionType !== undefined}
             errroMessage={errors.productionType?.message}
             theme={{
-              colors: { background: theme.colors.elevation.level3 }
+              colors: { background: theme.colors.elevation.level1 }
             }}
           />
 
@@ -247,6 +262,7 @@ const CattleInfoForm = (
               keyboardType: "numeric",
               disabled: !inQuarantine,
               onChangeText: (value: string) => quarantineDays.onChange(parseFloat(value)),
+              theme: { colors: { background: theme.colors.elevation.level1 } }
             }}
           />
         </View>

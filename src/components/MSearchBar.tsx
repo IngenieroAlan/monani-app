@@ -1,7 +1,7 @@
 
 import React, { memo, ReactNode, useEffect, useState } from "react";
 import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
-import { FlatList, SafeAreaView, StyleSheet, View } from "react-native";
+import { Animated, FlatList, SafeAreaView, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 // import { FlatList } from "react-native-gesture-handler";
 import { HelperText, List, Searchbar, SearchbarProps, TouchableRipple, useTheme } from "react-native-paper";
 
@@ -48,6 +48,9 @@ const RenderController = (
     data: ArrayLike<SearchBarDataItem> | null | undefined
     initialQuery?: string,
     maxHeight?: number
+    searchbarStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>
+    inputStyle?: StyleProp<TextStyle>
+    placeholderTextColor?: string
   }
 ) => {
   const theme = useTheme()
@@ -103,6 +106,13 @@ const RenderController = (
         value={searchQuery}
         onFocus={() => setSearchBarFocused(true)}
         onBlur={() => activeList ? setSearchBarFocused(false) : setSearchBarFocused(true)}
+        style={props.searchbarStyle ? props.searchbarStyle as StyleProp<ViewStyle> : {
+          backgroundColor: theme.colors.elevation.level1,
+          borderColor: theme.colors.outline,
+          borderWidth: 1,
+        }}
+        inputStyle={props.inputStyle ? props.inputStyle : { color: theme.colors.onSurface }}
+        placeholderTextColor={props.placeholderTextColor ? props.placeholderTextColor : theme.colors.onSurfaceVariant}
         {...props}
       />
 
@@ -149,6 +159,9 @@ const MSearchBar = <T extends FieldValues>(
     data: ArrayLike<SearchBarDataItem> | null | undefined;
     initialQuery?: string,
     maxHeight?: number
+    searchbarStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>
+    inputStyle?: StyleProp<TextStyle>
+    placeholderTextColor?: string
   }
 ) => {
   return (

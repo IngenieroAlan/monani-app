@@ -50,7 +50,6 @@ const CattleMedicationForm = ({ control, formState, medicationName }: {
         data={medicationData}
         erroMessage={errors.medication?.message ? String(errors.medication.message) : undefined}
         maxHeight={500}
-        style={{ backgroundColor: theme.colors.surface, borderWidth: 1 }}
       />
       <MDatePickerInput
         label="Fecha de próxima dosis*"
@@ -59,11 +58,14 @@ const CattleMedicationForm = ({ control, formState, medicationName }: {
         name="nextDoseAt"
         errors={errors.nextDoseAt}
         minDate={new Date()}
-        // moreDateTimePicker={{
-        //   mode: 'single',
-        //   // if there is no current value then current date+1 day
-        //   date: nextDoseAt.value ? dayjs(nextDoseAt.value).toDate() : dayjs(new Date().setDate(new Date().getDate() + 1)),
-        // }}
+        more={{
+          theme: { colors: { background: theme.colors.elevation.level1 } }
+        }}
+      // moreDateTimePicker={{
+      //   mode: 'single',
+      //   // if there is no current value then current date+1 day
+      //   date: nextDoseAt.value ? dayjs(nextDoseAt.value).toDate() : dayjs(new Date().setDate(new Date().getDate() + 1)),
+      // }}
       />
       <CustomTextInput
         name='dosesPerYear'
@@ -72,7 +74,7 @@ const CattleMedicationForm = ({ control, formState, medicationName }: {
         errors={errors.dosesPerYear}
         helperText={errors.dosesPerYear?.message ? errors.dosesPerYear?.message : ''}
         more={{
-          theme: { colors: { background: theme.colors.surface } },
+          theme: { colors: { background: theme.colors.elevation.level1 } },
           keyboardType: 'numeric',
           value: dosesPerYear.value ? String(dosesPerYear.value) : '',
           onChangeText: (value: string) => dosesPerYear.onChange(parseFloat(value)),

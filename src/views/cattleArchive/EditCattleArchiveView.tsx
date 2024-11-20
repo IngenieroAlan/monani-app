@@ -1,7 +1,9 @@
 import DismissDialog from '@/components/DismissDialog'
 import CattleArchiveForm, { CattleArchiveFields } from '@/components/forms/CattleArchiveForm'
+import { InfoSnackbarId } from '@/components/layout/cattleDetails/Components/info/InfoSnackbarContainer'
 import useCattleArchive from '@/hooks/collections/useCattleArchive'
-import { useAppSelector } from '@/hooks/useRedux'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import useAppTheme from '@/theme'
 import CattleArchiveSchema from '@/validationSchemas/CattleArchiveSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -40,6 +42,7 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
       />
       <Portal>
         <DismissDialog
+          snackbarOnDismiss
           visible={showDialog}
           onConfirm={onDismissConfirm}
           onCancel={() => setShowDialog(false)}
@@ -51,6 +54,7 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
 
 const EditCattleArchiveView = () => {
   const theme = useAppTheme()
+  const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const cattle = useAppSelector((state) => state.cattles.cattleInfo)
   const { cattleArchive } = useCattleArchive(cattle!)
@@ -62,7 +66,10 @@ const EditCattleArchiveView = () => {
   const { isDirty, isValid, isSubmitting, isSubmitSuccessful } = formState
 
   useEffect(() => {
-    if (isSubmitSuccessful) navigation.goBack()
+    if (!isSubmitSuccessful) return
+
+    dispatch(show(InfoSnackbarId.CATTLE_ARCHIVE_UPDATED))
+    navigation.goBack()
   }, [isSubmitSuccessful])
 
   useEffect(() => {

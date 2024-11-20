@@ -1,15 +1,21 @@
-import { useAppSelector } from '@/hooks/useRedux'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useCallback, useState } from 'react'
 import { Appbar, Button, Dialog, Portal, Text } from 'react-native-paper'
+import { InfoSnackbarId } from '../info/InfoSnackbarContainer'
 
 const UnarchiveCattleAction = () => {
+  const dispatch = useAppDispatch()
+  const cattle = useAppSelector((state) => state.cattles.cattleInfo)
   const [showDialog, setShowDialog] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const cattle = useAppSelector((state) => state.cattles.cattleInfo)
 
   const onUnarchive = useCallback(async () => {
     setIsLoading(true)
+
     await cattle?.unarchive()
+
+    dispatch(show(InfoSnackbarId.CATTLE_UNARCHIVED))
     setShowDialog(false)
   }, [cattle])
 

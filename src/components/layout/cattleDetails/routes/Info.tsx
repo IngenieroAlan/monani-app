@@ -1,42 +1,45 @@
 import Cattle from "@/database/models/Cattle";
-import { TableName } from "@/database/schema";
 import { useAppSelector } from '@/hooks/useRedux';
 import { cattleDetails } from '@/styles/main';
+import useAppTheme from '@/theme';
 import { withObservables } from "@nozbe/watermelondb/react";
 import { format } from 'date-fns';
 import { es } from "date-fns/locale";
-import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { Card, Divider, Text } from "react-native-paper";
+import InfoSnackbarContainer from '../Components/info/InfoSnackbarContainer';
 
 export const InfoRoute = () => {
-  const { cattleInfo } = useAppSelector(state => state.cattles);
+  const theme = useAppTheme()
+  const cattleInfo = useAppSelector(state => state.cattles.cattleInfo);
+
   return (
-    <ScrollView style={cattleDetails.container}>
-      {
-        cattleInfo && (<CattleInfoDetails cattle={cattleInfo} />)
-      }
-    </ScrollView>
+    <>
+      <ScrollView style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+        <CattleInfoDetails cattle={cattleInfo!} />
+      </ScrollView>
+      <InfoSnackbarContainer />
+    </>
   );
 }
 
 
-const observeCattle = withObservables([TableName.CATTLE], ({ cattle }: { cattle: Cattle }) => ({
+const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle
 }));
 
 const CattleInfoDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
   return (
     <View style={cattleDetails.cardsContainer}>
-      <Card style={cattleDetails.card}>
+      <Card>
         <Card.Title title="Cuarentena" />
         <Divider style={{ width: "85%", alignSelf: "center" }} />
-        <Card.Content style={{ marginTop: 10 }}>
+        <Card.Content style={{ margin: 10 }}>
           <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Tiempo restante</Text>
           <Text variant="titleSmall">27 días</Text>
         </Card.Content>
       </Card>
-      <Card style={cattleDetails.card}>
+      <Card>
         <Card.Title title="Datos generales" />
         <Divider style={{ width: "85%", alignSelf: "center" }} />
         <Card.Content style={{ marginTop: 10, gap: 8 }}>
@@ -58,7 +61,7 @@ const CattleInfoDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
           </View>
         </Card.Content>
       </Card>
-      <Card style={cattleDetails.card}>
+      <Card>
         <Card.Title title="Datos biológicos" />
         <Divider style={{ width: "85%", alignSelf: "center" }} />
         <Card.Content style={{ marginTop: 10, gap: 8 }}>
@@ -78,7 +81,7 @@ const CattleInfoDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
           </View>
         </Card.Content>
       </Card>
-      <Card style={cattleDetails.card}>
+      <Card>
         <Card.Title title="Estado productivo" />
         <Divider style={{ width: "85%", alignSelf: "center" }} />
         <Card.Content style={{ marginTop: 10, gap: 8 }}>
@@ -92,7 +95,7 @@ const CattleInfoDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
           </View>
         </Card.Content>
       </Card>
-      <Card style={cattleDetails.card}>
+      <Card>
         <Card.Title title="Gestación" />
         <Divider style={{ width: "85%", alignSelf: "center" }} />
         <Card.Content style={{ marginTop: 10, gap: 8 }}>

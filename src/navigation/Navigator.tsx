@@ -7,7 +7,7 @@ import database from '@/database'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
 import { getCattles } from '@/redux/slices/cattles'
-import ArchiveCattleView from '@/views/cattleArchive/ArchiveCattleView'
+import CreateCattleArchiveView from '@/views/cattleArchive/CreateCattleArchiveView'
 import EditCattleArchiveView from '@/views/cattleArchive/EditCattleArchiveView'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
@@ -79,7 +79,7 @@ export const Navigator = () => {
           />
           <Stack.Screen
             name='ArchiveCattleView'
-            component={ArchiveCattleView}
+            component={CreateCattleArchiveView}
           />
           <Stack.Screen
             name='EditCattleArchiveView'

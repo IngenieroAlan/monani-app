@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { View } from 'react-native'
 import { Appbar, Button, IconButton } from 'react-native-paper'
 
-const ArchiveCattleView = () => {
+const CreateCattleArchiveView = () => {
   const theme = useAppTheme()
   const navigation = useNavigation()
   const cattle = useAppSelector((state) => state.cattles.cattleInfo)
@@ -61,4 +61,4 @@ const ArchiveCattleView = () => {
   )
 }
 
-export default ArchiveCattleView
+export default CreateCattleArchiveView

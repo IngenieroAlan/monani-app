@@ -9,9 +9,9 @@ import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navig
 import { EarningsStack } from './stacks/EarningsStack'
 import { MilkProductionStack } from './stacks/MilkProductionStack'
 import { NotificationsStack } from './stacks/NotificationsStack'
-import { BottomTabsParamList } from './types'
+import { BottomTabsParamList, MaterialBottomTabNavigator } from './types'
 
-const Tab = createMaterialBottomTabNavigator<BottomTabsParamList>()
+const Tab: MaterialBottomTabNavigator<BottomTabsParamList> = createMaterialBottomTabNavigator<BottomTabsParamList>()
 
 const BottomTabsStack = () => {
   const dispatch = useAppDispatch()

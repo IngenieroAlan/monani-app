@@ -1,4 +1,6 @@
-import { NavigatorScreenParams } from "@react-navigation/native";
+import { DefaultNavigatorOptions, EventMapBase, NavigationState, NavigatorScreenParams, ParamListBase, RouteConfig, RouteGroupConfig, TabNavigationState } from "@react-navigation/native";
+import { MaterialBottomTabNavigationEventMap, MaterialBottomTabNavigationOptions } from 'react-native-paper';
+import { MaterialBottomTabNavigatorProps } from 'react-native-paper/lib/typescript/react-navigation/navigators/createMaterialBottomTabNavigator';
 
 export type RootStackParamList = {
   BottomTabsStack: NavigatorScreenParams<BottomTabsParamList>;
@@ -76,3 +78,39 @@ declare global {
     interface RootParamList extends RootStackParamList { }
   }
 }
+
+type LegacyTypedNavigator<
+  ParamList extends ParamListBase,
+  State extends NavigationState,
+  ScreenOptions extends {},
+  EventMap extends EventMapBase,
+  Navigator extends React.ComponentType<any>
+> = {
+  Navigator: React.ComponentType<
+    Omit<
+      React.ComponentProps<Navigator>,
+      keyof DefaultNavigatorOptions<any, any, any, any, any, any>
+    > &
+      DefaultNavigatorOptions<ParamList, any, State, ScreenOptions, EventMap, any>
+  >;
+  Group: React.ComponentType<RouteGroupConfig<ParamList, ScreenOptions, any>>;
+  Screen: <RouteName extends keyof ParamList>(
+    _: RouteConfig<ParamList, RouteName, State, ScreenOptions, EventMap, any>
+  ) => null;
+};
+
+export type MaterialBottomTabNavigator<T extends ParamListBase> = LegacyTypedNavigator<
+  T,
+  TabNavigationState<ParamListBase>,
+  MaterialBottomTabNavigationOptions,
+  MaterialBottomTabNavigationEventMap,
+  ({
+    id,
+    initialRouteName,
+    backBehavior,
+    children,
+    screenListeners,
+    screenOptions,
+    ...rest
+  }: MaterialBottomTabNavigatorProps) => React.JSX.Element
+>

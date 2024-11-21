@@ -1,3 +1,5 @@
+import { useAppDispatch } from '@/hooks/useRedux'
+import { reset } from '@/redux/slices/uiVisibilitySlice'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import React from 'react'
 import { Icon, Text, useTheme } from 'react-native-paper'
@@ -11,10 +13,13 @@ const Stack = createMaterialTopTabNavigator<EarningsStackParamList>()
 export const EarningsStack = () => {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
+  const dispatch = useAppDispatch()
 
   return (
     <Stack.Navigator
-      style={{ paddingTop: insets.top }}
+      screenListeners={{
+        blur: () => dispatch(reset())
+      }}
       screenOptions={{
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.onSurface,
@@ -31,6 +36,7 @@ export const EarningsStack = () => {
         },
         tabBarAndroidRipple: { borderless: false }
       }}
+      style={{ paddingTop: insets.top }}
     >
       <Stack.Screen
         name='EarningsView'

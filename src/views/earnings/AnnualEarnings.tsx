@@ -4,7 +4,7 @@ import ExpandableEarningsList, {
 } from '@/components/earnings/annualEarnings/ExpandableEarningsList'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { RootStackParamList } from '@/navigation/types'
-import { reset, setYear } from '@/redux/slices/collections/earningsQuerySlice'
+import { setYear } from '@/redux/slices/collections/earningsQuerySlice'
 import useAppTheme from '@/theme'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
@@ -18,12 +18,6 @@ const AnnualEarningsView = ({ route, navigation }: ScreenProps) => {
   const theme = useAppTheme()
   const dispatch = useAppDispatch()
   const { year, totalEarnings, totalCattleEarnings, totalMilkEarnings, difference } = route.params
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => dispatch(reset()))
-
-    return unsubscribe
-  }, [navigation])
 
   useEffect(() => {
     dispatch(setYear({ listId: ANNUAL_EARNINGS_LIST_ID, year }))

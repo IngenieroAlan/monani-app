@@ -5,9 +5,8 @@ import FeedsList from '@/components/resources/feeds/FeedsList'
 import FeedsSnackbarContainer from '@/components/resources/feeds/FeedsSnackbarContainer'
 import { useAppDispatch } from '@/hooks/useRedux'
 import useScrollFab from '@/hooks/useScrollFab'
-import { reset, show } from '@/redux/slices/uiVisibilitySlice'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
-import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
 
@@ -16,12 +15,6 @@ const Feeds = () => {
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const { onScroll, isFabExtended } = useScrollFab()
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => dispatch(reset()))
-
-    return unsubscribe
-  }, [navigation])
 
   return (
     <>

@@ -41,7 +41,7 @@ const EarningsList = (props: Props & { listId: string }) => {
 
   return props.data?.length ? (
     <FlashList
-      estimatedItemSize={80}
+      estimatedItemSize={180}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       ItemSeparatorComponent={() => <Divider />}

@@ -8,7 +8,7 @@ import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { MedicationSnackbarId } from '../layout/cattleDetails/Components/medicationSchedules/MedicationSnackbarContainer'
+import { MedicationSchedulesSnackbarId } from '../layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer'
 
 type navigationProps = MedicationSchedulesNavigationProps['navigation']
 
@@ -50,7 +50,7 @@ const ListItemMenu = (
         leadingIcon='minus'
         onPress={() => {
           setMenuVisible(false);
-          dispatch(show(MedicationSnackbarId.REMOVED_MEDICATION))
+          dispatch(show(MedicationSchedulesSnackbarId.REMOVED_MEDICATION_SCHEDULE))
           dispatch(deleteMedicationSchedule({ medicationScheduleId: medicationScheduleId }))
         }}
       />

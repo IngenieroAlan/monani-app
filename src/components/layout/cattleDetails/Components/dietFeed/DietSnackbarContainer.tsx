@@ -1,6 +1,6 @@
+import MSnackbar from '@/components/MSnackbar'
+import SnackbarContainer from '@/components/SnackbarContainer'
 import { memo } from 'react'
-import SnackbarContainer from '../../../../SnackbarContainer'
-import MSnackbar from '../../../../MSnackbar'
 
 export const DietSnackbarId = {
   UPDATED_DIET: 'updatedDietSnackbar',
@@ -8,11 +8,12 @@ export const DietSnackbarId = {
   REMOVED_DIETFEED: 'deletedDietFeedSnackbar',
   UPDATED_DIETFEED: 'updatedDietFeedSnackbar',
   SAME_DIETFEED: 'sameDietFeedSnackbar',
+  DIET_DISMISS: 'dietDismissSnackbar'
 }
 
 const DietSnackbarContainer = () => {
   return (
-    <SnackbarContainer dismissSnackbar>
+    <SnackbarContainer dismissSnackbarId={DietSnackbarId.DIET_DISMISS}>
       <MSnackbar id={DietSnackbarId.UPDATED_DIET}>Dieta actualizada con éxito.</MSnackbar>
       <MSnackbar id={DietSnackbarId.STORED_DIETFEED}>Alimento guardado con éxito.</MSnackbar>
       <MSnackbar id={DietSnackbarId.REMOVED_DIETFEED}>Alimento eliminado con éxito.</MSnackbar>

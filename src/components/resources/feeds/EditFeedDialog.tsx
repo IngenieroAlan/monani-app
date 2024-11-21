@@ -87,7 +87,7 @@ const EditFeedDialog = () => {
       </Dialog>
       <DismissDialog
         id={DISMISS_DIALOG_ID}
-        snackbarOnDismiss
+        dismissSnackbarId={FeedsSnackbarId.FEED_DISMISS}
         onConfirm={dismissChanges}
         onCancel={() => dispatch(show(EDIT_FEED_DIALOG_ID))}
       />

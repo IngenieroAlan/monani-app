@@ -1,6 +1,7 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
 import DismissDialog from "@/components/DismissDialog"
-import MedicationSnackbarContainer from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSnackbarContainer"
+import { HomeSnackbarId } from '@/components/home/HomeSnackbarContainer'
+import MedicationSchedulesSnackbarContainer from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList, RootStackParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
@@ -88,11 +89,11 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
       </View>
       <DismissDialog
         id={DISMISS_DIALOG_ID}
-        snackbarOnDismiss
+        dismissSnackbarId={HomeSnackbarId.CREATE_CATTLE_DISMISS}
         onConfirm={goBack}
         onCancel={() => { }}
       />
-      <MedicationSnackbarContainer />
+      <MedicationSchedulesSnackbarContainer />
     </SafeAreaProvider>
   </>
   )

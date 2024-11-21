@@ -1,5 +1,5 @@
 import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
-import MedicationSnackbarContainer, { MedicationSnackbarId } from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSnackbarContainer";
+import MedicationSchedulesSnackbarContainer, { MedicationSchedulesSnackbarId } from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer";
 import useMedications from '@/hooks/collections/useMedications';
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AddCattleStackParamsList } from "@/navigation/types";
@@ -62,7 +62,7 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
             cattleId: cattle.tagId,
           }
         }))
-        dispatch(show(MedicationSnackbarId.UPDATED_MEDICATION))
+        dispatch(show(MedicationSchedulesSnackbarId.UPDATED_MEDICATION_SCHEDULE))
       } else {
         dispatch(saveMedicationSchedule({
           medicationSchedule: {
@@ -74,11 +74,11 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
           }
         }))
         reset();
-        dispatch(show(MedicationSnackbarId.STORED_MEDICATION))
+        dispatch(show(MedicationSchedulesSnackbarId.STORED_MEDICATION_SCHEDULE))
       }
     } catch (error) {
       console.error(error);
-      dispatch(show(MedicationSnackbarId.SAME_MEDICATION))
+      dispatch(show(MedicationSchedulesSnackbarId.SAME_MEDICATION))
       return;
     }
 
@@ -96,6 +96,6 @@ export default function Medication({ navigation, route }: NativeStackScreenProps
       formState={formState}
       medicationName={medicationName}
     />
-    <MedicationSnackbarContainer />
+    <MedicationSchedulesSnackbarContainer />
   </>)
 }

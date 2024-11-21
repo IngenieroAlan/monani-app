@@ -1,17 +1,17 @@
 import { StyleSheet, View, ViewProps } from 'react-native'
 import MSnackbar from './MSnackbar'
 
-export const DISMISS_SNACKBAR_ID = 'dismissSnackbar'
-
 // Just a wrapper to add some styles.
-const SnackbarContainer = (props: ViewProps & { dismissSnackbar?: boolean }) => {
+const SnackbarContainer = (props: ViewProps & { dismissSnackbarId?: string; bottom?: number }) => {
   return (
     <View
-      style={styles.container}
+      style={{ ...styles.container, bottom: props.bottom || 0 }}
       {...props}
     >
       {props.children}
-      {props.dismissSnackbar && <MSnackbar id={DISMISS_SNACKBAR_ID}>Los cambios han sido descartados.</MSnackbar>}
+      {props.dismissSnackbarId !== undefined && (
+        <MSnackbar id={props.dismissSnackbarId}>Los cambios han sido descartados.</MSnackbar>
+      )}
     </View>
   )
 }
@@ -19,7 +19,6 @@ const SnackbarContainer = (props: ViewProps & { dismissSnackbar?: boolean }) => 
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 72,
     width: '100%',
     gap: 16,
     padding: 16

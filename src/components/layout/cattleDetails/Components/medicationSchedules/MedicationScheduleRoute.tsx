@@ -10,7 +10,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
-import { MedicationSnackbarId } from "./MedicationSnackbarContainer";
+import { MedicationSchedulesSnackbarId } from "./MedicationSchedulesSnackbarContainer";
 
 export default function MedicationScheduleRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'MedicationScheduleRoute'>) {
   const { cattleInfo } = useAppSelector(state => state.cattles)
@@ -63,7 +63,7 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
             nextDoseAt,
             dosesPerYear,
           });
-          dispatch(show(MedicationSnackbarId.UPDATED_MEDICATION))
+          dispatch(show(MedicationSchedulesSnackbarId.UPDATED_MEDICATION_SCHEDULE))
         } else {
           await cattleInfo?.addMedicationSchedule({
             medication: findedMed!,
@@ -71,11 +71,11 @@ export default function MedicationScheduleRoute({ navigation, route }: NativeSta
             dosesPerYear,
           });
           reset();
-          dispatch(show(MedicationSnackbarId.STORED_MEDICATION))
+          dispatch(show(MedicationSchedulesSnackbarId.STORED_MEDICATION_SCHEDULE))
         }
       } catch (error) {
         console.error("Failed to update diet feed:", error);
-        dispatch(show(MedicationSnackbarId.SAME_MEDICATION))
+        dispatch(show(MedicationSchedulesSnackbarId.SAME_MEDICATION))
         return;
       }
     };

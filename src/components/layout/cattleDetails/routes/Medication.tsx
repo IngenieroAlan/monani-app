@@ -1,5 +1,5 @@
 import MedicationScheduleItem from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationScheduleItem";
-import MedicationSnackbarContainer, { MedicationSnackbarId } from '@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSnackbarContainer';
+import MedicationSchedulesSnackbarContainer, { MedicationSchedulesSnackbarId } from '@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer';
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import useMedicationSchedules from "@/hooks/collections/useMedicationSchedule";
@@ -20,7 +20,7 @@ export const MedicationRoute = () => {
       {
         cattleInfo && (<CattleMedicationsDetails cattle={cattleInfo} />)
       }
-      <MedicationSnackbarContainer />
+      <MedicationSchedulesSnackbarContainer />
     </>
   );
 };
@@ -60,7 +60,7 @@ const CattleMedicationsDetails = observeCattle(({ cattle }: { cattle: Cattle }) 
     const medicationSchedule = medicationSchedules?.find(medicationSchedule => medicationSchedule.id === medicationScheduleId);
     const deleteDietFeed = async () => {
       medicationSchedule && await medicationSchedule.delete();
-      dispatch(show(MedicationSnackbarId.REMOVED_MEDICATION));
+      dispatch(show(MedicationSchedulesSnackbarId.REMOVED_MEDICATION_SCHEDULE));
     }
     deleteDietFeed();
   }, [medicationSchedules])

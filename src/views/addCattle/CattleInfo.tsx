@@ -1,5 +1,6 @@
 import DismissDialog from "@/components/DismissDialog"
 import CattleInfoForm from "@/components/forms/CattleInfoForm"
+import { HomeSnackbarId } from '@/components/home/HomeSnackbarContainer'
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList } from "@/navigation/types"
 import { CattleInfoFields, reset as resetCattle, saveCattleInfo } from "@/redux/slices/addCattleSlice"
@@ -84,9 +85,8 @@ export const CattlInfo = ({ navigation }: Props) => {
       </View>
       <DismissDialog
         id={DISMISS_DIALOG_ID}
-        snackbarOnDismiss
+        dismissSnackbarId={HomeSnackbarId.CREATE_CATTLE_DISMISS}
         onConfirm={goBack}
-        onCancel={() => { }}
       />
     </SafeAreaProvider>
   </>)

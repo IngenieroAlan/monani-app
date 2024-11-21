@@ -74,7 +74,7 @@ const CreateMedicationDialog = () => {
       </Dialog>
       <DismissDialog
         id={DISMISS_DIALOG_ID}
-        snackbarOnDismiss
+        dismissSnackbarId={MedicationsSnackbarId.MEDICATION_DISMISS}
         onConfirm={dismissChanges}
         onCancel={() => dispatch(show(CREATE_MEDICATION_DIALOG_ID))}
       />

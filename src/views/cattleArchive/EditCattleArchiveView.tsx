@@ -42,7 +42,7 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
       />
       <Portal>
         <DismissDialog
-          snackbarOnDismiss
+          dismissSnackbarId={InfoSnackbarId.CATTLE_ARCHIVE_DISMISS}
           visible={showDialog}
           onConfirm={onDismissConfirm}
           onCancel={() => setShowDialog(false)}

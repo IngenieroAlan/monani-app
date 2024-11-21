@@ -2,7 +2,7 @@ import BottomSheetProductionFilter from '@/components/home/BottomSheetProduction
 import BottomSheetStatusFilter from '@/components/home/BottomSheetStatusFilter'
 import CattleList from '@/components/home/CattleList'
 import CattleListFilters from '@/components/home/CattleListFilters'
-import DietSnackbarContainer from '@/components/layout/cattleDetails/Components/dietFeed/DietSnackbarContainer'
+import HomeSnackbarContainer from '@/components/home/HomeSnackbarContainer'
 import useScrollFab from '@/hooks/useScrollFab'
 import { useNavigation } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar'
@@ -47,7 +47,7 @@ export const HomeView = () => {
       </View>
       <BottomSheetStatusFilter />
       <BottomSheetProductionFilter />
-      <DietSnackbarContainer />
+      <HomeSnackbarContainer />
     </>
   )
 }

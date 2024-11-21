@@ -140,11 +140,11 @@ class Cattle extends Model {
     const archive = (await this.archive)[0]
 
     await this.batch(
-      archive.prepareDestroyPermanently(),
       this.prepareUpdate((record) => {
         record.isActive = true
         record.isArchived = false
-      })
+      }),
+      archive.prepareDestroyPermanently()
     )
   }
 

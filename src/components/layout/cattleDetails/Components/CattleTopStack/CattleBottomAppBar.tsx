@@ -32,7 +32,7 @@ const CattleBottomAppBar = () => {
     }
 
     if (screen === 'InfoRoute' || screen === 'GenealogyRoute') {
-      return 'pencil'
+      return 'pencil-outline'
     }
 
     return 'plus'

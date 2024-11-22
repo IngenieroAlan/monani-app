@@ -1,118 +1,56 @@
-import Cattle from "@/database/models/Cattle";
-import { useAppSelector } from '@/hooks/useRedux';
-import { cattleDetails } from '@/styles/main';
-import useAppTheme from '@/theme';
-import { withObservables } from "@nozbe/watermelondb/react";
-import { format } from 'date-fns';
-import { es } from "date-fns/locale";
-import { ScrollView, View } from 'react-native';
-import { Card, Divider, Text } from "react-native-paper";
-import InfoSnackbarContainer from '../Components/info/InfoSnackbarContainer';
+import Cattle from '@/database/models/Cattle'
+import useCattleArchive from '@/hooks/collections/useCattleArchive'
+import { useAppSelector } from '@/hooks/useRedux'
+import useAppTheme from '@/theme'
+import { withObservables } from '@nozbe/watermelondb/react'
+import { ScrollView, View } from 'react-native'
+import ArchiveCard from '../Components/info/cards/ArchiveCard'
+import BiologicalInfoCard from '../Components/info/cards/BiologicalInfoCard'
+import GeneralInfoCard from '../Components/info/cards/GeneralInfoCard'
+import PregnancyCard from '../Components/info/cards/PregnancyCard'
+import ProductionStatusCard from '../Components/info/cards/ProductionStatusCard'
+import InfoSnackbarContainer from '../Components/info/InfoSnackbarContainer'
 
 export const InfoRoute = () => {
   const theme = useAppTheme()
-  const cattleInfo = useAppSelector(state => state.cattles.cattleInfo);
+  const cattle = useAppSelector((state) => state.cattles.cattleInfo)
 
   return (
     <>
       <ScrollView style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
-        <CattleInfoDetails cattle={cattleInfo!} />
+        <CattleInfoDetails cattle={cattle!} />
       </ScrollView>
       <InfoSnackbarContainer />
     </>
-  );
+  )
 }
-
 
 const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle
-}));
+}))
 
 const CattleInfoDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
+  const { cattleArchive } = useCattleArchive(cattle!)
+
   return (
-    <View style={cattleDetails.cardsContainer}>
-      <Card>
-        <Card.Title title="Cuarentena" />
-        <Divider style={{ width: "85%", alignSelf: "center" }} />
-        <Card.Content style={{ margin: 10 }}>
-          <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Tiempo restante</Text>
-          <Text variant="titleSmall">27 días</Text>
-        </Card.Content>
-      </Card>
-      <Card>
-        <Card.Title title="Datos generales" />
-        <Divider style={{ width: "85%", alignSelf: "center" }} />
-        <Card.Content style={{ marginTop: 10, gap: 8 }}>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Nombre</Text>
-            <Text variant="titleSmall">{cattle.name}</Text>
-          </View>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>No. identificador</Text>
-            <Text variant="titleSmall">{cattle.tagId}</Text>
-          </View>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>No. de vaca</Text>
-            <Text variant="titleSmall">{cattle.tagCattleNumber}</Text>
-          </View>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Fecha de ingreso</Text>
-            <Text variant="titleSmall">Viernes 20 de septiembre de 2024</Text>
-          </View>
-        </Card.Content>
-      </Card>
-      <Card>
-        <Card.Title title="Datos biológicos" />
-        <Divider style={{ width: "85%", alignSelf: "center" }} />
-        <Card.Content style={{ marginTop: 10, gap: 8 }}>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Peso</Text>
-            <Text variant="titleSmall">{cattle.weight} kg</Text>
-          </View>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Edad</Text>
-            {/* 3 años, 5 meses, 10 dias */}
-            <Text variant="titleSmall"> {format(cattle.bornAt, "yyyyy,mmmm,dddd", { locale: es })}</Text>
-          </View>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Fecha de nacimiento</Text>
-            {/* Viernes 03 de septiembre de 2021 */}
-            <Text variant="titleSmall"> {format(cattle.bornAt, "dddd de mmm de yyyy", { locale: es })}</Text>
-          </View>
-        </Card.Content>
-      </Card>
-      <Card>
-        <Card.Title title="Estado productivo" />
-        <Divider style={{ width: "85%", alignSelf: "center" }} />
-        <Card.Content style={{ marginTop: 10, gap: 8 }}>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Producción</Text>
-            <Text variant="titleSmall">Lechera</Text>
-          </View>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Estado</Text>
-            <Text variant="titleSmall">Gestante</Text>
-          </View>
-        </Card.Content>
-      </Card>
-      <Card>
-        <Card.Title title="Gestación" />
-        <Divider style={{ width: "85%", alignSelf: "center" }} />
-        <Card.Content style={{ marginTop: 10, gap: 8 }}>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Edad gestacional</Text>
-            <Text variant="titleSmall">7 meses, 3 días</Text>
-          </View>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Inicio de gestación</Text>
-            <Text variant="titleSmall">Sabado 10 de marzo de 2024</Text>
-          </View>
-          <View>
-            <Text variant='titleSmall' style={{ fontWeight: "bold" }}>Día de parto</Text>
-            <Text variant="titleSmall">Martes 10 de diciembre de 2024</Text>
-          </View>
-        </Card.Content>
-      </Card>
+    <View style={{ gap: 24, padding: 16 }}>
+      {cattleArchive !== undefined && <ArchiveCard archive={cattleArchive} />}
+      <GeneralInfoCard
+        name={cattle.name}
+        tagId={cattle.tagId}
+        tagCattleNumber={cattle.tagCattleNumber}
+        admittedAt={cattle.admittedAt}
+      />
+      <BiologicalInfoCard
+        weight={cattle.weight}
+        bornAt={cattle.bornAt}
+        archive={cattleArchive}
+      />
+      <ProductionStatusCard
+        productionType={cattle.productionType}
+        cattleStatus={cattle.cattleStatus}
+      />
+      {cattle.pregnantAt && cattleArchive === undefined && <PregnancyCard pregnantAt={cattle.pregnantAt} />}
     </View>
   )
 })

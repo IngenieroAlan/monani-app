@@ -8,11 +8,11 @@ const useCattleArchive = (cattle: Cattle) => {
   const [cattleArchive, setCattleArchive] = useState<CattleArchive>()
 
   useEffect(() => {
-    const subscription = cattle.archive.observe().subscribe((data) => {
+    const subscription = cattle.archive.observeWithColumns(['reason', 'archived_at', 'notes']).subscribe((data) => {
       setCattleArchive(data[0])
     })
 
-    return () => subscription?.unsubscribe()
+    return () => subscription.unsubscribe()
   }, [database, cattle.archive])
 
   return { cattleArchive }

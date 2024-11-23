@@ -1,6 +1,5 @@
 import CattleArchive from '@/database/models/CattleArchive'
-import useNumberFormat from '@/hooks/useNumberFormat'
-import { getIntervalDuration } from '@/utils/helpers'
+import { formatNumberWithSpaces, getIntervalDuration } from '@/utils/helpers'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -53,7 +52,7 @@ const BiologicalInfoCard = (props: BiologicalInfoCardProps) => {
         <View style={{ gap: 12 }}>
           <View>
             <Text variant='labelMedium'>Peso</Text>
-            <Text variant='bodyLarge'>{useNumberFormat(props.weight.toFixed(3))} kg.</Text>
+            <Text variant='bodyLarge'>{formatNumberWithSpaces(props.weight.toFixed(3))} kg.</Text>
           </View>
           <AgeDisplay
             bornAt={props.bornAt}

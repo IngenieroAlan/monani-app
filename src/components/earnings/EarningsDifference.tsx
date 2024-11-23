@@ -1,5 +1,5 @@
-import useNumberFormat from '@/hooks/useNumberFormat'
 import useAppTheme from '@/theme'
+import { formatNumberWithSpaces } from '@/utils/helpers'
 import { Text } from 'react-native-paper'
 
 const EarningsDifference = ({ difference }: { difference: number }) => {
@@ -11,7 +11,7 @@ const EarningsDifference = ({ difference }: { difference: number }) => {
         variant='labelSmall'
         style={{ color: difference < 0 ? theme.colors.error : theme.colors.success }}
       >
-        {`${difference > 0 ? '+' : '-'}$${useNumberFormat(Math.abs(difference).toFixed(2))}`}
+        {`${difference > 0 ? '+' : '-'}$${formatNumberWithSpaces(Math.abs(difference).toFixed(2))}`}
       </Text>
     )
   )

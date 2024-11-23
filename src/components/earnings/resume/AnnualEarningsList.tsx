@@ -1,6 +1,6 @@
 import AnnualEarnings from '@/database/models/AnnualEarnings'
 import useAnnualEarnings from '@/hooks/collections/useAnnualEarnings'
-import useNumberFormat from '@/hooks/useNumberFormat'
+import { formatNumberWithSpaces } from '@/utils/helpers'
 import { useNavigation } from '@react-navigation/native'
 import { FlashList } from '@shopify/flash-list'
 import { useCallback } from 'react'
@@ -18,7 +18,7 @@ const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?:
       right={() => (
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <View style={{ alignItems: 'flex-end' }}>
-            <Text variant='labelSmall'>{`$${useNumberFormat(item.totalEarnings.toFixed(2))}`}</Text>
+            <Text variant='labelSmall'>{`$${formatNumberWithSpaces(item.totalEarnings.toFixed(2))}`}</Text>
             {prevEarnings && <EarningsDifference difference={item.totalEarnings - prevEarnings} />}
           </View>
           <Icon

@@ -1,5 +1,5 @@
 import useAnnualEarnings from '@/hooks/collections/useAnnualEarnings'
-import useNumberFormat from '@/hooks/useNumberFormat'
+import { formatNumberWithSpaces } from '@/utils/helpers'
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Card, Divider, Text } from 'react-native-paper'
@@ -28,20 +28,20 @@ const TotalEarningsCard = () => {
       <Card.Content style={{ gap: 12 }}>
         <View>
           <Text variant='labelMedium'>Ganancias totales</Text>
-          <Text variant='displayMedium'>{`$${useNumberFormat(total.toFixed(2))}`}</Text>
+          <Text variant='displayMedium'>{`$${formatNumberWithSpaces(total.toFixed(2))}`}</Text>
         </View>
         <View style={styles.salesContainer}>
           <Text variant='titleSmall'>Venta de ganado</Text>
-          <Text variant='bodyMedium'>{`$${useNumberFormat(totalCattle.toFixed(2))}`}</Text>
+          <Text variant='bodyMedium'>{`$${formatNumberWithSpaces(totalCattle.toFixed(2))}`}</Text>
         </View>
         <View style={styles.salesContainer}>
           <Text variant='titleSmall'>Venta de leche</Text>
-          <Text variant='bodyMedium'>{`$${useNumberFormat(totalMilk.toFixed(2))}`}</Text>
+          <Text variant='bodyMedium'>{`$${formatNumberWithSpaces(totalMilk.toFixed(2))}`}</Text>
         </View>
         <Divider horizontalInset />
         <View style={styles.salesContainer}>
           <Text variant='titleSmall'>Ganancias anuales promedio</Text>
-          <Text variant='bodyMedium'>{`$${useNumberFormat(avgAnnualEarnings.toFixed(2))}`}</Text>
+          <Text variant='bodyMedium'>{`$${formatNumberWithSpaces(avgAnnualEarnings.toFixed(2))}`}</Text>
         </View>
       </Card.Content>
     </Card>

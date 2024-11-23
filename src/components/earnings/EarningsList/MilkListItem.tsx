@@ -1,5 +1,5 @@
 import MilkSale from '@/database/models/MilkSale'
-import useNumberFormat from '@/hooks/useNumberFormat'
+import { formatNumberWithSpaces } from '@/utils/helpers'
 import { useCallback } from 'react'
 import { View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
@@ -17,7 +17,7 @@ const MilkListItem = ({ record }: { record: MilkSale }) => {
   const right = useCallback(() => {
     return (
       <View style={{ flexDirection: 'row', gap: 8 }}>
-        <Text variant='labelSmall'>{`$${useNumberFormat(record.soldBy.toFixed(2))}`}</Text>
+        <Text variant='labelSmall'>{`$${formatNumberWithSpaces(record.soldBy.toFixed(2))}`}</Text>
         <Icon
           size={24}
           source='menu-right'
@@ -29,8 +29,13 @@ const MilkListItem = ({ record }: { record: MilkSale }) => {
   return (
     <List.Item
       title={title}
-      description={`${useNumberFormat(record.liters.toFixed(3))} L.`}
-      left={() => <Icon size={24} source='beer-outline' />}
+      description={`${formatNumberWithSpaces(record.liters.toFixed(3))} L.`}
+      left={() => (
+        <Icon
+          size={24}
+          source='beer-outline'
+        />
+      )}
       right={right}
       onPress={() => {}}
       style={{ paddingStart: 16 }}

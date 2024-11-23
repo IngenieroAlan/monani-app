@@ -1,5 +1,5 @@
-import useNumberFormat from '@/hooks/useNumberFormat'
 import useAppTheme from '@/theme'
+import { formatNumberWithSpaces } from '@/utils/helpers'
 import { StyleSheet, View } from 'react-native'
 import { Card, Divider, Text } from 'react-native-paper'
 import EarningsDifference from '../EarningsDifference'
@@ -19,7 +19,7 @@ const AnnualEarningsCard = ({ totalEarnings, totalCattleEarnings, totalMilkEarni
       <Card.Content style={{ gap: 12 }}>
         <View>
           <Text variant='labelMedium'>Ganancias totales</Text>
-          <Text variant='displayMedium'>{`$${useNumberFormat(totalEarnings.toFixed(2))}`}</Text>
+          <Text variant='displayMedium'>{`$${formatNumberWithSpaces(totalEarnings.toFixed(2))}`}</Text>
           {difference !== 0 && (
             <Text
               style={{ color: difference < 0 ? theme.colors.error : theme.colors.success }}
@@ -31,16 +31,16 @@ const AnnualEarningsCard = ({ totalEarnings, totalCattleEarnings, totalMilkEarni
         </View>
         <View style={styles.salesContainer}>
           <Text variant='titleSmall'>Venta de ganado</Text>
-          <Text variant='bodyMedium'>{`$${useNumberFormat(totalCattleEarnings.toFixed(2))}`}</Text>
+          <Text variant='bodyMedium'>{`$${formatNumberWithSpaces(totalCattleEarnings.toFixed(2))}`}</Text>
         </View>
         <View style={styles.salesContainer}>
           <Text variant='titleSmall'>Venta de leche</Text>
-          <Text variant='bodyMedium'>{`$${useNumberFormat(totalMilkEarnings.toFixed(2))}`}</Text>
+          <Text variant='bodyMedium'>{`$${formatNumberWithSpaces(totalMilkEarnings.toFixed(2))}`}</Text>
         </View>
         <Divider horizontalInset />
         <View style={styles.salesContainer}>
           <Text variant='titleSmall'>Ganancias mensuales promedio</Text>
-          <Text variant='bodyMedium'>{`$${useNumberFormat((totalEarnings / 12).toFixed(2))}`}</Text>
+          <Text variant='bodyMedium'>{`$${formatNumberWithSpaces((totalEarnings / 12).toFixed(2))}`}</Text>
         </View>
       </Card.Content>
     </Card>

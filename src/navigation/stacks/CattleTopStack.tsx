@@ -17,9 +17,9 @@ const Stack = createMaterialTopTabNavigator<CattleInfoParamsList>()
 
 export const CattleTopStack = () => {
   const theme = useTheme()
-  const { cattleInfo, nestedCattles } = useAppSelector(state => state.cattles);
-  const navigator = useNavigation();
   const dispatch = useAppDispatch();
+  const navigator = useNavigation();
+  const { cattleInfo, nestedCattles } = useAppSelector(state => state.cattles);
 
   const renderHeader = () => (
     <Appbar.Header>
@@ -145,7 +145,7 @@ export const CattleTopStack = () => {
             }}
           />
         </Stack.Navigator>
-        <CattleBottomAppBar />
+        <CattleBottomAppBar cattle={cattleInfo!} />
       </Portal.Host>
     </>
   )

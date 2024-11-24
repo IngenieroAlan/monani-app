@@ -6,8 +6,9 @@ import MedicationScheduleRoute from '@/components/layout/cattleDetails/Component
 import { useAppDispatch } from '@/hooks/useRedux'
 import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
 import { reset } from '@/redux/slices/uiVisibilitySlice'
-import CreateCattleArchiveView from '@/views/cattleArchive/CreateCattleArchiveView'
-import EditCattleArchiveView from '@/views/cattleArchive/EditCattleArchiveView'
+import CreateCattleArchiveView from '@/views/cattleInfo/cattleArchive/CreateCattleArchiveView'
+import EditCattleArchiveView from '@/views/cattleInfo/cattleArchive/EditCattleArchiveView'
+import CreateCattleSaleView from '@/views/cattleInfo/CreateCattleSaleView'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -79,12 +80,16 @@ export const Navigator = () => {
             component={SearchOffspring}
           />
           <Stack.Screen
-            name='ArchiveCattleView'
+            name='CreateCattleArchiveView'
             component={CreateCattleArchiveView}
           />
           <Stack.Screen
             name='EditCattleArchiveView'
             component={EditCattleArchiveView}
+          />
+          <Stack.Screen 
+            name='CreateCattleSaleView'
+            component={CreateCattleSaleView}
           />
         </Stack.Group>
       </Stack.Navigator>

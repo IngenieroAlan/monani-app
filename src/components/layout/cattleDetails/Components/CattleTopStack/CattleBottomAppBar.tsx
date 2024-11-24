@@ -1,5 +1,8 @@
+import Cattle from '@/database/models/Cattle'
+import CattleSale from '@/database/models/CattleSale'
 import useCattleArchive from '@/hooks/collections/useCattleArchive'
 import { useAppSelector } from '@/hooks/useRedux'
+import { withObservables } from '@nozbe/watermelondb/react'
 import { useNavigation } from '@react-navigation/native'
 import { useEffect, useMemo, useRef } from 'react'
 import { Animated } from 'react-native'
@@ -10,12 +13,16 @@ import UnarchiveCattleAction from './UnarchiveCattleAction'
 
 const BOTTOM_APPBAR_HEIGHT = 80
 
-const CattleBottomAppBar = () => {
-  const { bottom } = useSafeAreaInsets()
-  const screen = useAppSelector((state) => state.ui.screen)
-  const cattle = useAppSelector((state) => state.cattles.cattleInfo)
-  const { cattleArchive } = useCattleArchive(cattle!)
+const observeCattleSale = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
+  cattle: cattle,
+  sale: cattle.sale
+}))
+
+const CattleBottomAppBar = observeCattleSale(({ cattle, sale }: { cattle: Cattle, sale: CattleSale[] }) => {
   const navigation = useNavigation()
+  const { bottom } = useSafeAreaInsets()
+  const { cattleArchive } = useCattleArchive(cattle)
+  const screen = useAppSelector((state) => state.ui.screen)
   const fadeAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -69,6 +76,8 @@ const CattleBottomAppBar = () => {
     }
   }
 
+  if (sale.length > 0) return
+
   return (
     <Appbar
       elevated
@@ -82,11 +91,11 @@ const CattleBottomAppBar = () => {
         <>
           <Appbar.Action
             icon='archive-arrow-down-outline'
-            onPress={() => navigation.navigate('ArchiveCattleView')}
+            onPress={() => navigation.navigate('CreateCattleArchiveView')}
           />
           <Appbar.Action
             icon='tag-outline'
-            onPress={() => {}}
+            onPress={() => navigation.navigate('CreateCattleSaleView')}
           />
 
           <Animated.View style={{ opacity: fadeAnim }}>
@@ -111,6 +120,6 @@ const CattleBottomAppBar = () => {
       />
     </Appbar>
   )
-}
+})
 
 export default CattleBottomAppBar

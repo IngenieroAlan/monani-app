@@ -1,39 +1,42 @@
-import CattleBottomAppBar from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleBottomAppBar';
-import { GenealogyRoute } from '@/components/layout/cattleDetails/routes/Genealogy';
-import { WeightRoute } from '@/components/layout/cattleDetails/routes/Weight';
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
-import { CattleInfoParamsList } from '@/navigation/types';
-import { unnestOneCattle } from '@/redux/slices/cattles';
-import { setScreen } from '@/redux/slices/ui';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { useNavigation } from '@react-navigation/native';
-import { Appbar, Icon, Portal, Text, useTheme } from 'react-native-paper';
-import { DietRoute } from '../../components/layout/cattleDetails/routes/Diet';
-import { InfoRoute } from "../../components/layout/cattleDetails/routes/Info";
-import { MedicationRoute } from '../../components/layout/cattleDetails/routes/Medication';
+import CattleBottomAppBar from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleBottomAppBar'
+import CattleStackSnackbarContainer from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleStackSnackbarContainer'
+import { GenealogyRoute } from '@/components/layout/cattleDetails/routes/Genealogy'
+import { WeightRoute } from '@/components/layout/cattleDetails/routes/Weight'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { CattleInfoParamsList } from '@/navigation/types'
+import { unnestOneCattle } from '@/redux/slices/cattles'
+import { setScreen } from '@/redux/slices/ui'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { useNavigation } from '@react-navigation/native'
+import { Appbar, Icon, Portal, Text, useTheme } from 'react-native-paper'
+import { DietRoute } from '../../components/layout/cattleDetails/routes/Diet'
+import { InfoRoute } from '../../components/layout/cattleDetails/routes/Info'
+import { MedicationRoute } from '../../components/layout/cattleDetails/routes/Medication'
 
-const ICON_SIZE = 24;
+const ICON_SIZE = 24
 const Stack = createMaterialTopTabNavigator<CattleInfoParamsList>()
 
 export const CattleTopStack = () => {
   const theme = useTheme()
-  const dispatch = useAppDispatch();
-  const navigator = useNavigation();
-  const { cattleInfo, nestedCattles } = useAppSelector(state => state.cattles);
+  const dispatch = useAppDispatch()
+  const navigator = useNavigation()
+  const { cattleInfo, nestedCattles } = useAppSelector((state) => state.cattles)
 
   const renderHeader = () => (
     <Appbar.Header>
-      <Appbar.BackAction onPress={() => {
-        if (nestedCattles.length > 0) {
-          navigator.navigate('CattleDetailsLayout', { screen: 'InfoRoute' })
-          dispatch(unnestOneCattle())
-        } else {
-          navigator.goBack()
-        }
-      }} />
+      <Appbar.BackAction
+        onPress={() => {
+          if (nestedCattles.length > 0) {
+            navigator.navigate('CattleDetailsLayout', { screen: 'InfoRoute' })
+            dispatch(unnestOneCattle())
+          } else {
+            navigator.goBack()
+          }
+        }}
+      />
       <Appbar.Content title={`No. ${cattleInfo?.tagId || 'Sin ID'}`} />
     </Appbar.Header>
-  );
+  )
 
   return (
     <>
@@ -47,28 +50,32 @@ export const CattleTopStack = () => {
               backgroundColor: theme.colors.surface,
               elevation: 0,
               borderBottomWidth: 1,
-              borderBottomColor: theme.colors.surfaceVariant,
+              borderBottomColor: theme.colors.surfaceVariant
             },
             tabBarItemStyle: { width: 'auto', paddingHorizontal: 24 },
             tabBarIndicatorContainerStyle: {
               borderWidth: 1,
               borderBottomWidth: 0,
-              borderColor: theme.colors.surface,
+              borderColor: theme.colors.surface
             },
             tabBarIndicatorStyle: {
               backgroundColor: theme.colors.primary,
               height: 3,
-              borderRadius: 3,
+              borderRadius: 3
             },
             tabBarAndroidRipple: { borderless: false },
-            tabBarScrollEnabled: true,
+            tabBarScrollEnabled: true
           }}
         >
           <Stack.Screen
-            name={"InfoRoute"}
+            name={'InfoRoute'}
             options={{
               tabBarIcon: ({ color }) => (
-                <Icon size={ICON_SIZE} color={color} source='file-document-outline' />
+                <Icon
+                  size={ICON_SIZE}
+                  color={color}
+                  source='file-document-outline'
+                />
               ),
               tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Información</Text>
             }}
@@ -78,10 +85,14 @@ export const CattleTopStack = () => {
             }}
           />
           <Stack.Screen
-            name={"DietRoute"}
+            name={'DietRoute'}
             options={{
               tabBarIcon: ({ color }) => (
-                <Icon size={ICON_SIZE} color={color} source='nutrition' />
+                <Icon
+                  size={ICON_SIZE}
+                  color={color}
+                  source='nutrition'
+                />
               ),
               tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Dieta</Text>
             }}
@@ -91,10 +102,14 @@ export const CattleTopStack = () => {
             }}
           />
           <Stack.Screen
-            name={"MedicationRoute"}
+            name={'MedicationRoute'}
             options={{
               tabBarIcon: ({ color }) => (
-                <Icon size={ICON_SIZE} color={color} source='needle' />
+                <Icon
+                  size={ICON_SIZE}
+                  color={color}
+                  source='needle'
+                />
               ),
               tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Medicación</Text>
             }}
@@ -104,10 +119,14 @@ export const CattleTopStack = () => {
             }}
           />
           <Stack.Screen
-            name={"WeightRoute"}
+            name={'WeightRoute'}
             options={{
               tabBarIcon: ({ color }) => (
-                <Icon size={ICON_SIZE} color={color} source='scale' />
+                <Icon
+                  size={ICON_SIZE}
+                  color={color}
+                  source='scale'
+                />
               ),
               tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Pesaje</Text>
             }}
@@ -116,12 +135,16 @@ export const CattleTopStack = () => {
               focus: () => dispatch(setScreen('WeightRoute'))
             }}
           />
-          {cattleInfo?.productionType === 'Lechera' &&
+          {cattleInfo?.productionType === 'Lechera' && (
             <Stack.Screen
-              name={"MilkyRoute"}
+              name={'MilkyRoute'}
               options={{
                 tabBarIcon: ({ color }) => (
-                  <Icon size={ICON_SIZE} color={color} source='beer-outline' />
+                  <Icon
+                    size={ICON_SIZE}
+                    color={color}
+                    source='beer-outline'
+                  />
                 ),
                 tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Prod. Lechera</Text>
               }}
@@ -130,12 +153,16 @@ export const CattleTopStack = () => {
                 focus: () => dispatch(setScreen('MilkyRoute'))
               }}
             />
-          }
+          )}
           <Stack.Screen
-            name={"GenealogyRoute"}
+            name={'GenealogyRoute'}
             options={{
               tabBarIcon: ({ color }) => (
-                <Icon size={ICON_SIZE} color={color} source='family-tree' />
+                <Icon
+                  size={ICON_SIZE}
+                  color={color}
+                  source='family-tree'
+                />
               ),
               tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Genealogía</Text>
             }}
@@ -146,6 +173,7 @@ export const CattleTopStack = () => {
           />
         </Stack.Navigator>
         <CattleBottomAppBar cattle={cattleInfo!} />
+        <CattleStackSnackbarContainer />
       </Portal.Host>
     </>
   )

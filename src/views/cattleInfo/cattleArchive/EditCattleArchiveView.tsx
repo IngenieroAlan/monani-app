@@ -1,6 +1,6 @@
 import DismissDialog from '@/components/DismissDialog'
 import CattleArchiveForm, { CattleArchiveFields } from '@/components/forms/CattleArchiveForm'
-import { InfoSnackbarId } from '@/components/layout/cattleDetails/Components/info/InfoSnackbarContainer'
+import { InfoSnackbarId } from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleStackSnackbarContainer'
 import useCattleArchive from '@/hooks/collections/useCattleArchive'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'

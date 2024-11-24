@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useCallback, useState } from 'react'
 import { Appbar, Button, Dialog, Portal, Text } from 'react-native-paper'
-import { InfoSnackbarId } from '../info/InfoSnackbarContainer'
+import { InfoSnackbarId } from './CattleStackSnackbarContainer'
 
 const UnarchiveCattleAction = () => {
   const dispatch = useAppDispatch()

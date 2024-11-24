@@ -8,9 +8,9 @@ export const InfoSnackbarId = {
   CATTLE_ARCHIVE_DISMISS: 'cattleArchiveDismissSnackbar'
 }
 
-const InfoSnackbarContainer = () => {
+const CattleStackSnackbarContainer = () => {
   return (
-    <SnackbarContainer dismissSnackbarId={InfoSnackbarId.CATTLE_ARCHIVE_DISMISS}>
+    <SnackbarContainer dismissSnackbarId={InfoSnackbarId.CATTLE_ARCHIVE_DISMISS} bottom={80}>
       <MSnackbar id={InfoSnackbarId.CATTLE_ARCHIVED}>Ganado archivado con éxito.</MSnackbar>
       <MSnackbar id={InfoSnackbarId.CATTLE_UNARCHIVED}>Ganado desarchivado con éxito.</MSnackbar>
       <MSnackbar id={InfoSnackbarId.CATTLE_ARCHIVE_UPDATED}>Archivo actualizado con éxito.</MSnackbar>
@@ -18,4 +18,4 @@ const InfoSnackbarContainer = () => {
   )
 }
 
-export default InfoSnackbarContainer
+export default CattleStackSnackbarContainer

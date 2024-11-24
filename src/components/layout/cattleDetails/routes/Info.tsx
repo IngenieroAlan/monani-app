@@ -9,19 +9,15 @@ import BiologicalInfoCard from '../Components/info/cards/BiologicalInfoCard'
 import GeneralInfoCard from '../Components/info/cards/GeneralInfoCard'
 import PregnancyCard from '../Components/info/cards/PregnancyCard'
 import ProductionStatusCard from '../Components/info/cards/ProductionStatusCard'
-import InfoSnackbarContainer from '../Components/info/InfoSnackbarContainer'
 
 export const InfoRoute = () => {
   const theme = useAppTheme()
   const cattle = useAppSelector((state) => state.cattles.cattleInfo)
 
   return (
-    <>
-      <ScrollView style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
-        <CattleInfoDetails cattle={cattle!} />
-      </ScrollView>
-      <InfoSnackbarContainer />
-    </>
+    <ScrollView style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+      <CattleInfoDetails cattle={cattle!} />
+    </ScrollView>
   )
 }
 

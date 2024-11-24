@@ -1,6 +1,9 @@
 import DismissDialog from '@/components/DismissDialog'
 import CattleSaleForm, { CattleSaleFields } from '@/components/forms/CattleSaleForm'
-import { useAppSelector } from '@/hooks/useRedux'
+import { CattleSaleSnackbarId } from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleSaleSnackbarContainer'
+import { CattleStackSnackbarId } from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleStackSnackbarContainer'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import useAppTheme from '@/theme'
 import CattleSaleSchema from '@/validationSchemas/CattleSaleSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -44,7 +47,7 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
       />
       <Portal>
         <DismissDialog
-          // Add dismiss snackbar ID
+          dismissSnackbarId={CattleStackSnackbarId.CATTLE_STACK_DISMISS}
           visible={showDialog}
           onConfirm={onDismissConfirm}
           onCancel={() => setShowDialog(false)}
@@ -56,6 +59,7 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
 
 const CreateCattleSaleView = () => {
   const theme = useAppTheme()
+  const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const cattle = useAppSelector((selector) => selector.cattles.cattleInfo)!
   const { control, formState, getValues, setValue, handleSubmit } = useForm<CattleSaleFields>({
@@ -74,7 +78,7 @@ const CreateCattleSaleView = () => {
   useEffect(() => {
     if (!isSubmitSuccessful) return
 
-    // TODO: Add show snackbar.
+    dispatch(show(CattleSaleSnackbarId.CATTLE_SOLD))
     navigation.goBack()
   }, [isSubmitSuccessful])
 

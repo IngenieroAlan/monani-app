@@ -1,6 +1,6 @@
 import DismissDialog from '@/components/DismissDialog'
 import CattleArchiveForm, { CattleArchiveFields } from '@/components/forms/CattleArchiveForm'
-import { InfoSnackbarId } from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleStackSnackbarContainer'
+import { CattleStackSnackbarId } from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleStackSnackbarContainer'
 import useCattleArchive from '@/hooks/collections/useCattleArchive'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
@@ -42,7 +42,7 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
       />
       <Portal>
         <DismissDialog
-          dismissSnackbarId={InfoSnackbarId.CATTLE_ARCHIVE_DISMISS}
+          dismissSnackbarId={CattleStackSnackbarId.CATTLE_STACK_DISMISS}
           visible={showDialog}
           onConfirm={onDismissConfirm}
           onCancel={() => setShowDialog(false)}
@@ -68,7 +68,7 @@ const EditCattleArchiveView = () => {
   useEffect(() => {
     if (!isSubmitSuccessful) return
 
-    dispatch(show(InfoSnackbarId.CATTLE_ARCHIVE_UPDATED))
+    dispatch(show(CattleStackSnackbarId.CATTLE_ARCHIVE_UPDATED))
     navigation.goBack()
   }, [isSubmitSuccessful])
 

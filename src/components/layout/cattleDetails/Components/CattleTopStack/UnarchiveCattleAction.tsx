@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useCallback, useState } from 'react'
 import { Appbar, Button, Dialog, Portal, Text } from 'react-native-paper'
-import { InfoSnackbarId } from './CattleStackSnackbarContainer'
+import { CattleStackSnackbarId } from './CattleStackSnackbarContainer'
 
 const UnarchiveCattleAction = () => {
   const dispatch = useAppDispatch()
@@ -15,7 +15,7 @@ const UnarchiveCattleAction = () => {
 
     await cattle?.unarchive()
 
-    dispatch(show(InfoSnackbarId.CATTLE_UNARCHIVED))
+    dispatch(show(CattleStackSnackbarId.CATTLE_UNARCHIVED))
     setShowDialog(false)
   }, [cattle])
 
@@ -42,9 +42,9 @@ const UnarchiveCattleAction = () => {
           <Dialog.Actions>
             <Button onPress={() => setShowDialog(false)}>Cancelar</Button>
             <Button
-            loading={isLoading}
-            disabled={isLoading}
-            onPress={onUnarchive}
+              loading={isLoading}
+              disabled={isLoading}
+              onPress={onUnarchive}
             >
               Desarchivar
             </Button>

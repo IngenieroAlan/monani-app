@@ -56,7 +56,7 @@ const CreateCattleArchiveView = () => {
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const cattle = useAppSelector((state) => state.cattles.cattleInfo)
-  const { control, handleSubmit, reset, formState } = useForm<CattleArchiveFields>({
+  const { control, handleSubmit, formState } = useForm<CattleArchiveFields>({
     defaultValues: {
       reason: undefined,
       archivedAt: set(new Date(), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 }),

@@ -1,4 +1,5 @@
 import { createMedicationNotification, createPregnancyNotification, createQuarantineNotification } from '@/notifee/constructors'
+import notifee from '@notifee/react-native'
 import { Model, Q, Query, Relation } from '@nozbe/watermelondb'
 import { children, date, field, immutableRelation, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
 import { Associations } from '@nozbe/watermelondb/Model'
@@ -14,10 +15,9 @@ import Medication from './Medication'
 import MedicationSchedule from './MedicationSchedule'
 import MilkProduction from './MilkProduction'
 import MilkReport from './MilkReport'
+import PendingNotification from './PendingNotification'
 import SentNotification from './SentNotification'
 import WeightReport from './WeightReport'
-import PendingNotification from './PendingNotification'
-import notifee from '@notifee/react-native'
 
 export type ProductionType = 'Lechera' | 'De carne'
 export type CattleStatus = 'Gestante' | 'En producción' | 'De reemplazo' | 'De deshecho'
@@ -309,11 +309,15 @@ class Cattle extends Model {
 
     await this.collections.get<MilkReport>(TableName.MILK_REPORTS)
       .create((record) => {
+        const milkProduction = createdMilkProduction ?? milkProductionsDate[milkProductionsDate.length - 1]
+
         record.cattle.set(this)
-        record.milkProduction.set(createdMilkProduction ? createdMilkProduction : milkProductionsDate[milkProductionsDate.length - 1])
+        record.milkProduction.set(milkProduction)
 
         record.reportedAt = reportedAt
         record.liters = liters
+        record.productionNumber = milkProduction.productionNumber
+        record.isSold = false
       })
   }
 

@@ -16,8 +16,10 @@ class MilkReport extends Model {
   @readonly @date('updated_at') updatedAt!: Date
 
   @nochange @date('reported_at') reportedAt!: Date
-  
+  @nochange @field('production_number') productionNumber!: number
+
   @field('liters') liters!: number
+  @field('is_sold') isSold!: boolean
 
   @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
   @immutableRelation(TableName.MILK_PRODUCTIONS, 'milk_production_id') milkProduction!: Relation<MilkProduction>
@@ -27,12 +29,12 @@ class MilkReport extends Model {
     const milkProduction = await this.milkProduction
 
     if (milkProduction.isSold) {
-      throw new Error('Can\'t edit a report that belongs to a sold milk production.')
+      throw new Error("Can't edit a report that belongs to a sold milk production.")
     }
 
     await this.batch(
       milkProduction.prepareUpdate((record) => {
-        record.liters += (liters - this.liters)
+        record.liters += liters - this.liters
       }),
       this.prepareUpdate((record) => {
         record.liters = liters
@@ -45,7 +47,7 @@ class MilkReport extends Model {
     const milkProduction = await this.milkProduction
 
     if (milkProduction.isSold) {
-      throw new Error('Can\'t delete a report that belongs to a sold milk production.')
+      throw new Error("Can't delete a report that belongs to a sold milk production.")
     }
 
     let milkProductionBatch: MilkProduction

@@ -24,6 +24,8 @@ const MilkReportSeeder = async (litersPerProduction: number[][]) => {
       milkReportRecords.push({
         cattle_id: cattleIds[j],
         milk_production_id: milkProductions[i].id,
+        is_sold: milkProductions[i].isSold,
+        production_number: milkProductions[i].productionNumber,
         liters: productionLiters[j],
         reported_at: milkProductions[i].producedAt.getTime()
       })

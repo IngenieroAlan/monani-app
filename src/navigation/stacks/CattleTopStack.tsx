@@ -2,6 +2,7 @@ import CattleBottomAppBar from '@/components/layout/cattleDetails/Components/Cat
 import CattleSaleSnackbarContainer from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleSaleSnackbarContainer'
 import CattleStackSnackbarContainer from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleStackSnackbarContainer'
 import { GenealogyRoute } from '@/components/layout/cattleDetails/routes/Genealogy'
+import MilkProductionRoute from '@/components/layout/cattleDetails/routes/MilkProduction'
 import { WeightRoute } from '@/components/layout/cattleDetails/routes/Weight'
 import Cattle from '@/database/models/Cattle'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
@@ -155,7 +156,7 @@ export const CattleTopStack = () => {
               ),
               tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Prod. Lechera</Text>
             }}
-            component={InfoRoute}
+            component={MilkProductionRoute}
             listeners={{
               focus: () => dispatch(setScreen('MilkyRoute'))
             }}

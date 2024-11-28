@@ -23,7 +23,7 @@ const useMilkReports = (cattle: Cattle, { take }: UseMilkReportProps = {}) => {
   if (take) milkReportsQuery = milkReportsQuery.extend(Q.take(take))
 
   useEffect(() => {
-    const subscription = milkReportsQuery.observe().subscribe((data) => {
+    const subscription = milkReportsQuery.observeWithColumns(['liters']).subscribe((data) => {
       setMilkReports(data)
     })
 

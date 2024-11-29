@@ -1,14 +1,58 @@
+import DismissDialog from '@/components/DismissDialog'
 import MilkReportForm, { MilkReportFields } from '@/components/forms/MilkReportForm'
 import { useAppSelector } from '@/hooks/useRedux'
 import useAppTheme from '@/theme'
 import createMilkReportSchema from '@/validationSchemas/MilkReportSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, usePreventRemove } from '@react-navigation/native'
 import { set } from 'date-fns'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { View } from 'react-native'
-import { Appbar, Button } from 'react-native-paper'
+import { Keyboard, View } from 'react-native'
+import { Appbar, Button, IconButton, Portal } from 'react-native-paper'
+
+const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubmitSuccessful: boolean }) => {
+  const navigation = useNavigation()
+  const [showDialog, setShowDialog] = useState(false)
+  const confirmGoBack = useRef(false)
+
+  usePreventRemove(isDirty && !isSubmitSuccessful, ({ data }) => {
+    if (!confirmGoBack.current) {
+      setShowDialog(true)
+      return
+    }
+
+    setShowDialog(false)
+    navigation.dispatch(data.action)
+  })
+
+  const onClosePress = useCallback(() => {
+    Keyboard.dismiss()
+    navigation.goBack()
+  }, [])
+
+  const onDismissConfirm = useCallback(() => {
+    confirmGoBack.current = true
+    navigation.goBack()
+  }, [])
+
+  return (
+    <>
+      <IconButton
+        icon='close'
+        onPress={onClosePress}
+      />
+      <Portal>
+        <DismissDialog
+          // dismissSnackbarId={CattleStackSnackbarId.CATTLE_STACK_DISMISS}
+          visible={showDialog}
+          onConfirm={onDismissConfirm}
+          onCancel={() => setShowDialog(false)}
+        />
+      </Portal>
+    </>
+  )
+}
 
 const CreateMilkReportView = () => {
   const theme = useAppTheme()
@@ -46,7 +90,10 @@ const CreateMilkReportView = () => {
   return (
     <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
       <Appbar.Header>
-        <Appbar.BackAction />
+        <CloseButton
+          isDirty={isDirty}
+          isSubmitSuccessful={isSubmitSuccessful}
+        />
         <Appbar.Content title='Reportar prod. de leche' />
         <Button
           loading={isSubmitting}

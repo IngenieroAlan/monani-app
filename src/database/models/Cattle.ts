@@ -105,6 +105,9 @@ class Cattle extends Model {
     .get<Cattle>(TableName.CATTLE)
     .query(Q.on(TableName.GENEALOGY, 'mother_id', this.id))
 
+  @lazy
+  pendingMilkReports = this.milkReports
+    .extend(Q.where('is_sold', false))
 
   // May not be needed.
   @writer

@@ -218,7 +218,7 @@ class Cattle extends Model {
     const existingReport = await this.weightReports
       .extend(
         Q.where('cattle_id', this.id),
-        Q.unsafeSqlExpr(`strftime('%Y-%m-%d', datetime(weighed_at / 1000, 'unixepoch')) = ${weighedAtDate}`),
+        Q.unsafeSqlExpr(`strftime('%Y/%m/%d', datetime(weighed_at / 1000, 'unixepoch')) = ${weighedAtDate}`),
         Q.take(1)
       )
       .fetch()
@@ -277,7 +277,7 @@ class Cattle extends Model {
   async createMilkReport({ liters, reportedAt }: { liters: number, reportedAt: Date }) {
     const reportedAtDate = format(reportedAt, 'yyyy/MM/dd')
     const milkReports = await this.milkReports.extend(
-      Q.unsafeSqlExpr(`strftime("%Y-%m-%d", datetime(reported_at / 1000, "unixepoch")) = '${reportedAtDate}'`)
+      Q.unsafeSqlExpr(`strftime("%Y/%m/%d", datetime(reported_at / 1000, "unixepoch")) = '${reportedAtDate}'`)
     )
 
     for (const milkReport of milkReports) {
@@ -290,7 +290,7 @@ class Cattle extends Model {
 
     const milkProductionsDate = await this.collections.get<MilkProduction>(TableName.MILK_PRODUCTIONS)
       .query(
-        Q.unsafeSqlExpr(`strftime("%Y-%m-%d", datetime(produced_at / 1000, "unixepoch")) = '${reportedAtDate}'`),
+        Q.unsafeSqlExpr(`strftime("%Y/%m/%d", datetime(produced_at / 1000, "unixepoch")) = '${reportedAtDate}'`),
         Q.sortBy('production_number', Q.asc)
       )
       .fetch()

@@ -9,6 +9,7 @@ import { reset } from '@/redux/slices/uiVisibilitySlice'
 import CreateCattleArchiveView from '@/views/cattleInfo/cattleArchive/CreateCattleArchiveView'
 import EditCattleArchiveView from '@/views/cattleInfo/cattleArchive/EditCattleArchiveView'
 import CreateCattleSaleView from '@/views/cattleInfo/CreateCattleSaleView'
+import CreateMilkReportView from '@/views/cattleInfo/CreateMilkReportView'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
 import SearchCattle from '@/views/home/SearchCattle'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -90,6 +91,10 @@ export const Navigator = () => {
           <Stack.Screen 
             name='CreateCattleSaleView'
             component={CreateCattleSaleView}
+          />
+          <Stack.Screen
+            name='CreateMilkReportView'
+            component={CreateMilkReportView}
           />
         </Stack.Group>
       </Stack.Navigator>

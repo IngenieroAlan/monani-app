@@ -18,7 +18,7 @@ const observeCattleSale = withObservables(['cattle'], ({ cattle }: { cattle: Cat
   sale: cattle.sale
 }))
 
-const CattleBottomAppBar = observeCattleSale(({ cattle, sale }: { cattle: Cattle, sale: CattleSale[] }) => {
+const CattleBottomAppBar = observeCattleSale(({ cattle, sale }: { cattle: Cattle; sale: CattleSale[] }) => {
   const navigation = useNavigation()
   const { bottom } = useSafeAreaInsets()
   const { cattleArchive } = useCattleArchive(cattle)
@@ -65,7 +65,7 @@ const CattleBottomAppBar = observeCattleSale(({ cattle, sale }: { cattle: Cattle
         console.log('Navigate to add')
         break
       case 'MilkyRoute':
-        console.log('Navigate to add')
+        navigation.navigate('CreateMilkReportView')
         break
       case 'GenealogyRoute':
         navigation.navigate('SearchOffspringView')

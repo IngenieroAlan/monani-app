@@ -39,6 +39,7 @@ export type RootStackParamList = {
   CreateCattleArchiveView: undefined
   EditCattleArchiveView: undefined
   CreateCattleSaleView: undefined
+  CreateMilkReportView: undefined
 }
 
 export type BottomTabsParamList = {

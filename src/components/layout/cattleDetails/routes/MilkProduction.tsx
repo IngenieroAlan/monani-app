@@ -7,7 +7,7 @@ import { formatISO, set } from 'date-fns'
 import { useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, Text } from 'react-native-paper'
-import MilkReportsAccordion from '../Components/milkProduction/MilkReportsAccordion'
+import MilkReportsAccordion from '../Components/milkProduction/milkReportsList/MilkReportsAccordion'
 
 const ITEMS_PER_PAGINATE = 35
 

@@ -2,7 +2,7 @@ import MilkReport from '@/database/models/MilkReport'
 import useAppTheme from '@/theme'
 import { formatNumberWithSpaces } from '@/utils/helpers'
 import { format } from 'date-fns'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Divider, Icon, Text, TouchableRipple } from 'react-native-paper'
 import MilkReportItem from './MilkReportItem'
@@ -18,6 +18,13 @@ const MilkReportsAccordion = (props: MilkReportItemProps) => {
   const theme = useAppTheme()
   const [expanded, setExpanded] = useState(false)
   const { dayReports, totalLiters, timestamp } = props
+
+  // To reset state when flashlist recycle components.
+  const lastId = useRef(props.dayReports[0].id)
+  if (props.dayReports[0].id !== lastId.current) {
+    lastId.current = props.dayReports[0].id
+    setExpanded(false)
+  }
 
   const colors = useMemo(() => [theme.colors.primary, theme.colors.secondaryContainer, theme.colors.tertiary], [])
 

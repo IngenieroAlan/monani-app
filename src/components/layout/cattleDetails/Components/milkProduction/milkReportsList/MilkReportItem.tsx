@@ -1,8 +1,12 @@
+import { useMilkReportContext } from '@/contexts'
 import MilkReport from '@/database/models/MilkReport'
+import { useAppDispatch } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useCallback, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, IconButton, List, Menu, Text } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { EDIT_MILK_REPORT_DIALOG_ID } from '../EditMilkReportDialog'
 
 type MilkReportItemProps = {
   milkReport: MilkReport
@@ -10,15 +14,17 @@ type MilkReportItemProps = {
   color: string
 }
 
-const MenuItem = ({ isSold }: { isSold: boolean }) => {
+const MenuItem = ({ milkReport }: { milkReport: MilkReport }) => {
   const insets = useSafeAreaInsets()
-  const [visible, setVisible] = useState(false)
+  const dispatch = useAppDispatch()
+  const { setValue: setMilkReport } = useMilkReportContext()
+  const [showMenu, setShowMenu] = useState(false)
 
   const onPress = useCallback(() => {
-    if (!isSold) setVisible(true)
+    if (!milkReport.isSold) setShowMenu(true)
   }, [])
 
-  if (isSold) {
+  if (milkReport.isSold) {
     return (
       <Icon
         source='bookmark-check-outline'
@@ -29,8 +35,8 @@ const MenuItem = ({ isSold }: { isSold: boolean }) => {
 
   return (
     <Menu
-      visible={visible}
-      onDismiss={() => setVisible(false)}
+      visible={showMenu}
+      onDismiss={() => setShowMenu(false)}
       anchorPosition='bottom'
       statusBarHeight={insets.top}
       anchor={
@@ -43,7 +49,11 @@ const MenuItem = ({ isSold }: { isSold: boolean }) => {
       <Menu.Item
         title='Editar'
         leadingIcon='pencil-outline'
-        onPress={() => {}}
+        onPress={() => {
+          setShowMenu(false)
+          dispatch(show(EDIT_MILK_REPORT_DIALOG_ID))
+          setMilkReport(milkReport)
+        }}
       />
       <Menu.Item
         title='Eliminar'
@@ -54,11 +64,13 @@ const MenuItem = ({ isSold }: { isSold: boolean }) => {
   )
 }
 
-const ItemRight = ({ productionNumber, isSold }: { productionNumber: number; isSold: boolean }) => {
+const ItemRight = ({ milkReport }: { milkReport: MilkReport }) => {
+  const { isSold, productionNumber } = milkReport
+
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: isSold ? 16 : 4, gap: isSold ? 16 : 0 }}>
       <Text variant='labelSmall'>Producción {productionNumber}</Text>
-      <MenuItem isSold={isSold} />
+      <MenuItem milkReport={milkReport} />
     </View>
   )
 }
@@ -72,12 +84,7 @@ const MilkReportItem = (props: MilkReportItemProps) => {
       title={`${milkReport.liters} L.`}
       description={`${((milkReport.liters / totalLiters) * 100).toFixed(1)}%`}
       left={() => <View style={[styles.dot, { backgroundColor: color }]} />}
-      right={() => (
-        <ItemRight
-          isSold={milkReport.isSold}
-          productionNumber={milkReport.productionNumber}
-        />
-      )}
+      right={() => <ItemRight milkReport={props.milkReport} />}
       style={styles.listItem}
     />
   )

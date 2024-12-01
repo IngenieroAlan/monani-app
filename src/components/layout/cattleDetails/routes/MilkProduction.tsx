@@ -1,3 +1,4 @@
+import { MilkReportProvider } from '@/contexts'
 import MilkReport from '@/database/models/MilkReport'
 import useMilkReports from '@/hooks/collections/useMilkReports'
 import { useAppSelector } from '@/hooks/useRedux'
@@ -7,6 +8,7 @@ import { formatISO, set } from 'date-fns'
 import { useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, Text } from 'react-native-paper'
+import EditMilkReportDialog from '../Components/milkProduction/EditMilkReportDialog'
 import MilkReportsAccordion from '../Components/milkProduction/milkReportsList/MilkReportsAccordion'
 
 const ITEMS_PER_PAGINATE = 35
@@ -67,22 +69,25 @@ const MilkProductionRoute = () => {
   if (milkReports.length === 0) return <EmptyList />
 
   return (
-    <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
-      <FlashList
-        estimatedItemSize={64}
-        data={groupedMilkReports}
-        keyExtractor={(item) => item[0]}
-        renderItem={({ item }) => (
-          <MilkReportsAccordion
-            timestamp={item[0]}
-            totalLiters={item[1].totalLiters}
-            dayReports={item[1].dayReports}
-          />
-        )}
-        onEndReachedThreshold={2}
-        onEndReached={() => setIndex(index + 1)}
-      />
-    </View>
+    <MilkReportProvider>
+      <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+        <FlashList
+          estimatedItemSize={64}
+          data={groupedMilkReports}
+          keyExtractor={(item) => item[0]}
+          renderItem={({ item }) => (
+            <MilkReportsAccordion
+              timestamp={item[0]}
+              totalLiters={item[1].totalLiters}
+              dayReports={item[1].dayReports}
+            />
+          )}
+          onEndReachedThreshold={2}
+          onEndReached={() => setIndex(index + 1)}
+        />
+      </View>
+      <EditMilkReportDialog />
+    </MilkReportProvider>
   )
 }
 

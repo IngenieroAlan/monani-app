@@ -11,6 +11,7 @@ import { Icon, Text } from 'react-native-paper'
 import DeleteMilkReportDialog from '../Components/milkProduction/DeleteMilkReportDialog'
 import EditMilkReportDialog from '../Components/milkProduction/EditMilkReportDialog'
 import MilkReportsAccordion from '../Components/milkProduction/milkReportsList/MilkReportsAccordion'
+import MilkReportsSnackbarContainer from '../Components/milkProduction/MilkReportsSnackbarContainer'
 
 const ITEMS_PER_PAGINATE = 35
 
@@ -67,29 +68,34 @@ const MilkProductionRoute = () => {
 
   const groupedMilkReports = useMemo(() => groupMilkReports(milkReports), [milkReports])
 
-  if (milkReports.length === 0) return <EmptyList />
-
   return (
-    <MilkReportProvider>
-      <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
-        <FlashList
-          estimatedItemSize={64}
-          data={groupedMilkReports}
-          keyExtractor={(item) => item[0]}
-          renderItem={({ item }) => (
-            <MilkReportsAccordion
-              timestamp={item[0]}
-              totalLiters={item[1].totalLiters}
-              dayReports={item[1].dayReports}
+    <>
+      {milkReports.length > 0 ? (
+        <MilkReportProvider>
+          <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+            <FlashList
+              estimatedItemSize={64}
+              data={groupedMilkReports}
+              keyExtractor={(item) => item[0]}
+              renderItem={({ item }) => (
+                <MilkReportsAccordion
+                  timestamp={item[0]}
+                  totalLiters={item[1].totalLiters}
+                  dayReports={item[1].dayReports}
+                />
+              )}
+              onEndReachedThreshold={2}
+              onEndReached={() => setIndex(index + 1)}
             />
-          )}
-          onEndReachedThreshold={2}
-          onEndReached={() => setIndex(index + 1)}
-        />
-      </View>
-      <EditMilkReportDialog />
-      <DeleteMilkReportDialog />
-    </MilkReportProvider>
+          </View>
+          <EditMilkReportDialog />
+          <DeleteMilkReportDialog />
+        </MilkReportProvider>
+      ) : (
+        <EmptyList />
+      )}
+      <MilkReportsSnackbarContainer />
+    </>
   )
 }
 

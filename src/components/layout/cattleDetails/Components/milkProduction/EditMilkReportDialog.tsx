@@ -1,7 +1,7 @@
 import { CustomTextInput } from '@/components/CustomTextInput'
 import { useMilkReportContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { hide } from '@/redux/slices/uiVisibilitySlice'
+import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import useAppTheme from '@/theme'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCallback, useEffect } from 'react'
@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import { Keyboard } from 'react-native'
 import { Button, Dialog, Portal, TextInput } from 'react-native-paper'
 import { z } from 'zod'
+import { MilkReportsSnackbarId } from './MilkReportsSnackbarContainer'
 
 export const EDIT_MILK_REPORT_DIALOG_ID = 'editMilkReportDialog'
 
@@ -35,7 +36,6 @@ const EditMilkReportDialog = () => {
   const { isDirty, isValid, isSubmitting, errors } = formState
 
   useEffect(() => {
-    console.log('asdadas')
     if (!milkReportContext.value) return
 
     reset({ liters: milkReportContext.value.liters.toString() })
@@ -54,7 +54,7 @@ const EditMilkReportDialog = () => {
     async (data: EditMilkReport) => {
       await milkReportContext.value?.updateMilkReport(+data.liters)
 
-      // TODO: Add updated milk report snackbar.
+      dispatch(show(MilkReportsSnackbarId.MILK_REPORT_UPDATED))
       dismissChanges()
     },
     [milkReportContext]

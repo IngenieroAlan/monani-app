@@ -1,8 +1,9 @@
 import { useMilkReportContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { hide } from '@/redux/slices/uiVisibilitySlice'
+import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { useCallback, useState } from 'react'
 import { Button, Dialog, Portal, Text } from 'react-native-paper'
+import { MilkReportsSnackbarId } from './MilkReportsSnackbarContainer'
 
 export const DELETE_MILK_REPORT_DIALOG_ID = 'deleteMilkReportDialog'
 
@@ -20,7 +21,7 @@ const DeleteMilkReportDialog = () => {
     milkReportContext.setValue(undefined)
 
     dispatch(hide(DELETE_MILK_REPORT_DIALOG_ID))
-    // TODO: Add deleted milk report snackbar.
+    dispatch(show(MilkReportsSnackbarId.MILK_REPORT_DELETED))
   }, [milkReportContext])
 
   return (

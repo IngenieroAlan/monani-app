@@ -1,6 +1,8 @@
 import DismissDialog from '@/components/DismissDialog'
 import MilkReportForm, { MilkReportFields } from '@/components/forms/MilkReportForm'
-import { useAppSelector } from '@/hooks/useRedux'
+import { MilkReportsSnackbarId } from '@/components/layout/cattleDetails/Components/milkProduction/MilkReportsSnackbarContainer'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
 import useAppTheme from '@/theme'
 import createMilkReportSchema from '@/validationSchemas/MilkReportSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -44,7 +46,7 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
       />
       <Portal>
         <DismissDialog
-          // dismissSnackbarId={CattleStackSnackbarId.CATTLE_STACK_DISMISS}
+          dismissSnackbarId={MilkReportsSnackbarId.MILK_REPORT_DISMISSED}
           visible={showDialog}
           onConfirm={onDismissConfirm}
           onCancel={() => setShowDialog(false)}
@@ -56,10 +58,11 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
 
 const CreateMilkReportView = () => {
   const theme = useAppTheme()
+  const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const cattle = useAppSelector((select) => select.cattles.cattleInfo)!
   const [disabledDates, setDisabledDates] = useState<Date[]>([])
-  const { control, formState, handleSubmit } = useForm<MilkReportFields>({
+  const { control, formState, handleSubmit, trigger } = useForm<MilkReportFields>({
     defaultValues: {
       liters: 0,
       reportedAt: set(new Date(), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 })
@@ -71,6 +74,10 @@ const CreateMilkReportView = () => {
   const { isValid, isSubmitting, isDirty, isSubmitSuccessful } = formState
 
   useEffect(() => {
+    trigger('reportedAt')
+  }, [])
+
+  useEffect(() => {
     ;(async () => {
       setDisabledDates((await cattle.pendingMilkReports).map((milkReport) => milkReport.reportedAt))
     })()
@@ -79,7 +86,7 @@ const CreateMilkReportView = () => {
   useEffect(() => {
     if (!isSubmitSuccessful) return
 
-    // Add show snackbar
+    dispatch(show(MilkReportsSnackbarId.MILK_REPORT_CREATED))
     navigation.goBack()
   }, [isSubmitSuccessful])
 

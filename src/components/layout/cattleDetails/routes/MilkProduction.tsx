@@ -8,6 +8,7 @@ import { formatISO, set } from 'date-fns'
 import { useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, Text } from 'react-native-paper'
+import DeleteMilkReportDialog from '../Components/milkProduction/DeleteMilkReportDialog'
 import EditMilkReportDialog from '../Components/milkProduction/EditMilkReportDialog'
 import MilkReportsAccordion from '../Components/milkProduction/milkReportsList/MilkReportsAccordion'
 
@@ -87,6 +88,7 @@ const MilkProductionRoute = () => {
         />
       </View>
       <EditMilkReportDialog />
+      <DeleteMilkReportDialog />
     </MilkReportProvider>
   )
 }

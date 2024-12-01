@@ -6,6 +6,7 @@ import { useCallback, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, IconButton, List, Menu, Text } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { DELETE_MILK_REPORT_DIALOG_ID } from '../DeleteMilkReportDialog'
 import { EDIT_MILK_REPORT_DIALOG_ID } from '../EditMilkReportDialog'
 
 type MilkReportItemProps = {
@@ -58,7 +59,11 @@ const MenuItem = ({ milkReport }: { milkReport: MilkReport }) => {
       <Menu.Item
         title='Eliminar'
         leadingIcon='trash-can-outline'
-        onPress={() => {}}
+        onPress={() => {
+          setShowMenu(false)
+          dispatch(show(DELETE_MILK_REPORT_DIALOG_ID))
+          setMilkReport(milkReport)
+        }}
       />
     </Menu>
   )

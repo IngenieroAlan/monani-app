@@ -10,6 +10,7 @@ import BiologicalInfoCard from '../Components/info/cards/BiologicalInfoCard'
 import GeneralInfoCard from '../Components/info/cards/GeneralInfoCard'
 import PregnancyCard from '../Components/info/cards/PregnancyCard'
 import ProductionStatusCard from '../Components/info/cards/ProductionStatusCard'
+import QuarantineCard from '../Components/info/cards/QuarantineCard'
 import SaleCard from '../Components/info/cards/SaleCard'
 
 export const InfoRoute = () => {
@@ -33,8 +34,11 @@ const CattleInfoDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
 
   return (
     <View style={{ gap: 24, padding: 16 }}>
-      {cattleSale !== undefined && <SaleCard sale={cattleSale} />}
-      {cattleArchive !== undefined && <ArchiveCard archive={cattleArchive} />}
+      {cattle.quarantineEndsAt && !cattleSale && !cattleArchive && (
+        <QuarantineCard quarantineEndsAt={cattle.quarantineEndsAt} />
+      )}
+      {cattleSale && <SaleCard sale={cattleSale} />}
+      {cattleArchive && <ArchiveCard archive={cattleArchive} />}
       <GeneralInfoCard
         name={cattle.name}
         tagId={cattle.tagId}
@@ -50,7 +54,7 @@ const CattleInfoDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
         productionType={cattle.productionType}
         cattleStatus={cattle.cattleStatus}
       />
-      {cattle.pregnantAt && cattleArchive === undefined && <PregnancyCard pregnantAt={cattle.pregnantAt} />}
+      {cattle.pregnantAt && !cattleArchive && <PregnancyCard pregnantAt={cattle.pregnantAt} />}
     </View>
   )
 })

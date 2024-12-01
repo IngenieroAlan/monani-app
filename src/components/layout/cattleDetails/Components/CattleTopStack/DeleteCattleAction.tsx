@@ -1,8 +1,9 @@
+import { BottomTabsSnackbarId } from '@/components/BottomTabsSnackbarContainer'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
 import { useCallback, useState } from 'react'
-import { Appbar, Button, Dialog, Portal, Snackbar, Text } from 'react-native-paper'
+import { Appbar, Button, Dialog, Portal, Text } from 'react-native-paper'
 
 const DeleteCattleAction = () => {
   const navigation = useNavigation()
@@ -15,7 +16,7 @@ const DeleteCattleAction = () => {
     setIsDeleting(true)
     await cattle?.delete()
     navigation.goBack()
-    dispatch(show('DeletedCattleSnackbar'))
+    dispatch(show(BottomTabsSnackbarId.CATTLE_DELETED))
   }, [])
 
   return (

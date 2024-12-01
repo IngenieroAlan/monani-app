@@ -1,5 +1,6 @@
 import Cattle from '@/database/models/Cattle'
 import useCattleArchive from '@/hooks/collections/useCattleArchive'
+import useCattleSale from '@/hooks/collections/useCattleSale'
 import { useAppSelector } from '@/hooks/useRedux'
 import useAppTheme from '@/theme'
 import { withObservables } from '@nozbe/watermelondb/react'
@@ -9,6 +10,7 @@ import BiologicalInfoCard from '../Components/info/cards/BiologicalInfoCard'
 import GeneralInfoCard from '../Components/info/cards/GeneralInfoCard'
 import PregnancyCard from '../Components/info/cards/PregnancyCard'
 import ProductionStatusCard from '../Components/info/cards/ProductionStatusCard'
+import SaleCard from '../Components/info/cards/SaleCard'
 
 export const InfoRoute = () => {
   const theme = useAppTheme()
@@ -27,9 +29,11 @@ const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle 
 
 const CattleInfoDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
   const { cattleArchive } = useCattleArchive(cattle!)
+  const { cattleSale } = useCattleSale(cattle!)
 
   return (
     <View style={{ gap: 24, padding: 16 }}>
+      {cattleSale !== undefined && <SaleCard sale={cattleSale} />}
       {cattleArchive !== undefined && <ArchiveCard archive={cattleArchive} />}
       <GeneralInfoCard
         name={cattle.name}

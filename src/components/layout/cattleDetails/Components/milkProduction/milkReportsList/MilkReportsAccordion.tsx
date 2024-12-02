@@ -7,6 +7,7 @@ import { StyleSheet, View } from 'react-native'
 import { Divider, Icon, Text, TouchableRipple } from 'react-native-paper'
 import MilkReportItem from './MilkReportItem'
 import MilkReportsBar from './MilkReportsBar'
+import LitersSoldChip from './LitersSoldChip'
 
 type MilkReportItemProps = {
   timestamp: string
@@ -37,6 +38,11 @@ const MilkReportsAccordion = (props: MilkReportItemProps) => {
 
   const formattedDate = useMemo(() => format(timestamp, 'dd/MM/yy'), [timestamp])
 
+  const isEveryProductionSold = useMemo(() => {
+    const productionsSold = props.dayReports.reduce((acc, milkReport) => acc + +milkReport.isSold, 0)
+    return productionsSold === props.dayReports.length
+  }, [props.dayReports])
+
   return (
     <>
       <TouchableRipple
@@ -45,7 +51,10 @@ const MilkReportsAccordion = (props: MilkReportItemProps) => {
       >
         <View style={styles.rippleContainer}>
           <View style={styles.litersContainer}>
-            <Text variant='bodyLarge'>{formatNumberWithSpaces(totalLiters.toFixed(3))} L.</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Text variant='bodyLarge'>{formatNumberWithSpaces(totalLiters.toFixed(3))} L.</Text>
+              {isEveryProductionSold && <LitersSoldChip />}
+            </View>
             <MilkReportsBar
               colors={colors}
               progressBars={progressBars}

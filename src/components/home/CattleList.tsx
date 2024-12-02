@@ -33,16 +33,12 @@ const ListEmptyComponent = () => {
   )
 }
 
-const ListItemRight = ({ cattleWeight }: { cattleWeight: number }) => {
-  const decimals = cattleWeight.toString().split('.')[1]
-  const formattedWeight = `${Math.trunc(cattleWeight)}.${decimals ? decimals.padEnd(3, '0') : '000'}`
-
+const ListItemRight = () => {
   return (
-    <View style={{ flexDirection: 'row', gap: 8 }}>
-      <Text variant='labelSmall'>{`${formattedWeight} kg.`}</Text>
+    <View style={{ justifyContent: 'center' }}>
       <Icon
         size={24}
-        source='menu-right'
+        source='chevron-right'
       />
     </View>
   )
@@ -67,7 +63,7 @@ const CattleItem = observeCattle(({ cattle }: { cattle: Cattle }) => {
     <List.Item
       title={<ListItemTitle cattle={cattle} />}
       description={<Text variant='bodyMedium'>{cattle.cattleStatus}</Text>}
-      right={() => <ListItemRight cattleWeight={cattle.weight} />}
+      right={() => <ListItemRight />}
       onPress={() => {
         dispatch(setCattleInfo(cattle))
         navigator.navigate('CattleDetailsLayout', {

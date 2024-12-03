@@ -53,7 +53,7 @@ const CattleBottomAppBar = observeCattleSale(({ cattle, sale }: { cattle: Cattle
 
     switch (screen) {
       case 'InfoRoute':
-        console.log('Navigate to edit')
+        navigation.navigate('EditCattleInfoView')
         break
       case 'DietRoute':
         navigation.navigate('DietFeedRoute')

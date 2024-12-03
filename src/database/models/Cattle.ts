@@ -22,7 +22,7 @@ import WeightReport from './WeightReport'
 export type ProductionType = 'Lechera' | 'De carne'
 export type CattleStatus = 'Gestante' | 'En producción' | 'De reemplazo' | 'De deshecho'
 
-type UpdateCattleData = {
+export type UpdateCattleData = {
   name?: string
   tagId: string
   tagCattleNumber: string

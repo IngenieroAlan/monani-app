@@ -2,6 +2,7 @@ import DietFeedRoute from '@/components/layout/cattleDetails/Components/dietFeed
 import DietSettingsRoute from '@/components/layout/cattleDetails/Components/dietFeed/DietSettingsRoute'
 import SearchMother from '@/components/layout/cattleDetails/Components/genealogy/SearchMother'
 import SearchOffspring from '@/components/layout/cattleDetails/Components/genealogy/SearchOffspring'
+import EditCattleInfoView from '@/components/layout/cattleDetails/Components/info/EditCattleInfoView'
 import MedicationScheduleRoute from '@/components/layout/cattleDetails/Components/medicationSchedules/MedicationScheduleRoute'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
@@ -59,6 +60,10 @@ export const Navigator = () => {
           <Stack.Screen
             name='SearchCattleView'
             component={SearchCattle}
+          />
+          <Stack.Screen
+            name='EditCattleInfoView'
+            component={EditCattleInfoView}
           />
           <Stack.Screen
             name='DietSettingsRoute'

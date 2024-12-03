@@ -8,7 +8,7 @@ import { show } from "@/redux/slices/uiVisibilitySlice"
 import CattleInfoSchema from "@/validationSchemas/cattleInfoSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
@@ -21,18 +21,6 @@ export const CattlInfo = ({ navigation }: Props) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { cattle } = useAppSelector(state => state.addCattle)
-
-  const goBack = () => {
-    dispatch(resetCattle());
-    navigation.goBack();
-  }
-
-  const handleNext = () => {
-    const values = getValues()
-    dispatch(saveCattleInfo({ cattle: values }))
-
-    navigation.navigate('Diet')
-  }
 
   const initialCattleValues: CattleInfoFields = useMemo(() => {
     return cattle
@@ -60,6 +48,18 @@ export const CattlInfo = ({ navigation }: Props) => {
   })
   const { isSubmitting, isValid, isDirty } = formState
   const { motherId } = useAppSelector((state) => state.addCattle.cattle)
+
+  const goBack = useCallback(() => {
+    dispatch(resetCattle());
+    navigation.goBack();
+  }, [dispatch, navigation])
+
+  const handleNext = useCallback(() => {
+    const values = getValues()
+    dispatch(saveCattleInfo({ cattle: values }))
+
+    navigation.navigate('Diet')
+  }, [dispatch, getValues, navigation])
 
   return (<>
     <Appbar.Header>

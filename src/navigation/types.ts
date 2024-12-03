@@ -25,6 +25,7 @@ export type RootStackParamList = {
   }
 
   CattleDetailsLayout: NavigatorScreenParams<CattleInfoParamsList>
+  EditCattleInfoView: undefined
   DietSettingsRoute: undefined
   DietFeedRoute?: {
     dietFeedId: string

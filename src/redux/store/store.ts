@@ -5,7 +5,6 @@ import {
   cattleQueryReducer,
   cattlesReducer,
   earningsQueryReducer,
-  medicationsReducer,
   uiReducer,
   uiVisibilityReducer
 } from '../slices'
@@ -16,8 +15,7 @@ const store = configureStore({
     bottomSheet: bottomSheetReducer,
     cattleQuery: cattleQueryReducer,
     uiVisibility: uiVisibilityReducer,
-    medications: medicationsReducer,
-    cattles:cattlesReducer,
+    cattles: cattlesReducer,
     addCattle: addCattleReducer,
     earningsQuery: earningsQueryReducer
   },

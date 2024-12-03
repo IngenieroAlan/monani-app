@@ -3,38 +3,19 @@ import NotificationsSection from '@/components/notifications/NotificationsSectio
 import SentNotification from '@/database/models/SentNotification'
 import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import useAppTheme from '@/theme'
+import { formatDateRelativeToYear } from '@/utils/helpers'
 import { FlashList } from '@shopify/flash-list'
-import { format } from 'date-fns'
-import { es } from 'date-fns/locale'
 import { StatusBar } from 'expo-status-bar'
 import { useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const formatNotificationDate = (timestamp: Date) => {
-  const today = new Date()
-  const notificationDate = new Date(timestamp)
-
-  const isToday = notificationDate.toDateString() === today.toDateString()
-  const isYesterday = notificationDate.toDateString() === new Date(today.setDate(today.getDate() - 1)).toDateString()
-
-  if (isToday) {
-    return 'Hoy'
-  } else if (isYesterday) {
-    return 'Ayer'
-  } else {
-    return format(notificationDate, "d 'de' MMMM 'de' yyyy", { locale: es })
-  }
-}
-
 const groupNotificationsByDay = (notifications: SentNotification[]): Record<string, SentNotification[]> => {
   return notifications.reduce((acc: Record<string, SentNotification[]>, notification) => {
-    const dateKey: string = formatNotificationDate(notification.eventAt)
+    const dateKey = formatDateRelativeToYear(notification.eventAt)
 
-    if (!acc[dateKey]) {
-      acc[dateKey] = []
-    }
+    if (!acc[dateKey]) acc[dateKey] = []
 
     acc[dateKey].push(notification)
     return acc

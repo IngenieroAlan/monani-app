@@ -1,8 +1,7 @@
 import { EarningsRecord } from '@/hooks/collections/useEarnings'
 import { useAppSelector } from '@/hooks/useRedux'
 import { RootState } from '@/redux/store/store'
-import { format, isSameYear, isThisYear, isToday, isYesterday } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { formatDateRelativeToYear } from '@/utils/helpers'
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-paper'
@@ -12,17 +11,7 @@ import MilkListItem from './MilkListItem'
 const EarningsListSection = ({ records, listId }: { records: EarningsRecord; listId: string }) => {
   const year = useAppSelector((state: RootState) => state.earningsQuery[listId]?.year)
 
-  const title = useMemo(() => {
-    if (isToday(records.date)) return 'Hoy'
-
-    if (isYesterday(records.date)) return 'Ayer'
-
-    if (year ? isSameYear(records.date, new Date(year, 0, 1)) : isThisYear(records.date)) {
-      return format(records.date, "dd 'de' MMMM", { locale: es })
-    }
-
-    return format(records.date, "dd 'de' MMMM 'de' yyyy", { locale: es })
-  }, [records])
+  const title = useMemo(() => formatDateRelativeToYear(records.date, year ?? undefined), [records])
 
   const cattleSales = useMemo(() => {
     return records.cattleSales.map((cattleSale, index) => (

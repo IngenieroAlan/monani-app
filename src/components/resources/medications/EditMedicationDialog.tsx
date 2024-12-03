@@ -1,7 +1,7 @@
 import DismissDialog from '@/components/DismissDialog'
 import MedicationForm, { MedicationFields } from '@/components/forms/MedicationForm'
+import { useMedicationContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setSelectedMedication } from '@/redux/slices/medicationsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import MedicationSchema from '@/validationSchemas/MedicationSchema'
@@ -18,33 +18,30 @@ const DISMISS_DIALOG_ID = 'editMedicationDismissDialog'
 
 const EditMedicationDialog = () => {
   const dispatch = useAppDispatch()
+  const medicationContext = useMedicationContext()
   const visible = useAppSelector((state: RootState) => state.uiVisibility[EDIT_MEDICATION_DIALOG_ID])
-  const selectedMedication = useAppSelector((state: RootState) => state.medications.selectedMedication)
   const { control, handleSubmit, reset, clearErrors, formState } = useForm<MedicationFields>({
-    defaultValues: {
-      name: selectedMedication?.name ? selectedMedication.name : '',
-      medicationType: selectedMedication?.medicationType ? selectedMedication.medicationType : undefined
-    },
     resolver: zodResolver(MedicationSchema),
     mode: 'onTouched'
   })
   const { isDirty, isValid, isSubmitting } = formState
 
   useEffect(() => {
+    if (!medicationContext.value) return
+
     reset({
-      name: selectedMedication?.name,
-      medicationType: selectedMedication?.medicationType
+      name: medicationContext.value.name,
+      medicationType: medicationContext.value.medicationType
     })
-  }, [selectedMedication])
+  }, [medicationContext])
 
   const dismissChanges = useCallback(() => {
     Keyboard.dismiss()
-    dispatch(setSelectedMedication())
+    medicationContext.setValue(undefined)
 
     clearErrors()
-    reset()
     dispatch(hide(EDIT_MEDICATION_DIALOG_ID))
-  }, [])
+  }, [medicationContext])
 
   const showDismissDialog = useCallback(() => {
     dispatch(hide(EDIT_MEDICATION_DIALOG_ID))
@@ -53,12 +50,12 @@ const EditMedicationDialog = () => {
 
   const onSubmit = useCallback(
     async (data: MedicationFields) => {
-      await selectedMedication!.updateMedication(data)
+      await medicationContext.value?.updateMedication(data)
 
       dispatch(show(MedicationsSnackbarId.UPDATED_MEDICATION))
       dismissChanges()
     },
-    [selectedMedication]
+    [medicationContext]
   )
 
   return (
@@ -78,6 +75,7 @@ const EditMedicationDialog = () => {
         <Dialog.Actions>
           <Button onPress={() => (isDirty ? showDismissDialog() : dismissChanges())}>Cancelar</Button>
           <Button
+            loading={isSubmitting}
             disabled={isSubmitting || !isValid || !isDirty}
             onPress={handleSubmit(onSubmit)}
           >

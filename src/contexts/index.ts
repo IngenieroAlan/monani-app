@@ -1,7 +1,7 @@
 import Feed from '@/database/models/Feed'
+import Medication from '@/database/models/Medication'
 import MilkReport from '@/database/models/MilkReport'
 import { createModelContext } from './ModelContextFactory'
-import Medication from '@/database/models/Medication'
 
 export const {
   useModelContext: useMilkReportContext,

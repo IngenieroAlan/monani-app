@@ -65,6 +65,7 @@ const CreateMedicationDialog = () => {
         <Dialog.Actions>
           <Button onPress={() => (isDirty ? showDismissDialog() : dismissChanges())}>Cancelar</Button>
           <Button
+            loading={isSubmitting}
             disabled={isSubmitting || !isValid || !isDirty}
             onPress={handleSubmit(onSubmit)}
           >

@@ -1,5 +1,5 @@
+import { useMedicationContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setSelectedMedication } from '@/redux/slices/medicationsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import { useCallback, useState } from 'react'
@@ -11,18 +11,18 @@ export const DELETE_MEDICATION_DIALOG_ID = 'deleteMedicationDialog'
 const DeleteMedicationDialog = () => {
   const dispatch = useAppDispatch()
   const [isDeleting, setIsDeleting] = useState(false)
-  const selectedMedication = useAppSelector((state: RootState) => state.medications.selectedMedication)
+  const medicationContext = useMedicationContext()
   const visible = useAppSelector((state: RootState) => state.uiVisibility[DELETE_MEDICATION_DIALOG_ID])
 
   const onDelete = useCallback(async () => {
     setIsDeleting(true)
-    await selectedMedication?.delete()
+    await medicationContext.value?.delete()
     setIsDeleting(false)
 
     dispatch(hide(DELETE_MEDICATION_DIALOG_ID))
     dispatch(show(MedicationsSnackbarId.DELETED_MEDICATION))
-    dispatch(setSelectedMedication())
-  }, [selectedMedication])
+    medicationContext.setValue(undefined)
+  }, [medicationContext])
 
   return (
     <Portal>
@@ -42,6 +42,7 @@ const DeleteMedicationDialog = () => {
         <Dialog.Actions>
           <Button onPress={() => dispatch(hide(DELETE_MEDICATION_DIALOG_ID))}>Cancelar</Button>
           <Button
+            loading={isDeleting}
             disabled={isDeleting}
             onPress={onDelete}
           >

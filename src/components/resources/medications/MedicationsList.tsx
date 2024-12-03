@@ -1,7 +1,7 @@
+import { useMedicationContext } from '@/contexts'
 import Medication from '@/database/models/Medication'
 import useMedications from '@/hooks/collections/useMedications'
 import { useAppDispatch } from '@/hooks/useRedux'
-import { setSelectedMedication } from '@/redux/slices/medicationsSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { FlashList } from '@shopify/flash-list'
@@ -21,6 +21,7 @@ const ListItemMenu = ({ medication }: { medication: Medication }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const insets = useSafeAreaInsets()
+  const { setValue: setMedicationContext } = useMedicationContext()
   const [canDelete, setCanDelete] = useState(true)
   const [menuVisible, setMenuVisible] = useState(false)
 
@@ -49,7 +50,7 @@ const ListItemMenu = ({ medication }: { medication: Medication }) => {
         title='Editar'
         leadingIcon='pencil-outline'
         onPress={() => {
-          dispatch(setSelectedMedication(medication))
+          setMedicationContext(medication)
           dispatch(show(EDIT_MEDICATION_DIALOG_ID))
           setMenuVisible(false)
         }}
@@ -70,7 +71,7 @@ const ListItemMenu = ({ medication }: { medication: Medication }) => {
             return
           }
 
-          dispatch(setSelectedMedication(medication))
+          setMedicationContext(medication)
           dispatch(show(DELETE_MEDICATION_DIALOG_ID))
           setMenuVisible(false)
         }}

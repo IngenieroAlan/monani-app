@@ -5,6 +5,7 @@ import DeleteMedicationDialog from '@/components/resources/medications/DeleteMed
 import EditMedicationDialog from '@/components/resources/medications/EditMedicationDialog'
 import MedicationsList from '@/components/resources/medications/MedicationsList'
 import MedicationsSnackbarContainer from '@/components/resources/medications/MedicationsSnackbarContainer'
+import { MedicationProvider } from '@/contexts'
 import { useAppDispatch } from '@/hooks/useRedux'
 import useScrollFab from '@/hooks/useScrollFab'
 import { show } from '@/redux/slices/uiVisibilitySlice'
@@ -19,26 +20,28 @@ const Medications = () => {
   const { onScroll, isFabExtended } = useScrollFab()
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
-      <Appbar.Header>
-        <Appbar.BackAction onPress={navigation.goBack} />
-        <Appbar.Content title='Medicamentos' />
-      </Appbar.Header>
-      <MedicationsList onScroll={onScroll} />
-      <AnimatedFAB
-        style={styles.animatedFab}
-        icon='plus'
-        label='Añadir'
-        extended={isFabExtended}
-        onPress={() => dispatch(show(CREATE_MEDICATION_DIALOG_ID))}
-      />
-
+    <>
+      <MedicationProvider>
+        <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
+          <Appbar.Header>
+            <Appbar.BackAction onPress={navigation.goBack} />
+            <Appbar.Content title='Medicamentos' />
+          </Appbar.Header>
+          <MedicationsList onScroll={onScroll} />
+          <AnimatedFAB
+            style={styles.animatedFab}
+            icon='plus'
+            label='Añadir'
+            extended={isFabExtended}
+            onPress={() => dispatch(show(CREATE_MEDICATION_DIALOG_ID))}
+          />
+          <EditMedicationDialog />
+          <DeleteMedicationDialog />
+        </View>
+      </MedicationProvider>
       <CreateMedicationDialog />
-      <EditMedicationDialog />
-      <DeleteMedicationDialog />
-
       <MedicationsSnackbarContainer />
-    </View>
+    </>
   )
 }
 

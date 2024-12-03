@@ -18,7 +18,7 @@ type MilkReportItemProps = {
 const MenuItem = ({ milkReport }: { milkReport: MilkReport }) => {
   const insets = useSafeAreaInsets()
   const dispatch = useAppDispatch()
-  const { setValue: setMilkReport } = useMilkReportContext()
+  const { setValue: setMilkReportContext } = useMilkReportContext()
   const [showMenu, setShowMenu] = useState(false)
 
   const onPress = useCallback(() => {
@@ -53,7 +53,7 @@ const MenuItem = ({ milkReport }: { milkReport: MilkReport }) => {
         onPress={() => {
           setShowMenu(false)
           dispatch(show(EDIT_MILK_REPORT_DIALOG_ID))
-          setMilkReport(milkReport)
+          setMilkReportContext(milkReport)
         }}
       />
       <Menu.Item
@@ -62,7 +62,7 @@ const MenuItem = ({ milkReport }: { milkReport: MilkReport }) => {
         onPress={() => {
           setShowMenu(false)
           dispatch(show(DELETE_MILK_REPORT_DIALOG_ID))
-          setMilkReport(milkReport)
+          setMilkReportContext(milkReport)
         }}
       />
     </Menu>

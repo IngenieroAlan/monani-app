@@ -1,6 +1,6 @@
+import { useFeedContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
-import { RootState } from '@/redux/store/store'
 import { useCallback, useState } from 'react'
 import { Button, Dialog, Portal, Text } from 'react-native-paper'
 import { FeedsSnackbarId } from './FeedsSnackbarContainer'
@@ -9,18 +9,18 @@ export const DELETE_FEED_DIALOG_ID = 'deleteFeedDialog'
 
 const DeleteFeedDialog = () => {
   const dispatch = useAppDispatch()
+  const feedContext = useFeedContext()
+  const deleteFeedVisible = useAppSelector((state) => state.uiVisibility[DELETE_FEED_DIALOG_ID])
   const [isDeleting, setIsDeleting] = useState(false)
-  const selectedFeed = useAppSelector((state: RootState) => state.feeds.selectedFeed)
-  const deleteFeedVisible = useAppSelector((state: RootState) => state.uiVisibility[DELETE_FEED_DIALOG_ID])
 
   const onDelete = useCallback(async () => {
     setIsDeleting(true)
-    await selectedFeed?.delete()
+    await feedContext.value?.delete()
     setIsDeleting(false)
 
     dispatch(hide(DELETE_FEED_DIALOG_ID))
     dispatch(show(FeedsSnackbarId.DELETED_FEED))
-  }, [selectedFeed])
+  }, [feedContext.value])
 
   return (
     <Portal>
@@ -40,6 +40,7 @@ const DeleteFeedDialog = () => {
         <Dialog.Actions>
           <Button onPress={() => dispatch(hide(DELETE_FEED_DIALOG_ID))}>Cancelar</Button>
           <Button
+            loading={isDeleting}
             disabled={isDeleting}
             onPress={onDelete}
           >

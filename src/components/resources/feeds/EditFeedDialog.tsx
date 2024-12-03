@@ -1,5 +1,5 @@
+import { useFeedContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { setSelectedFeed } from '@/redux/slices/feedsSlice'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
 import FeedSchema from '@/validationSchemas/FeedSchema'
@@ -19,32 +19,29 @@ const DISMISS_DIALOG_ID = 'editFeedDismissDialog'
 const EditFeedDialog = () => {
   const dispatch = useAppDispatch()
   const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[EDIT_FEED_DIALOG_ID])
-  const selectedFeed = useAppSelector((state: RootState) => state.feeds.selectedFeed)
+  const feedContext = useFeedContext()
   const { control, handleSubmit, reset, clearErrors, formState } = useForm<FeedFields>({
-    defaultValues: {
-      name: selectedFeed?.name ? selectedFeed.name : '',
-      feedType: selectedFeed?.feedType ? selectedFeed.feedType : undefined
-    },
     resolver: zodResolver(FeedSchema),
     mode: 'onTouched'
   })
   const { isDirty, isValid, isSubmitting } = formState
 
   useEffect(() => {
+    if (!feedContext.value) return
+
     reset({
-      name: selectedFeed?.name,
-      feedType: selectedFeed?.feedType
+      name: feedContext.value.name,
+      feedType: feedContext.value.feedType
     })
-  }, [selectedFeed])
+  }, [feedContext])
 
   const dismissChanges = useCallback(() => {
     Keyboard.dismiss()
-    dispatch(setSelectedFeed())
+    feedContext.setValue(undefined)
 
     clearErrors()
-    reset()
     dispatch(hide(EDIT_FEED_DIALOG_ID))
-  }, [])
+  }, [feedContext])
 
   const showDismissDialog = useCallback(() => {
     dispatch(hide(EDIT_FEED_DIALOG_ID))
@@ -53,12 +50,12 @@ const EditFeedDialog = () => {
 
   const onSubmit = useCallback(
     async (data: FeedFields) => {
-      await selectedFeed!.updateFeed(data)
+      await feedContext.value?.updateFeed(data)
 
       dispatch(show(FeedsSnackbarId.UPDATED_FEED))
       dismissChanges()
     },
-    [selectedFeed]
+    [feedContext]
   )
 
   return (
@@ -78,6 +75,7 @@ const EditFeedDialog = () => {
         <Dialog.Actions>
           <Button onPress={() => (isDirty ? showDismissDialog() : dismissChanges())}>Cancelar</Button>
           <Button
+            loading={isSubmitting}
             disabled={isSubmitting || !isValid || !isDirty}
             onPress={handleSubmit(onSubmit)}
           >

@@ -1,7 +1,7 @@
+import { useFeedContext } from '@/contexts'
 import Feed from '@/database/models/Feed'
 import useFeeds from '@/hooks/collections/useFeeds'
 import { useAppDispatch } from '@/hooks/useRedux'
-import { setSelectedFeed } from '@/redux/slices/feedsSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { FlashList } from '@shopify/flash-list'
@@ -21,6 +21,7 @@ const ListItemMenu = ({ feed }: { feed: Feed }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const insets = useSafeAreaInsets()
+  const { setValue: setFeedContext } = useFeedContext()
   const [canDelete, setCanDelete] = useState(true)
   const [menuVisible, setMenuVisible] = useState(false)
 
@@ -49,7 +50,7 @@ const ListItemMenu = ({ feed }: { feed: Feed }) => {
         title='Editar'
         leadingIcon='pencil-outline'
         onPress={() => {
-          dispatch(setSelectedFeed(feed))
+          setFeedContext(feed)
           dispatch(show(EDIT_FEED_DIALOG_ID))
           setMenuVisible(false)
         }}
@@ -70,7 +71,7 @@ const ListItemMenu = ({ feed }: { feed: Feed }) => {
             return
           }
 
-          dispatch(setSelectedFeed(feed))
+          setFeedContext(feed)
           dispatch(show(DELETE_FEED_DIALOG_ID))
           setMenuVisible(false)
         }}

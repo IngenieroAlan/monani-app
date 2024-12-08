@@ -7,10 +7,9 @@ import { List, Text, useTheme } from 'react-native-paper';
 interface Props {
     yearData: YearlyMilkProduction;
 }
-
+const formattedLiters = (data: string) => new Intl.NumberFormat().format(parseFloat(data)).replace(/,/g, ' ');
 export const AnnualMilkProducedAccordion = ({ yearData }: Props) => {
     const theme = useTheme();
-
     return (
         <List.Accordion
             key={yearData.year}
@@ -20,18 +19,18 @@ export const AnnualMilkProducedAccordion = ({ yearData }: Props) => {
                 <View>
                     <View style={styles.accordionTitle}>
                         <Text variant="bodyLarge">{yearData.year}</Text>
-                        <Text variant="bodyMedium">{yearData.totalLiters.toFixed(2)} L</Text>
+                        <Text variant="bodyMedium">{formattedLiters(yearData.totalLiters.toFixed(2))} L</Text>
                     </View>
                     <View style={styles.accordionTitle}>
-                        <Text variant="labelSmall">Promedio por mes: {yearData.monthlyAverage.toFixed(2)} L.</Text>
+                        <Text variant="labelSmall">Promedio por mes: {formattedLiters(yearData.monthlyAverage.toFixed(2))} L.</Text>
                         {(yearData.differenceFromPreviousYear && yearData.differenceFromPreviousYear !== 0) && (
                             <Text
                                 variant="labelSmall"
                                 style={{ color: yearData.differenceFromPreviousYear > 0 ? theme.colors.inversePrimary : theme.colors.error }}
                             >
                                 {yearData.differenceFromPreviousYear > 0
-                                    ? `+${yearData.differenceFromPreviousYear} L`
-                                    : `-${yearData.differenceFromPreviousYear} L`}
+                                    ? `+${formattedLiters(yearData.differenceFromPreviousYear+"")} L`
+                                    : `-${formattedLiters(yearData.differenceFromPreviousYear+"")} L`}
                             </Text>
                         )}
                         {(!yearData.differenceFromPreviousYear || yearData.differenceFromPreviousYear === 0) && (
@@ -46,7 +45,7 @@ export const AnnualMilkProducedAccordion = ({ yearData }: Props) => {
                     key={monthData.month}
                     style={{ backgroundColor: theme.colors.surface }}
                     title={() => <Text variant="labelLarge">{monthData.month}</Text>}
-                    right={() => <Text>{monthData.liters.toFixed(2)} L</Text>}
+                    right={() => <Text>{formattedLiters(monthData.liters.toFixed(2))} L</Text>}
                 />
             ))}
         </List.Accordion>

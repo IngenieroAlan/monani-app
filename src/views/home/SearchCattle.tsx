@@ -1,39 +1,27 @@
+import CattleList from '@/components/CattleList/CattleList'
+import { CattleFiltersProvider, useCattleFilters } from '@/contexts/CattleFiltersContext'
 import Cattle from '@/database/models/Cattle'
-import { TableName } from '@/database/schema'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { setCattleInfo } from '@/redux/slices/cattles'
-import { Q } from '@nozbe/watermelondb'
-import { useDatabase } from '@nozbe/watermelondb/react'
 import { StackActions, useNavigation } from '@react-navigation/native'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { FlatList, StyleSheet, View } from 'react-native'
-import { ActivityIndicator, Icon, List, Searchbar, Text, useTheme } from 'react-native-paper'
+import { memo, useCallback, useMemo } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Icon, List, Portal, Searchbar, Text, useTheme } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const ListEmptyComponent = ({ search, isFetching }: { search: string; isFetching: boolean }) => {
+const ListEmptyComponent = () => {
   return (
-    <View style={styles.emtpyListContainer}>
-      {isFetching ? (
-        <ActivityIndicator
-          animating={true}
-          size='large'
-        />
-      ) : (
-        <>
-          <Icon
-            size={56}
-            source={search === '' ? 'magnify' : 'cow-off'}
-          ></Icon>
-          <Text
-            style={{ textAlign: 'center' }}
-            variant='titleMedium'
-          >
-            {search === ''
-              ? 'Escribe un no. identificador para empezar a buscar.'
-              : 'No se han encontrado coincidencias.'}
-          </Text>
-        </>
-      )}
+    <View style={styles.listEmptyView}>
+      <Icon
+        size={56}
+        source='cow-off'
+      ></Icon>
+      <Text
+        style={{ textAlign: 'center' }}
+        variant='titleMedium'
+      >
+        No se han encontrado coincidencias.
+      </Text>
     </View>
   )
 }
@@ -102,89 +90,74 @@ const CattleItem = memo(({ cattle }: { cattle: Cattle }) => {
   )
 })
 
-const SearchCattle = () => {
+const CattleSearchbar = () => {
   const navigation = useNavigation()
-  const theme = useTheme()
-  const database = useDatabase()
-  const [search, setSearch] = useState('')
-  const [cattle, setCattle] = useState<Cattle[]>([])
-  const [isFetching, setIsFetching] = useState(false)
-
-  useEffect(() => {
-    if (search === '') {
-      setCattle([])
-      return
-    }
-
-    const fetch = async () => {
-      setIsFetching(true)
-
-      const results = await database.collections
-        .get<Cattle>(TableName.CATTLE)
-        .query(Q.where('tag_id', Q.like(`${Q.sanitizeLikeString(search)}%`)))
-        .fetch()
-
-      setIsFetching(false)
-      setCattle(results)
-    }
-
-    fetch()
-  }, [search])
-
-  const renderItem = useCallback(({ item }: { item: Cattle }) => <CattleItem cattle={item} />, [])
-  const keyExtractor = useCallback((item: Cattle) => item.id, [])
-  const listEmptyComponent = useCallback(
-    () => (
-      <ListEmptyComponent
-        search={search}
-        isFetching={isFetching}
-      />
-    ),
-    [cattle, isFetching]
-  )
+  const tagId = useCattleFilters('tagId')
+  const setTagId = useCattleFilters('setTagId')
 
   return (
-    <SafeAreaView
-      style={{
-        backgroundColor: theme.colors.elevation.level3,
-        flex: 1
-      }}
-    >
-      <Searchbar
-        keyboardType='numeric'
-        autoFocus
-        placeholder='Buscar no. de identificación'
-        value={search}
-        onChangeText={(text) => setSearch(text)}
-        mode='view'
-        icon={() => (
-          <Icon
-            size={24}
-            source='arrow-left'
-          />
-        )}
-        onIconPress={navigation.goBack}
-      />
-      <FlatList
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps='handled'
-        data={cattle}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        ListEmptyComponent={listEmptyComponent}
-      />
-    </SafeAreaView>
+    <Searchbar
+      keyboardType='numeric'
+      placeholder='Buscar no. de identificación'
+      value={tagId}
+      onChangeText={(text) => setTagId(text)}
+      mode='view'
+      icon={() => (
+        <Icon
+          size={24}
+          source='arrow-left'
+        />
+      )}
+      onIconPress={navigation.goBack}
+    />
+  )
+}
+
+const SearchCattle = () => {
+  const theme = useTheme()
+
+  const renderItem = useCallback(({ item }: { item: Cattle }) => <CattleItem cattle={item} />, [])
+
+  return (
+    <CattleFiltersProvider>
+      <Portal.Host>
+        <SafeAreaView
+          style={{
+            backgroundColor: theme.colors.elevation.level3,
+            flex: 1
+          }}
+        >
+          <CattleSearchbar />
+          <CattleList
+            flashListProps={{
+              estimatedItemSize: 78,
+              keyboardShouldPersistTaps: 'handled',
+              onEndReachedThreshold: 1.5,
+              ListEmptyComponent: <ListEmptyComponent />
+            }}
+            filters={
+              <>
+                <CattleList.StatusFilterChip />
+                <CattleList.ProductionFilterChip />
+                <CattleList.FlagFilterChip />
+                <CattleList.QuarantineFilterChip />
+              </>
+            }
+          >
+            {renderItem}
+          </CattleList>
+        </SafeAreaView>
+      </Portal.Host>
+    </CattleFiltersProvider>
   )
 }
 
 export default SearchCattle
 
 const styles = StyleSheet.create({
-  emtpyListContainer: {
-    marginVertical: 'auto',
+  listEmptyView: {
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    gap: 16
+    padding: 16,
+    gap: 8
   }
 })

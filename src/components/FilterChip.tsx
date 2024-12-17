@@ -18,7 +18,7 @@ const FilterChip = <T,>(props: ChipProps & { filters: T[] }) => {
 
   return (
     <Chip
-      style={{ backgroundColor: filters.length > 0 ? theme.colors.primaryContainer : theme.colors.surface }}
+      style={{ backgroundColor: filters.length > 0 ? theme.colors.primaryContainer : 'transparent' }}
       {...props}
       onClose={filters.length > 0 ? props.onClose : undefined}
     >

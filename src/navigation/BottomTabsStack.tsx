@@ -1,4 +1,5 @@
 import BottomTabsSnackbarContainer from '@/components/BottomTabsSnackbarContainer'
+import { CattleFiltersProvider } from '@/contexts/CattleFiltersContext'
 import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { setShowBottomStack } from '@/redux/slices/ui'
@@ -18,77 +19,79 @@ const BottomTabsStack = () => {
   const { showBottomStack } = useAppSelector((state) => state.ui)
 
   return (
-    <Portal.Host>
-      <Tab.Navigator
-        barStyle={{ display: showBottomStack ? 'flex' : 'none' }}
-        screenListeners={{
-          blur: () => {
-            dispatch(setShowBottomStack(true))
-          }
-        }}
-      >
-        <Tab.Screen
-          name='Ganado'
-          component={HomeView}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <Icon
-                source='cow'
-                color={color}
-                size={24}
-              />
-            )
+    <CattleFiltersProvider flags={{ isActive: true }}>
+      <Portal.Host>
+        <Tab.Navigator
+          barStyle={{ display: showBottomStack ? 'flex' : 'none' }}
+          screenListeners={{
+            blur: () => {
+              dispatch(setShowBottomStack(true))
+            }
           }}
-        />
-        <Tab.Screen
-          name='Prod. lechera'
-          component={MilkProductionStack}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <Icon
-                source='beer-outline'
-                color={color}
-                size={24}
-              />
-            )
-          }}
-        />
-        <Tab.Screen
-          name='Ganancias'
-          component={EarningsStack}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <Icon
-                source='cash-multiple'
-                color={color}
-                size={24}
-              />
-            )
-          }}
-        />
-        <Tab.Screen
-          name='Notificaciones'
-          component={NotificationsStack}
-          options={() => {
-            // To prevent re rendering the whole bottom tab.
-            const { notifications } = useSentNotifications({ isMarkedAsRead: false })
-
-            return {
-              tabBarBadge: notifications.length || undefined,
+        >
+          <Tab.Screen
+            name='Ganado'
+            component={HomeView}
+            options={{
               tabBarIcon: ({ color }) => (
                 <Icon
-                  source='bell-outline'
+                  source='cow'
                   color={color}
                   size={24}
                 />
               )
-            }
-          }}
-        />
-      </Tab.Navigator>
+            }}
+          />
+          <Tab.Screen
+            name='Prod. lechera'
+            component={MilkProductionStack}
+            options={{
+              tabBarIcon: ({ color }) => (
+                <Icon
+                  source='beer-outline'
+                  color={color}
+                  size={24}
+                />
+              )
+            }}
+          />
+          <Tab.Screen
+            name='Ganancias'
+            component={EarningsStack}
+            options={{
+              tabBarIcon: ({ color }) => (
+                <Icon
+                  source='cash-multiple'
+                  color={color}
+                  size={24}
+                />
+              )
+            }}
+          />
+          <Tab.Screen
+            name='Notificaciones'
+            component={NotificationsStack}
+            options={() => {
+              // To prevent re rendering the whole bottom tab.
+              const { notifications } = useSentNotifications({ isMarkedAsRead: false })
 
-      <BottomTabsSnackbarContainer />
-    </Portal.Host>
+              return {
+                tabBarBadge: notifications.length || undefined,
+                tabBarIcon: ({ color }) => (
+                  <Icon
+                    source='bell-outline'
+                    color={color}
+                    size={24}
+                  />
+                )
+              }
+            }}
+          />
+        </Tab.Navigator>
+
+        <BottomTabsSnackbarContainer />
+      </Portal.Host>
+    </CattleFiltersProvider>
   )
 }
 

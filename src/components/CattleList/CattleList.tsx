@@ -2,10 +2,11 @@ import { useCattleFilters } from '@/contexts/CattleFiltersContext'
 import Cattle from '@/database/models/Cattle'
 import useCattle from '@/hooks/collections/useCattle'
 import { FlashList, FlashListProps } from '@shopify/flash-list'
-import { ReactNode, useCallback } from 'react'
+import { ReactNode } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 import { ScrollView } from 'react-native-use-form'
+import EmptyList from '../EmptyList'
 import CattleListFlagFilterChip from './CattleListFlagFilterChip'
 import CattleListProductionFilterChip from './CattleListProductionFilterChip'
 import CattleListQuarantineFilterChip from './CattleListQuarantineFilterChip'
@@ -19,6 +20,8 @@ type CattleListProps = {
   flashListProps?: Omit<FlashListProps<Cattle>, 'data' | 'renderItem' | 'keyExtractor'>
 }
 
+const keyExtractor = (item: Cattle) => item.id
+
 const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
   const nextIndex = useCattleFilters('nextIndex')
 
@@ -30,10 +33,6 @@ const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
     ...useCattleFilters('flags'),
     take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * useCattleFilters('paginateIndex')
   })
-
-  console.log('Rendering list.')
-
-  const keyExtractor = useCallback((item: Cattle) => item.id, [])
 
   return (
     <>
@@ -55,19 +54,26 @@ const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
           size='large'
           animating
         />
-        <View style={{ flex: 1 }}>
-          <View style={{ flex: 1, opacity: +!isPending }}>
-            <FlashList
-              data={cattleRecords}
-              renderItem={children}
-              keyExtractor={keyExtractor}
-              onEndReached={() => {
-                if (cattleRecords.length > 0) nextIndex()
-              }}
-              {...flashListProps}
-            />
+        {cattleRecords.length === 0 && !isPending ? (
+          <EmptyList
+            icon='cow-off'
+            text='No se han encontrado registros.'
+          />
+        ) : (
+          <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, opacity: +!isPending }}>
+              <FlashList
+                data={cattleRecords}
+                renderItem={children}
+                keyExtractor={keyExtractor}
+                onEndReached={() => {
+                  if (cattleRecords.length > 0) nextIndex()
+                }}
+                {...flashListProps}
+              />
+            </View>
           </View>
-        </View>
+        )}
       </View>
     </>
   )

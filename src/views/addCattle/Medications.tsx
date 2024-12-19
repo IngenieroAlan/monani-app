@@ -1,6 +1,6 @@
 import MedicationSchedulesList from "@/components/addCattle/MedicationSchedulesList"
 import DismissDialog from "@/components/DismissDialog"
-import { HomeSnackbarId } from '@/components/home/HomeSnackbarContainer'
+import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
 import MedicationSchedulesSnackbarContainer from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { AddCattleStackParamsList, RootStackParamList } from "@/navigation/types"

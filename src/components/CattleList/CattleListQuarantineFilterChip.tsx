@@ -1,5 +1,5 @@
+import FilterChip from '@/components/FilterChip'
 import { useCattleFilters } from '@/contexts/CattleFiltersContext'
-import FilterChip from '../FilterChip'
 
 const CattleListQuarantineFilterChip = () => {
   const isInQuarantine = useCattleFilters('isInQuarantine')

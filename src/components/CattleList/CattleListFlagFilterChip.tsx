@@ -1,11 +1,11 @@
+import FilterChip from '@/components/FilterChip'
+import MBottomSheet from '@/components/MBottomSheet'
 import { useCattleFilters } from '@/contexts/CattleFiltersContext'
 import { CattleFlags } from '@/zustand/stores/cattleFiltersStore/types'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Keyboard, View } from 'react-native'
 import { Checkbox, Icon, List, Text } from 'react-native-paper'
-import FilterChip from '../FilterChip'
-import MBottomSheet from '../MBottomSheet'
 
 type ListItemFilterProps = {
   title: string
@@ -61,7 +61,7 @@ const CattleListFlagFilterChip = () => {
   const filters = useMemo(() => {
     const filters: string[] = []
 
-    for (const key of Object.keys(flags)) {
+    for (const key of Object.keys(flags) as Array<keyof CattleFlags>) {
       switch (key) {
         case 'isActive':
           filters.push('Activo')

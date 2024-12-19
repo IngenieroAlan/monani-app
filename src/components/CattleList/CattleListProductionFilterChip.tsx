@@ -1,11 +1,11 @@
+import FilterChip from '@/components/FilterChip'
+import MBottomSheet from '@/components/MBottomSheet'
 import { useCattleFilters } from '@/contexts/CattleFiltersContext'
 import { ProductionType } from '@/database/models/Cattle'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Keyboard, View } from 'react-native'
 import { Icon, List, RadioButton, Text, useTheme } from 'react-native-paper'
-import FilterChip from '../FilterChip'
-import MBottomSheet from '../MBottomSheet'
 
 type ListItemFilterProps = {
   title: string

@@ -1,6 +1,6 @@
 import DismissDialog from "@/components/DismissDialog"
 import EditCattleInfoForm from "@/components/forms/EditCattleInfoForm"
-import { HomeSnackbarId } from '@/components/home/HomeSnackbarContainer'
+import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
 import { UpdateCattleData } from "@/database/models/Cattle"
 import useWeightReports from "@/hooks/collections/useWeightReports"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"

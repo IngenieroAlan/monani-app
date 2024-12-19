@@ -1,11 +1,11 @@
+import FilterChip from '@/components/FilterChip'
+import MBottomSheet from '@/components/MBottomSheet'
 import { useCattleFilters } from '@/contexts/CattleFiltersContext'
 import { CattleStatus } from '@/database/models/Cattle'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Keyboard, View } from 'react-native'
 import { Checkbox, Icon, List, Text } from 'react-native-paper'
-import FilterChip from '../FilterChip'
-import MBottomSheet from '../MBottomSheet'
 
 type ListItemFilterProps = {
   title: string
@@ -17,8 +17,6 @@ type ListItemFilterProps = {
 const ListItemFilter = memo((props: ListItemFilterProps) => {
   const addCattleStatus = useCattleFilters('addCattleStatus')
   const removeCattleStatus = useCattleFilters('removeCattleStatus')
-
-  console.log('rendering list item filter')
 
   const left = useCallback(() => {
     return (

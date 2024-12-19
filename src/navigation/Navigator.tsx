@@ -12,7 +12,7 @@ import EditCattleArchiveView from '@/views/cattleInfo/cattleArchive/EditCattleAr
 import CreateCattleSaleView from '@/views/cattleInfo/CreateCattleSaleView'
 import CreateMilkReportView from '@/views/cattleInfo/CreateMilkReportView'
 import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
-import SearchCattle from '@/views/home/SearchCattle'
+import SearchView from '@/views/search/SearchCattleView'
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { View } from 'react-native'
@@ -59,7 +59,7 @@ export const Navigator = () => {
         <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen
             name='SearchCattleView'
-            component={SearchCattle}
+            component={SearchView}
           />
           <Stack.Screen
             name='EditCattleInfoView'

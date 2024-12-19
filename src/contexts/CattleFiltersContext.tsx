@@ -4,15 +4,19 @@ import createPaginateIndexSlice from '@/zustand/stores/cattleFiltersStore/pagina
 import createProductionTypeSlice from '@/zustand/stores/cattleFiltersStore/productionTypeSlice'
 import createQuarantineSlice from '@/zustand/stores/cattleFiltersStore/quarantineSlice'
 import createTagIdSlice from '@/zustand/stores/cattleFiltersStore/tagIdSlice'
-import { createContext, ReactNode, useContext, useState } from 'react'
+import { createContext, PropsWithChildren, useContext, useState } from 'react'
 import { createStore, StoreApi } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { createSelectors } from '../zustand/createSelectors'
-import { CattleFiltersStore } from '../zustand/stores/cattleFiltersStore/types'
+import { CattleFiltersStore, CattleFlags } from '../zustand/stores/cattleFiltersStore/types'
+
+type CattleFiltersProviderProps = {
+  flags?: CattleFlags
+} & PropsWithChildren
 
 const CattleFiltersContext = createContext<StoreApi<CattleFiltersStore> | undefined>(undefined)
 
-export const CattleFiltersProvider = ({ children }: { children: ReactNode }) => {
+export const CattleFiltersProvider = ({ children, flags }: CattleFiltersProviderProps) => {
   const [store] = useState(() =>
     createStore<CattleFiltersStore, [['zustand/immer', never]]>(
       immer((...a) => ({
@@ -20,7 +24,7 @@ export const CattleFiltersProvider = ({ children }: { children: ReactNode }) => 
         ...createTagIdSlice(...a),
         ...createCattleStatusSlice(...a),
         ...createProductionTypeSlice(...a),
-        ...createCattleFlagsSlice(...a),
+        ...createCattleFlagsSlice(flags)(...a),
         ...createQuarantineSlice(...a)
       }))
     )

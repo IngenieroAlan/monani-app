@@ -1,18 +1,52 @@
-import BottomSheetProductionFilter from '@/components/home/BottomSheetProductionFilter'
-import BottomSheetStatusFilter from '@/components/home/BottomSheetStatusFilter'
-import CattleList from '@/components/home/CattleList'
-import CattleListFilters from '@/components/home/CattleListFilters'
-import HomeSnackbarContainer from '@/components/home/HomeSnackbarContainer'
+import CattleList from '@/components/CattleList/CattleList'
 import useScrollFab from '@/hooks/useScrollFab'
 import { useNavigation } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar'
-import React from 'react'
+import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
+import HomeListItem from './components/HomeListItem'
+import HomeSnackbarContainer from './components/HomeSnackbarContainer'
+
+const Filters = memo(() => {
+  return (
+    <>
+      <CattleList.StatusFilterChip />
+      <CattleList.ProductionFilterChip />
+    </>
+  )
+})
+
+const List = () => {
+  const navigation = useNavigation()
+  const { isFabExtended, onScroll } = useScrollFab()
+
+  return (
+    <>
+      <CattleList
+        filters={<Filters />}
+        flashListProps={{
+          estimatedItemSize: 88,
+          onScroll: onScroll,
+          onEndReachedThreshold: 1.5,
+          ListFooterComponent: () => <View style={{ height: 88 }} />
+        }}
+      >
+        {({ item }) => <HomeListItem cattle={item} />}
+      </CattleList>
+      <AnimatedFAB
+        style={styles.fab}
+        extended={isFabExtended}
+        icon='plus'
+        label='Añadir'
+        onPress={() => navigation.navigate('AddCattleStack')}
+      />
+    </>
+  )
+}
 
 export const HomeView = () => {
   const theme = useTheme()
-  const { isFabExtended, onScroll } = useScrollFab()
   const navigation = useNavigation()
 
   return (
@@ -35,18 +69,8 @@ export const HomeView = () => {
             onPress={() => navigation.navigate('ResourcesStack')}
           />
         </Appbar.Header>
-        <CattleListFilters />
-        <CattleList onScroll={onScroll} />
-        <AnimatedFAB
-          style={styles.fab}
-          extended={isFabExtended}
-          icon='plus'
-          label='Añadir'
-          onPress={() => navigation.navigate('AddCattleStack')}
-        />
+        <List />
       </View>
-      <BottomSheetStatusFilter />
-      <BottomSheetProductionFilter />
       <HomeSnackbarContainer />
     </>
   )

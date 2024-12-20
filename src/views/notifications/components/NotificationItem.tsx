@@ -11,13 +11,9 @@ import { useCallback, useState } from 'react'
 import { IconButton, List, Menu } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import NotificationDescription from './NotificationDescription'
-import { NotificationIcon, NotificationTitle } from './typesMapping'
+import { NotificationIcon, NotificationTitle } from './types'
 
 const MENU_OFFSET = 4
-
-const observeNotification = withObservables(['notification'], ({ notification }: { notification: SentNotification }) => ({
-  notification
-}))
 
 const ItemMenu = ({ notification }: { notification: SentNotification }) => {
   const [visible, setVisible] = useState(false)
@@ -65,7 +61,14 @@ const ItemMenu = ({ notification }: { notification: SentNotification }) => {
   )
 }
 
-const NotificationItem = observeNotification(({ notification }: { notification: SentNotification }) => {
+const withNotificationObserver = withObservables(
+  ['notification'],
+  ({ notification }: { notification: SentNotification }) => ({
+    notification
+  })
+)
+
+const NotificationItem = ({ notification }: { notification: SentNotification }) => {
   const theme = useAppTheme()
   const dispatch = useAppDispatch()
   const database = useDatabase()
@@ -95,6 +98,6 @@ const NotificationItem = observeNotification(({ notification }: { notification: 
       }}
     />
   )
-})
+}
 
-export default NotificationItem
+export default withNotificationObserver(NotificationItem)

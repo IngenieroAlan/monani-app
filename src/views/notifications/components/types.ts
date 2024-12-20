@@ -13,4 +13,3 @@ export const NotificationIcon: NotificationMap = {
   medication: 'pill',
   quarantine: 'minus-circle-off-outline'
 }
-

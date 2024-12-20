@@ -5,9 +5,7 @@ import { useCallback } from 'react'
 import { Appbar, Tooltip } from 'react-native-paper'
 
 const CheckAllAction = () => {
-  const { notifications } = useSentNotifications({
-    isMarkedAsRead: false
-  })
+  const { notifications } = useSentNotifications({ isMarkedAsRead: false })
 
   const onMarkAllAsRead = useCallback(async () => {
     await notifee.cancelDisplayedNotifications()

@@ -1,8 +1,7 @@
 import { useAppDispatch } from '@/hooks/useRedux'
 import { reset } from '@/redux/slices/uiVisibilitySlice'
+import NotificationsView from '@/views/notifications/NotificationsView'
 import { createStackNavigator } from '@react-navigation/stack'
-import React from 'react'
-import { NotificationsView } from '../../views/notifications/Notifications'
 
 export type NotificationsStackParams = {
   NotificationsView: undefined

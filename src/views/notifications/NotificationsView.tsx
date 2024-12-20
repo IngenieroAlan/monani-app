@@ -1,5 +1,5 @@
-import NotificationsAppbar from '@/components/notifications/NotificationsAppbar'
-import NotificationsSection from '@/components/notifications/NotificationsSection'
+import NotificationsAppbar from '@/views/notifications/components/NotificationsAppbar'
+import NotificationsSection from '@/views/notifications/components/NotificationsSection'
 import SentNotification from '@/database/models/SentNotification'
 import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import useAppTheme from '@/theme'
@@ -11,7 +11,7 @@ import { StyleSheet, View } from 'react-native'
 import { Icon, Text } from 'react-native-paper'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const groupNotificationsByDay = (notifications: SentNotification[]): Record<string, SentNotification[]> => {
+const groupNotificationsByDay = (notifications: SentNotification[]) => {
   return notifications.reduce((acc: Record<string, SentNotification[]>, notification) => {
     const dateKey = formatDateRelativeToYear(notification.eventAt)
 
@@ -24,7 +24,7 @@ const groupNotificationsByDay = (notifications: SentNotification[]): Record<stri
 
 const ITEMS_PER_PAGE = 25
 
-export const NotificationsView = () => {
+const NotificationsView = () => {
   const theme = useAppTheme()
   const [index, setIndex] = useState(0)
   const { notifications } = useSentNotifications({
@@ -78,6 +78,8 @@ export const NotificationsView = () => {
     </SafeAreaView>
   )
 }
+
+export default NotificationsView
 
 const styles = StyleSheet.create({
   notificationsEmpty: {

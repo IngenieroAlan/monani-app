@@ -1,8 +1,8 @@
-import useAnnualEarnings from '@/hooks/collections/useAnnualEarnings'
 import { formatNumberWithSpaces } from '@/utils/helpers'
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Card, Divider, Text } from 'react-native-paper'
+import useAnnualEarnings from '../hooks/useAnnualEarnings'
 
 const TotalEarningsCard = () => {
   const { annualEarningsRecords } = useAnnualEarnings()

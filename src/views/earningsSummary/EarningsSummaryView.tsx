@@ -1,10 +1,10 @@
-import AnnualEarningsList from '@/components/earnings/resume/AnnualEarningsList'
-import TotalEarningsCard from '@/components/earnings/resume/TotalEarningsCard'
 import React from 'react'
 import { View } from 'react-native'
 import { Divider, useTheme } from 'react-native-paper'
+import AnnualEarningsList from './components/AnnualEarningsList'
+import TotalEarningsCard from './components/TotalEarningsCard'
 
-const EarningsResumeView = () => {
+const EarningsSummaryView = () => {
   const theme = useTheme()
 
   return (
@@ -20,4 +20,4 @@ const EarningsResumeView = () => {
   )
 }
 
-export default EarningsResumeView
+export default EarningsSummaryView

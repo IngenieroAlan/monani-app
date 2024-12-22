@@ -1,12 +1,12 @@
+import NumericDifference from '@/components/NumericDifference'
 import AnnualEarnings from '@/database/models/AnnualEarnings'
-import useAnnualEarnings from '@/hooks/collections/useAnnualEarnings'
 import { formatNumberWithSpaces } from '@/utils/helpers'
 import { useNavigation } from '@react-navigation/native'
 import { FlashList } from '@shopify/flash-list'
 import { useCallback } from 'react'
 import { View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
-import EarningsDifference from '../EarningsDifference'
+import useAnnualEarnings from '../hooks/useAnnualEarnings'
 
 const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?: number }) => {
   const navigation = useNavigation()
@@ -19,7 +19,7 @@ const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?:
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <View style={{ alignItems: 'flex-end' }}>
             <Text variant='labelSmall'>{`$${formatNumberWithSpaces(item.totalEarnings.toFixed(2))}`}</Text>
-            {prevEarnings && <EarningsDifference difference={item.totalEarnings - prevEarnings} />}
+            {prevEarnings && <NumericDifference difference={item.totalEarnings - prevEarnings} />}
           </View>
           <Icon
             size={24}
@@ -28,7 +28,7 @@ const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?:
         </View>
       )}
       onPress={() =>
-        navigation.navigate('AnnualEarningsView', {
+        navigation.navigate('EarningsAnnualSummaryView', {
           year: item.year,
           totalEarnings: item.totalEarnings,
           totalCattleEarnings: item.totalCattleSales,

@@ -1,11 +1,11 @@
 import { useAppDispatch } from '@/hooks/useRedux'
 import { reset } from '@/redux/slices/uiVisibilitySlice'
+import EarningsSummaryView from '@/views/earningsSummary/EarningsSummaryView'
+import EarningsTransactionsView from '@/views/earningsTransactions/EarningsTransactionsView'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import React from 'react'
 import { Icon, Text, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import EarningsView from '../../views/earnings/Earnings'
-import EarningsResumeView from '../../views/earnings/EarningsResume'
 import { EarningsStackParamList } from '../types'
 
 const Stack = createMaterialTopTabNavigator<EarningsStackParamList>()
@@ -39,7 +39,7 @@ export const EarningsStack = () => {
       style={{ paddingTop: insets.top }}
     >
       <Stack.Screen
-        name='EarningsView'
+        name='EarningsTransactionsView'
         options={{
           tabBarIcon: ({ color }) => (
             <Icon
@@ -50,10 +50,10 @@ export const EarningsStack = () => {
           ),
           tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Transacciones</Text>
         }}
-        component={EarningsView}
+        component={EarningsTransactionsView}
       />
       <Stack.Screen
-        name='EarningsResumeView'
+        name='EarningsSummaryView'
         options={{
           tabBarIcon: ({ color }) => (
             <Icon
@@ -64,7 +64,7 @@ export const EarningsStack = () => {
           ),
           tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Resumen</Text>
         }}
-        component={EarningsResumeView}
+        component={EarningsSummaryView}
       />
     </Stack.Navigator>
   )

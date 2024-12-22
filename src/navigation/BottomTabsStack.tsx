@@ -9,8 +9,8 @@ import { Icon, Portal } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { EarningsStack } from './stacks/EarningsStack'
 import { MilkProductionStack } from './stacks/MilkProductionStack'
-import { NotificationsStack } from './stacks/NotificationsStack'
 import { BottomTabsParamList, MaterialBottomTabNavigator } from './types'
+import NotificationsView from '@/views/notifications/NotificationsView'
 
 const Tab: MaterialBottomTabNavigator<BottomTabsParamList> = createMaterialBottomTabNavigator<BottomTabsParamList>()
 
@@ -70,7 +70,7 @@ const BottomTabsStack = () => {
           />
           <Tab.Screen
             name='Notificaciones'
-            component={NotificationsStack}
+            component={NotificationsView}
             options={() => {
               // To prevent re rendering the whole bottom tab.
               const { notifications } = useSentNotifications({ isMarkedAsRead: false })

@@ -1,8 +1,8 @@
 import { useAppDispatch } from '@/hooks/useRedux'
 import { reset } from '@/redux/slices/uiVisibilitySlice'
-import Feeds from '@/views/resources/Feeds'
-import Medications from '@/views/resources/Medications'
-import Resources from '@/views/resources/Resources'
+import FeedsView from '@/views/feeds/FeedsView'
+import MedicationsView from '@/views/medications/MedicationsView'
+import ResourcesView from '@/views/resources/ResourcesView'
 import { createStackNavigator } from '@react-navigation/stack'
 import { ResourcesStackParamList } from '../types'
 
@@ -20,15 +20,15 @@ const ResourcesStack = () => {
     >
       <Stack.Screen
         name='ResourcesView'
-        component={Resources}
+        component={ResourcesView}
       />
       <Stack.Screen
         name='FeedsView'
-        component={Feeds}
+        component={FeedsView}
       />
       <Stack.Screen
         name='MedicationsView'
-        component={Medications}
+        component={MedicationsView}
       />
     </Stack.Navigator>
   )

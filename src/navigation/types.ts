@@ -16,7 +16,7 @@ export type RootStackParamList = {
   SearchCattleView: undefined
   AddCattleStack: undefined
   ResourcesStack: undefined
-  AnnualEarningsView: {
+  EarningsAnnualSummaryView: {
     year: number
     totalEarnings: number
     totalCattleEarnings: number
@@ -51,8 +51,8 @@ export type BottomTabsParamList = {
 }
 
 export type EarningsStackParamList = {
-  EarningsView: undefined
-  EarningsResumeView: undefined
+  EarningsTransactionsView: undefined
+  EarningsSummaryView: undefined
 }
 
 export type ResourcesStackParamList = {

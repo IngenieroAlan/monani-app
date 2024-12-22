@@ -11,7 +11,7 @@ import CreateCattleArchiveView from '@/views/cattleInfo/cattleArchive/CreateCatt
 import EditCattleArchiveView from '@/views/cattleInfo/cattleArchive/EditCattleArchiveView'
 import CreateCattleSaleView from '@/views/cattleInfo/CreateCattleSaleView'
 import CreateMilkReportView from '@/views/cattleInfo/CreateMilkReportView'
-import AnnualEarningsView from '@/views/earnings/AnnualEarnings'
+import EarningsAnnualSummaryView from '@/views/earningsAnnualSummary/EarningsAnnualSummary'
 import SearchCattleView from '@/views/searchCattle/SearchCattleView'
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
@@ -53,8 +53,8 @@ export const Navigator = () => {
           component={ResourcesStack}
         />
         <Stack.Screen
-          name='AnnualEarningsView'
-          component={AnnualEarningsView}
+          name='EarningsAnnualSummaryView'
+          component={EarningsAnnualSummaryView}
         />
         <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen

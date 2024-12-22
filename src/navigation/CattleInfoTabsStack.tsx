@@ -6,19 +6,18 @@ import MilkProductionRoute from '@/components/layout/cattleDetails/routes/MilkPr
 import { WeightRoute } from '@/components/layout/cattleDetails/routes/Weight'
 import Cattle from '@/database/models/Cattle'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { CattleInfoParamsList } from '@/navigation/types'
+import { CattleInfoTabsStackParamList } from '@/navigation/types'
 import { unnestOneCattle } from '@/redux/slices/cattles'
 import { setScreen } from '@/redux/slices/ui'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { useNavigation } from '@react-navigation/native'
 import { useCallback } from 'react'
 import { Appbar, Icon, Portal, Text, useTheme } from 'react-native-paper'
-import { DietRoute } from '../../components/layout/cattleDetails/routes/Diet'
-import { InfoRoute } from '../../components/layout/cattleDetails/routes/Info'
-import { MedicationRoute } from '../../components/layout/cattleDetails/routes/Medication'
+import { DietRoute } from '../components/layout/cattleDetails/routes/Diet'
+import { InfoRoute } from '../components/layout/cattleDetails/routes/Info'
+import { MedicationRoute } from '../components/layout/cattleDetails/routes/Medication'
 
 const ICON_SIZE = 24
-const Stack = createMaterialTopTabNavigator<CattleInfoParamsList>()
 
 const StackAppBar = ({ cattle }: { cattle: Cattle }) => {
   const navigation = useNavigation()
@@ -28,7 +27,7 @@ const StackAppBar = ({ cattle }: { cattle: Cattle }) => {
   const onPress = useCallback(() => {
     if (nestedCattles.length > 0) {
       dispatch(unnestOneCattle())
-      navigation.navigate('CattleDetailsLayout', { screen: 'InfoRoute' })
+      navigation.navigate('CattleInfoTabsStack', { screen: 'InfoRoute' })
     } else {
       navigation.goBack()
     }
@@ -42,7 +41,9 @@ const StackAppBar = ({ cattle }: { cattle: Cattle }) => {
   )
 }
 
-export const CattleTopStack = () => {
+const Stack = createMaterialTopTabNavigator<CattleInfoTabsStackParamList>()
+
+export const CattleInfoTabsStack = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const cattleInfo = useAppSelector((state) => state.cattles.cattleInfo)!

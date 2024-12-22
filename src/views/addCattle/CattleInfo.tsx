@@ -2,7 +2,7 @@ import DismissDialog from "@/components/DismissDialog"
 import CattleInfoForm from "@/components/forms/CattleInfoForm"
 import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { AddCattleStackParamsList } from "@/navigation/types"
+import { CreateCattleStackParamList } from "@/navigation/types"
 import { CattleInfoFields, reset as resetCattle, saveCattleInfo } from "@/redux/slices/addCattleSlice"
 import { show } from "@/redux/slices/uiVisibilitySlice"
 import CattleInfoSchema from "@/validationSchemas/cattleInfoSchema"
@@ -16,7 +16,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 
 const DISMISS_DIALOG_ID = 'createCattleDismissDialog'
 
-type Props = NativeStackScreenProps<AddCattleStackParamsList, 'CattleInfo'>;
+type Props = NativeStackScreenProps<CreateCattleStackParamList, 'CattleInfo'>;
 export const CattlInfo = ({ navigation }: Props) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()

@@ -1,7 +1,7 @@
 import { FeedProportion } from '@/database/models/DietFeed'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { ACDietFeed } from '@/interfaces/cattleInterfaces'
-import { AddCattleStackParamsList, BottomTabsParamList } from '@/navigation/types'
+import { CreateCattleStackParamList, HomeTabsParamList } from '@/navigation/types'
 import { deleteDietFeed } from '@/redux/slices/addCattleSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
@@ -22,7 +22,7 @@ type DietFeedItem = {
   feedProportion: FeedProportion;
 }
 
-type ScreenProps = NativeStackScreenProps<AddCattleStackParamsList & BottomTabsParamList>['navigation']
+type ScreenProps = NativeStackScreenProps<CreateCattleStackParamList & HomeTabsParamList>['navigation']
 
 
 const ListItemMenu = (

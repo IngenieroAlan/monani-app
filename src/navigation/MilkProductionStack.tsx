@@ -1,11 +1,10 @@
-import React from "react";
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { Icon, useTheme } from 'react-native-paper';
-import { MilkProductionView } from "../../views/milkProduction/MilkProduction";
-import { MilkProductionResumeView } from '../../views/milkProduction/MilkProductionResume';
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAppDispatch } from "@/hooks/useRedux";
 import { setShowBottomStack } from "@/redux/slices/ui";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { Icon, useTheme } from 'react-native-paper';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { MilkProductionView } from "../views/milkProduction/MilkProduction";
+import { MilkProductionResumeView } from '../views/milkProduction/MilkProductionResume';
 
 export type MilkProductionStackParams = {
   MilkProductionView: undefined;

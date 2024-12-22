@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { AddCattleStackParamsList } from "@/navigation/types";
+import { CreateCattleStackParamList } from "@/navigation/types";
 import { setDiet } from "@/redux/slices/addCattleSlice";
 import { show } from "@/redux/slices/uiVisibilitySlice";
 import ACDietSchema, { ACDietFields } from "@/validationSchemas/ACDietSchema";
@@ -8,10 +8,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
-import DietSnackbarContainer, { DietSnackbarId } from "../layout/cattleDetails/Components/dietFeed/DietSnackbarContainer";
 import DietSettingsForm from "../forms/DietSettingsForm";
+import DietSnackbarContainer, { DietSnackbarId } from "../layout/cattleDetails/Components/dietFeed/DietSnackbarContainer";
 
-export default function DietSettings({ navigation }: NativeStackScreenProps<AddCattleStackParamsList, 'DietSettings'>) {
+export default function DietSettings({ navigation }: NativeStackScreenProps<CreateCattleStackParamList, 'DietSettings'>) {
   const { cattle, diet } = useAppSelector(state => state.addCattle)
   const dispatch = useAppDispatch();
 

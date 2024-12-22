@@ -5,7 +5,7 @@ import SearchOffspring from '@/components/layout/cattleDetails/Components/geneal
 import EditCattleInfoView from '@/components/layout/cattleDetails/Components/info/EditCattleInfoView'
 import MedicationScheduleRoute from '@/components/layout/cattleDetails/Components/medicationSchedules/MedicationScheduleRoute'
 import { useAppDispatch } from '@/hooks/useRedux'
-import { CattleTopStack } from '@/navigation/stacks/CattleTopStack'
+import { CattleInfoTabsStack } from '@/navigation/CattleInfoTabsStack'
 import { reset } from '@/redux/slices/uiVisibilitySlice'
 import CreateCattleArchiveView from '@/views/cattleInfo/cattleArchive/CreateCattleArchiveView'
 import EditCattleArchiveView from '@/views/cattleInfo/cattleArchive/EditCattleArchiveView'
@@ -17,14 +17,14 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { View } from 'react-native'
 import { useTheme } from 'react-native-paper'
-import BottomTabsStack from './BottomTabsStack'
-import AddCattleStack from './stacks/AddCattleStack'
-import ResourcesStack from './stacks/ResourcesStack'
-import { RootStackParamList } from './types'
+import CreateCattleStack from './CreateCattleStack'
+import HomeTabsStack from './HomeTabsStack'
+import ResourcesStack from './ResourcesStack'
+import { MainStackParamList } from './types'
 
-const Stack = createStackNavigator<RootStackParamList>()
+const Stack = createStackNavigator<MainStackParamList>()
 
-export const Navigator = () => {
+export const MainStack = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
 
@@ -37,16 +37,16 @@ export const Navigator = () => {
         }}
       >
         <Stack.Screen
-          name='BottomTabsStack'
-          component={BottomTabsStack}
+          name='HomeTabsStack'
+          component={HomeTabsStack}
         />
         <Stack.Screen
-          name='AddCattleStack'
-          component={AddCattleStack}
+          name='CreateCattleStack'
+          component={CreateCattleStack}
         />
         <Stack.Screen
-          name='CattleDetailsLayout'
-          component={CattleTopStack}
+          name='CattleInfoTabsStack'
+          component={CattleInfoTabsStack}
         />
         <Stack.Screen
           name='ResourcesStack'
@@ -93,7 +93,7 @@ export const Navigator = () => {
             name='EditCattleArchiveView'
             component={EditCattleArchiveView}
           />
-          <Stack.Screen 
+          <Stack.Screen
             name='CreateCattleSaleView'
             component={CreateCattleSaleView}
           />

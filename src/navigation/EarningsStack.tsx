@@ -6,7 +6,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import React from 'react'
 import { Icon, Text, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { EarningsStackParamList } from '../types'
+import { EarningsStackParamList } from './types'
 
 const Stack = createMaterialTopTabNavigator<EarningsStackParamList>()
 

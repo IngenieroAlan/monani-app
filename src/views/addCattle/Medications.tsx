@@ -3,7 +3,7 @@ import DismissDialog from "@/components/DismissDialog"
 import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
 import MedicationSchedulesSnackbarContainer from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { AddCattleStackParamsList, RootStackParamList } from "@/navigation/types"
+import { CreateCattleStackParamList, MainStackParamList } from "@/navigation/types"
 import { reset } from "@/redux/slices/addCattleSlice"
 import { setCattleInfo } from "@/redux/slices/cattles"
 import { show } from "@/redux/slices/uiVisibilitySlice"
@@ -14,7 +14,7 @@ import { StyleSheet, View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
-export type MedicationSchedulesNavigationProps = NativeStackScreenProps<AddCattleStackParamsList & RootStackParamList, 'Medications'>;
+export type MedicationSchedulesNavigationProps = NativeStackScreenProps<CreateCattleStackParamList & MainStackParamList, 'Medications'>;
 const DISMISS_DIALOG_ID = 'createCattleDismissDialog'
 
 export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) => {
@@ -24,7 +24,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
   const goBack = () => {
     dispatch(reset())
-    navigation.navigate('BottomTabsStack', { screen: 'Ganado' })
+    navigation.navigate('HomeTabsStack', { screen: 'Ganado' })
   }
 
   const handleSave = () => {
@@ -45,7 +45,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
             medicationSchedules
           ).then(createdCattle => {
             dispatch(setCattleInfo(createdCattle))
-            navigation.navigate('CattleDetailsLayout', {
+            navigation.navigate('CattleInfoTabsStack', {
               screen: 'InfoRoute'
             })
           })
@@ -57,7 +57,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
     createCattleFunction();
     dispatch(reset());
-    navigation.navigate('BottomTabsStack', { screen: 'Ganado' });
+    navigation.navigate('HomeTabsStack', { screen: 'Ganado' });
   }
 
   return (<>

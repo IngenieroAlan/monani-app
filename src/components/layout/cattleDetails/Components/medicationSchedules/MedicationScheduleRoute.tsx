@@ -2,7 +2,7 @@ import CattleMedicationForm from "@/components/forms/CattleMedicationForm";
 import useMedications from '@/hooks/collections/useMedications';
 import useMedicationSchedules from "@/hooks/collections/useMedicationSchedule";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { RootStackParamList } from "@/navigation/types";
+import { MainStackParamList } from "@/navigation/types";
 import { show } from "@/redux/slices/uiVisibilitySlice";
 import ACMedicationSchema, { ACMedication } from "@/validationSchemas/ACMedicationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
 import { MedicationSchedulesSnackbarId } from "./MedicationSchedulesSnackbarContainer";
 
-export default function MedicationScheduleRoute({ navigation, route }: NativeStackScreenProps<RootStackParamList, 'MedicationScheduleRoute'>) {
+export default function MedicationScheduleRoute({ navigation, route }: NativeStackScreenProps<MainStackParamList, 'MedicationScheduleRoute'>) {
   const { cattleInfo } = useAppSelector(state => state.cattles)
   const { medicationSchedules } = useMedicationSchedules(cattleInfo!)
   const { medications } = useMedications()

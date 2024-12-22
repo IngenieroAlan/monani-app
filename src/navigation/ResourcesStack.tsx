@@ -4,7 +4,7 @@ import FeedsView from '@/views/feeds/FeedsView'
 import MedicationsView from '@/views/medications/MedicationsView'
 import ResourcesView from '@/views/resources/ResourcesView'
 import { createStackNavigator } from '@react-navigation/stack'
-import { ResourcesStackParamList } from '../types'
+import { ResourcesStackParamList } from './types'
 
 const Stack = createStackNavigator<ResourcesStackParamList>()
 

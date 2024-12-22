@@ -1,24 +1,24 @@
 import DismissDialog from "@/components/DismissDialog"
 import EditCattleInfoForm from "@/components/forms/EditCattleInfoForm"
-import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
 import { UpdateCattleData } from "@/database/models/Cattle"
 import useWeightReports from "@/hooks/collections/useWeightReports"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { RootStackParamList } from "@/navigation/types"
+import { MainStackParamList } from "@/navigation/types"
 import { reset as resetCattle } from "@/redux/slices/addCattleSlice"
 import { show } from "@/redux/slices/uiVisibilitySlice"
 import EditCattleInfoSchema from "@/validationSchemas/EditCattleInfoSchema"
+import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useCallback, useMemo } from "react"
 import { useForm } from "react-hook-form"
-import { Text, View } from "react-native"
+import { View } from "react-native"
 import { Appbar, Button, useTheme } from "react-native-paper"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
 const DISMISS_DIALOG_ID = 'editCattleDismissDialog'
 
-type Props = NativeStackScreenProps<RootStackParamList, 'EditCattleInfoView'>;
+type Props = NativeStackScreenProps<MainStackParamList, 'EditCattleInfoView'>;
 const EditCattlInfoView = ({ navigation }: Props) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()

@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/hooks/useRedux'
-import { RootStackParamList } from '@/navigation/types'
+import { MainStackParamList } from '@/navigation/types'
 import { setYear } from '@/redux/slices/collections/earningsQuerySlice'
 import useAppTheme from '@/theme'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -7,10 +7,10 @@ import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import { View } from 'react-native'
 import { Appbar, Divider, Portal } from 'react-native-paper'
-import ExpandableEarningsList, { ANNUAL_EARNINGS_LIST_ID } from './components/ExpandableEarningsList'
 import AnnualEarningsCard from './components/AnnualEarningsCard'
+import ExpandableEarningsList, { ANNUAL_EARNINGS_LIST_ID } from './components/ExpandableEarningsList'
 
-type ScreenProps = NativeStackScreenProps<RootStackParamList, 'EarningsAnnualSummaryView'>
+type ScreenProps = NativeStackScreenProps<MainStackParamList, 'EarningsAnnualSummaryView'>
 
 const EarningsAnnualSummaryView = ({ route, navigation }: ScreenProps) => {
   const theme = useAppTheme()

@@ -4,17 +4,17 @@ import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { setShowBottomStack } from '@/redux/slices/ui'
 import { HomeView } from '@/views/home/Home'
+import NotificationsView from '@/views/notifications/NotificationsView'
 import React from 'react'
 import { Icon, Portal } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
-import { EarningsStack } from './stacks/EarningsStack'
-import { MilkProductionStack } from './stacks/MilkProductionStack'
-import { BottomTabsParamList, MaterialBottomTabNavigator } from './types'
-import NotificationsView from '@/views/notifications/NotificationsView'
+import { EarningsStack } from './EarningsStack'
+import { MilkProductionStack } from './MilkProductionStack'
+import { HomeTabsParamList, MaterialBottomTabNavigator } from './types'
 
-const Tab: MaterialBottomTabNavigator<BottomTabsParamList> = createMaterialBottomTabNavigator<BottomTabsParamList>()
+const Tab: MaterialBottomTabNavigator<HomeTabsParamList> = createMaterialBottomTabNavigator<HomeTabsParamList>()
 
-const BottomTabsStack = () => {
+const HomeTabsStack = () => {
   const dispatch = useAppDispatch()
   const { showBottomStack } = useAppSelector((state) => state.ui)
 
@@ -95,4 +95,4 @@ const BottomTabsStack = () => {
   )
 }
 
-export default BottomTabsStack
+export default HomeTabsStack

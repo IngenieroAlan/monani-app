@@ -43,9 +43,7 @@ const HomeListItem = ({ cattle }: { cattle: Cattle }) => {
       right={() => <Right />}
       onPress={() => {
         dispatch(setCattleInfo(cattle))
-        navigator.navigate('CattleDetailsLayout', {
-          screen: 'InfoRoute'
-        })
+        navigator.navigate('CattleInfoTabsStack', { screen: 'InfoRoute' })
       }}
     />
   )

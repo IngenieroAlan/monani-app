@@ -76,7 +76,7 @@ const NotificationItem = ({ notification }: { notification: SentNotification }) 
 
   const onNotificationPress = useCallback(async () => {
     dispatch(setCattleInfo(await database.get<Cattle>(TableName.CATTLE).find(notification.cattle.id)))
-    navigation.navigate('CattleDetailsLayout', {
+    navigation.navigate('CattleInfoTabsStack', {
       screen: notification.type === 'medication' ? 'MedicationRoute' : 'InfoRoute'
     })
 

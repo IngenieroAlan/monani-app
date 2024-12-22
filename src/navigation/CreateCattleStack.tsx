@@ -8,11 +8,11 @@ import Medication from '@/views/addCattle/Medication'
 import { Medications } from '@/views/addCattle/Medications'
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import { AddCattleStackParamsList } from '../types'
+import { CreateCattleStackParamList } from './types'
 
-const Stack = createStackNavigator<AddCattleStackParamsList>()
+const Stack = createStackNavigator<CreateCattleStackParamList>()
 
-const AddCattleStack = () => {
+const CreateCattleStack = () => {
   const dispatch = useAppDispatch()
 
   return (
@@ -30,12 +30,10 @@ const AddCattleStack = () => {
         name='Diet'
         component={Diet}
       />
-
       <Stack.Screen
         name='Medications'
         component={Medications}
       />
-
       <Stack.Screen
         name='DietFeed'
         component={DietFeed}
@@ -43,7 +41,6 @@ const AddCattleStack = () => {
           presentation: 'modal'
         }}
       />
-
       <Stack.Screen
         name='DietSettings'
         options={{
@@ -51,7 +48,6 @@ const AddCattleStack = () => {
         }}
         component={DietSettings}
       />
-
       <Stack.Screen
         name='Medication'
         options={{
@@ -63,4 +59,4 @@ const AddCattleStack = () => {
   )
 }
 
-export default AddCattleStack
+export default CreateCattleStack

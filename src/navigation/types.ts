@@ -11,11 +11,12 @@ import {
 import { MaterialBottomTabNavigationEventMap, MaterialBottomTabNavigationOptions } from 'react-native-paper'
 import { MaterialBottomTabNavigatorProps } from 'react-native-paper/lib/typescript/react-navigation/navigators/createMaterialBottomTabNavigator'
 
-export type RootStackParamList = {
-  BottomTabsStack: NavigatorScreenParams<BottomTabsParamList>
-  SearchCattleView: undefined
-  AddCattleStack: undefined
+export type MainStackParamList = {
+  HomeTabsStack: NavigatorScreenParams<HomeTabsParamList>
+  CattleInfoTabsStack: NavigatorScreenParams<CattleInfoTabsStackParamList>
+  CreateCattleStack: undefined
   ResourcesStack: undefined
+  SearchCattleView: undefined
   EarningsAnnualSummaryView: {
     year: number
     totalEarnings: number
@@ -23,8 +24,6 @@ export type RootStackParamList = {
     totalMilkEarnings: number
     difference: number
   }
-
-  CattleDetailsLayout: NavigatorScreenParams<CattleInfoParamsList>
   EditCattleInfoView: undefined
   DietSettingsRoute: undefined
   DietFeedRoute?: {
@@ -43,7 +42,7 @@ export type RootStackParamList = {
   CreateMilkReportView: undefined
 }
 
-export type BottomTabsParamList = {
+export type HomeTabsParamList = {
   Ganado: undefined
   'Prod. lechera': undefined
   Ganancias: undefined
@@ -61,7 +60,7 @@ export type ResourcesStackParamList = {
   MedicationsView: undefined
 }
 
-export type AddCattleStackParamsList = {
+export type CreateCattleStackParamList = {
   CattleInfo: undefined
   Diet: undefined
   DietSettings: undefined
@@ -79,7 +78,7 @@ export type AddCattleStackParamsList = {
       }
     | undefined
 }
-export type CattleInfoParamsList = {
+export type CattleInfoTabsStackParamList = {
   InfoRoute: undefined
   DietRoute: undefined
   MedicationRoute: undefined
@@ -97,11 +96,8 @@ type LegacyTypedNavigator<
   Navigator extends React.ComponentType<any>
 > = {
   Navigator: React.ComponentType<
-    Omit<
-      React.ComponentProps<Navigator>,
-      keyof DefaultNavigatorOptions<any, any, any, any, any, any>
-    > &
-    DefaultNavigatorOptions<ParamList, any, State, ScreenOptions, EventMap, any>
+    Omit<React.ComponentProps<Navigator>, keyof DefaultNavigatorOptions<any, any, any, any, any, any>> &
+      DefaultNavigatorOptions<ParamList, any, State, ScreenOptions, EventMap, any>
   >
   Group: React.ComponentType<RouteGroupConfig<ParamList, ScreenOptions, any>>
   Screen: <RouteName extends keyof ParamList>(
@@ -127,6 +123,6 @@ export type MaterialBottomTabNavigator<T extends ParamListBase> = LegacyTypedNav
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
+    interface RootParamList extends MainStackParamList {}
   }
 }

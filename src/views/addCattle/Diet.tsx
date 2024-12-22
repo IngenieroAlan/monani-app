@@ -3,7 +3,7 @@ import DismissDialog from '@/components/DismissDialog'
 import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
 import DietSnackbarContainer from '@/components/layout/cattleDetails/Components/dietFeed/DietSnackbarContainer'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { AddCattleStackParamsList, BottomTabsParamList } from '@/navigation/types'
+import { CreateCattleStackParamList, HomeTabsParamList } from '@/navigation/types'
 import { reset } from '@/redux/slices/addCattleSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
@@ -13,7 +13,7 @@ import { StyleSheet, View } from 'react-native'
 import { Appbar, Button, List, useTheme } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-export type AddDietNavigationProps = NativeStackScreenProps<AddCattleStackParamsList & BottomTabsParamList, 'Diet'>
+export type AddDietNavigationProps = NativeStackScreenProps<CreateCattleStackParamList & HomeTabsParamList, 'Diet'>
 const DISMISS_DIALOG_ID = 'createCattleDismissDialog'
 
 export const Diet = ({ navigation }: AddDietNavigationProps) => {

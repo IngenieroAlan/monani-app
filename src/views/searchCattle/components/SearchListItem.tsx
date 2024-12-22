@@ -60,7 +60,7 @@ const SearchListItem = ({ cattle }: { cattle: Cattle }) => {
       left={() => <Left iconName={icon} />}
       onPress={() => {
         dispatch(setCattleInfo(cattle))
-        navigation.navigate('CattleDetailsLayout', { screen: 'InfoRoute' })
+        navigation.navigate('CattleInfoTabsStack', { screen: 'InfoRoute' })
       }}
     />
   )

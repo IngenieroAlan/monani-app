@@ -1,6 +1,6 @@
+import MSnackbar from '@/components/MSnackbar'
+import SnackbarContainer from '@/components/SnackbarContainer'
 import { memo } from 'react'
-import MSnackbar from '../../MSnackbar'
-import SnackbarContainer from '../../SnackbarContainer'
 
 export const FeedsSnackbarId = {
   FEED_IN_USE: 'feedInUseSnackbar',
@@ -12,7 +12,10 @@ export const FeedsSnackbarId = {
 
 const FeedsSnackbarContainer = () => {
   return (
-    <SnackbarContainer dismissSnackbarId={FeedsSnackbarId.FEED_DISMISS} bottom={72}>
+    <SnackbarContainer
+      dismissSnackbarId={FeedsSnackbarId.FEED_DISMISS}
+      bottom={72}
+    >
       <MSnackbar id={FeedsSnackbarId.FEED_IN_USE}>El alimento está actualmente en uso.</MSnackbar>
       <MSnackbar id={FeedsSnackbarId.STORED_FEED}>Alimento guardado con éxito.</MSnackbar>
       <MSnackbar id={FeedsSnackbarId.DELETED_FEED}>Alimento eliminado con éxito.</MSnackbar>

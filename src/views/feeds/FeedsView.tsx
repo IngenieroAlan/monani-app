@@ -1,17 +1,17 @@
-import CreateFeedDialog, { CREATE_FEED_DIALOG_ID } from '@/components/resources/feeds/CreateFeedDialog'
-import DeleteFeedDialog from '@/components/resources/feeds/DeleteFeedDialog'
-import EditFeedDialog from '@/components/resources/feeds/EditFeedDialog'
-import FeedsList from '@/components/resources/feeds/FeedsList'
-import FeedsSnackbarContainer from '@/components/resources/feeds/FeedsSnackbarContainer'
 import { FeedProvider } from '@/contexts'
 import { useAppDispatch } from '@/hooks/useRedux'
 import useScrollFab from '@/hooks/useScrollFab'
 import { show } from '@/redux/slices/uiVisibilitySlice'
+import CreateFeedDialog, { CREATE_FEED_DIALOG_ID } from '@/views/feeds/components/CreateFeedDialog'
+import DeleteFeedDialog from '@/views/feeds/components/DeleteFeedDialog'
+import EditFeedDialog from '@/views/feeds/components/EditFeedDialog'
+import FeedsList from '@/views/feeds/components/FeedsList'
+import FeedsSnackbarContainer from '@/views/feeds/components/FeedsSnackbarContainer'
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, View } from 'react-native'
 import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
 
-const Feeds = () => {
+const FeedsView = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Feeds
+export default FeedsView

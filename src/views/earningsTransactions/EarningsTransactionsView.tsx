@@ -28,7 +28,7 @@ const List = () => {
   )
 }
 
-const EarningsView = () => {
+const EarningsTransactionsView = () => {
   const theme = useTheme()
 
   return (
@@ -39,4 +39,4 @@ const EarningsView = () => {
   )
 }
 
-export default EarningsView
+export default EarningsTransactionsView

@@ -1,34 +1,13 @@
 import { ResourcesStackParamList } from '@/navigation/types'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
-import { useCallback } from 'react'
 import { View } from 'react-native'
-import { Appbar, Divider, Icon, List, ListItemProps, useTheme } from 'react-native-paper'
+import { Appbar, Divider, useTheme } from 'react-native-paper'
+import ResourcesListItem from './components/ResourcesListItem'
 
 type ScreenProps = NativeStackScreenProps<ResourcesStackParamList>
 
-const ListItem = (props: ListItemProps & { iconName: string }) => {
-  const left = useCallback(() => {
-    return (
-      <View style={{ paddingStart: 16 }}>
-        <Icon
-          size={24}
-          source={props.iconName}
-        />
-      </View>
-    )
-  }, [props.iconName])
-
-  return (
-    <List.Item
-      {...props}
-      left={left}
-      right={() => (<Icon size={24} source='menu-right' />)}
-    />
-  )
-}
-
-const Resources = ({ navigation }: ScreenProps) => {
+const ResourcesView = ({ navigation }: ScreenProps) => {
   const theme = useTheme()
 
   return (
@@ -38,13 +17,13 @@ const Resources = ({ navigation }: ScreenProps) => {
         <Appbar.BackAction onPress={navigation.goBack} />
         <Appbar.Content title='Recursos' />
       </Appbar.Header>
-      <ListItem
+      <ResourcesListItem
         title='Alimentos'
         iconName='silverware'
         onPress={() => navigation.navigate('FeedsView')}
       />
       <Divider horizontalInset />
-      <ListItem
+      <ResourcesListItem
         title='Medicamentos'
         iconName='needle'
         onPress={() => navigation.navigate('MedicationsView')}
@@ -53,4 +32,4 @@ const Resources = ({ navigation }: ScreenProps) => {
   )
 }
 
-export default Resources
+export default ResourcesView

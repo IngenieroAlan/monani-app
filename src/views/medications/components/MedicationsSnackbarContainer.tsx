@@ -1,6 +1,6 @@
+import MSnackbar from '@/components/MSnackbar'
+import SnackbarContainer from '@/components/SnackbarContainer'
 import { memo } from 'react'
-import MSnackbar from '../../MSnackbar'
-import SnackbarContainer from '../../SnackbarContainer'
 
 export const MedicationsSnackbarId = {
   MEDICATION_IN_USE: 'medicationInUseSnackbar',
@@ -12,7 +12,10 @@ export const MedicationsSnackbarId = {
 
 const MedicationsSnackbarContainer = () => {
   return (
-    <SnackbarContainer dismissSnackbarId={MedicationsSnackbarId.MEDICATION_DISMISS} bottom={72}>
+    <SnackbarContainer
+      dismissSnackbarId={MedicationsSnackbarId.MEDICATION_DISMISS}
+      bottom={72}
+    >
       <MSnackbar id={MedicationsSnackbarId.MEDICATION_IN_USE}>El medicamento está actualmente en uso.</MSnackbar>
       <MSnackbar id={MedicationsSnackbarId.STORED_MEDICATION}>Medicamento guardado con éxito.</MSnackbar>
       <MSnackbar id={MedicationsSnackbarId.DELETED_MEDICATION}>Medicamento eliminado con éxito.</MSnackbar>

@@ -1,19 +1,19 @@
-import CreateMedicationDialog, {
-  CREATE_MEDICATION_DIALOG_ID
-} from '@/components/resources/medications/CreateMedicationDialog'
-import DeleteMedicationDialog from '@/components/resources/medications/DeleteMedicationDialog'
-import EditMedicationDialog from '@/components/resources/medications/EditMedicationDialog'
-import MedicationsList from '@/components/resources/medications/MedicationsList'
-import MedicationsSnackbarContainer from '@/components/resources/medications/MedicationsSnackbarContainer'
 import { MedicationProvider } from '@/contexts'
 import { useAppDispatch } from '@/hooks/useRedux'
 import useScrollFab from '@/hooks/useScrollFab'
 import { show } from '@/redux/slices/uiVisibilitySlice'
+import CreateMedicationDialog, {
+  CREATE_MEDICATION_DIALOG_ID
+} from '@/views/medications/components/CreateMedicationDialog'
+import DeleteMedicationDialog from '@/views/medications/components/DeleteMedicationDialog'
+import EditMedicationDialog from '@/views/medications/components/EditMedicationDialog'
+import MedicationsList from '@/views/medications/components/MedicationsList'
+import MedicationsSnackbarContainer from '@/views/medications/components/MedicationsSnackbarContainer'
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, View } from 'react-native'
 import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
 
-const Medications = () => {
+const MedicationsView = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
@@ -52,4 +52,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Medications
+export default MedicationsView

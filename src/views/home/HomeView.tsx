@@ -39,7 +39,7 @@ const List = () => {
         extended={isFabExtended}
         icon='plus'
         label='Añadir'
-        onPress={() => navigation.navigate('AddCattleStack')}
+        onPress={() => navigation.navigate('CreateCattleStack')}
       />
     </>
   )

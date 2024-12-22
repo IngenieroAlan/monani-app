@@ -1,12 +1,12 @@
 import database, { initializeDatabase, resetDatabase } from '@/database'
 import seedDatabase from '@/database/seeders/seeder'
-import { Navigator } from '@/navigation/Navigator'
+import { MainStack } from '@/navigation/MainStack'
 import onBackgroundEventHandler from '@/notifee/eventHandlers/onBackgroundEventHandler'
 import { CattleNotificationEventType } from '@/notifee/types'
 import useOnForegroundEvent from '@/notifee/useOnForegroundEvent'
 import store from '@/redux/store/store'
 import useAppTheme, { CustomDarkTheme, CustomLightTheme } from '@/theme'
-import notifee, { AndroidImportance, AndroidVisibility, AuthorizationStatus } from '@notifee/react-native'
+import notifee, { AndroidImportance, AuthorizationStatus } from '@notifee/react-native'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
@@ -34,7 +34,6 @@ notifee.createChannel({
   id: 'monani',
   name: 'Monani',
   importance: AndroidImportance.HIGH,
-  visibility: AndroidVisibility.PUBLIC
 })
 notifee.setNotificationCategories([
   {
@@ -59,7 +58,7 @@ export default function App() {
         >
           <PaperProvider theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
             <AppState>
-              <Navigator />
+              <MainStack />
             </AppState>
           </PaperProvider>
         </NavigationContainer>

@@ -1,7 +1,3 @@
-import AnnualEarningsCard from '@/components/earnings/annualEarnings/AnnualEarningsCard'
-import ExpandableEarningsList, {
-  ANNUAL_EARNINGS_LIST_ID
-} from '@/components/earnings/annualEarnings/ExpandableEarningsList'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { RootStackParamList } from '@/navigation/types'
 import { setYear } from '@/redux/slices/collections/earningsQuerySlice'
@@ -11,10 +7,12 @@ import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import { View } from 'react-native'
 import { Appbar, Divider, Portal } from 'react-native-paper'
+import ExpandableEarningsList, { ANNUAL_EARNINGS_LIST_ID } from './components/ExpandableEarningsList'
+import AnnualEarningsCard from './components/AnnualEarningsCard'
 
-type ScreenProps = NativeStackScreenProps<RootStackParamList, 'AnnualEarningsView'>
+type ScreenProps = NativeStackScreenProps<RootStackParamList, 'EarningsAnnualSummaryView'>
 
-const AnnualEarningsView = ({ route, navigation }: ScreenProps) => {
+const EarningsAnnualSummaryView = ({ route, navigation }: ScreenProps) => {
   const theme = useAppTheme()
   const dispatch = useAppDispatch()
   const { year, totalEarnings, totalCattleEarnings, totalMilkEarnings, difference } = route.params
@@ -48,4 +46,4 @@ const AnnualEarningsView = ({ route, navigation }: ScreenProps) => {
   )
 }
 
-export default AnnualEarningsView
+export default EarningsAnnualSummaryView

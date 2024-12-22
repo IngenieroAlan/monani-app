@@ -1,17 +1,22 @@
+import NumericDifference from '@/components/NumericDifference'
 import useAppTheme from '@/theme'
 import { formatNumberWithSpaces } from '@/utils/helpers'
 import { StyleSheet, View } from 'react-native'
 import { Card, Divider, Text } from 'react-native-paper'
-import EarningsDifference from '../EarningsDifference'
 
-type Props = {
+type AnnualEarningsCardProps = {
   totalEarnings: number
   totalCattleEarnings: number
   totalMilkEarnings: number
   difference: number
 }
 
-const AnnualEarningsCard = ({ totalEarnings, totalCattleEarnings, totalMilkEarnings, difference }: Props) => {
+const AnnualEarningsCard = ({
+  totalEarnings,
+  totalCattleEarnings,
+  totalMilkEarnings,
+  difference
+}: AnnualEarningsCardProps) => {
   const theme = useAppTheme()
 
   return (
@@ -25,7 +30,7 @@ const AnnualEarningsCard = ({ totalEarnings, totalCattleEarnings, totalMilkEarni
               style={{ color: difference < 0 ? theme.colors.error : theme.colors.success }}
               variant='labelSmall'
             >
-              <EarningsDifference difference={difference} /> comparado al año pasado.
+              <NumericDifference difference={difference} /> comparado al año pasado.
             </Text>
           )}
         </View>

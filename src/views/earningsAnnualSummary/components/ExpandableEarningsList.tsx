@@ -1,11 +1,11 @@
+import EarningsList from '@/components/earnings/EarningsList/EarningsList'
+import EarningsListFilters from '@/components/earnings/EarningsListFilters/EarningsListFilters'
 import ExpandableBottomSheet from '@/components/ExpandableBottomSheet'
 import useEarnings from '@/hooks/collections/useEarnings'
 import { useAppSelector } from '@/hooks/useRedux'
 import { RootState } from '@/redux/store/store'
 import { BottomSheetView } from '@gorhom/bottom-sheet'
 import { useState } from 'react'
-import EarningsList from '../EarningsList/EarningsList'
-import EarningsListFilters from '../EarningsListFilters/EarningsListFilters'
 
 export const ANNUAL_EARNINGS_LIST_ID = 'annualEarningsList'
 

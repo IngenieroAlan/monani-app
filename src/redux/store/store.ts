@@ -2,7 +2,6 @@ import { configureStore } from '@reduxjs/toolkit'
 import {
   addCattleReducer,
   bottomSheetReducer,
-  cattleQueryReducer,
   cattlesReducer,
   earningsQueryReducer,
   uiReducer,
@@ -13,7 +12,6 @@ const store = configureStore({
   reducer: {
     ui: uiReducer,
     bottomSheet: bottomSheetReducer,
-    cattleQuery: cattleQueryReducer,
     uiVisibility: uiVisibilityReducer,
     cattles: cattlesReducer,
     addCattle: addCattleReducer,

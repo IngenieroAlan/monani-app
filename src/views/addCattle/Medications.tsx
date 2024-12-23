@@ -24,7 +24,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
   const goBack = () => {
     dispatch(reset())
-    navigation.navigate('HomeTabsStack', { screen: 'Ganado' })
+    navigation.navigate('HomeTabsStack', { screen: 'Cattle' })
   }
 
   const handleSave = () => {
@@ -57,7 +57,7 @@ export const Medications = ({ navigation }: MedicationSchedulesNavigationProps) 
 
     createCattleFunction();
     dispatch(reset());
-    navigation.navigate('HomeTabsStack', { screen: 'Ganado' });
+    navigation.navigate('HomeTabsStack', { screen: 'Cattle' });
   }
 
   return (<>

@@ -12,7 +12,7 @@ import { MaterialBottomTabNavigationEventMap, MaterialBottomTabNavigationOptions
 import { MaterialBottomTabNavigatorProps } from 'react-native-paper/lib/typescript/react-navigation/navigators/createMaterialBottomTabNavigator'
 
 export type MainStackParamList = {
-  HomeTabsStack: NavigatorScreenParams<HomeTabsParamList>
+  HomeTabsStack: NavigatorScreenParams<HomeTabsStackParamList>
   CattleInfoTabsStack: NavigatorScreenParams<CattleInfoTabsStackParamList>
   CreateCattleStack: undefined
   ResourcesStack: undefined
@@ -42,11 +42,11 @@ export type MainStackParamList = {
   CreateMilkReportView: undefined
 }
 
-export type HomeTabsParamList = {
-  Ganado: undefined
-  'Prod. lechera': undefined
-  Ganancias: undefined
-  Notificaciones: undefined
+export type HomeTabsStackParamList = {
+  Cattle: undefined
+  MilkProduction: undefined
+  Earnings: undefined
+  Notifications: undefined
 }
 
 export type EarningsStackParamList = {
@@ -85,7 +85,6 @@ export type CattleInfoTabsStackParamList = {
   WeightRoute: undefined
   MilkyRoute: undefined
   GenealogyRoute: undefined
-  FirstRoute: undefined
 }
 
 type LegacyTypedNavigator<
@@ -110,15 +109,7 @@ export type MaterialBottomTabNavigator<T extends ParamListBase> = LegacyTypedNav
   TabNavigationState<ParamListBase>,
   MaterialBottomTabNavigationOptions,
   MaterialBottomTabNavigationEventMap,
-  ({
-    id,
-    initialRouteName,
-    backBehavior,
-    children,
-    screenListeners,
-    screenOptions,
-    ...rest
-  }: MaterialBottomTabNavigatorProps) => React.JSX.Element
+  (_: MaterialBottomTabNavigatorProps) => React.JSX.Element
 >
 
 declare global {

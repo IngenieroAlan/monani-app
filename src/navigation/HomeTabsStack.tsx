@@ -10,9 +10,9 @@ import { Icon, Portal } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { EarningsStack } from './EarningsStack'
 import { MilkProductionStack } from './MilkProductionStack'
-import { HomeTabsParamList, MaterialBottomTabNavigator } from './types'
+import { HomeTabsStackParamList, MaterialBottomTabNavigator } from './types'
 
-const Tab: MaterialBottomTabNavigator<HomeTabsParamList> = createMaterialBottomTabNavigator<HomeTabsParamList>()
+const Tab: MaterialBottomTabNavigator<HomeTabsStackParamList> = createMaterialBottomTabNavigator()
 
 const HomeTabsStack = () => {
   const dispatch = useAppDispatch()
@@ -30,9 +30,10 @@ const HomeTabsStack = () => {
           }}
         >
           <Tab.Screen
-            name='Ganado'
+            name='Cattle'
             component={HomeView}
             options={{
+              tabBarLabel: 'Ganado',
               tabBarIcon: ({ color }) => (
                 <Icon
                   source='cow'
@@ -43,9 +44,10 @@ const HomeTabsStack = () => {
             }}
           />
           <Tab.Screen
-            name='Prod. lechera'
+            name='MilkProduction'
             component={MilkProductionStack}
             options={{
+              tabBarLabel: 'Prod. lechera',
               tabBarIcon: ({ color }) => (
                 <Icon
                   source='beer-outline'
@@ -56,9 +58,10 @@ const HomeTabsStack = () => {
             }}
           />
           <Tab.Screen
-            name='Ganancias'
+            name='Earnings'
             component={EarningsStack}
             options={{
+              tabBarLabel: 'Ganancias',
               tabBarIcon: ({ color }) => (
                 <Icon
                   source='cash-multiple'
@@ -69,13 +72,14 @@ const HomeTabsStack = () => {
             }}
           />
           <Tab.Screen
-            name='Notificaciones'
+            name='Notifications'
             component={NotificationsView}
             options={() => {
               // To prevent re rendering the whole bottom tab.
               const { notifications } = useSentNotifications({ isMarkedAsRead: false })
 
               return {
+                tabBarLabel: 'Notificaciones',
                 tabBarBadge: notifications.length || undefined,
                 tabBarIcon: ({ color }) => (
                   <Icon

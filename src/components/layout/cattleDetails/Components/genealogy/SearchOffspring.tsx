@@ -7,12 +7,12 @@ import { GenealogySnackbarId } from './GenealogySnackbarContainer'
 import SearchGenealogyView from './SearchGenealogyView'
 
 const SearchOffspring = () => {
-  const navigation = useNavigation()
-  const [selectedOffspring, setSelectedOffspring] = useState<Cattle | undefined>(undefined)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const { cattleInfo } = useAppSelector(state => state.cattles);
-  const [offsprings, setOffsprings] = useState<Cattle[]>([])
   const dispatch = useAppDispatch()
+  const navigation = useNavigation()
+  const { cattleInfo } = useAppSelector((state) => state.cattles)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [offsprings, setOffsprings] = useState<Cattle[]>([])
+  const [selectedOffspring, setSelectedOffspring] = useState<Cattle | undefined>(undefined)
 
   useEffect(() => {
     const fetch = async () => {

@@ -40,7 +40,10 @@ export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSele
           leadingIcon='pencil-outline'
           onPress={() => {
             setMenuVisible(false);
-            navigation.navigate('SearchMotherView', { edit: true });
+            navigation.navigate('CattleStack', {
+              screen: 'SearchMotherView',
+              params: { edit: true }
+            })
           }}
         />
         <Menu.Item
@@ -102,7 +105,7 @@ export const SetMother = ({ cattle, onSelectedCattle }: { cattle: Cattle, onSele
       title='Asignar madre'
       right={() => <List.Icon icon='plus' />}
       style={{ paddingHorizontal: 16, paddingVertical: 8, gap: 16 }}
-      onPress={() => navigation.navigate('SearchMotherView')}
+      onPress={() => navigation.navigate('CattleStack', { screen: 'SearchMotherView' })}
     />
     <Divider />
   </>)

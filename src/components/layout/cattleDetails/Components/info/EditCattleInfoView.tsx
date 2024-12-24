@@ -3,13 +3,12 @@ import EditCattleInfoForm from "@/components/forms/EditCattleInfoForm"
 import { UpdateCattleData } from "@/database/models/Cattle"
 import useWeightReports from "@/hooks/collections/useWeightReports"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
-import { MainStackParamList } from "@/navigation/types"
 import { reset as resetCattle } from "@/redux/slices/addCattleSlice"
 import { show } from "@/redux/slices/uiVisibilitySlice"
 import EditCattleInfoSchema from "@/validationSchemas/EditCattleInfoSchema"
 import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
 import { zodResolver } from "@hookform/resolvers/zod"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { useNavigation } from '@react-navigation/native'
 import { useCallback, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { View } from "react-native"
@@ -18,9 +17,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 
 const DISMISS_DIALOG_ID = 'editCattleDismissDialog'
 
-type Props = NativeStackScreenProps<MainStackParamList, 'EditCattleInfoView'>;
-const EditCattlInfoView = ({ navigation }: Props) => {
+const EditCattleInfoView = () => {
   const theme = useTheme()
+  const navigation = useNavigation()
   const dispatch = useAppDispatch()
   const { cattleInfo } = useAppSelector(state => state.cattles)
   const { weightReports } = useWeightReports(cattleInfo!)
@@ -117,4 +116,4 @@ const EditCattlInfoView = ({ navigation }: Props) => {
   </>)
 }
 
-export default EditCattlInfoView
+export default EditCattleInfoView

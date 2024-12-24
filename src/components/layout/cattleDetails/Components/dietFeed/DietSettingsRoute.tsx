@@ -1,20 +1,20 @@
+import DietSettingsForm from '@/components/forms/DietSettingsForm';
 import useDiet from "@/hooks/collections/useDiet";
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { MainStackParamList } from "@/navigation/types";
 import { show } from "@/redux/slices/uiVisibilitySlice";
 import ACDietSchema, { ACDietFields } from "@/validationSchemas/ACDietSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
-import DietSettingsForm from "../../../../forms/DietSettingsForm";
 import DietSnackbarContainer, { DietSnackbarId } from "./DietSnackbarContainer";
 
-export default function DietSettingsRoute({ navigation }: NativeStackScreenProps<MainStackParamList, 'DietSettingsRoute'>) {
+export function DietSettingsRoute() {
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation()
   const { cattleInfo } = useAppSelector(state => state.cattles)
   const { diet } = useDiet(cattleInfo!)
-  const dispatch = useAppDispatch();
 
   const {
     control,

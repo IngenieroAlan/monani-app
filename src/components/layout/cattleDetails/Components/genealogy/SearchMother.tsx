@@ -1,15 +1,15 @@
 import Cattle from '@/database/models/Cattle'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { MainStackParamList } from '@/navigation/types'
+import { CattleStackParamList } from '@/navigation/types'
 import { show } from '@/redux/slices/uiVisibilitySlice'
-import { useNavigation } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useState } from 'react'
 import { GenealogySnackbarId } from './GenealogySnackbarContainer'
 import SearchGenealogyView from './SearchGenealogyView'
 
-const SearchMother = ({ route }: NativeStackScreenProps<MainStackParamList, 'SearchMotherView'>) => {
-  const navigation = useNavigation()
+type ScreenProps = NativeStackScreenProps<CattleStackParamList, 'SearchMotherView'>
+
+const SearchMother = ({ navigation, route }: ScreenProps) => {
   const [selectedMother, setSelectedMother] = useState<Cattle | undefined>(undefined)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const edit = route.params?.edit

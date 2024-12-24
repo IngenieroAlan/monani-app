@@ -47,28 +47,28 @@ const CattleBottomAppBar = observeCattleSale(({ cattle, sale }: { cattle: Cattle
 
   const navigateTo = () => {
     if (cattleArchive) {
-      navigation.navigate('EditCattleArchiveView')
+      navigation.navigate('CattleStack', { screen: 'EditCattleArchiveView' })
       return
     }
 
     switch (screen) {
       case 'InfoRoute':
-        navigation.navigate('EditCattleInfoView')
+        navigation.navigate('CattleStack', { screen: 'EditCattleInfoView' })
         break
       case 'DietRoute':
-        navigation.navigate('DietFeedRoute')
+        navigation.navigate('CattleStack', { screen: 'CreateDietFeedView' })
         break
       case 'MedicationRoute':
-        navigation.navigate('MedicationScheduleRoute')
+        navigation.navigate('CattleStack', { screen: 'MedicationScheduleRoute' })
         break
       case 'WeightRoute':
         console.log('Navigate to add')
         break
       case 'MilkyRoute':
-        navigation.navigate('CreateMilkReportView')
+        navigation.navigate('CattleStack', { screen: 'CreateMilkReportView' })
         break
       case 'GenealogyRoute':
-        navigation.navigate('SearchOffspringView')
+        navigation.navigate('CattleStack', { screen: 'SearchOffspringView' })
         break
       default:
         console.log('Navigate to')
@@ -91,18 +91,18 @@ const CattleBottomAppBar = observeCattleSale(({ cattle, sale }: { cattle: Cattle
         <>
           <Appbar.Action
             icon='archive-arrow-down-outline'
-            onPress={() => navigation.navigate('CreateCattleArchiveView')}
+            onPress={() => navigation.navigate('CattleStack', { screen: 'CreateCattleArchiveView' })}
           />
           <Appbar.Action
             icon='tag-outline'
-            onPress={() => navigation.navigate('CreateCattleSaleView')}
+            onPress={() => navigation.navigate('CattleStack', { screen: 'CreateCattleSaleView' })}
           />
 
           <Animated.View style={{ opacity: fadeAnim }}>
             <Appbar.Action
               icon='cog-outline'
               onPress={() => {
-                screen === 'DietRoute' && navigation.navigate('DietSettingsRoute')
+                screen === 'DietRoute' && navigation.navigate('CattleStack', { screen: 'EditDietProportionsView' })
               }}
             />
           </Animated.View>

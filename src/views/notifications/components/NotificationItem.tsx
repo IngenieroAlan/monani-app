@@ -76,8 +76,9 @@ const NotificationItem = ({ notification }: { notification: SentNotification }) 
 
   const onNotificationPress = useCallback(async () => {
     dispatch(setCattleInfo(await database.get<Cattle>(TableName.CATTLE).find(notification.cattle.id)))
-    navigation.navigate('CattleInfoTabsStack', {
-      screen: notification.type === 'medication' ? 'MedicationRoute' : 'InfoRoute'
+    navigation.navigate('CattleStack', {
+      screen: 'CattleInfoTabsStack',
+      params: { screen: notification.type === 'medication' ? 'MedicationRoute' : 'InfoRoute' }
     })
 
     await notifee.cancelDisplayedNotification(notification.notifeeId)

@@ -12,7 +12,9 @@ import { useCallback, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { Appbar, Button, IconButton } from "react-native-paper";
 
-export default function Medication({ navigation, route }: NativeStackScreenProps<CreateCattleStackParamList, 'Medication'>) {
+type ScreenProps = NativeStackScreenProps<CreateCattleStackParamList, 'Medication'>
+
+export default function Medication({ navigation, route }: ScreenProps) {
   const { medicationSchedules, cattle } = useAppSelector(state => state.addCattle)
   const { medications } = useMedications()
   const dispatch = useAppDispatch();

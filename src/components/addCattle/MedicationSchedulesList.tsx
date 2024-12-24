@@ -1,8 +1,8 @@
 import { useAppDispatch } from '@/hooks/useRedux'
-import { ACMedicationSchedule, } from '@/interfaces/cattleInterfaces'
+import { ACMedicationSchedule } from '@/interfaces/cattleInterfaces'
 import { deleteMedicationSchedule } from '@/redux/slices/addCattleSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
-import { MedicationSchedulesNavigationProps } from '@/views/addCattle/Medications'
+import { useNavigation } from '@react-navigation/native'
 import { memo, useState } from 'react'
 import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
@@ -10,13 +10,10 @@ import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { MedicationSchedulesSnackbarId } from '../layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer'
 
-type navigationProps = MedicationSchedulesNavigationProps['navigation']
-
-const ListItemMenu = (
-  { medicationScheduleId, navigation }: { medicationScheduleId: string, navigation: navigationProps }
-) => {
+const ListItemMenu = ({ medicationScheduleId }: { medicationScheduleId: string }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
+  const navigation = useNavigation()
   const insets = useSafeAreaInsets()
   const [menuVisible, setMenuVisible] = useState(false)
 
@@ -37,11 +34,14 @@ const ListItemMenu = (
         title='Editar'
         leadingIcon='pencil-outline'
         onPress={() => {
-          setMenuVisible(false);
-          navigation.navigate('Medication', {
-            medicationScheduleId: medicationScheduleId,
-            modify: true
-          });
+          setMenuVisible(false)
+          navigation.navigate('CreateCattleStack', {
+            screen: 'Medication',
+            params: {
+              medicationScheduleId,
+              modify: true
+            }
+          })
         }}
       />
       <Menu.Item
@@ -49,7 +49,7 @@ const ListItemMenu = (
         title='Eliminar'
         leadingIcon='minus'
         onPress={() => {
-          setMenuVisible(false);
+          setMenuVisible(false)
           dispatch(show(MedicationSchedulesSnackbarId.REMOVED_MEDICATION_SCHEDULE))
           dispatch(deleteMedicationSchedule({ medicationScheduleId: medicationScheduleId }))
         }}
@@ -58,36 +58,22 @@ const ListItemMenu = (
   )
 }
 
-const ListItem = (
-  { medicationSchedule: medicationSchedule, navigation }: { medicationSchedule: ACMedicationSchedule, navigation: navigationProps }
-) => {
+const ListItem = ({ medicationSchedule: medicationSchedule }: { medicationSchedule: ACMedicationSchedule }) => {
   return (
     <List.Item
       style={{ paddingVertical: 2, paddingRight: 8 }}
       title={medicationSchedule.medication.name}
       description={medicationSchedule.medication.medicationType}
-      right={() => (
-        <ListItemMenu
-          medicationScheduleId={medicationSchedule.medicationScheduleId}
-          navigation={navigation}
-        />
-      )}
+      right={() => <ListItemMenu medicationScheduleId={medicationSchedule.medicationScheduleId} />}
     />
   )
 }
 
-const MedicationSchedulesList = (
-  { medicationSchedules, navigation }: { medicationSchedules: ACMedicationSchedule[], navigation: navigationProps }
-) => {
+const MedicationSchedulesList = ({ medicationSchedules }: { medicationSchedules: ACMedicationSchedule[] }) => {
   return (
     <FlatList
       data={medicationSchedules}
-      renderItem={({ item }) => (
-        <ListItem
-          medicationSchedule={item}
-          navigation={navigation}
-        />
-      )}
+      renderItem={({ item }) => <ListItem medicationSchedule={item} />}
       keyExtractor={(item) => item.medicationScheduleId}
       ListFooterComponent={() => <View style={{ height: 88 }} />}
     />

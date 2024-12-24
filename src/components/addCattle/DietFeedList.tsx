@@ -1,11 +1,9 @@
 import { FeedProportion } from '@/database/models/DietFeed'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { ACDietFeed } from '@/interfaces/cattleInterfaces'
-import { CreateCattleStackParamList, HomeTabsStackParamList } from '@/navigation/types'
 import { deleteDietFeed } from '@/redux/slices/addCattleSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { useNavigation } from '@react-navigation/native'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { memo, useState } from 'react'
 import { View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
@@ -14,25 +12,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DietSnackbarId } from '../layout/cattleDetails/Components/dietFeed/DietSnackbarContainer'
 
 type DietFeedItem = {
-  dietFeedId: string;
-  dietId: string;
-  feedId: string;
-  feedAmount: number;
-  percentage?: number;
-  feedProportion: FeedProportion;
+  dietFeedId: string
+  dietId: string
+  feedId: string
+  feedAmount: number
+  percentage?: number
+  feedProportion: FeedProportion
 }
 
-type ScreenProps = NativeStackScreenProps<CreateCattleStackParamList & HomeTabsStackParamList>['navigation']
-
-
-const ListItemMenu = (
-  { dietFeedId }: { dietFeedId: string }
-) => {
+const ListItemMenu = ({ dietFeedId }: { dietFeedId: string }) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const insets = useSafeAreaInsets()
   const [menuVisible, setMenuVisible] = useState(false)
-  const navigation = useNavigation<ScreenProps>()
+  const navigation = useNavigation()
 
   return (
     <Menu
@@ -51,8 +44,14 @@ const ListItemMenu = (
         title='Editar'
         leadingIcon='pencil-outline'
         onPress={() => {
-          navigation.navigate('DietFeed', { dietFeedId, modify: true })
-          setMenuVisible(false);
+          navigation.navigate('CreateCattleStack', {
+            screen: 'DietFeed',
+            params: {
+              dietFeedId,
+              modify: true
+            }
+          })
+          setMenuVisible(false)
         }}
       />
       <Menu.Item
@@ -62,7 +61,7 @@ const ListItemMenu = (
         onPress={() => {
           dispatch(deleteDietFeed({ dietFeedId }))
           dispatch(show(DietSnackbarId.REMOVED_DIETFEED))
-          setMenuVisible(false);
+          setMenuVisible(false)
         }}
       />
     </Menu>
@@ -71,12 +70,12 @@ const ListItemMenu = (
 
 type DietFeedProps = {
   props: {
-    id: string;
-    feedAmount: number;
-    percentage?: number;
-    feedProportion: FeedProportion;
-  },
-  feedName: string,
+    id: string
+    feedAmount: number
+    percentage?: number
+    feedProportion: FeedProportion
+  }
+  feedName: string
 }
 
 const DietFeedItem = memo(({ props, feedName }: DietFeedProps) => {
@@ -85,9 +84,7 @@ const DietFeedItem = memo(({ props, feedName }: DietFeedProps) => {
       style={{ paddingVertical: 2, paddingRight: 8 }}
       title={feedName}
       description={props.feedProportion === 'Por porcentaje' ? `${props.percentage}%` : `${props.feedAmount} kg`}
-      right={() => (
-        <ListItemMenu dietFeedId={props.id} />
-      )}
+      right={() => <ListItemMenu dietFeedId={props.id} />}
     />
   )
 })
@@ -98,7 +95,12 @@ const DietFeedList = ({ dietFeeds }: { dietFeeds: ACDietFeed[] }) => {
       data={dietFeeds}
       renderItem={({ item }) => (
         <DietFeedItem
-          props={{ feedAmount: item.feedAmount, feedProportion: item.feedProportion, id: item.dietFeedId, percentage: item.percentage }}
+          props={{
+            feedAmount: item.feedAmount,
+            feedProportion: item.feedProportion,
+            id: item.dietFeedId,
+            percentage: item.percentage
+          }}
           feedName={item.feed.name}
         />
       )}

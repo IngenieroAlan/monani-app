@@ -33,7 +33,7 @@ const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle 
 }))
 
 const HomeListItem = ({ cattle }: { cattle: Cattle }) => {
-  const navigator = useNavigation()
+  const navigation = useNavigation()
   const dispatch = useAppDispatch()
 
   return (
@@ -43,7 +43,10 @@ const HomeListItem = ({ cattle }: { cattle: Cattle }) => {
       right={() => <Right />}
       onPress={() => {
         dispatch(setCattleInfo(cattle))
-        navigator.navigate('CattleInfoTabsStack', { screen: 'InfoRoute' })
+        navigation.navigate('CattleStack', {
+          screen: 'CattleInfoTabsStack',
+          params: { screen: 'InfoRoute' }
+        })
       }}
     />
   )

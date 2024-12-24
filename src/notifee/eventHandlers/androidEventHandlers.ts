@@ -17,8 +17,9 @@ export const androidPressHandler = async (notification: Notifeecation, navigatio
   const data = notification.data as NotificationData
 
   dispatch(setCattleInfo(await database.get<Cattle>(TableName.CATTLE).find(data.cattleId)))
-  navigation.navigate('CattleInfoTabsStack', {
-    screen: data.type === 'medication' ? 'MedicationRoute' : 'InfoRoute'
+  navigation.navigate('CattleStack', {
+    screen: 'CattleInfoTabsStack',
+    params: { screen: data.type === 'medication' ? 'MedicationRoute' : 'InfoRoute' }
   })
 
   const appNotification = await database
@@ -37,5 +38,4 @@ export const androidMarkAsReadHandler = async (notification: Notifeecation) => {
   if (appNotification.length === 0) return
 
   await appNotification[0].markAsRead()
-
 }

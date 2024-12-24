@@ -25,8 +25,9 @@ export const iosPressHandler = async (notification: Notifeecation, navigation: N
   const data = notification.data as NotificationData
 
   dispatch(setCattleInfo(await database.get<Cattle>(TableName.CATTLE).find(data.cattleId)))
-  navigation.navigate('CattleInfoTabsStack', {
-    screen: data.type === 'medication' ? 'MedicationRoute' : 'InfoRoute'
+  navigation.navigate('CattleStack', {
+    screen: 'CattleInfoTabsStack',
+    params: { screen: data.type === 'medication' ? 'MedicationRoute' : 'InfoRoute' }
   })
 
   await iosMarkAsReadHandler(notification)

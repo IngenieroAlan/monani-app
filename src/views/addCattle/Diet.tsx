@@ -13,10 +13,10 @@ import { StyleSheet, View } from 'react-native'
 import { Appbar, Button, List, useTheme } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-export type AddDietNavigationProps = NativeStackScreenProps<CreateCattleStackParamList & HomeTabsStackParamList, 'Diet'>
+type ScreenProps = NativeStackScreenProps<CreateCattleStackParamList & HomeTabsStackParamList, 'Diet'>
 const DISMISS_DIALOG_ID = 'createCattleDismissDialog'
 
-export const Diet = ({ navigation }: AddDietNavigationProps) => {
+export const Diet = ({ navigation }: ScreenProps) => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { dietFeeds, diet } = useAppSelector((state: RootState) => state.addCattle)

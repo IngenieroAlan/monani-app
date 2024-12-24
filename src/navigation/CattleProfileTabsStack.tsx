@@ -6,7 +6,7 @@ import MilkProductionRoute from '@/components/layout/cattleDetails/routes/MilkPr
 import { WeightRoute } from '@/components/layout/cattleDetails/routes/Weight'
 import Cattle from '@/database/models/Cattle'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { CattleInfoTabsStackParamList } from '@/navigation/types'
+import { CattleProfileTabsStackParamList } from '@/navigation/types'
 import { unnestOneCattle } from '@/redux/slices/cattles'
 import { setScreen } from '@/redux/slices/ui'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
@@ -28,7 +28,7 @@ const StackAppBar = ({ cattle }: { cattle: Cattle }) => {
     if (nestedCattles.length > 0) {
       dispatch(unnestOneCattle())
       navigation.navigate('CattleStack', {
-        screen: 'CattleInfoTabsStack',
+        screen: 'CattleProfileTabsStack',
         params: { screen: 'InfoRoute' }
       })
     } else {
@@ -44,9 +44,9 @@ const StackAppBar = ({ cattle }: { cattle: Cattle }) => {
   )
 }
 
-const Stack = createMaterialTopTabNavigator<CattleInfoTabsStackParamList>()
+const Stack = createMaterialTopTabNavigator<CattleProfileTabsStackParamList>()
 
-export const CattleInfoTabsStack = () => {
+export const CattleProfileTabsStack = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const cattleInfo = useAppSelector((state) => state.cattles.cattleInfo)!

@@ -46,7 +46,7 @@ export const Medications = ({ navigation }: ScreenProps) => {
           ).then((createdCattle) => {
             dispatch(setCattleInfo(createdCattle))
             navigation.navigate('CattleStack', {
-              screen: 'CattleInfoTabsStack',
+              screen: 'CattleProfileTabsStack',
               params: { screen: 'InfoRoute' }
             })
           })

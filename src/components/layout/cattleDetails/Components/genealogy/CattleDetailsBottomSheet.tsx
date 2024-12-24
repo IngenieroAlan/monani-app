@@ -65,7 +65,7 @@ const CattleDetailsBottomSheet = ({ cattleBottomSheet, setCattleBottomSheet, cat
               bottomSheetRef.current?.close()
               dispatch(nestCattle(cattle))
               navigation.navigate('CattleStack', {
-                screen: 'CattleInfoTabsStack',
+                screen: 'CattleProfileTabsStack',
                 params: { screen: 'InfoRoute' }
               })
               setIsPressed(false)

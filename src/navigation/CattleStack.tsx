@@ -9,7 +9,7 @@ import EditCattleArchiveView from '@/views/cattleInfo/cattleArchive/EditCattleAr
 import CreateCattleSaleView from '@/views/cattleInfo/CreateCattleSaleView'
 import CreateMilkReportView from '@/views/cattleInfo/CreateMilkReportView'
 import { createStackNavigator } from '@react-navigation/stack'
-import { CattleInfoTabsStack } from './CattleInfoTabsStack'
+import { CattleProfileTabsStack } from './CattleProfileTabsStack'
 import { CattleStackParamList } from './types'
 
 const Stack = createStackNavigator<CattleStackParamList>()
@@ -18,8 +18,8 @@ export const CattleStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name='CattleInfoTabsStack'
-        component={CattleInfoTabsStack}
+        name='CattleProfileTabsStack'
+        component={CattleProfileTabsStack}
       />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen

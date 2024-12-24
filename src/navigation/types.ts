@@ -34,7 +34,7 @@ export type MainStackParamList = {
 }
 
 export type CattleStackParamList = {
-  CattleInfoTabsStack: NavigatorScreenParams<CattleInfoTabsStackParamList>
+  CattleProfileTabsStack: NavigatorScreenParams<CattleProfileTabsStackParamList>
   SearchOffspringView: undefined
   SearchMotherView: { edit: boolean } | undefined
   EditCattleInfoView: undefined
@@ -82,7 +82,7 @@ export type CreateCattleStackParamList = {
       }
     | undefined
 }
-export type CattleInfoTabsStackParamList = {
+export type CattleProfileTabsStackParamList = {
   InfoRoute: undefined
   DietRoute: undefined
   MedicationRoute: undefined

@@ -27,7 +27,10 @@ const StackAppBar = ({ cattle }: { cattle: Cattle }) => {
   const onPress = useCallback(() => {
     if (nestedCattles.length > 0) {
       dispatch(unnestOneCattle())
-      navigation.navigate('CattleInfoTabsStack', { screen: 'InfoRoute' })
+      navigation.navigate('CattleStack', {
+        screen: 'CattleInfoTabsStack',
+        params: { screen: 'InfoRoute' }
+      })
     } else {
       navigation.goBack()
     }
@@ -36,7 +39,7 @@ const StackAppBar = ({ cattle }: { cattle: Cattle }) => {
   return (
     <Appbar.Header>
       <Appbar.BackAction onPress={onPress} />
-      <Appbar.Content title={`No. ${cattle.tagId || 'Sin ID'}`} />
+      <Appbar.Content title={`No. ${cattle.tagId}`} />
     </Appbar.Header>
   )
 }

@@ -1,11 +1,10 @@
 import BottomTabsSnackbarContainer from '@/components/BottomTabsSnackbarContainer'
 import { CattleFiltersProvider } from '@/contexts/CattleFiltersContext'
 import useSentNotifications from '@/hooks/collections/useSentNotifications'
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { useAppDispatch } from '@/hooks/useRedux'
 import { setShowBottomStack } from '@/redux/slices/ui'
 import { HomeView } from '@/views/home/HomeView'
 import NotificationsView from '@/views/notifications/NotificationsView'
-import React from 'react'
 import { Icon, Portal } from 'react-native-paper'
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { EarningsStack } from './EarningsStack'
@@ -14,15 +13,13 @@ import { HomeTabsStackParamList, MaterialBottomTabNavigator } from './types'
 
 const Tab: MaterialBottomTabNavigator<HomeTabsStackParamList> = createMaterialBottomTabNavigator()
 
-const HomeTabsStack = () => {
+export const HomeTabsStack = () => {
   const dispatch = useAppDispatch()
-  const { showBottomStack } = useAppSelector((state) => state.ui)
 
   return (
     <CattleFiltersProvider flags={{ isActive: true }}>
       <Portal.Host>
         <Tab.Navigator
-          barStyle={{ display: showBottomStack ? 'flex' : 'none' }}
           screenListeners={{
             blur: () => {
               dispatch(setShowBottomStack(true))
@@ -98,5 +95,3 @@ const HomeTabsStack = () => {
     </CattleFiltersProvider>
   )
 }
-
-export default HomeTabsStack

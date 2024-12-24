@@ -8,7 +8,7 @@ import { ResourcesStackParamList } from './types'
 
 const Stack = createStackNavigator<ResourcesStackParamList>()
 
-const ResourcesStack = () => {
+export const ResourcesStack = () => {
   const dispatch = useAppDispatch()
 
   return (
@@ -33,5 +33,3 @@ const ResourcesStack = () => {
     </Stack.Navigator>
   )
 }
-
-export default ResourcesStack

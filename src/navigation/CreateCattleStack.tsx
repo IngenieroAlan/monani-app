@@ -7,12 +7,11 @@ import DietFeed from '@/views/addCattle/DietFeed'
 import Medication from '@/views/addCattle/Medication'
 import { Medications } from '@/views/addCattle/Medications'
 import { createStackNavigator } from '@react-navigation/stack'
-import React from 'react'
 import { CreateCattleStackParamList } from './types'
 
 const Stack = createStackNavigator<CreateCattleStackParamList>()
 
-const CreateCattleStack = () => {
+export const CreateCattleStack = () => {
   const dispatch = useAppDispatch()
 
   return (
@@ -58,5 +57,3 @@ const CreateCattleStack = () => {
     </Stack.Navigator>
   )
 }
-
-export default CreateCattleStack

@@ -11,11 +11,18 @@ import {
 import { MaterialBottomTabNavigationEventMap, MaterialBottomTabNavigationOptions } from 'react-native-paper'
 import { MaterialBottomTabNavigatorProps } from 'react-native-paper/lib/typescript/react-navigation/navigators/createMaterialBottomTabNavigator'
 
+export type HomeTabsStackParamList = {
+  Cattle: undefined
+  MilkProduction: undefined
+  Earnings: undefined
+  Notifications: undefined
+}
+
 export type MainStackParamList = {
   HomeTabsStack: NavigatorScreenParams<HomeTabsStackParamList>
-  CattleInfoTabsStack: NavigatorScreenParams<CattleInfoTabsStackParamList>
-  CreateCattleStack: undefined
-  ResourcesStack: undefined
+  CattleStack: NavigatorScreenParams<CattleStackParamList>
+  CreateCattleStack: NavigatorScreenParams<CreateCattleStackParamList>
+  ResourcesStack: NavigatorScreenParams<ResourcesStackParamList>
   SearchCattleView: undefined
   EarningsAnnualSummaryView: {
     year: number
@@ -24,9 +31,15 @@ export type MainStackParamList = {
     totalMilkEarnings: number
     difference: number
   }
+}
+
+export type CattleStackParamList = {
+  CattleInfoTabsStack: NavigatorScreenParams<CattleInfoTabsStackParamList>
+  SearchOffspringView: undefined
+  SearchMotherView: { edit: boolean } | undefined
   EditCattleInfoView: undefined
-  DietSettingsRoute: undefined
-  DietFeedRoute?: {
+  EditDietProportionsView: undefined
+  CreateDietFeedView?: {
     dietFeedId: string
     modify: boolean
   }
@@ -34,19 +47,10 @@ export type MainStackParamList = {
     medicationScheduleId: string
     modify: boolean
   }
-  SearchMotherView: { edit: boolean } | undefined
-  SearchOffspringView: undefined
   CreateCattleArchiveView: undefined
   EditCattleArchiveView: undefined
   CreateCattleSaleView: undefined
   CreateMilkReportView: undefined
-}
-
-export type HomeTabsStackParamList = {
-  Cattle: undefined
-  MilkProduction: undefined
-  Earnings: undefined
-  Notifications: undefined
 }
 
 export type EarningsStackParamList = {

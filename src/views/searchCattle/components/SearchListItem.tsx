@@ -61,7 +61,7 @@ const SearchListItem = ({ cattle }: { cattle: Cattle }) => {
       onPress={() => {
         dispatch(setCattleInfo(cattle))
         navigation.navigate('CattleStack', {
-          screen: 'CattleInfoTabsStack',
+          screen: 'CattleProfileTabsStack',
           params: { screen: 'InfoRoute' }
         })
       }}

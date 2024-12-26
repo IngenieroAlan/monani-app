@@ -1,10 +1,10 @@
 import DismissDialog from '@/components/DismissDialog'
 import CattleArchiveForm, { CattleArchiveFields } from '@/components/forms/CattleArchiveForm'
 import { CattleStackSnackbarId } from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleStackSnackbarContainer'
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import useCattleArchive from '@/hooks/collections/useCattleArchive'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
-import useAppTheme from '@/theme'
 import CattleArchiveSchema from '@/validationSchemas/CattleArchiveSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigation, usePreventRemove } from '@react-navigation/native'
@@ -53,7 +53,6 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
 }
 
 const EditCattleArchiveView = () => {
-  const theme = useAppTheme()
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const cattle = useAppSelector((state) => state.cattles.cattleInfo)
@@ -92,7 +91,7 @@ const EditCattleArchiveView = () => {
   )
 
   return (
-    <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+    <SurfaceContainer>
       <Appbar.Header>
         <CloseButton
           isDirty={isDirty}
@@ -113,7 +112,7 @@ const EditCattleArchiveView = () => {
           formState={formState}
         />
       </View>
-    </View>
+    </SurfaceContainer>
   )
 }
 

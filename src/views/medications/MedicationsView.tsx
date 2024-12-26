@@ -1,3 +1,4 @@
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import { MedicationProvider } from '@/contexts'
 import { useAppDispatch } from '@/hooks/useRedux'
 import useScrollFab from '@/hooks/useScrollFab'
@@ -10,11 +11,10 @@ import EditMedicationDialog from '@/views/medications/components/EditMedicationD
 import MedicationsList from '@/views/medications/components/MedicationsList'
 import MedicationsSnackbarContainer from '@/views/medications/components/MedicationsSnackbarContainer'
 import { useNavigation } from '@react-navigation/native'
-import { StyleSheet, View } from 'react-native'
-import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
+import { StyleSheet } from 'react-native'
+import { AnimatedFAB, Appbar } from 'react-native-paper'
 
 const MedicationsView = () => {
-  const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const { onScroll, isFabExtended } = useScrollFab()
@@ -22,7 +22,7 @@ const MedicationsView = () => {
   return (
     <>
       <MedicationProvider>
-        <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
+        <SurfaceContainer>
           <Appbar.Header>
             <Appbar.BackAction onPress={navigation.goBack} />
             <Appbar.Content title='Medicamentos' />
@@ -37,7 +37,7 @@ const MedicationsView = () => {
           />
           <EditMedicationDialog />
           <DeleteMedicationDialog />
-        </View>
+        </SurfaceContainer>
       </MedicationProvider>
       <CreateMedicationDialog />
       <MedicationsSnackbarContainer />

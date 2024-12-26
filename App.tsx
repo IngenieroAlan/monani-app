@@ -1,3 +1,4 @@
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import database, { initializeDatabase, resetDatabase } from '@/database'
 import seedDatabase from '@/database/seeders/seeder'
 import { MainStack } from '@/navigation/MainStack'
@@ -5,14 +6,14 @@ import onBackgroundEventHandler from '@/notifee/eventHandlers/onBackgroundEventH
 import { CattleNotificationEventType } from '@/notifee/types'
 import useOnForegroundEvent from '@/notifee/useOnForegroundEvent'
 import store from '@/redux/store/store'
-import useAppTheme, { CustomDarkTheme, CustomLightTheme } from '@/theme'
+import { CustomDarkTheme, CustomLightTheme } from '@/theme'
 import notifee, { AndroidImportance, AuthorizationStatus } from '@notifee/react-native'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import * as SplashScreen from 'expo-splash-screen'
 import { enableMapSet } from 'immer'
 import { useCallback, useEffect, useState } from 'react'
-import { useColorScheme, View } from 'react-native'
+import { useColorScheme } from 'react-native'
 import { PaperProvider } from 'react-native-paper'
 import { es, registerTranslation } from 'react-native-paper-dates'
 import { Provider } from 'react-redux'
@@ -33,7 +34,7 @@ notifee.onBackgroundEvent(onBackgroundEventHandler)
 notifee.createChannel({
   id: 'monani',
   name: 'Monani',
-  importance: AndroidImportance.HIGH,
+  importance: AndroidImportance.HIGH
 })
 notifee.setNotificationCategories([
   {
@@ -68,7 +69,6 @@ export default function App() {
 }
 
 const AppState = ({ children }: { children: JSX.Element }) => {
-  const theme = useAppTheme()
   const [appIsReady, setAppIsReady] = useState(false)
 
   useOnForegroundEvent()
@@ -99,12 +99,5 @@ const AppState = ({ children }: { children: JSX.Element }) => {
 
   if (!appIsReady) return null
 
-  return (
-    <View
-      style={{ backgroundColor: theme.colors.surface, flex: 1 }}
-      onLayout={onLayoutRootView}
-    >
-      {children}
-    </View>
-  )
+  return <SurfaceContainer onLayout={onLayoutRootView}>{children}</SurfaceContainer>
 }

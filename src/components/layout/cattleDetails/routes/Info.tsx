@@ -1,8 +1,8 @@
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import Cattle from '@/database/models/Cattle'
 import useCattleArchive from '@/hooks/collections/useCattleArchive'
 import useCattleSale from '@/hooks/collections/useCattleSale'
 import { useAppSelector } from '@/hooks/useRedux'
-import useAppTheme from '@/theme'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { ScrollView, View } from 'react-native'
 import ArchiveCard from '../Components/info/cards/ArchiveCard'
@@ -14,13 +14,12 @@ import QuarantineCard from '../Components/info/cards/QuarantineCard'
 import SaleCard from '../Components/info/cards/SaleCard'
 
 export const InfoRoute = () => {
-  const theme = useAppTheme()
   const cattle = useAppSelector((state) => state.cattles.cattleInfo)
 
   return (
-    <ScrollView style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+    <SurfaceContainer Component={ScrollView}>
       <CattleInfoDetails cattle={cattle!} />
-    </ScrollView>
+    </SurfaceContainer>
   )
 }
 

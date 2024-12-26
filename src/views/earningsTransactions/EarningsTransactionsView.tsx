@@ -1,11 +1,10 @@
 import EarningsList from '@/components/earnings/EarningsList/EarningsList'
 import EarningsListFilters from '@/components/earnings/EarningsListFilters/EarningsListFilters'
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import useEarnings from '@/hooks/collections/useEarnings'
 import { useAppSelector } from '@/hooks/useRedux'
 import { RootState } from '@/redux/store/store'
 import { useState } from 'react'
-import { View } from 'react-native'
-import { useTheme } from 'react-native-paper'
 
 export const OVERVIEW_EARNINGS_LIST_ID = 'overviewEarningsList'
 
@@ -29,13 +28,11 @@ const List = () => {
 }
 
 const EarningsTransactionsView = () => {
-  const theme = useTheme()
-
   return (
-    <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+    <SurfaceContainer>
       <EarningsListFilters listId={OVERVIEW_EARNINGS_LIST_ID} />
       <List />
-    </View>
+    </SurfaceContainer>
   )
 }
 

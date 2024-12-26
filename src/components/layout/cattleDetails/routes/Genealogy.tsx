@@ -2,13 +2,12 @@ import CattleDetailsBottomSheet from "@/components/layout/cattleDetails/Componen
 import GenealogyList from "@/components/layout/cattleDetails/Components/genealogy/GenealogyList";
 import GenealogySnackbarContainer from "@/components/layout/cattleDetails/Components/genealogy/GenealogySnackbarContainer";
 import { SetMother } from "@/components/layout/cattleDetails/Components/genealogy/SetMother";
+import { SurfaceContainer } from '@/components/SurfaceContainer';
 import Cattle from "@/database/models/Cattle";
 import { TableName } from "@/database/schema";
 import { useAppSelector } from '@/hooks/useRedux';
 import { withObservables } from "@nozbe/watermelondb/react";
 import React, { useState } from 'react';
-import { View } from "react-native";
-import { useTheme } from "react-native-paper";
 
 export const GenealogyRoute = () => {
   const { cattleInfo } = useAppSelector(state => state.cattles);
@@ -26,7 +25,6 @@ const observeCattle = withObservables([TableName.CATTLE], ({ cattle }: { cattle:
 }))
 
 const CattleGeneologyDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
-  const theme = useTheme();
   const [cattleBottomSheet, setCattleBottomSheet] = useState(-1)
   const [selectedCattle, setSelectedCattle] = useState<Cattle | null>(null)
 
@@ -36,10 +34,10 @@ const CattleGeneologyDetails = observeCattle(({ cattle }: { cattle: Cattle }) =>
   }
 
   return (<>
-    <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
+    <SurfaceContainer>
       <SetMother cattle={cattle} onSelectedCattle={onSelectedCattle} />
       <GenealogyList cattle={cattle} onSelectedCattle={onSelectedCattle} />
-    </View>
+    </SurfaceContainer>
     {selectedCattle && (
       <CattleDetailsBottomSheet
         cattleBottomSheet={cattleBottomSheet}

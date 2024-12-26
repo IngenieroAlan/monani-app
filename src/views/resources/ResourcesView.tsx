@@ -1,17 +1,15 @@
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import { ResourcesStackParamList } from '@/navigation/types'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
-import { View } from 'react-native'
-import { Appbar, Divider, useTheme } from 'react-native-paper'
+import { Appbar, Divider } from 'react-native-paper'
 import ResourcesListItem from './components/ResourcesListItem'
 
 type ScreenProps = NativeStackScreenProps<ResourcesStackParamList>
 
 const ResourcesView = ({ navigation }: ScreenProps) => {
-  const theme = useTheme()
-
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.surface }}>
+    <SurfaceContainer>
       <StatusBar />
       <Appbar.Header>
         <Appbar.BackAction onPress={navigation.goBack} />
@@ -28,7 +26,7 @@ const ResourcesView = ({ navigation }: ScreenProps) => {
         iconName='needle'
         onPress={() => navigation.navigate('MedicationsView')}
       />
-    </View>
+    </SurfaceContainer>
   )
 }
 

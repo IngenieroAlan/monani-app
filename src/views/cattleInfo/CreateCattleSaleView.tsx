@@ -2,9 +2,9 @@ import DismissDialog from '@/components/DismissDialog'
 import CattleSaleForm, { CattleSaleFields } from '@/components/forms/CattleSaleForm'
 import { CattleSaleSnackbarId } from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleSaleSnackbarContainer'
 import { CattleStackSnackbarId } from '@/components/layout/cattleDetails/Components/CattleTopStack/CattleStackSnackbarContainer'
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
-import useAppTheme from '@/theme'
 import CattleSaleSchema from '@/validationSchemas/CattleSaleSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigation, usePreventRemove } from '@react-navigation/native'
@@ -58,7 +58,6 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
 }
 
 const CreateCattleSaleView = () => {
-  const theme = useAppTheme()
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const cattle = useAppSelector((selector) => selector.cattles.cattleInfo)!
@@ -97,7 +96,7 @@ const CreateCattleSaleView = () => {
   )
 
   return (
-    <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+    <SurfaceContainer>
       <Appbar.Header>
         <CloseButton
           isDirty={dirtyFields.soldAt === true || +pricePerKg !== 0 || +soldBy !== 0}
@@ -139,7 +138,7 @@ const CreateCattleSaleView = () => {
           </HelperText>
         </View>
       </View>
-    </View>
+    </SurfaceContainer>
   )
 }
 

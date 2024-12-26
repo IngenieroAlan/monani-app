@@ -1,10 +1,11 @@
 import CattleList from '@/components/CattleList/CattleList'
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import useScrollFab from '@/hooks/useScrollFab'
 import { useNavigation } from '@react-navigation/native'
 import { StatusBar } from 'expo-status-bar'
 import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { AnimatedFAB, Appbar, useTheme } from 'react-native-paper'
+import { AnimatedFAB, Appbar } from 'react-native-paper'
 import HomeListItem from './components/HomeListItem'
 import HomeSnackbarContainer from './components/HomeSnackbarContainer'
 
@@ -39,24 +40,22 @@ const List = () => {
         extended={isFabExtended}
         icon='plus'
         label='Añadir'
-        onPress={() => navigation.navigate('CreateCattleStack')}
+        onPress={() =>
+          navigation.navigate('CreateCattleStack', {
+            screen: 'CattleInfo'
+          })
+        }
       />
     </>
   )
 }
 
 export const HomeView = () => {
-  const theme = useTheme()
   const navigation = useNavigation()
 
   return (
     <>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: theme.colors.surface
-        }}
-      >
+      <SurfaceContainer>
         <StatusBar />
         <Appbar.Header>
           <Appbar.Content title='Monani' />
@@ -66,11 +65,15 @@ export const HomeView = () => {
           />
           <Appbar.Action
             icon='shape-outline'
-            onPress={() => navigation.navigate('ResourcesStack')}
+            onPress={() =>
+              navigation.navigate('ResourcesStack', {
+                screen: 'ResourcesView'
+              })
+            }
           />
         </Appbar.Header>
         <List />
-      </View>
+      </SurfaceContainer>
       <HomeSnackbarContainer />
     </>
   )

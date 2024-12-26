@@ -1,19 +1,16 @@
-import useAppTheme from '@/theme'
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import NotificationsAppbar from '@/views/notifications/components/NotificationsAppbar'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { NotificationsList } from './components/NotificationsList/NotificationsList'
 
 const NotificationsView = () => {
-  const theme = useAppTheme()
-
   return (
-    <SafeAreaView style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+    <SurfaceContainer>
       <NotificationsAppbar />
       <StatusBar />
       <NotificationsList />
-    </SafeAreaView>
+    </SurfaceContainer>
   )
 }
 

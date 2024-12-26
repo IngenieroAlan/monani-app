@@ -1,9 +1,9 @@
 import DismissDialog from '@/components/DismissDialog'
 import MilkReportForm, { MilkReportFields } from '@/components/forms/MilkReportForm'
 import { MilkReportsSnackbarId } from '@/components/layout/cattleDetails/Components/milkProduction/MilkReportsSnackbarContainer'
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
-import useAppTheme from '@/theme'
 import createMilkReportSchema from '@/validationSchemas/MilkReportSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigation, usePreventRemove } from '@react-navigation/native'
@@ -57,7 +57,6 @@ const CloseButton = ({ isDirty, isSubmitSuccessful }: { isDirty: boolean; isSubm
 }
 
 const CreateMilkReportView = () => {
-  const theme = useAppTheme()
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const cattle = useAppSelector((select) => select.cattles.cattleInfo)!
@@ -95,7 +94,7 @@ const CreateMilkReportView = () => {
   }, [])
 
   return (
-    <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+    <SurfaceContainer>
       <Appbar.Header>
         <CloseButton
           isDirty={isDirty}
@@ -117,7 +116,7 @@ const CreateMilkReportView = () => {
           disabledDates={disabledDates}
         />
       </View>
-    </View>
+    </SurfaceContainer>
   )
 }
 

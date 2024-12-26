@@ -1,7 +1,7 @@
+import { SurfaceContainer } from '@/components/SurfaceContainer'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { MainStackParamList } from '@/navigation/types'
 import { setYear } from '@/redux/slices/collections/earningsQuerySlice'
-import useAppTheme from '@/theme'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
@@ -13,7 +13,6 @@ import ExpandableEarningsList, { ANNUAL_EARNINGS_LIST_ID } from './components/Ex
 type ScreenProps = NativeStackScreenProps<MainStackParamList, 'EarningsAnnualSummaryView'>
 
 const EarningsAnnualSummaryView = ({ route, navigation }: ScreenProps) => {
-  const theme = useAppTheme()
   const dispatch = useAppDispatch()
   const { year, totalEarnings, totalCattleEarnings, totalMilkEarnings, difference } = route.params
 
@@ -23,7 +22,7 @@ const EarningsAnnualSummaryView = ({ route, navigation }: ScreenProps) => {
 
   return (
     <Portal.Host>
-      <View style={{ backgroundColor: theme.colors.surface, flex: 1 }}>
+      <SurfaceContainer>
         <StatusBar />
         <Appbar.Header>
           <Appbar.BackAction onPress={navigation.goBack} />
@@ -41,7 +40,7 @@ const EarningsAnnualSummaryView = ({ route, navigation }: ScreenProps) => {
           <Divider />
           <ExpandableEarningsList />
         </View>
-      </View>
+      </SurfaceContainer>
     </Portal.Host>
   )
 }

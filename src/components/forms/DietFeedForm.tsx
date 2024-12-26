@@ -2,11 +2,11 @@ import useFeeds from '@/hooks/collections/useFeeds'
 import { DietFeedFields } from '@/validationSchemas/DietFeedSchema'
 import { useMemo } from 'react'
 import { Control, FormState, useController } from 'react-hook-form'
-import { View } from 'react-native'
 import { Text, useTheme } from 'react-native-paper'
 import { CustomTextInput } from '../CustomTextInput'
 import MDropdown from '../MDropdown'
 import MSearchBar, { SearchBarDataItem } from '../MSearchBar'
+import { SurfaceContainer } from '../SurfaceContainer'
 
 const DietFeedForm = ({
   control,
@@ -43,17 +43,19 @@ const DietFeedForm = ({
     }
   ]
 
-  const feedData: SearchBarDataItem[] = useMemo(() =>
-    feeds.map((feed) => ({
-      id: feed.id,
-      title: feed.name,
-      description: feed.feedType,
-      value: feed.id
-    })),
-    [feeds])
+  const feedData: SearchBarDataItem[] = useMemo(
+    () =>
+      feeds.map((feed) => ({
+        id: feed.id,
+        title: feed.name,
+        description: feed.feedType,
+        value: feed.id
+      })),
+    [feeds]
+  )
 
   return (
-    <View style={{ padding: 16, gap: 10, flex: 1, backgroundColor: theme.colors.surface }}>
+    <SurfaceContainer style={{ padding: 16, gap: 10 }}>
       <MSearchBar
         name='feed'
         control={control}
@@ -93,7 +95,7 @@ const DietFeedForm = ({
       <Text variant='labelSmall'>
         {feedProportion.value === 'Por porcentaje' ? `Equivalente a ${formattedWeight} kg.` : ''}
       </Text>
-    </View>
+    </SurfaceContainer>
   )
 }
 

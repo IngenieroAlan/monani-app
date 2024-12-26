@@ -1,6 +1,6 @@
 import BottomTabsSnackbarContainer from '@/components/BottomTabsSnackbarContainer'
 import { CattleFiltersProvider } from '@/contexts/CattleFiltersContext'
-import useSentNotifications from '@/hooks/collections/useSentNotifications'
+import { useNotificationsCount } from '@/hooks/collections/useNotificationsCount'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { setShowBottomStack } from '@/redux/slices/ui'
 import { HomeView } from '@/views/home/HomeView'
@@ -73,11 +73,11 @@ export const HomeTabsStack = () => {
             component={NotificationsView}
             options={() => {
               // To prevent re rendering the whole bottom tab.
-              const { notifications } = useSentNotifications({ isMarkedAsRead: false })
+              const { notificationsCount } = useNotificationsCount()
 
               return {
                 tabBarLabel: 'Notificaciones',
-                tabBarBadge: notifications.length || undefined,
+                tabBarBadge: notificationsCount || undefined,
                 tabBarIcon: ({ color }) => (
                   <Icon
                     source='bell-outline'

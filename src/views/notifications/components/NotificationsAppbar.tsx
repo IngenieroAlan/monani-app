@@ -1,11 +1,11 @@
-import useSentNotifications from '@/hooks/collections/useSentNotifications'
 import { deleteAllNotifications, markAllAsRead } from '@/utils/collections/sentNotifications'
+import useSentNotifications from '@/views/notifications/hooks/useSentNotifications'
 import notifee from '@notifee/react-native'
 import { useCallback } from 'react'
 import { Appbar, Tooltip } from 'react-native-paper'
 
 const CheckAllAction = () => {
-  const { notifications } = useSentNotifications({ isMarkedAsRead: false })
+  const { notificationsRecords } = useSentNotifications({ isMarkedAsRead: false })
 
   const onMarkAllAsRead = useCallback(async () => {
     await notifee.cancelDisplayedNotifications()
@@ -15,7 +15,7 @@ const CheckAllAction = () => {
   return (
     <Tooltip title='Marcara todo como leído'>
       <Appbar.Action
-        disabled={notifications.length === 0}
+        disabled={notificationsRecords.length === 0}
         icon='checkbox-multiple-outline'
         onPress={onMarkAllAsRead}
       />
@@ -24,7 +24,7 @@ const CheckAllAction = () => {
 }
 
 const NotificationsAppbar = () => {
-  const { notifications } = useSentNotifications()
+  const { notificationsRecords } = useSentNotifications()
 
   const onDeleteAll = useCallback(async () => {
     await notifee.cancelDisplayedNotifications()
@@ -33,7 +33,7 @@ const NotificationsAppbar = () => {
 
   return (
     <Appbar style={{ justifyContent: 'flex-end' }}>
-      {notifications.length > 0 && (
+      {notificationsRecords.length > 0 && (
         <>
           <CheckAllAction />
           <Tooltip title='Eliminar todo'>

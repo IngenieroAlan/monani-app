@@ -10,25 +10,30 @@ import { IconButton, List, Menu, Text, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type DietFeedItem = {
-  dietFeedId: string;
-  dietId: string;
-  feedId: string;
-  feedAmount: number;
-  percentage?: number;
-  feedProportion: FeedProportion;
+  dietFeedId: string
+  dietId: string
+  feedId: string
+  feedAmount: number
+  percentage?: number
+  feedProportion: FeedProportion
 }
 
-const observeMedicationSchedule = withObservables([TableName.MEDICATION_SCHEDULES], ({ medication_schedules }: { medication_schedules: MedicationSchedule }) => ({
-  medication_schedules
-}))
+const withMedicationScheduleObserver = withObservables(
+  [TableName.MEDICATION_SCHEDULES],
+  ({ medication_schedules }: { medication_schedules: MedicationSchedule }) => ({
+    medication_schedules
+  })
+)
 
-const ListItemMenu = (
-  { MedicationScheduleId, onEdit, onDelete }: {
-    MedicationScheduleId: string,
-    onEdit: (MedicationScheduleId: string) => void,
-    onDelete: (MedicationScheduleId: string) => void
-  }
-) => {
+const ListItemMenu = ({
+  MedicationScheduleId,
+  onEdit,
+  onDelete
+}: {
+  MedicationScheduleId: string
+  onEdit: (MedicationScheduleId: string) => void
+  onDelete: (MedicationScheduleId: string) => void
+}) => {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const [menuVisible, setMenuVisible] = useState(false)
@@ -51,7 +56,7 @@ const ListItemMenu = (
         leadingIcon='pencil-outline'
         onPress={() => {
           onEdit(MedicationScheduleId)
-          setMenuVisible(false);
+          setMenuVisible(false)
         }}
       />
       <Menu.Item
@@ -60,7 +65,7 @@ const ListItemMenu = (
         leadingIcon='minus'
         onPress={() => {
           onDelete(MedicationScheduleId)
-          setMenuVisible(false);
+          setMenuVisible(false)
         }}
       />
     </Menu>
@@ -68,7 +73,6 @@ const ListItemMenu = (
 }
 
 const ListItemTitle = ({ medication }: { medication: Medication }) => {
-
   return (
     <View>
       <Text variant='labelMedium'>{medication.medicationType}</Text>
@@ -78,28 +82,33 @@ const ListItemTitle = ({ medication }: { medication: Medication }) => {
 }
 
 type MedicationScheduleProps = {
-  medication_schedules: MedicationSchedule,
-  onEdit: (MedicationScheduleId: string) => void,
+  medication_schedules: MedicationSchedule
+  onEdit: (MedicationScheduleId: string) => void
   onDelete: (MedicationScheduleId: string) => void
 }
 
-const MedicationScheduleItem = observeMedicationSchedule(({ medication_schedules, onEdit, onDelete }: MedicationScheduleProps) => {
-  const { medications } = useMedications()
-  const findMedication = useCallback((MedicationId: string) => medications.find(medication => medication.id === MedicationId) || '', [medications, medication_schedules])
-  return (
-    <List.Item
-      style={{ paddingVertical: 2, paddingRight: 8 }}
-      title={<ListItemTitle medication={findMedication(medication_schedules.medication.id) as Medication} />}
-      description={medication_schedules.nextDoseAt.toLocaleString()}
-      right={() => (
-        <ListItemMenu
-          MedicationScheduleId={medication_schedules.id}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      )}
-    />
-  )
-})
+const MedicationScheduleItem = withMedicationScheduleObserver(
+  ({ medication_schedules, onEdit, onDelete }: MedicationScheduleProps) => {
+    const { medications } = useMedications()
+    const findMedication = useCallback(
+      (MedicationId: string) => medications.find((medication) => medication.id === MedicationId) || '',
+      [medications, medication_schedules]
+    )
+    return (
+      <List.Item
+        style={{ paddingVertical: 2, paddingRight: 8 }}
+        title={<ListItemTitle medication={findMedication(medication_schedules.medication.id) as Medication} />}
+        description={medication_schedules.nextDoseAt.toLocaleString()}
+        right={() => (
+          <ListItemMenu
+            MedicationScheduleId={medication_schedules.id}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        )}
+      />
+    )
+  }
+)
 
 export default memo(MedicationScheduleItem)

@@ -13,7 +13,7 @@ import { DELETE_MEDICATION_DIALOG_ID } from './DeleteMedicationDialog'
 import { EDIT_MEDICATION_DIALOG_ID } from './EditMedicationDialog'
 import { MedicationsSnackbarId } from './MedicationsSnackbarContainer'
 
-const observeMedtication = withObservables(['medication'], ({ medication }: { medication: Medication }) => ({
+const withMedicationObserver = withObservables(['medication'], ({ medication }: { medication: Medication }) => ({
   medication
 }))
 
@@ -80,7 +80,7 @@ const ListItemMenu = ({ medication }: { medication: Medication }) => {
   )
 }
 
-const ListItem = observeMedtication(({ medication }: { medication: Medication }) => {
+const ListItem = withMedicationObserver(({ medication }: { medication: Medication }) => {
   return (
     <List.Item
       style={{ paddingRight: 4 }}

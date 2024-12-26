@@ -1,31 +1,31 @@
-import MedicationScheduleItem from "@/components/layout/cattleDetails/Components/medicationSchedules/MedicationScheduleItem";
-import MedicationSchedulesSnackbarContainer, { MedicationSchedulesSnackbarId } from '@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer';
-import Cattle from "@/database/models/Cattle";
-import { TableName } from "@/database/schema";
-import useMedicationSchedules from "@/hooks/collections/useMedicationSchedule";
-import { useAppDispatch, useAppSelector } from '@/hooks/useRedux';
-import { show } from "@/redux/slices/uiVisibilitySlice";
-import { cattleDetails } from "@/styles/main";
-import { withObservables } from "@nozbe/watermelondb/react";
-import { useNavigation } from "@react-navigation/native";
-import { FlashList } from "@shopify/flash-list";
-import { useCallback, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { Icon, Text } from "react-native-paper";
+import MedicationScheduleItem from '@/components/layout/cattleDetails/Components/medicationSchedules/MedicationScheduleItem'
+import MedicationSchedulesSnackbarContainer, {
+  MedicationSchedulesSnackbarId
+} from '@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer'
+import Cattle from '@/database/models/Cattle'
+import { TableName } from '@/database/schema'
+import useMedicationSchedules from '@/hooks/collections/useMedicationSchedule'
+import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { show } from '@/redux/slices/uiVisibilitySlice'
+import { cattleDetails } from '@/styles/main'
+import { withObservables } from '@nozbe/watermelondb/react'
+import { useNavigation } from '@react-navigation/native'
+import { FlashList } from '@shopify/flash-list'
+import { useCallback, useState } from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { Icon, Text } from 'react-native-paper'
 
 export const MedicationRoute = () => {
-  const { cattleInfo } = useAppSelector(state => state.cattles);
+  const { cattleInfo } = useAppSelector((state) => state.cattles)
   return (
     <>
-      {
-        cattleInfo && (<CattleMedicationsDetails cattle={cattleInfo} />)
-      }
+      {cattleInfo && <CattleMedicationsDetails cattle={cattleInfo} />}
       <MedicationSchedulesSnackbarContainer />
     </>
-  );
-};
+  )
+}
 
-const observeCattle = withObservables([TableName.CATTLE], ({ cattle }: { cattle: Cattle }) => ({
+const witCattleObserver = withObservables([TableName.CATTLE], ({ cattle }: { cattle: Cattle }) => ({
   cattle
 }))
 
@@ -46,25 +46,33 @@ const ListEmptyComponent = () => {
   )
 }
 
-const CattleMedicationsDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
+const CattleMedicationsDetails = witCattleObserver(({ cattle }: { cattle: Cattle }) => {
   const { medicationSchedules } = useMedicationSchedules(cattle)
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(0)
   const navigation = useNavigation()
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   const onEdit = useCallback((medicationScheduleId: string) => {
-    navigation.navigate('MedicationScheduleRoute', { medicationScheduleId, modify: true });
+    navigation.navigate('CattleStack', {
+      screen: 'MedicationScheduleRoute',
+      params: { medicationScheduleId, modify: true }
+    })
+    // navigation.navigate('MedicationScheduleRoute', { medicationScheduleId, modify: true });
   }, [])
 
-  const onDelete = useCallback((medicationScheduleId: string) => {
-    const medicationSchedule = medicationSchedules?.find(medicationSchedule => medicationSchedule.id === medicationScheduleId);
-    const deleteDietFeed = async () => {
-      medicationSchedule && await medicationSchedule.delete();
-      dispatch(show(MedicationSchedulesSnackbarId.REMOVED_MEDICATION_SCHEDULE));
-    }
-    deleteDietFeed();
-  }, [medicationSchedules])
-
+  const onDelete = useCallback(
+    (medicationScheduleId: string) => {
+      const medicationSchedule = medicationSchedules?.find(
+        (medicationSchedule) => medicationSchedule.id === medicationScheduleId
+      )
+      const deleteDietFeed = async () => {
+        medicationSchedule && (await medicationSchedule.delete())
+        dispatch(show(MedicationSchedulesSnackbarId.REMOVED_MEDICATION_SCHEDULE))
+      }
+      deleteDietFeed()
+    },
+    [medicationSchedules]
+  )
 
   return (
     <ScrollView style={[cattleDetails.container, cattleDetails.cardsContainer]}>

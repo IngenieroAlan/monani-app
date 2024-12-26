@@ -23,11 +23,11 @@ export const InfoRoute = () => {
   )
 }
 
-const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
+const withCattleObserver = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle
 }))
 
-const CattleInfoDetails = observeCattle(({ cattle }: { cattle: Cattle }) => {
+const CattleInfoDetails = withCattleObserver(({ cattle }: { cattle: Cattle }) => {
   const { cattleArchive } = useCattleArchive(cattle!)
   const { cattleSale } = useCattleSale(cattle!)
 

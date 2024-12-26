@@ -28,7 +28,7 @@ const Title = ({ cattle }: { cattle: Cattle }) => {
   )
 }
 
-const observeCattle = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
+const withCattleObserver = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle
 }))
 
@@ -52,4 +52,4 @@ const HomeListItem = ({ cattle }: { cattle: Cattle }) => {
   )
 }
 
-export default observeCattle(HomeListItem)
+export default withCattleObserver(HomeListItem)

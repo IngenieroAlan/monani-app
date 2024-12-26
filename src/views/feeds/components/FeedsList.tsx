@@ -13,7 +13,7 @@ import { DELETE_FEED_DIALOG_ID } from './DeleteFeedDialog'
 import { EDIT_FEED_DIALOG_ID } from './EditFeedDialog'
 import { FeedsSnackbarId } from './FeedsSnackbarContainer'
 
-const observeFeed = withObservables(['feed'], ({ feed }: { feed: Feed }) => ({
+const withFeedObserver = withObservables(['feed'], ({ feed }: { feed: Feed }) => ({
   feed
 }))
 
@@ -80,7 +80,7 @@ const ListItemMenu = ({ feed }: { feed: Feed }) => {
   )
 }
 
-const ListItem = observeFeed(({ feed }: { feed: Feed }) => {
+const ListItem = withFeedObserver(({ feed }: { feed: Feed }) => {
   return (
     <List.Item
       style={{ paddingRight: 4 }}

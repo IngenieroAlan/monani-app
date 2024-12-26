@@ -7,11 +7,11 @@ import { memo, useMemo } from 'react'
 import { View } from 'react-native'
 import { Avatar, Card, Divider, Text } from 'react-native-paper'
 
-const observeArchive = withObservables(['archive'], ({ archive }: { archive: CattleArchive }) => ({
+const withArchiveObserver = withObservables(['archive'], ({ archive }: { archive: CattleArchive }) => ({
   archive
 }))
 
-const ArchiveCard = observeArchive(({ archive }: { archive: CattleArchive }) => {
+const ArchiveCard = withArchiveObserver(({ archive }: { archive: CattleArchive }) => {
   const theme = useAppTheme()
   const archiveDate = useMemo(() => {
     return format(archive.archivedAt, 'PPPP', { locale: es })

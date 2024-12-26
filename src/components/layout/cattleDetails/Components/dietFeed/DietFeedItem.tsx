@@ -8,17 +8,19 @@ import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DietSnackbarId } from './DietSnackbarContainer'
 
-const observeDietFeed = withObservables([TableName.DIET_FEED], ({ diet_feed }: { diet_feed: DietFeed }) => ({
+const withDietFeedObserver = withObservables([TableName.DIET_FEED], ({ diet_feed }: { diet_feed: DietFeed }) => ({
   diet_feed
 }))
 
-const ListItemMenu = (
-  { dietFeedId, onEdit, onDelete }: {
-    dietFeedId: string,
-    onEdit: (dietFeedId: string) => void,
-    onDelete: (dietFeedId: string) => void
-  }
-) => {
+const ListItemMenu = ({
+  dietFeedId,
+  onEdit,
+  onDelete
+}: {
+  dietFeedId: string
+  onEdit: (dietFeedId: string) => void
+  onDelete: (dietFeedId: string) => void
+}) => {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const [menuVisible, setMenuVisible] = useState(false)
@@ -42,7 +44,7 @@ const ListItemMenu = (
         leadingIcon='pencil-outline'
         onPress={() => {
           onEdit(dietFeedId)
-          setMenuVisible(false);
+          setMenuVisible(false)
         }}
       />
       <Menu.Item
@@ -52,7 +54,7 @@ const ListItemMenu = (
         onPress={() => {
           onDelete(dietFeedId)
           dispatch(show(DietSnackbarId.REMOVED_DIETFEED))
-          setMenuVisible(false);
+          setMenuVisible(false)
         }}
       />
     </Menu>
@@ -60,18 +62,20 @@ const ListItemMenu = (
 }
 
 type DietFeedProps = {
-  diet_feed: DietFeed,
-  onEdit: (dietFeedId: string) => void,
+  diet_feed: DietFeed
+  onEdit: (dietFeedId: string) => void
   onDelete: (dietFeedId: string) => void
   findFeedName: (feedId: string) => string
 }
 
-const DietFeedItem = observeDietFeed(({ diet_feed, onEdit, onDelete, findFeedName }: DietFeedProps) => {
+const DietFeedItem = withDietFeedObserver(({ diet_feed, onEdit, onDelete, findFeedName }: DietFeedProps) => {
   return (
     <List.Item
       style={{ paddingVertical: 2, paddingRight: 8 }}
       title={findFeedName(diet_feed.feed.id)}
-      description={diet_feed.feedProportion === 'Por porcentaje' ? `${diet_feed.percentage}%` : `${diet_feed.feedAmount} kg`}
+      description={
+        diet_feed.feedProportion === 'Por porcentaje' ? `${diet_feed.percentage}%` : `${diet_feed.feedAmount} kg`
+      }
       right={() => (
         <ListItemMenu
           dietFeedId={diet_feed.id}

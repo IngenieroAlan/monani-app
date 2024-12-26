@@ -19,11 +19,11 @@ type BiologicalInfoCardProps = {
   archive?: CattleArchive
 }
 
-const observeArchive = withObservables(['archive'], ({ archive }: { archive?: CattleArchive }) => ({
+const withArchiveObserver = withObservables(['archive'], ({ archive }: { archive?: CattleArchive }) => ({
   archive: archive || of(undefined)
 }))
 
-const AgeDisplay = observeArchive((props: AgeDisplayProps) => {
+const AgeDisplay = withArchiveObserver((props: AgeDisplayProps) => {
   const age = useMemo(() => {
     return getIntervalDuration(props.bornAt, props.archive?.archivedAt ?? new Date())
   }, [props.bornAt, props.archive?.archivedAt])

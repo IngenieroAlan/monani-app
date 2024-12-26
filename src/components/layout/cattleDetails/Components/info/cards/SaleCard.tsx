@@ -8,11 +8,11 @@ import { memo, useMemo } from 'react'
 import { View } from 'react-native'
 import { Avatar, Card, Divider, Text } from 'react-native-paper'
 
-const observeSale = withObservables(['sale'], ({ sale }: { sale: CattleSale }) => ({
+const withSaleObserver = withObservables(['sale'], ({ sale }: { sale: CattleSale }) => ({
   sale
 }))
 
-const SaleCard = observeSale(({ sale }: { sale: CattleSale }) => {
+const SaleCard = withSaleObserver(({ sale }: { sale: CattleSale }) => {
   const theme = useAppTheme()
 
   const saleDate = useMemo(() => {

@@ -13,12 +13,12 @@ import UnarchiveCattleAction from './UnarchiveCattleAction'
 
 const BOTTOM_APPBAR_HEIGHT = 80
 
-const observeCattleSale = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
+const withCattleSaleObserver = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle: cattle,
   sale: cattle.sale
 }))
 
-const CattleBottomAppBar = observeCattleSale(({ cattle, sale }: { cattle: Cattle; sale: CattleSale[] }) => {
+const CattleBottomAppBar = withCattleSaleObserver(({ cattle, sale }: { cattle: Cattle; sale: CattleSale[] }) => {
   const navigation = useNavigation()
   const { bottom } = useSafeAreaInsets()
   const { cattleArchive } = useCattleArchive(cattle)

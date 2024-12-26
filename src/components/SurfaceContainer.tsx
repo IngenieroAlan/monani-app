@@ -1,15 +1,25 @@
 import useAppTheme from '@/theme'
-import { View, ViewProps } from 'react-native'
+import { ComponentProps, ElementType } from 'react'
+import { View } from 'react-native'
 
-export const SurfaceContainer = ({ children, style, ...rest }: ViewProps) => {
+type SurfaceContainerProps<T extends ElementType> = {
+  Component?: T
+} & ComponentProps<T>
+
+export const SurfaceContainer = <T extends React.ElementType = typeof View>({
+  Component = View,
+  children,
+  style,
+  ...rest
+}: SurfaceContainerProps<T>) => {
   const theme = useAppTheme()
 
   return (
-    <View
+    <Component
       {...rest}
       style={[style, { flex: 1, backgroundColor: theme.colors.surface }]}
     >
       {children}
-    </View>
+    </Component>
   )
 }

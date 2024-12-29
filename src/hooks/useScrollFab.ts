@@ -7,7 +7,7 @@ const useScrollFab = () => {
   // const [isScrollAtTop, setIsScrollAtTop] = useState(false)
 
   const onScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const currentScrollPosition = Math.abs(e.nativeEvent.contentOffset.y)
+    const currentScrollPosition = Math.max(e.nativeEvent.contentOffset.y, 0)
 
     setIsFabExtended(currentScrollPosition <= lastScrollPosition.current)
 

@@ -30,7 +30,7 @@ const DietFeedForm = ({
     return `${Math.trunc(equivalentWeight)}.${decimals ? decimals.padEnd(3, '0') : '000'}`
   }, [quantity.value])
 
-  const { feeds } = useFeeds()
+  const { feedsRecords } = useFeeds()
 
   const dropdownOptions = [
     {
@@ -45,13 +45,13 @@ const DietFeedForm = ({
 
   const feedData: SearchBarDataItem[] = useMemo(
     () =>
-      feeds.map((feed) => ({
+      feedsRecords.map((feed) => ({
         id: feed.id,
         title: feed.name,
         description: feed.feedType,
         value: feed.id
       })),
-    [feeds]
+    [feedsRecords]
   )
 
   return (

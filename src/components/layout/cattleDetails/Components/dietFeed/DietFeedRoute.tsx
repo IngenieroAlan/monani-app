@@ -16,7 +16,7 @@ import DietSnackbarContainer, { DietSnackbarId } from "./DietSnackbarContainer";
 
 export default function DietFeedRoute({ navigation, route }: NativeStackScreenProps<CattleStackParamList, 'CreateDietFeedView'>) {
   const { cattleInfo } = useAppSelector((state: RootState) => state.cattles);
-  const { feeds } = useFeeds()
+  const { feedsRecords } = useFeeds()
   const { dietFeeds } = useDietFeeds(cattleInfo!);
   const { diet } = useDiet(cattleInfo!);
   const dispatch = useAppDispatch();
@@ -25,7 +25,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
   const modify = route.params?.modify || false;
 
   const dietFeed = useMemo(() => dietFeedId ? dietFeeds.find(dietFeed => dietFeed.id === dietFeedId) : undefined, [dietFeedId, dietFeeds]);
-  const findFeed = useCallback((feedId: string) => feeds.find(feed => feed.id === feedId), [feeds]);
+  const findFeed = useCallback((feedId: string) => feedsRecords.find(feed => feed.id === feedId), [feedsRecords]);
   const currentFeed = useMemo(() => dietFeed ? findFeed(dietFeed.feed.id) : undefined, [dietFeed, findFeed]);
   const feedName = useMemo(() => currentFeed ? currentFeed.name : undefined, [currentFeed]);
 
@@ -59,7 +59,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
     const { feedProportion, feed, quantity } = getValues();
     const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined;
     const feedAmount = feedProportion === 'Fija' ? quantity : cattleInfo!.weight * (quantity / 100);
-    const findedFeed = feed ? feeds.find(F => F.id === feed) : undefined;
+    const findedFeed = feed ? feedsRecords.find(F => F.id === feed) : undefined;
 
     const Action = async () => {
       try {
@@ -90,7 +90,7 @@ export default function DietFeedRoute({ navigation, route }: NativeStackScreenPr
 
     Action();
     navigation.goBack();
-  }, [cattleInfo, diet, dietFeed, currentFeed, feeds]);
+  }, [cattleInfo, diet, dietFeed, currentFeed, feedsRecords]);
 
   return (
     <>

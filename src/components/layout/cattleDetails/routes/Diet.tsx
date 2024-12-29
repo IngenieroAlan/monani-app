@@ -51,7 +51,7 @@ const CattleDietDetails = withCattleObserver(({ cattle }: { cattle: Cattle }) =>
   const [index, setIndex] = useState(0)
   const navigation = useNavigation()
   const [totalAmount, setTotalAmount] = useState(0)
-  const { feeds } = useFeeds()
+  const { feedsRecords } = useFeeds()
 
   const onEdit = useCallback((dietFeedId: string) => {
     navigation.navigate('CattleStack', {
@@ -75,7 +75,7 @@ const CattleDietDetails = withCattleObserver(({ cattle }: { cattle: Cattle }) =>
     setTotalAmount(dietFeeds.reduce((acc, dietFeed) => acc + parseFloat(dietFeed.feedAmount.toString()), 0))
   }, [dietFeeds, diet])
 
-  const findFeedName = useCallback((feedId: string) => feeds.find((feed) => feed.id === feedId)?.name || '', [feeds])
+  const findFeedName = useCallback((feedId: string) => feedsRecords.find((feed) => feed.id === feedId)?.name || '', [feedsRecords])
 
   return (
     <ScrollView style={[cattleDetails.container, cattleDetails.cardsContainer]}>

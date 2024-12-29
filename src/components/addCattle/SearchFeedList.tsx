@@ -54,7 +54,7 @@ const SearchFeedList = <T extends FieldValues>({
   name,
   control
 }: ListProps<T>) => {
-  const { feeds } = useFeeds()
+  const { feedsRecords } = useFeeds()
   const dispatch = useAppDispatch()
 
   const renderItem = (
@@ -104,7 +104,7 @@ const SearchFeedList = <T extends FieldValues>({
                 return true;
               }}
             >
-              <FlatList data={feeds} renderItem={({ item }) => renderItem({ item, onChange })} keyExtractor={(item) => item.id} />
+              <FlatList data={feedsRecords} renderItem={({ item }) => renderItem({ item, onChange })} keyExtractor={(item) => item.id} />
             </View>
           )
         }}

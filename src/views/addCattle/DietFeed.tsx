@@ -17,7 +17,7 @@ type ScreenProps = NativeStackScreenProps<CreateCattleStackParamList, 'DietFeed'
 export default function DietFeed({ navigation, route }: ScreenProps) {
   const { cattle, dietFeeds } = useAppSelector(state => state.addCattle);
   const dispatch = useAppDispatch();
-  const { feeds } = useFeeds();
+  const { feedsRecords } = useFeeds();
 
   const dietFeedId = route.params?.dietFeedId;
   const modify = route.params?.modify || false;
@@ -46,7 +46,7 @@ export default function DietFeed({ navigation, route }: ScreenProps) {
     const { feedProportion, feed, quantity } = getValues();
     const percentage = feedProportion === 'Por porcentaje' ? quantity : undefined;
     const feedAmount = feedProportion === 'Fija' ? quantity : cattle!.weight * (quantity / 100);
-    const findedFeed = feed ? feeds.find(F => F.id === feed) : undefined;
+    const findedFeed = feed ? feedsRecords.find(F => F.id === feed) : undefined;
 
     try {
       if (modify && dietFeedId) {
@@ -82,7 +82,7 @@ export default function DietFeed({ navigation, route }: ScreenProps) {
     }
 
     navigation.goBack()
-  }, [dietFeedId, cattle, dietFeed, feeds])
+  }, [dietFeedId, cattle, dietFeed, feedsRecords])
 
   return (<>
     <Appbar.Header>

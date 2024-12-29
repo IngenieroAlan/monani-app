@@ -4,24 +4,20 @@ import { NativeScrollEvent, NativeSyntheticEvent } from 'react-native'
 const useScrollFab = () => {
   const lastScrollPosition = useRef(0)
   const [isFabExtended, setIsFabExtended] = useState(true)
-  const [isScrollAtTop, setIsScrollAtTop] = useState(false)
+  // const [isScrollAtTop, setIsScrollAtTop] = useState(false)
 
   const onScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const currentScrollPosition = Math.floor(e.nativeEvent.contentOffset.y) ?? 0
+    const currentScrollPosition = Math.abs(e.nativeEvent.contentOffset.y)
 
-    if (currentScrollPosition > lastScrollPosition.current) {
-      setIsFabExtended(false)
-    } else if (currentScrollPosition < lastScrollPosition.current) {
-      setIsFabExtended(true)
-    }
+    setIsFabExtended(currentScrollPosition <= lastScrollPosition.current)
 
     lastScrollPosition.current = currentScrollPosition
-    setIsScrollAtTop(currentScrollPosition > 0)
+    // setIsScrollAtTop(currentScrollPosition > 0)
   }, [])
 
   return {
     isFabExtended,
-    isScrollAtTop,
+    // isScrollAtTop,
     onScroll
   }
 }

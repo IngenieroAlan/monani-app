@@ -1,24 +1,17 @@
 import { useFeedContext } from '@/contexts'
 import Feed from '@/database/models/Feed'
-import useFeeds from '@/hooks/collections/useFeeds'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
-import { withObservables } from '@nozbe/watermelondb/react'
-import { FlashList } from '@shopify/flash-list'
+import useAppTheme from '@/theme'
 import { memo, useEffect, useState } from 'react'
-import { NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native'
-import { Icon, IconButton, List, Menu, useTheme } from 'react-native-paper'
+import { Icon, IconButton, Menu } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { DELETE_FEED_DIALOG_ID } from './DeleteFeedDialog'
-import { EDIT_FEED_DIALOG_ID } from './EditFeedDialog'
-import { FeedsSnackbarId } from './FeedsSnackbarContainer'
+import { DELETE_FEED_DIALOG_ID } from '../DeleteFeedDialog'
+import { EDIT_FEED_DIALOG_ID } from '../EditFeedDialog'
+import { FeedsSnackbarId } from '../FeedsSnackbarContainer'
 
-const withFeedObserver = withObservables(['feed'], ({ feed }: { feed: Feed }) => ({
-  feed
-}))
-
-const ListItemMenu = ({ feed }: { feed: Feed }) => {
-  const theme = useTheme()
+export const FeedsListItemMenu = memo(({ feed }: { feed: Feed }) => {
+  const theme = useAppTheme()
   const dispatch = useAppDispatch()
   const insets = useSafeAreaInsets()
   const { setValue: setFeedContext } = useFeedContext()
@@ -26,11 +19,10 @@ const ListItemMenu = ({ feed }: { feed: Feed }) => {
   const [menuVisible, setMenuVisible] = useState(false)
 
   useEffect(() => {
-    const fetchDiets = async () => {
+    ;(async () => {
       const diets = await feed.diets
       setCanDelete(diets.length === 0)
-    }
-    fetchDiets()
+    })()
   }, [feed])
 
   return (
@@ -78,32 +70,4 @@ const ListItemMenu = ({ feed }: { feed: Feed }) => {
       />
     </Menu>
   )
-}
-
-const ListItem = withFeedObserver(({ feed }: { feed: Feed }) => {
-  return (
-    <List.Item
-      style={{ paddingRight: 4 }}
-      title={feed.name}
-      description={feed.feedType}
-      right={() => <ListItemMenu feed={feed} />}
-    />
-  )
 })
-
-const FeedsList = ({ onScroll }: { onScroll?: (e: NativeSyntheticEvent<NativeScrollEvent>) => void }) => {
-  const { feeds } = useFeeds()
-
-  return (
-    <FlashList
-      estimatedItemSize={81}
-      onScroll={onScroll}
-      data={feeds}
-      renderItem={({ item }) => <ListItem feed={item} />}
-      keyExtractor={(item) => item.id}
-      ListFooterComponent={() => <View style={{ height: 88 }} />}
-    />
-  )
-}
-
-export default memo(FeedsList)

@@ -6,16 +6,32 @@ import { show } from '@/redux/slices/uiVisibilitySlice'
 import CreateFeedDialog, { CREATE_FEED_DIALOG_ID } from '@/views/feeds/components/CreateFeedDialog'
 import DeleteFeedDialog from '@/views/feeds/components/DeleteFeedDialog'
 import EditFeedDialog from '@/views/feeds/components/EditFeedDialog'
-import FeedsList from '@/views/feeds/components/FeedsList'
 import FeedsSnackbarContainer from '@/views/feeds/components/FeedsSnackbarContainer'
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet } from 'react-native'
 import { AnimatedFAB, Appbar } from 'react-native-paper'
+import { FeedsList } from './components/FeedsList/FeedsList'
+
+const List = () => {
+  const dispatch = useAppDispatch()
+  const { onScroll, isFabExtended } = useScrollFab()
+
+  return (
+    <>
+      <FeedsList flashListProps={{ onScroll }} />
+      <AnimatedFAB
+        style={styles.animatedFab}
+        icon='plus'
+        label='Añadir'
+        extended={isFabExtended}
+        onPress={() => dispatch(show(CREATE_FEED_DIALOG_ID))}
+      />
+    </>
+  )
+}
 
 const FeedsView = () => {
-  const dispatch = useAppDispatch()
   const navigation = useNavigation()
-  const { onScroll, isFabExtended } = useScrollFab()
 
   return (
     <>
@@ -25,14 +41,7 @@ const FeedsView = () => {
             <Appbar.BackAction onPress={navigation.goBack} />
             <Appbar.Content title='Alimentos' />
           </Appbar.Header>
-          <FeedsList onScroll={onScroll} />
-          <AnimatedFAB
-            style={styles.animatedFab}
-            icon='plus'
-            label='Añadir'
-            extended={isFabExtended}
-            onPress={() => dispatch(show(CREATE_FEED_DIALOG_ID))}
-          />
+          <List />
         </SurfaceContainer>
         <EditFeedDialog />
         <DeleteFeedDialog />

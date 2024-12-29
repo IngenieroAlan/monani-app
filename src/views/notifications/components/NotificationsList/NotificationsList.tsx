@@ -1,9 +1,8 @@
 import EmptyList from '@/components/EmptyList'
+import { RecordsList } from '@/components/RecordsList'
 import useSentNotifications from '@/views/notifications/hooks/useSentNotifications'
 import { FlashList } from '@shopify/flash-list'
 import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { ActivityIndicator } from 'react-native-paper'
 import { NotificationsListSection } from './NotificationsListSection'
 
 const ITEMS_PER_PAGINATE = 25
@@ -17,43 +16,26 @@ export const NotificationsList = () => {
   })
 
   return (
-    <View style={{ flex: 1 }}>
-      <ActivityIndicator
-        style={[styles.activityIndicator, { opacity: +isPending }]}
-        size='large'
-        animating
-      />
-      {notificationsRecords.length === 0 && !isPending ? (
+    <RecordsList
+      isPending={isPending}
+      isListEmpty={notificationsRecords.length === 0 && !isPending}
+      emptyListComponent={
         <EmptyList
           icon='sleep'
           text='Aún no hay notificaciones nuevas.'
         />
-      ) : (
-        <View style={{ flex: 1 }}>
-          <View style={{ flex: 1, opacity: +!isPending }}>
-            <FlashList
-              estimatedItemSize={159}
-              data={notificationsRecords}
-              renderItem={({ item }) => <NotificationsListSection notificationsByDate={item} />}
-              keyExtractor={keyExtractor}
-              onEndReachedThreshold={2}
-              onEndReached={() => {
-                if (notificationsRecords.length > 0) setIndex(index + 1)
-              }}
-            />
-          </View>
-        </View>
-      )}
-    </View>
+      }
+    >
+      <FlashList
+        estimatedItemSize={159}
+        data={notificationsRecords}
+        renderItem={({ item }) => <NotificationsListSection notificationsByDate={item} />}
+        keyExtractor={keyExtractor}
+        onEndReachedThreshold={2}
+        onEndReached={() => {
+          if (notificationsRecords.length > 0) setIndex(index + 1)
+        }}
+      />
+    </RecordsList>
   )
 }
-
-const styles = StyleSheet.create({
-  activityIndicator: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0
-  }
-})

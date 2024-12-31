@@ -3,26 +3,47 @@ import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useEffect, useState } from 'react'
+import { InteractionManager } from 'react-native'
 
-const useMedications = () => {
+type UseMedicationsProps = {
+  take?: number
+}
+
+const useMedications = ({ take }: UseMedicationsProps = {}) => {
   const database = useDatabase()
-  const [medications, setMedications] = useState<Medication[]>([])
+  const [medicationsRecords, setMedicationsRecords] = useState<Medication[]>([])
+  const [isPending, setIsPending] = useState(true)
 
-  let medicationsQuery = database.collections
-    .get<Medication>(TableName.MEDICATIONS)
-    .query(
-      Q.sortBy('name', Q.asc)
-    )
+  let medicationsQuery = database.get<Medication>(TableName.MEDICATIONS).query(Q.sortBy('name', Q.asc))
+
+  if (take) {
+    medicationsQuery = medicationsQuery.extend(Q.take(take))
+  }
 
   useEffect(() => {
+    setIsPending(true)
+
     const subscription = medicationsQuery.observe().subscribe((data) => {
-      setMedications(data)
+      InteractionManager.runAfterInteractions(() => {
+        setMedicationsRecords(data)
+      }).then(() => setIsPending(false))
+      setMedicationsRecords(data)
     })
 
     return () => subscription.unsubscribe()
-  }, [database])
+  }, [])
 
-  return { medications }
+  useEffect(() => {
+    const subscription = medicationsQuery.observe().subscribe((data) => {
+      InteractionManager.runAfterInteractions(() => {
+        setMedicationsRecords(data)
+      })
+    })
+
+    return () => subscription.unsubscribe()
+  }, [take])
+
+  return { medicationsRecords, isPending }
 }
 
 export default useMedications

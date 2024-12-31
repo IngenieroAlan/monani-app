@@ -21,17 +21,17 @@ const CattleMedicationForm = ({
   const { errors } = formState
   const { field: dosesPerYear } = useController({ name: 'dosesPerYear', control })
   const { field: nextDoseAt } = useController({ name: 'nextDoseAt', control })
-  const { medications } = useMedications()
+  const { medicationsRecords } = useMedications()
 
   const medicationData: SearchBarDataItem[] = useMemo(
     () =>
-      medications.map((medication) => ({
+      medicationsRecords.map((medication) => ({
         id: medication.id,
         title: medication.name,
         description: medication.medicationType,
         value: medication.id
       })),
-    [medications]
+    [medicationsRecords]
   )
 
   return (

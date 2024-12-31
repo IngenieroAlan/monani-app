@@ -89,10 +89,10 @@ type MedicationScheduleProps = {
 
 const MedicationScheduleItem = withMedicationScheduleObserver(
   ({ medication_schedules, onEdit, onDelete }: MedicationScheduleProps) => {
-    const { medications } = useMedications()
+    const { medicationsRecords } = useMedications()
     const findMedication = useCallback(
-      (MedicationId: string) => medications.find((medication) => medication.id === MedicationId) || '',
-      [medications, medication_schedules]
+      (MedicationId: string) => medicationsRecords.find((medication) => medication.id === MedicationId) || '',
+      [medicationsRecords, medication_schedules]
     )
     return (
       <List.Item

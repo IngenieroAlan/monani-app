@@ -16,14 +16,14 @@ type ScreenProps = NativeStackScreenProps<CreateCattleStackParamList, 'Medicatio
 
 export default function Medication({ navigation, route }: ScreenProps) {
   const { medicationSchedules, cattle } = useAppSelector(state => state.addCattle)
-  const { medications } = useMedications()
+  const { medicationsRecords } = useMedications()
   const dispatch = useAppDispatch();
 
   const medicationScheduleId = route.params?.medicationScheduleId || '';
   const modify = route.params?.modify || false;
 
   const medicationSchedule = useMemo(() => medicationSchedules.find(medicationSchedule => medicationSchedule.medicationScheduleId === medicationScheduleId), [medicationSchedules, medicationScheduleId])
-  const currentMedication = useMemo(() => medications.find(medication => medication.id === medicationSchedule?.medication.id), [medications, medicationSchedule])
+  const currentMedication = useMemo(() => medicationsRecords.find(medication => medication.id === medicationSchedule?.medication.id), [medicationsRecords, medicationSchedule])
   const medicationName = useMemo(() => (currentMedication ? currentMedication.name : undefined), [currentMedication])
 
   const initialMedicationScheduleValues = medicationSchedule ? {
@@ -51,7 +51,7 @@ export default function Medication({ navigation, route }: ScreenProps) {
 
   const onSubmit = useCallback(() => {
     const { medication, nextDoseAt, dosesPerYear } = getValues()
-    const findedMed = medication ? medications.find(FMedication => FMedication.id === medication) : undefined
+    const findedMed = medication ? medicationsRecords.find(FMedication => FMedication.id === medication) : undefined
 
     try {
       if (modify) {
@@ -85,7 +85,7 @@ export default function Medication({ navigation, route }: ScreenProps) {
     }
 
     navigation.goBack()
-  }, [currentMedication, medicationScheduleId, cattle.tagId, medications])
+  }, [currentMedication, medicationScheduleId, cattle.tagId, medicationsRecords])
 
   return (<>
     <Appbar.Header>

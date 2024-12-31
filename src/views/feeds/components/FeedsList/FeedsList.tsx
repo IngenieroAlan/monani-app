@@ -26,7 +26,7 @@ export const FeedsList = ({ flashListProps }: FeedsListProps) => {
       emptyListComponent={
         <EmptyList
           icon='silverware'
-          text='No se han encontado registros.'
+          text='No se han encontrado registros.'
         />
       }
     >

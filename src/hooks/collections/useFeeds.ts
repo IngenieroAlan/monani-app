@@ -14,7 +14,11 @@ const useFeeds = ({ take }: useFeedsProps = {}) => {
   const [feedsRecords, setFeedsRecords] = useState<Feed[]>([])
   const [isPending, setIsPending] = useState(true)
 
-  let feedsQuery = database.collections.get<Feed>(TableName.FEEDS).query(Q.sortBy('name', Q.asc))
+  let feedsQuery = database.get<Feed>(TableName.FEEDS).query(Q.sortBy('name', Q.asc))
+
+  if (take) {
+    feedsQuery = feedsQuery.extend(Q.take(take))
+  }
 
   useEffect(() => {
     setIsPending(true)

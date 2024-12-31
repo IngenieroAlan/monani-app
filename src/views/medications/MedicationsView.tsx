@@ -8,16 +8,32 @@ import CreateMedicationDialog, {
 } from '@/views/medications/components/CreateMedicationDialog'
 import DeleteMedicationDialog from '@/views/medications/components/DeleteMedicationDialog'
 import EditMedicationDialog from '@/views/medications/components/EditMedicationDialog'
-import MedicationsList from '@/views/medications/components/MedicationsList'
 import MedicationsSnackbarContainer from '@/views/medications/components/MedicationsSnackbarContainer'
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet } from 'react-native'
 import { AnimatedFAB, Appbar } from 'react-native-paper'
+import { MedicationsList } from './components/MedicationsList/MedicationsList'
+
+const List = () => {
+  const dispatch = useAppDispatch()
+  const { onScroll, isFabExtended } = useScrollFab()
+
+  return (
+    <>
+      <MedicationsList flashListProps={{ onScroll }} />
+      <AnimatedFAB
+        style={styles.animatedFab}
+        icon='plus'
+        label='Añadir'
+        extended={isFabExtended}
+        onPress={() => dispatch(show(CREATE_MEDICATION_DIALOG_ID))}
+      />
+    </>
+  )
+}
 
 const MedicationsView = () => {
-  const dispatch = useAppDispatch()
   const navigation = useNavigation()
-  const { onScroll, isFabExtended } = useScrollFab()
 
   return (
     <>
@@ -27,14 +43,7 @@ const MedicationsView = () => {
             <Appbar.BackAction onPress={navigation.goBack} />
             <Appbar.Content title='Medicamentos' />
           </Appbar.Header>
-          <MedicationsList onScroll={onScroll} />
-          <AnimatedFAB
-            style={styles.animatedFab}
-            icon='plus'
-            label='Añadir'
-            extended={isFabExtended}
-            onPress={() => dispatch(show(CREATE_MEDICATION_DIALOG_ID))}
-          />
+          <List />
           <EditMedicationDialog />
           <DeleteMedicationDialog />
         </SurfaceContainer>

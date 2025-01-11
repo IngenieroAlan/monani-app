@@ -50,6 +50,7 @@ export const NotificationsList = () => {
             )
           }
         }}
+        getItemType={(item) => (typeof item === 'string' ? 'sectionHeader' : 'row')}
         keyExtractor={keyExtractor}
         onEndReachedThreshold={2}
         onEndReached={() => {

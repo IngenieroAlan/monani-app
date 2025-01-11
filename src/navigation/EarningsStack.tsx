@@ -48,7 +48,7 @@ export const EarningsStack = () => {
               size={24}
             />
           ),
-          tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Transacciones</Text>
+          tabBarLabel: 'Transacciones'
         }}
         component={EarningsTransactionsView}
       />
@@ -62,7 +62,7 @@ export const EarningsStack = () => {
               size={24}
             />
           ),
-          tabBarLabel: ({ color }) => <Text style={{ color: color, textAlign: 'center' }}>Resumen</Text>
+          tabBarLabel: 'Resumen'
         }}
         component={EarningsSummaryView}
       />

@@ -3,7 +3,9 @@ import { RecordsList } from '@/components/RecordsList'
 import useSentNotifications from '@/views/notifications/hooks/useSentNotifications'
 import { FlashList } from '@shopify/flash-list'
 import { useState } from 'react'
-import { NotificationsListSection } from './NotificationsListSection'
+import { StyleSheet } from 'react-native'
+import { Text } from 'react-native-paper'
+import { NotificationsListItem } from './NotificationsListItem'
 
 const ITEMS_PER_PAGINATE = 25
 
@@ -27,9 +29,27 @@ export const NotificationsList = () => {
       }
     >
       <FlashList
-        estimatedItemSize={159}
+        estimatedItemSize={68}
         data={notificationsRecords}
-        renderItem={({ item }) => <NotificationsListSection notificationsByDate={item} />}
+        renderItem={({ item }) => {
+          if (typeof item === 'string') {
+            return (
+              <Text
+                variant='titleSmall'
+                style={styles.title}
+              >
+                {item}
+              </Text>
+            )
+          } else {
+            return (
+              <NotificationsListItem
+                key={item.id}
+                notification={item}
+              />
+            )
+          }
+        }}
         keyExtractor={keyExtractor}
         onEndReachedThreshold={2}
         onEndReached={() => {
@@ -39,3 +59,11 @@ export const NotificationsList = () => {
     </RecordsList>
   )
 }
+
+const styles = StyleSheet.create({
+  title: {
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+    paddingTop: 24
+  }
+})

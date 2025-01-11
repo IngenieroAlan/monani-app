@@ -12,22 +12,25 @@ type UseNotificationsProps = {
 }
 
 const groupNotificationsByDate = (notifications: SentNotification[]) => {
-  const notificationsData = notifications.reduce((acc: Record<string, SentNotification[]>, notification) => {
-    const dateKey = formatDateRelativeToYear(notification.eventAt)
+  const groupedNotifications: (string | SentNotification)[] = []
 
-    if (!acc[dateKey]) acc[dateKey] = []
-    acc[dateKey].push(notification)
+  notifications.forEach((notification) => {
+    const date = formatDateRelativeToYear(notification.eventAt)
 
-    return acc
-  }, {})
+    if (!groupedNotifications.includes(date)) {
+      groupedNotifications.push(date)
+    }
 
-  return Object.entries(notificationsData)
+    groupedNotifications.push(notification)
+  })
+
+  return groupedNotifications
 }
 
 const useSentNotifications = ({ take, isMarkedAsRead }: UseNotificationsProps = {}) => {
   const database = useDatabase()
   const [isPending, setIsPending] = useState(true)
-  const [notificationsRecords, setNotificationsRecords] = useState<[string, SentNotification[]][]>([])
+  const [notificationsRecords, setNotificationsRecords] = useState<(string | SentNotification)[]>([])
 
   let notificationsQuery = database.collections
     .get<SentNotification>(TableName.SENT_NOTIFICATIONS)

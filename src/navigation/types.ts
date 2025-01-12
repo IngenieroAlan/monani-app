@@ -53,6 +53,11 @@ export type CattleStackParamList = {
   CreateMilkReportView: undefined
 }
 
+export type MilkProductionStackParamList = {
+  DailyMilkProductionView: undefined
+  MilkProductionSummaryView: undefined
+}
+
 export type EarningsStackParamList = {
   EarningsTransactionsView: undefined
   EarningsSummaryView: undefined

@@ -7,65 +7,71 @@ import { es } from 'date-fns/locale'
 import { useEffect, useState } from 'react'
 import { InteractionManager } from 'react-native'
 
-type UseMilkProductionsProps = {
-  take?: number
-}
-
 export type MilkProductionListItem = {
   liters: number
   totalProductions: number
   productionDate: string
 }
 
-const groupMilkProductions = (data: MilkProduction[]) => {
-  return Object.values(
-    data.reduce((acc: Record<string, MilkProductionListItem>, milkProduction) => {
-      const date = format(milkProduction.producedAt, 'dd/MM/yy', { locale: es })
-
-      if (!acc[date]) {
-        acc[date] = {
-          liters: 0,
-          totalProductions: 0,
-          productionDate: date
-        }
-      }
-
-      acc[date].liters += milkProduction.liters
-      acc[date].totalProductions++
-
-      return acc
-    }, {})
-  )
+type UseMilkProductionsProps = {
+  take?: number
+  betweenDates?: number[] | null
 }
 
-export const useMilkProductions = ({ take }: UseMilkProductionsProps = {}) => {
+export const useMilkProductions = ({ take, betweenDates }: UseMilkProductionsProps = {}) => {
   const database = useDatabase()
   const [records, setRecords] = useState<MilkProductionListItem[]>([])
   const [isPending, setIsPending] = useState(true)
 
-  let query = database.get<MilkProduction>(TableName.MILK_PRODUCTIONS).query(Q.sortBy('produced_at', Q.desc))
+  let rawQuery = `SELECT * FROM ${TableName.MILK_PRODUCTIONS_VIEW}`
+  let observableQuery = database.get<MilkProduction>(TableName.MILK_PRODUCTIONS).query()
+
+  if (betweenDates?.length) {
+    rawQuery = `${rawQuery} WHERE productionDate >= ${betweenDates[0]} AND productionDate <= ${betweenDates[1]}`
+  }
 
   if (take) {
-    query = query.extend(Q.take(take))
+    rawQuery = `${rawQuery} LIMIT ${take}`
   }
 
   useEffect(() => {
     setIsPending(true)
 
-    const subscription = query.observe().subscribe((data) => {
-      InteractionManager.runAfterInteractions(() => {
-        setRecords(groupMilkProductions(data))
+    const subscription = observableQuery.observeWithColumns(['liters']).subscribe(() => {
+      InteractionManager.runAfterInteractions(async () => {
+        const rawRecords = (await database
+          .get(TableName.MILK_PRODUCTIONS)
+          .query(Q.unsafeSqlQuery(rawQuery))
+          .unsafeFetchRaw()) as { liters: number; totalProductions: number; productionDate: number }[]
+
+        setRecords(
+          rawRecords.map(({ productionDate, ...rest }) => ({
+            ...rest,
+            productionDate: format(productionDate, 'dd/MM/yy', { locale: es })
+          }))
+        )
+
         setIsPending(false)
       })
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [betweenDates])
 
   useEffect(() => {
-    const subscription = query.observe().subscribe((data) => {
-      InteractionManager.runAfterInteractions(() => {
-        setRecords(groupMilkProductions(data))
+    const subscription = observableQuery.observeWithColumns(['liters']).subscribe(() => {
+      InteractionManager.runAfterInteractions(async () => {
+        const rawRecords = (await database
+          .get(TableName.MILK_PRODUCTIONS)
+          .query(Q.unsafeSqlQuery(rawQuery))
+          .unsafeFetchRaw()) as { liters: number; totalProductions: number; productionDate: number }[]
+
+        setRecords(
+          rawRecords.map(({ productionDate, ...rest }) => ({
+            ...rest,
+            productionDate: format(productionDate, 'dd/MM/yy', { locale: es })
+          }))
+        )
       })
     })
 

@@ -4,7 +4,7 @@ import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { InteractionManager } from 'react-native'
 
 export type MilkProductionListItem = {
@@ -34,22 +34,26 @@ export const useMilkProductions = ({ take, betweenDates }: UseMilkProductionsPro
     rawQuery = `${rawQuery} LIMIT ${take}`
   }
 
+  const fetchRecords = useCallback(async () => {
+    const rawRecords = (await database
+      .get(TableName.MILK_PRODUCTIONS)
+      .query(Q.unsafeSqlQuery(rawQuery))
+      .unsafeFetchRaw()) as { liters: number; totalProductions: number; productionDate: number }[]
+
+    setRecords(
+      rawRecords.map(({ productionDate, ...rest }) => ({
+        ...rest,
+        productionDate: format(productionDate, 'dd/MM/yy', { locale: es })
+      }))
+    )
+  }, [])
+
   useEffect(() => {
     setIsPending(true)
 
     const subscription = observableQuery.observeWithColumns(['liters']).subscribe(() => {
       InteractionManager.runAfterInteractions(async () => {
-        const rawRecords = (await database
-          .get(TableName.MILK_PRODUCTIONS)
-          .query(Q.unsafeSqlQuery(rawQuery))
-          .unsafeFetchRaw()) as { liters: number; totalProductions: number; productionDate: number }[]
-
-        setRecords(
-          rawRecords.map(({ productionDate, ...rest }) => ({
-            ...rest,
-            productionDate: format(productionDate, 'dd/MM/yy', { locale: es })
-          }))
-        )
+        await fetchRecords()
 
         setIsPending(false)
       })
@@ -61,17 +65,7 @@ export const useMilkProductions = ({ take, betweenDates }: UseMilkProductionsPro
   useEffect(() => {
     const subscription = observableQuery.observeWithColumns(['liters']).subscribe(() => {
       InteractionManager.runAfterInteractions(async () => {
-        const rawRecords = (await database
-          .get(TableName.MILK_PRODUCTIONS)
-          .query(Q.unsafeSqlQuery(rawQuery))
-          .unsafeFetchRaw()) as { liters: number; totalProductions: number; productionDate: number }[]
-
-        setRecords(
-          rawRecords.map(({ productionDate, ...rest }) => ({
-            ...rest,
-            productionDate: format(productionDate, 'dd/MM/yy', { locale: es })
-          }))
-        )
+        await fetchRecords()
       })
     })
 

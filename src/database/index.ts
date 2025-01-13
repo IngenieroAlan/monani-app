@@ -70,30 +70,23 @@ export const initializeDatabase = async () => {
     .get<MilkProductionSummary>(TableName.MILK_PRODUCTION_SUMMARY)
     .query()
     .fetchCount()
-  const earningsSummaryExists = await database
-    .get<EarningsSummary>(TableName.EARNINGS_SUMMARY)
-    .query()
-    .fetchCount()
+  const earningsSummaryExists = await database.get<EarningsSummary>(TableName.EARNINGS_SUMMARY).query().fetchCount()
 
   if (!milkProductionSummaryExists) {
     await database.write(async () => {
-      await database
-        .get<MilkProductionSummary>(TableName.MILK_PRODUCTION_SUMMARY)
-        .create(milkProductionSummary => {
-          milkProductionSummary.totalProduction = 0
-        })
+      await database.get<MilkProductionSummary>(TableName.MILK_PRODUCTION_SUMMARY).create((milkProductionSummary) => {
+        milkProductionSummary.totalProduction = 0
+      })
     })
   }
 
   if (!earningsSummaryExists) {
     await database.write(async () => {
-      await database
-        .get<EarningsSummary>(TableName.EARNINGS_SUMMARY)
-        .create(earningsSummary => {
-          earningsSummary.totalEarnings = 0
-          earningsSummary.totalCattleSales = 0
-          earningsSummary.totalMilkSales = 0
-        })
+      await database.get<EarningsSummary>(TableName.EARNINGS_SUMMARY).create((earningsSummary) => {
+        earningsSummary.totalEarnings = 0
+        earningsSummary.totalCattleSales = 0
+        earningsSummary.totalMilkSales = 0
+      })
     })
   }
 }

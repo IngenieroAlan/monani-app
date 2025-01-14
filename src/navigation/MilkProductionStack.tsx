@@ -1,10 +1,10 @@
 import { useAppDispatch } from '@/hooks/useRedux'
 import { setShowBottomStack } from '@/redux/slices/ui'
 import { DailyMilkProductionView } from '@/views/dailyMilkProduction/DailyMilkProductionView'
+import { MilkProductionSummaryView } from '@/views/milkProductionSummary/MilkProductionSummaryView'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Icon, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { MilkProductionResumeView } from '../views/milkProduction/MilkProductionResume'
 import { MilkProductionStackParamList } from './types'
 
 const Stack = createMaterialTopTabNavigator<MilkProductionStackParamList>()
@@ -64,7 +64,7 @@ export const MilkProductionStack = () => {
           ),
           tabBarLabel: 'Resumen'
         }}
-        component={MilkProductionResumeView}
+        component={MilkProductionSummaryView}
       />
     </Stack.Navigator>
   )

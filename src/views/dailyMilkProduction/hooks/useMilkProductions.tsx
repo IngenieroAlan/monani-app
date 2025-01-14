@@ -46,7 +46,7 @@ export const useMilkProductions = ({ take, betweenDates }: UseMilkProductionsPro
         productionDate: format(productionDate, 'dd/MM/yy', { locale: es })
       }))
     )
-  }, [])
+  }, [rawQuery])
 
   useEffect(() => {
     setIsPending(true)

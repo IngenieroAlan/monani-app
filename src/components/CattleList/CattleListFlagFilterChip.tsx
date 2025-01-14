@@ -1,7 +1,7 @@
 import FilterChip from '@/components/FilterChip'
 import MBottomSheet from '@/components/MBottomSheet'
 import { useCattleFilters } from '@/contexts/CattleFiltersContext'
-import { CattleFlags } from '@/zustand/stores/cattleFiltersStore/types'
+import { CattleFlags } from '@/zustand/stores/cattleFilters/types'
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Keyboard, View } from 'react-native'

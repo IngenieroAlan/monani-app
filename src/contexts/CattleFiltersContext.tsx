@@ -1,14 +1,14 @@
-import createCattleFlagsSlice from '@/zustand/stores/cattleFiltersStore/cattleFlagsSlice'
-import createCattleStatusSlice from '@/zustand/stores/cattleFiltersStore/cattleStatusSlice'
-import createPaginateIndexSlice from '@/zustand/stores/cattleFiltersStore/paginateIndexSlice'
-import createProductionTypeSlice from '@/zustand/stores/cattleFiltersStore/productionTypeSlice'
-import createQuarantineSlice from '@/zustand/stores/cattleFiltersStore/quarantineSlice'
-import createTagIdSlice from '@/zustand/stores/cattleFiltersStore/tagIdSlice'
+import createCattleFlagsSlice from '@/zustand/stores/cattleFilters/cattleFlagsSlice'
+import createCattleStatusSlice from '@/zustand/stores/cattleFilters/cattleStatusSlice'
+import createPaginateIndexSlice from '@/zustand/stores/cattleFilters/paginateIndexSlice'
+import createProductionTypeSlice from '@/zustand/stores/cattleFilters/productionTypeSlice'
+import createQuarantineSlice from '@/zustand/stores/cattleFilters/quarantineSlice'
+import createTagIdSlice from '@/zustand/stores/cattleFilters/tagIdSlice'
 import { createContext, PropsWithChildren, useContext, useState } from 'react'
 import { createStore, StoreApi } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { createSelectors } from '../zustand/createSelectors'
-import { CattleFiltersStore, CattleFlags } from '../zustand/stores/cattleFiltersStore/types'
+import { CattleFiltersStore, CattleFlags } from '../zustand/stores/cattleFilters/types'
 
 type CattleFiltersProviderProps = {
   flags?: CattleFlags

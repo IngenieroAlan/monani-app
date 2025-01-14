@@ -6,7 +6,7 @@ import { View, ViewProps } from "react-native";
 import useDateInput from "@/hooks/useDateInput";
 import { DatePickerInputProps } from "react-native-paper-dates/lib/typescript/Date/DatePickerInput.shared";
 import TextInputWithMask from "./TextInputWithMask";
-import MDateTimePicker from "./MDateTimePicker";
+import { DatePicker } from "./DatePicker";
 import { DateType } from "react-native-ui-datepicker";
 import { DatePickerSingleProps } from "react-native-ui-datepicker/lib/typescript/src/DateTimePicker";
 import dayjs from "dayjs";
@@ -121,7 +121,7 @@ const MDatePickerInput = <T extends FieldValues>(
               {...more}
             />
             {/* <Text>{JSON.stringify(dateType)}</Text> */}
-            <MDateTimePicker
+            <DatePicker
               locale="es"
               mode="single"
               date={dateType}

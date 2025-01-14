@@ -5,7 +5,7 @@ import { BottomSheetView } from '@gorhom/bottom-sheet';
 import { MilkProductionItem } from '../../components/milkProduction/MilkProductionItem';
 import { colors } from '../../utils/colors';
 import { useAppDispatch } from '@/hooks/useRedux';
-import MDateTimePicker from '@/components/MDateTimePicker';
+import { DatePicker } from '@/components/DatePicker';
 import useMilkProduction from '@/hooks/collections/useMilkProduction';
 import MilkProduction from '@/database/models/MilkProduction';
 import { FlashList } from '@shopify/flash-list';
@@ -93,7 +93,7 @@ export const MilkProductionView = () => {
         ListEmptyComponent={<EmptyItem />}
         onEndReachedThreshold={2}
       />
-      <MDateTimePicker
+      <DatePicker
         locale="es"
         mode="range"
         visible={openDatePicker}

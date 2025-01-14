@@ -1,4 +1,4 @@
-import MDateTimePicker from '@/components/MDateTimePicker'
+import { DatePicker } from '@/components/DatePicker'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { setBetweenDates } from '@/redux/slices/collections/earningsQuerySlice'
 import { RootState } from '@/redux/store/store'
@@ -34,7 +34,7 @@ const DatePickerModal = (props: Props) => {
   }, [])
 
   return (
-    <MDateTimePicker
+    <DatePicker
       dismissable
       firstDayOfWeek={1}
       mode='range'

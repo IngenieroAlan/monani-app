@@ -1,5 +1,5 @@
+import { DatePicker } from '@/components/DatePicker'
 import FilterChip from '@/components/FilterChip'
-import MDateTimePicker from '@/components/MDateTimePicker'
 import { format, set } from 'date-fns'
 import { memo, MutableRefObject, useRef, useState } from 'react'
 import { DateType } from 'react-native-ui-datepicker'
@@ -26,7 +26,7 @@ const DatePickerModal = memo((props: DatePickerModalProps) => {
   const setBetweenDates = useMilkProductionsFilters('setBetweenDates')
 
   return (
-    <MDateTimePicker
+    <DatePicker
       dismissable
       firstDayOfWeek={1}
       mode='range'

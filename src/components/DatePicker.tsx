@@ -10,7 +10,7 @@ import {
   DatePickerSingleProps
 } from 'react-native-ui-datepicker/lib/typescript/src/DateTimePicker'
 
-type MDateTimePickerProps = {
+type DatePickerProps = {
   visible?: boolean
   dismissable?: boolean
   onCancel?: () => void
@@ -41,11 +41,11 @@ const HeaderButton = ({ icon }: { icon: string }) => {
 }
 
 // Does not support multiple and time modes.
-const MDateTimePicker = ({
+export const DatePicker = ({
   visible = false,
   dismissable = false,
   ...props
-}: MDateTimePickerProps & (DatePickerSingleProps | DatePickerRangeProps)) => {
+}: DatePickerProps & (DatePickerSingleProps | DatePickerRangeProps)) => {
   const theme = useTheme()
 
   const headline = useMemo(() => {
@@ -184,5 +184,3 @@ const styles = StyleSheet.create({
     height: 48
   }
 })
-
-export default MDateTimePicker

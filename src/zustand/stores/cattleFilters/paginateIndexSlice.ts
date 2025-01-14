@@ -1,4 +1,5 @@
-import { CattleFilterSlice, PaginateIndexSlice } from './types'
+import { PaginateIndexSlice } from '../types'
+import { CattleFilterSlice } from './types'
 
 const createPaginateIndexSlice: CattleFilterSlice<PaginateIndexSlice> = (set) => ({
   paginateIndex: 0,

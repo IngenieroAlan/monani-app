@@ -1,10 +1,6 @@
 import { StateCreator } from 'zustand'
+import { BetweenDatesSlice, PaginateIndexSlice } from '../types'
 
-export type BetweenDatesSlice = {
-  betweenDates: number[] | null
-  setBetweenDates: (betweenDates: number[] | null) => void
-}
-
-export type MilkProductionsFiltersStore = BetweenDatesSlice
+export type MilkProductionsFiltersStore = PaginateIndexSlice & BetweenDatesSlice
 
 export type MilkProductionsFilterSlice<T> = StateCreator<MilkProductionsFiltersStore, [['zustand/immer', never]], [], T>

@@ -1,11 +1,6 @@
 import { CattleStatus, ProductionType } from '@/database/models/Cattle'
 import { StateCreator } from 'zustand'
-
-export type PaginateIndexSlice = {
-  paginateIndex: number
-  nextIndex: () => void
-  resetIndex: () => void
-}
+import { PaginateIndexSlice } from '../types'
 
 export type TagIdSlice = {
   tagId: string

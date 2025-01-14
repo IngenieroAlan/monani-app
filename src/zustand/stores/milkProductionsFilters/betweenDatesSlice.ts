@@ -1,9 +1,12 @@
-import { BetweenDatesSlice, MilkProductionsFilterSlice } from './types';
+import { BetweenDatesSlice } from '../types'
+import { MilkProductionsFilterSlice } from './types'
 
 export const createBetweenDatesSlice: MilkProductionsFilterSlice<BetweenDatesSlice> = (set, get) => ({
   betweenDates: null,
-  setBetweenDates: (betweenDates) =>
+  setBetweenDates: (betweenDates) => {
+    get().resetIndex()
     set((state) => {
       state.betweenDates = betweenDates
     })
+  }
 })

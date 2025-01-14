@@ -1,9 +1,9 @@
 import FilterChip from '@/components/FilterChip'
 import MDateTimePicker from '@/components/MDateTimePicker'
-import { useMilkProductionsFilters } from '@/contexts/MilkProductionsFiltersContext'
 import { format, set } from 'date-fns'
 import { memo, MutableRefObject, useRef, useState } from 'react'
 import { DateType } from 'react-native-ui-datepicker'
+import { useMilkProductionsFilters } from '../contexts/MilkProductionsFiltersContext'
 
 type DatePickerModalProps = {
   visibleDatePicker: boolean

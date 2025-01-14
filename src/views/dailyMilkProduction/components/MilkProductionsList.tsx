@@ -1,7 +1,7 @@
 import EmptyList from '@/components/EmptyList'
 import { RecordsList } from '@/components/RecordsList'
-import { useMilkProductionsFilters } from '@/contexts/MilkProductionsFiltersContext'
 import { FlashList } from '@shopify/flash-list'
+import { useMilkProductionsFilters } from '../contexts/MilkProductionsFiltersContext'
 import { useMilkProductions } from '../hooks/useMilkProductions'
 import { BetweenDatesFilterChip } from './BetweenDatesFilterChip'
 import { MilkProductionsListItem } from './MilkProductionsListItem'

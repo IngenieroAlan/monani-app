@@ -1,6 +1,6 @@
 import { SurfaceContainer } from '@/components/SurfaceContainer'
-import { MilkProductionsFiltersProvider } from '@/contexts/MilkProductionsFiltersContext'
 import { MilkProductionsList } from './components/MilkProductionsList'
+import { MilkProductionsFiltersProvider } from './contexts/MilkProductionsFiltersContext'
 
 export const DailyMilkProductionView = () => {
   return (

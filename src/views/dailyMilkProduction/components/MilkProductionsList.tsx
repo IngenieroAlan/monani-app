@@ -29,7 +29,7 @@ export const MilkProductionsList = () => {
     >
       <FlashList
         data={milkProductionsRecords}
-        renderItem={({ item }) => <MilkProductionsListItem milkProduction={item} />}
+        renderItem={({ item }) => <MilkProductionsListItem productions={item} />}
         estimatedItemSize={69}
         onEndReachedThreshold={2}
         onEndReached={() => {

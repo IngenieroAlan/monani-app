@@ -11,7 +11,6 @@ export enum TableName {
   MEDICATION_SCHEDULES = 'medication_schedules',
   WEIGHT_REPORTS = 'weight_reports',
   MILK_PRODUCTIONS = 'milk_productions',
-  MILK_PRODUCTIONS_VIEW = 'milk_productions_view',
   MILK_REPORTS = 'milk_reports',
   MILK_PRODUCTION_SUMMARY = 'milk_production_summary',
   MONTHLY_MILK_PRODUCTION = 'monthly_milk_production',
@@ -246,23 +245,4 @@ export default appSchema({
       ]
     }),
   ],
-  unsafeSql: (sql, kind) => {
-    switch (kind) {
-      case 'setup':
-        return `
-          DROP VIEW IF EXISTS ${TableName.MILK_PRODUCTIONS_VIEW};
-          CREATE VIEW IF NOT EXISTS ${TableName.MILK_PRODUCTIONS_VIEW} AS
-          SELECT
-            sum(liters) AS 'liters',
-            count(*) AS 'totalProductions',
-            round(produced_at / 1000) * 1000 AS 'productionDate'
-          FROM ${TableName.MILK_PRODUCTIONS}
-          GROUP BY date(produced_at / 1000, 'unixepoch')
-          ORDER BY produced_at DESC;${sql}
-        `
-      case 'create_indices':
-      case 'drop_indices':
-        return sql
-    }
-  }
 })

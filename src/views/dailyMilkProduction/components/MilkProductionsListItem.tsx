@@ -1,8 +1,11 @@
+import MilkProduction from '@/database/models/MilkProduction'
 import { formatNumberWithSpaces } from '@/utils/helpers'
+import { withObservables } from '@nozbe/watermelondb/react'
+import { merge, of } from '@nozbe/watermelondb/utils/rx'
+import { format } from 'date-fns'
 import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
-import { MilkProductionListItem } from '../hooks/useMilkProductions'
 
 const Right = memo(({ date }: { date: string }) => {
   return (
@@ -16,18 +19,23 @@ const Right = memo(({ date }: { date: string }) => {
   )
 })
 
-export const MilkProductionsListItem = ({ milkProduction }: { milkProduction: MilkProductionListItem }) => {
+const withObserver = withObservables(['productions'], ({ productions }: { productions: MilkProduction[] }) => ({
+  _: merge(...productions.map((production) => production.observe())),
+  productions: of(productions)
+}))
+
+export const MilkProductionsListItem = withObserver(({ productions }: { productions: MilkProduction[] }) => {
   return (
     <List.Item
-      title={`${formatNumberWithSpaces(milkProduction.liters.toFixed(3))} L.`}
-      description={`${milkProduction.totalProductions} ${
-        milkProduction.totalProductions === 1 ? 'producción' : 'producciones'
-      }`}
-      right={() => <Right date={milkProduction.productionDate} />}
+      title={`${formatNumberWithSpaces(
+        productions.reduce((acc, production) => acc + production.liters, 0).toFixed(3)
+      )} L.`}
+      description={`${productions.length} ${productions.length === 1 ? 'producción' : 'producciones'}`}
+      right={() => <Right date={format(productions[0].producedAt, 'dd/MM/yyyy')} />}
       onPress={() => {}}
     />
   )
-}
+})
 
 const styles = StyleSheet.create({
   rightContainer: {

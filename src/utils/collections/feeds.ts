@@ -1,7 +1,7 @@
 import { FeedFields } from '@/components/forms/FeedForm'
 import database from '@/database'
 import Feed from '@/database/models/Feed'
-import { TableName } from '@/database/schema'
+import { TableName } from '@/database/constants'
 
 export const createFeed = async (data: FeedFields) => {
   const createdFeed = await database.write(async () => {

@@ -4,7 +4,7 @@ import database from '..'
 import WeightReportFactory from '../factories/WeightReportFactory'
 import Cattle from '../models/Cattle'
 import WeightReport from '../models/WeightReport'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const MIN_NUM_OF_RECORDS = 10
 const MAX_NUM_OF_RECORDS = 20

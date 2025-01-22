@@ -3,7 +3,6 @@ import MedicationSchedulesSnackbarContainer, {
   MedicationSchedulesSnackbarId
 } from '@/components/layout/cattleDetails/Components/medicationSchedules/MedicationSchedulesSnackbarContainer'
 import Cattle from '@/database/models/Cattle'
-import { TableName } from '@/database/schema'
 import useMedicationSchedules from '@/hooks/collections/useMedicationSchedule'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
@@ -25,7 +24,7 @@ export const MedicationRoute = () => {
   )
 }
 
-const witCattleObserver = withObservables([TableName.CATTLE], ({ cattle }: { cattle: Cattle }) => ({
+const witCattleObserver = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle
 }))
 
@@ -81,7 +80,7 @@ const CattleMedicationsDetails = witCattleObserver(({ cattle }: { cattle: Cattle
         data={medicationSchedules}
         renderItem={({ item }) => (
           <MedicationScheduleItem
-            medication_schedules={item}
+            medicationSchedules={item}
             onEdit={onEdit}
             onDelete={onDelete}
           />

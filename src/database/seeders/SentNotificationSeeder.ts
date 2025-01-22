@@ -5,7 +5,7 @@ import SentNotificationFactory from '../factories/SentNotificationFactory'
 import Cattle from '../models/Cattle'
 import Medication from '../models/Medication'
 import SentNotification from '../models/SentNotification'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const SentNotificationSeeder = async () => {
   const cattle = await database.get<Cattle>(TableName.CATTLE).query().fetch()

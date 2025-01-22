@@ -1,7 +1,6 @@
 import DietFeedItem from '@/components/layout/cattleDetails/Components/dietFeed/DietFeedItem'
 import DietSnackbarContainer from '@/components/layout/cattleDetails/Components/dietFeed/DietSnackbarContainer'
 import Cattle from '@/database/models/Cattle'
-import { TableName } from '@/database/schema'
 import useDiet from '@/hooks/collections/useDiet'
 import useDietFeeds from '@/hooks/collections/useDietFeeds'
 import useFeeds from '@/hooks/collections/useFeeds'
@@ -24,7 +23,7 @@ export const DietRoute = () => {
   )
 }
 
-const withCattleObserver = withObservables([TableName.CATTLE], ({ cattle }: { cattle: Cattle }) => ({
+const withCattleObserver = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle
 }))
 

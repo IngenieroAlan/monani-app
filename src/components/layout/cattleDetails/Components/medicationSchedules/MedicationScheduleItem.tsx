@@ -1,7 +1,6 @@
 import { FeedProportion } from '@/database/models/DietFeed'
 import Medication from '@/database/models/Medication'
 import MedicationSchedule from '@/database/models/MedicationSchedule'
-import { TableName } from '@/database/schema'
 import useMedications from '@/hooks/collections/useMedications'
 import { withObservables } from '@nozbe/watermelondb/react'
 import { memo, useCallback, useState } from 'react'
@@ -19,9 +18,9 @@ type DietFeedItem = {
 }
 
 const withMedicationScheduleObserver = withObservables(
-  [TableName.MEDICATION_SCHEDULES],
-  ({ medication_schedules }: { medication_schedules: MedicationSchedule }) => ({
-    medication_schedules
+  ['medicationSchedules'],
+  ({ medicationSchedules }: { medicationSchedules: MedicationSchedule }) => ({
+    medication_schedules: medicationSchedules
   })
 )
 

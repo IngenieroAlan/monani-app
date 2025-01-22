@@ -1,5 +1,5 @@
+import { CattleCol, TableName } from '@/database/constants'
 import Cattle from '@/database/models/Cattle'
-import { TableName } from '@/database/schema'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { Q } from '@nozbe/watermelondb'
@@ -175,7 +175,7 @@ const SearchGenealogyView = ({
 
       const results = await database.collections
         .get<Cattle>(TableName.CATTLE)
-        .query(Q.where('tag_id', Q.like(`${Q.sanitizeLikeString(search)}%`)))
+        .query(Q.where(CattleCol.TAG_ID, Q.like(`${Q.sanitizeLikeString(search)}%`)))
         .fetch()
 
       setIsFetching(false)

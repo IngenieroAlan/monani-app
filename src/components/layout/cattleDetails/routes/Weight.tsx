@@ -1,5 +1,4 @@
 import Cattle from '@/database/models/Cattle'
-import { TableName } from '@/database/schema'
 import { useAppSelector } from '@/hooks/useRedux'
 import { cattleDetails } from '@/styles/main'
 import { withObservables } from '@nozbe/watermelondb/react'
@@ -20,7 +19,7 @@ interface CowWeightReports {
   date: Date
 }
 
-const withCattleObserver = withObservables([TableName.CATTLE], ({ cattle }: { cattle: Cattle }) => ({
+const withCattleObserver = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle
   //TODO: This should be based on the relation
 }))

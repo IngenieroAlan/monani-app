@@ -6,7 +6,7 @@ import AnnualEarnings from '../models/AnnualEarnings'
 import Cattle from '../models/Cattle'
 import CattleSale from '../models/CattleSale'
 import EarningsSummary from '../models/EarningsSummary'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const NUM_OF_RECORDS = 10
 

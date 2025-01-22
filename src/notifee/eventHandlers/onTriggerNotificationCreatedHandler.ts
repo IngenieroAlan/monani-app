@@ -1,6 +1,6 @@
 import database from '@/database'
+import { TableName } from '@/database/constants'
 import PendingNotification from '@/database/models/PendingNotification'
-import { TableName } from '@/database/schema'
 import { Notification } from '@notifee/react-native'
 import { Q } from '@nozbe/watermelondb'
 import { NotificationData } from '../types'

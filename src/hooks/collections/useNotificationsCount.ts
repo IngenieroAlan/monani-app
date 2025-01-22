@@ -1,5 +1,5 @@
+import { SentNotificationsCol as Column, TableName } from '@/database/constants'
 import SentNotification from '@/database/models/SentNotification'
-import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ export const useNotificationsCount = () => {
 
   let countQuery = database
     .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
-    .query(Q.where('is_marked_as_read', false))
+    .query(Q.where(Column.IS_MARKED_AS_READ, false))
 
   useEffect(() => {
     const subscription = countQuery.observeCount().subscribe((count) => {

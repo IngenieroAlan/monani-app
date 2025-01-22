@@ -1,26 +1,26 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
-
-export enum TableName {
-  FEEDS = 'feeds',
-  DIETS = 'diets',
-  DIET_FEED = 'diet_feed',
-  CATTLE = 'cattle',
-  GENEALOGY = 'genealogy',
-  CATTLE_ARCHIVES = 'cattle_archives',
-  MEDICATIONS = 'medications',
-  MEDICATION_SCHEDULES = 'medication_schedules',
-  WEIGHT_REPORTS = 'weight_reports',
-  MILK_PRODUCTIONS = 'milk_productions',
-  MILK_REPORTS = 'milk_reports',
-  MILK_PRODUCTION_SUMMARY = 'milk_production_summary',
-  MONTHLY_MILK_PRODUCTION = 'monthly_milk_production',
-  CATTLE_SALES = 'cattle_sales',
-  MILK_SALES = 'milk_sales',
-  EARNINGS_SUMMARY = 'earnings_summary',
-  ANNUAL_EARNINGS = 'annual_earnings',
-  SENT_NOTIFICATIONS = 'sent_notifications',
-  PENDING_NOTIFICATIONS = 'pending_notifications'
-}
+import {
+  AnnualEarningsCol,
+  CattleArchivesCol,
+  CattleCol,
+  CattleSalesCol,
+  DietFeedCol,
+  DietsCol,
+  EarningsSummaryCol,
+  FeedsCol,
+  GenealogyCol,
+  MedicationSchedulesCol,
+  MedicationsCol,
+  MilkProductionsCol,
+  MilkProductionSummaryCol,
+  MilkReportsCol,
+  MilkSalesCol,
+  MonthlyMilkProductionCol,
+  PendingNotificationsCol,
+  SentNotificationsCol,
+  TableName,
+  WeightReportsCol
+} from './constants'
 
 export default appSchema({
   version: 1,
@@ -28,21 +28,21 @@ export default appSchema({
     tableSchema({
       name: TableName.FEEDS,
       columns: [
-        { name: 'name', type: 'string' },
-        { name: 'feed_type', type: 'string' }, // Alimento | Concentrado de engorda | Concentrado lechero
+        { name: FeedsCol.NAME, type: 'string' },
+        { name: FeedsCol.FEED_TYPE, type: 'string' }, // Alimento | Concentrado de engorda | Concentrado lechero
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ],
-      unsafeSql: (sql) => sql.replace('"name",', '"name" collate nocase,')
+      unsafeSql: (sql) => sql.replace(`'${FeedsCol.NAME}',`, `'${FeedsCol.NAME}' collate nocase,`)
     }),
     tableSchema({
       name: TableName.DIETS,
       columns: [
-        { name: 'water_amount', type: 'number' },
-        { name: 'matter_proportion', type: 'string' }, // Porcentaje de peso | Fija | Sin definir
-        { name: 'matter_amount', type: 'number', isOptional: true },
-        { name: 'percentage', type: 'number', isOptional: true },
-        { name: 'is_concentrate_excluded', type: 'boolean' },
+        { name: DietsCol.WATER_AMOUNT, type: 'number' },
+        { name: DietsCol.MATTER_PROPORTION, type: 'string' }, // Porcentaje de peso | Fija | Sin definir
+        { name: DietsCol.MATTER_AMOUNT, type: 'number', isOptional: true },
+        { name: DietsCol.PERCENTAGE, type: 'number', isOptional: true },
+        { name: DietsCol.IS_CONCENTRATE_EXCLUDED, type: 'boolean' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -50,11 +50,11 @@ export default appSchema({
     tableSchema({
       name: TableName.DIET_FEED,
       columns: [
-        { name: 'diet_id', type: 'string' },
-        { name: 'feed_id', type: 'string' },
-        { name: 'feed_proportion', type: 'string' }, // Fija | Por procentaje
-        { name: 'feed_amount', type: 'number' },
-        { name: 'percentage', type: 'number', isOptional: true },
+        { name: DietFeedCol.DIET_ID, type: 'string' },
+        { name: DietFeedCol.FEED_ID, type: 'string' },
+        { name: DietFeedCol.FEED_PROPORTION, type: 'string' }, // Fija | Por procentaje
+        { name: DietFeedCol.FEED_AMOUNT, type: 'number' },
+        { name: DietFeedCol.PERCENTAGE, type: 'number', isOptional: true },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -62,20 +62,20 @@ export default appSchema({
     tableSchema({
       name: TableName.CATTLE,
       columns: [
-        { name: 'name', type: 'string', isOptional: true },
-        { name: 'tag_id', type: 'string', isIndexed: true },
-        { name: 'tag_cattle_number', type: 'string' },
-        { name: 'weight', type: 'number' },
-        { name: 'production_type', type: 'string' }, // Lechera | De carne
-        { name: 'cattle_status', type: 'string' }, // Gestante | En producción | De reemplazo | De deshecho
-        { name: 'pregnant_at', type: 'number', isOptional: true },
-        { name: 'is_active', type: 'boolean' },
-        { name: 'is_archived', type: 'boolean' },
-        { name: 'is_sold', type: 'boolean' },
-        { name: 'diet_id', type: 'string' },
-        { name: 'born_at', type: 'number' },
-        { name: 'admitted_at', type: 'number' },
-        { name: 'quarantine_ends_at', type: 'number', isOptional: true },
+        { name: CattleCol.NAME, type: 'string', isOptional: true },
+        { name: CattleCol.TAG_ID, type: 'string', isIndexed: true },
+        { name: CattleCol.TAG_CATTLE_NUMBER, type: 'string' },
+        { name: CattleCol.WEIGHT, type: 'number' },
+        { name: CattleCol.PRODUCTION_TYPE, type: 'string' }, // Lechera | De carne
+        { name: CattleCol.CATTLE_STATUS, type: 'string' }, // Gestante | En producción | De reemplazo | De deshecho
+        { name: CattleCol.PREGNANT_AT, type: 'number', isOptional: true },
+        { name: CattleCol.IS_ACTIVE, type: 'boolean' },
+        { name: CattleCol.IS_ARCHIVED, type: 'boolean' },
+        { name: CattleCol.IS_SOLD, type: 'boolean' },
+        { name: CattleCol.DIET_ID, type: 'string' },
+        { name: CattleCol.BORN_AT, type: 'number' },
+        { name: CattleCol.ADMITTED_AT, type: 'number' },
+        { name: CattleCol.QUARANTINE_ENDS_AT, type: 'number', isOptional: true },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -83,8 +83,8 @@ export default appSchema({
     tableSchema({
       name: TableName.GENEALOGY,
       columns: [
-        { name: 'mother_id', type: 'string', isIndexed: true },
-        { name: 'offspring_id', type: 'string', isIndexed: true },
+        { name: GenealogyCol.MOTHER_ID, type: 'string', isIndexed: true },
+        { name: GenealogyCol.OFFSPRING_ID, type: 'string', isIndexed: true },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -92,10 +92,10 @@ export default appSchema({
     tableSchema({
       name: TableName.CATTLE_ARCHIVES,
       columns: [
-        { name: 'cattle_id', type: 'string' },
-        { name: 'reason', type: 'string' }, // Muerte | Extravío | Otro
-        { name: 'notes', type: 'string', isOptional: true },
-        { name: 'archived_at', type: 'number' },
+        { name: CattleArchivesCol.CATTLE_ID, type: 'string' },
+        { name: CattleArchivesCol.REASON, type: 'string' }, // Muerte | Extravío | Otro
+        { name: CattleArchivesCol.NOTES, type: 'string', isOptional: true },
+        { name: CattleArchivesCol.ARCHIVED_AT, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -103,20 +103,20 @@ export default appSchema({
     tableSchema({
       name: TableName.MEDICATIONS,
       columns: [
-        { name: 'name', type: 'string' },
-        { name: 'medication_type', type: 'string' }, // Desparasitante | Vitaminas | Suplemento mineral | Otro
+        { name: MedicationsCol.NAME, type: 'string' },
+        { name: MedicationsCol.MEDICATION_TYPE, type: 'string' }, // Desparasitante | Vitaminas | Suplemento mineral | Otro
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ],
-      unsafeSql: (sql) => sql.replace('"name",', '"name" collate nocase,')
+      unsafeSql: (sql) => sql.replace(`'${MedicationsCol.NAME}',`, `'${MedicationsCol.NAME}' collate nocase,`)
     }),
     tableSchema({
       name: TableName.MEDICATION_SCHEDULES,
       columns: [
-        { name: 'cattle_id', type: 'string' },
-        { name: 'medication_id', type: 'string' },
-        { name: 'doses_per_year', type: 'number' },
-        { name: 'next_dose_at', type: 'number' },
+        { name: MedicationSchedulesCol.CATTLE_ID, type: 'string' },
+        { name: MedicationSchedulesCol.MEDICATION_ID, type: 'string' },
+        { name: MedicationSchedulesCol.DOSES_PER_YEAR, type: 'number' },
+        { name: MedicationSchedulesCol.NEXT_DOSE_AT, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -124,12 +124,12 @@ export default appSchema({
     tableSchema({
       name: TableName.WEIGHT_REPORTS,
       columns: [
-        { name: 'cattle_id', type: 'string' },
-        { name: 'weight', type: 'number' },
-        { name: 'weight_difference', type: 'number' },
-        { name: 'days_passed', type: 'number' },
-        { name: 'avg_daily_difference', type: 'number' },
-        { name: 'weighed_at', type: 'number' },
+        { name: WeightReportsCol.CATTLE_ID, type: 'string' },
+        { name: WeightReportsCol.WEIGHT, type: 'number' },
+        { name: WeightReportsCol.WEIGHT_DIFFERENCE, type: 'number' },
+        { name: WeightReportsCol.DAYS_PASSED, type: 'number' },
+        { name: WeightReportsCol.AVG_DAILY_DIFFERENCE, type: 'number' },
+        { name: WeightReportsCol.WEIGHED_AT, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -137,10 +137,10 @@ export default appSchema({
     tableSchema({
       name: TableName.MILK_PRODUCTIONS,
       columns: [
-        { name: 'liters', type: 'number' },
-        { name: 'production_number', type: 'number' },
-        { name: 'is_sold', type: 'boolean' },
-        { name: 'produced_at', type: 'number' },
+        { name: MilkProductionsCol.LITERS, type: 'number' },
+        { name: MilkProductionsCol.PRODUCTION_NUMBER, type: 'number' },
+        { name: MilkProductionsCol.IS_SOLD, type: 'boolean' },
+        { name: MilkProductionsCol.PRODUCED_AT, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -148,12 +148,12 @@ export default appSchema({
     tableSchema({
       name: TableName.MILK_REPORTS,
       columns: [
-        { name: 'cattle_id', type: 'string' },
-        { name: 'milk_production_id', type: 'string' },
-        { name: 'liters', type: 'number' },
-        { name: 'production_number', type: 'number' },
-        { name: 'is_sold', type: 'boolean' },
-        { name: 'reported_at', type: 'number' },
+        { name: MilkReportsCol.CATTLE_ID, type: 'string' },
+        { name: MilkReportsCol.MILK_PRODUCTION_ID, type: 'string' },
+        { name: MilkReportsCol.LITERS, type: 'number' },
+        { name: MilkReportsCol.PRODUCTION_NUMBER, type: 'number' },
+        { name: MilkReportsCol.IS_SOLD, type: 'boolean' },
+        { name: MilkReportsCol.REPORTED_AT, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -161,7 +161,7 @@ export default appSchema({
     tableSchema({
       name: TableName.MILK_PRODUCTION_SUMMARY,
       columns: [
-        { name: 'total_production', type: 'number' },
+        { name: MilkProductionSummaryCol.TOTAL_PRODUCTION, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -169,9 +169,9 @@ export default appSchema({
     tableSchema({
       name: TableName.MONTHLY_MILK_PRODUCTION,
       columns: [
-        { name: 'year', type: 'number' },
-        { name: 'month', type: 'number' },
-        { name: 'liters', type: 'number' },
+        { name: MonthlyMilkProductionCol.YEAR, type: 'number' },
+        { name: MonthlyMilkProductionCol.MONTH, type: 'number' },
+        { name: MonthlyMilkProductionCol.LITERS, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -179,11 +179,11 @@ export default appSchema({
     tableSchema({
       name: TableName.CATTLE_SALES,
       columns: [
-        { name: 'details', type: 'string' },
-        { name: 'kg', type: 'number' },
-        { name: 'sold_by', type: 'number' },
-        { name: 'cattle_id', type: 'string' },
-        { name: 'sold_at', type: 'number' },
+        { name: CattleSalesCol.DETAILS, type: 'string' },
+        { name: CattleSalesCol.KG, type: 'number' },
+        { name: CattleSalesCol.SOLD_BY, type: 'number' },
+        { name: CattleSalesCol.CATTLE_ID, type: 'string' },
+        { name: CattleSalesCol.SOLD_AT, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -191,11 +191,11 @@ export default appSchema({
     tableSchema({
       name: TableName.MILK_SALES,
       columns: [
-        { name: 'details', type: 'string' },
-        { name: 'liters', type: 'number' },
-        { name: 'sold_by', type: 'number' },
-        { name: 'milk_production_id', type: 'string' },
-        { name: 'sold_at', type: 'number' },
+        { name: MilkSalesCol.DETAILS, type: 'string' },
+        { name: MilkSalesCol.LITERS, type: 'number' },
+        { name: MilkSalesCol.SOLD_BY, type: 'number' },
+        { name: MilkSalesCol.MILK_PRODUCTION_ID, type: 'string' },
+        { name: MilkSalesCol.SOLD_AT, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -203,9 +203,9 @@ export default appSchema({
     tableSchema({
       name: TableName.EARNINGS_SUMMARY,
       columns: [
-        { name: 'total_earnings', type: 'number' },
-        { name: 'total_cattle_sales', type: 'number' },
-        { name: 'total_milk_sales', type: 'number' },
+        { name: EarningsSummaryCol.TOTAL_EARNINGS, type: 'number' },
+        { name: EarningsSummaryCol.TOTAL_CATTLE_SALES, type: 'number' },
+        { name: EarningsSummaryCol.TOTAL_MILK_SALES, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -213,10 +213,10 @@ export default appSchema({
     tableSchema({
       name: TableName.ANNUAL_EARNINGS,
       columns: [
-        { name: 'year', type: 'number' },
-        { name: 'total_earnings', type: 'number' },
-        { name: 'total_cattle_sales', type: 'number' },
-        { name: 'total_milk_sales', type: 'number' },
+        { name: AnnualEarningsCol.YEAR, type: 'number' },
+        { name: AnnualEarningsCol.TOTAL_EARNINGS, type: 'number' },
+        { name: AnnualEarningsCol.TOTAL_CATTLE_SALES, type: 'number' },
+        { name: AnnualEarningsCol.TOTAL_MILK_SALES, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -224,12 +224,12 @@ export default appSchema({
     tableSchema({
       name: TableName.SENT_NOTIFICATIONS,
       columns: [
-        { name: 'notifee_id', type: 'string', isIndexed: true },
-        { name: 'cattle_id', type: 'string', isIndexed: true },
-        { name: 'is_marked_as_read', type: 'boolean' },
-        { name: 'type', type: 'string' },
-        { name: 'extra_info', type: 'string', isOptional: true },
-        { name: 'event_at', type: 'number' },
+        { name: SentNotificationsCol.NOTIFEE_ID, type: 'string', isIndexed: true },
+        { name: SentNotificationsCol.CATTLE_ID, type: 'string', isIndexed: true },
+        { name: SentNotificationsCol.IS_MARKED_AS_READ, type: 'boolean' },
+        { name: SentNotificationsCol.TYPE, type: 'string' },
+        { name: SentNotificationsCol.EXTRA_INFO, type: 'string', isOptional: true },
+        { name: SentNotificationsCol.EVENT_AT, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
@@ -237,12 +237,12 @@ export default appSchema({
     tableSchema({
       name: TableName.PENDING_NOTIFICATIONS,
       columns: [
-        { name: 'type', type: 'string' },
-        { name: 'foreign_id', type: 'string', isOptional: true },
-        { name: 'cattle_id', type: 'string', isIndexed: true },
+        { name: PendingNotificationsCol.TYPE, type: 'string' },
+        { name: PendingNotificationsCol.FOREIGN_ID, type: 'string', isOptional: true },
+        { name: PendingNotificationsCol.CATTLE_ID, type: 'string', isIndexed: true },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]
-    }),
-  ],
+    })
+  ]
 })

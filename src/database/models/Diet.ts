@@ -1,6 +1,6 @@
 import { Model, Q } from '@nozbe/watermelondb'
 import { date, field, lazy, readonly, writer } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../schema'
+import { CattleCol, DietFeedCol, DietsCol, TableName } from '../constants'
 import Cattle from './Cattle'
 import DietFeed, { FeedProportion } from './DietFeed'
 import Feed from './Feed'
@@ -11,33 +11,33 @@ class Diet extends Model {
   static table = TableName.DIETS
 
   static associations = {
-    [TableName.CATTLE]: { type: 'has_many' as const, foreignKey: 'diet_id' },
-    [TableName.DIET_FEED]: { type: 'has_many' as const, foreignKey: 'diet_id' }
+    [TableName.CATTLE]: { type: 'has_many' as const, foreignKey: CattleCol.DIET_ID },
+    [TableName.DIET_FEED]: { type: 'has_many' as const, foreignKey: DietFeedCol.DIET_ID }
   }
 
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @field('water_amount') waterAmount!: number
-  @field('matter_amount') matterAmount?: number
-  @field('percentage') percentage?: number
-  @field('matter_proportion') matterProportion!: MatterProportion
-  @field('is_concentrate_excluded') isConcentrateExcluded!: boolean
+  @field(DietsCol.WATER_AMOUNT) waterAmount!: number
+  @field(DietsCol.MATTER_AMOUNT) matterAmount?: number
+  @field(DietsCol.PERCENTAGE) percentage?: number
+  @field(DietsCol.MATTER_PROPORTION) matterProportion!: MatterProportion
+  @field(DietsCol.IS_CONCENTRATE_EXCLUDED) isConcentrateExcluded!: boolean
 
   @lazy
   cattle = this.collections
     .get<Cattle>(TableName.CATTLE)
-    .query(Q.where('diet_id', this.id), Q.take(1))
+    .query(Q.where(CattleCol.DIET_ID, this.id), Q.take(1))
 
   @lazy
   feeds = this.collections
     .get<Feed>(TableName.FEEDS)
-    .query(Q.on(TableName.DIET_FEED, 'diet_id', this.id))
+    .query(Q.on(TableName.DIET_FEED, DietFeedCol.DIET_ID, this.id))
 
   @lazy
   dietFeeds = this.collections
     .get(TableName.DIET_FEED)
-    .query(Q.where('diet_id', this.id))
+    .query(Q.where(DietFeedCol.DIET_ID, this.id))
 
   @writer
   async createDietFeed({ feed, feedAmount, percentage, feedProportion }: {
@@ -47,7 +47,7 @@ class Diet extends Model {
     feedProportion: FeedProportion
   }) {
     const existingDietFeed = await this.dietFeeds
-      .extend(Q.where('feed_id', feed.id))
+      .extend(Q.where(DietFeedCol.FEED_ID, feed.id))
       .fetchCount()
 
     if (existingDietFeed > 0) throw new Error('Este alimento ya es parte de la dieta.')

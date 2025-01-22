@@ -4,7 +4,7 @@ import { eachDayOfInterval, subMonths } from 'date-fns'
 import database from '..'
 import Cattle from '../models/Cattle'
 import MilkProduction from '../models/MilkProduction'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 import MilkReportSeeder from './MilkReportSeeder'
 import MonthlyMilkProductionSeeeder from './MonthlyMilkProductionSeeder'
 

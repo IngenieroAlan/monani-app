@@ -6,7 +6,7 @@ import AnnualEarnings from '../models/AnnualEarnings'
 import EarningsSummary from '../models/EarningsSummary'
 import MilkProduction from '../models/MilkProduction'
 import MilkSale from '../models/MilkSale'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const prepareAnnualEarningsUpdate = async (annualEarningsRecords: { [year: number]: number }) => {
   const updates: Model[] = []

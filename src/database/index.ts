@@ -2,6 +2,7 @@ import { Database } from '@nozbe/watermelondb'
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
 // import migrations from './model/migrations'
 
+import { TableName } from './constants'
 import AnnualEarnings from './models/AnnualEarnings'
 import Cattle from './models/Cattle'
 import CattleArchive from './models/CattleArchive'
@@ -21,7 +22,7 @@ import MonthlyMilkProduction from './models/MonthlyMilkProduction'
 import PendingNotification from './models/PendingNotification'
 import SentNotification from './models/SentNotification'
 import WeightReport from './models/WeightReport'
-import schema, { TableName } from './schema'
+import schema from './schema'
 
 const adapter = new SQLiteAdapter({
   schema,

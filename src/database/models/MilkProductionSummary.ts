@@ -1,6 +1,6 @@
 import { Model } from '@nozbe/watermelondb'
 import { date, field, readonly } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 class MilkProductionSummary extends Model {
   static table = TableName.MILK_PRODUCTION_SUMMARY

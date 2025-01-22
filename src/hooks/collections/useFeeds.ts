@@ -1,5 +1,5 @@
+import { FeedsCol as Column, TableName } from '@/database/constants'
 import Feed from '@/database/models/Feed'
-import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useEffect, useState } from 'react'
@@ -14,7 +14,7 @@ const useFeeds = ({ take }: useFeedsProps = {}) => {
   const [feedsRecords, setFeedsRecords] = useState<Feed[]>([])
   const [isPending, setIsPending] = useState(true)
 
-  let feedsQuery = database.get<Feed>(TableName.FEEDS).query(Q.sortBy('name', Q.asc))
+  let feedsQuery = database.get<Feed>(TableName.FEEDS).query(Q.sortBy(Column.NAME, Q.asc))
 
   if (take) {
     feedsQuery = feedsQuery.extend(Q.take(take))

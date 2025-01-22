@@ -1,5 +1,5 @@
+import { MonthlyMilkProductionCol as Column, TableName } from '@/database/constants'
 import MonthlyMilkProduction from '@/database/models/MonthlyMilkProduction'
-import { TableName } from '@/database/schema'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useEffect, useState } from 'react'
 import { InteractionManager } from 'react-native'
@@ -14,7 +14,7 @@ export const useMonthlyMilkProduction = () => {
   useEffect(() => {
     setIsPending(true)
 
-    const subscription = query.observeWithColumns(['liters']).subscribe((data) => {
+    const subscription = query.observeWithColumns([Column.LITERS]).subscribe((data) => {
       InteractionManager.runAfterInteractions(() => {
         setRecords(data)
       }).then(() => setIsPending(false))

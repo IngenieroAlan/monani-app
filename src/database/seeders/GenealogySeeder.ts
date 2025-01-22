@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker/.'
 import database from '..'
 import Cattle from '../models/Cattle'
 import Genealogy from '../models/Genealogy'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 type GenealogyRecord = { mother_id: string; offspring_id: string }
 

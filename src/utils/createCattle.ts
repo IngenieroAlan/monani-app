@@ -6,7 +6,7 @@ import Feed from '@/database/models/Feed'
 import Genealogy from '@/database/models/Genealogy'
 import Medication from '@/database/models/Medication'
 import MedicationSchedule from '@/database/models/MedicationSchedule'
-import { TableName } from '@/database/schema'
+import { TableName } from '@/database/constants'
 import {
   createMedicationNotification,
   createPregnancyNotification,

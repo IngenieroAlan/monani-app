@@ -4,7 +4,6 @@ import GenealogySnackbarContainer from '@/components/layout/cattleDetails/Compon
 import { SetMother } from '@/components/layout/cattleDetails/Components/genealogy/SetMother'
 import { SurfaceContainer } from '@/components/SurfaceContainer'
 import Cattle from '@/database/models/Cattle'
-import { TableName } from '@/database/schema'
 import { useAppSelector } from '@/hooks/useRedux'
 import { withObservables } from '@nozbe/watermelondb/react'
 import React, { useState } from 'react'
@@ -14,7 +13,7 @@ export const GenealogyRoute = () => {
   return <>{cattleInfo && <CattleGeneologyDetails cattle={cattleInfo} />}</>
 }
 
-const withCattleObserver = withObservables([TableName.CATTLE], ({ cattle }: { cattle: Cattle }) => ({
+const withCattleObserver = withObservables(['cattle'], ({ cattle }: { cattle: Cattle }) => ({
   cattle
 }))
 

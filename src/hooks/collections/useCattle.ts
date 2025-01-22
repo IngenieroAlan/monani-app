@@ -1,5 +1,5 @@
+import { CattleCol as Column, TableName } from '@/database/constants'
 import Cattle, { CattleStatus, ProductionType } from '@/database/models/Cattle'
-import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { sanitizeLikeString } from '@nozbe/watermelondb/QueryDescription'
 import { useDatabase } from '@nozbe/watermelondb/react'
@@ -38,28 +38,28 @@ const useCattle = ({
   }
 
   if (tagId) {
-    cattleQuery = cattleQuery.extend(Q.where('tag_id', Q.like(`${sanitizeLikeString(tagId)}%`)))
+    cattleQuery = cattleQuery.extend(Q.where(Column.TAG_ID, Q.like(`${sanitizeLikeString(tagId)}%`)))
   }
 
   if (cattleStatus && Array.from(cattleStatus).length > 0) {
-    cattleQuery = cattleQuery.extend(Q.where('cattle_status', Q.oneOf(Array.from(cattleStatus))))
+    cattleQuery = cattleQuery.extend(Q.where(Column.CATTLE_STATUS, Q.oneOf(Array.from(cattleStatus))))
   }
 
   if (productionType) {
-    cattleQuery = cattleQuery.extend(Q.where('production_type', productionType))
+    cattleQuery = cattleQuery.extend(Q.where(Column.PRODUCTION_TYPE, productionType))
   }
 
   if (isActive || isArchived || isSold) {
     const orQuery: Q.Where[] = []
-    isActive && orQuery.push(Q.where('is_active', isActive))
-    isArchived && orQuery.push(Q.where('is_archived', isArchived))
-    isSold && orQuery.push(Q.where('is_sold', isSold))
+    isActive && orQuery.push(Q.where(Column.IS_ACTIVE, isActive))
+    isArchived && orQuery.push(Q.where(Column.IS_ARCHIVED, isArchived))
+    isSold && orQuery.push(Q.where(Column.IS_SOLD, isSold))
 
     cattleQuery = cattleQuery.extend(Q.or(orQuery))
   }
 
   if (isInQuarantine !== undefined) {
-    cattleQuery = cattleQuery.extend(Q.where('quarantine_ends_at', isInQuarantine ? Q.notEq(null) : Q.eq(null)))
+    cattleQuery = cattleQuery.extend(Q.where(Column.QUARANTINE_ENDS_AT, isInQuarantine ? Q.notEq(null) : Q.eq(null)))
   }
 
   useEffect(() => {

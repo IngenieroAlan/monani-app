@@ -1,8 +1,8 @@
+import { TableName } from "@/database/constants";
+import Cattle from "@/database/models/Cattle";
+import { Database } from "@nozbe/watermelondb";
 import { createSlice, Dispatch } from "@reduxjs/toolkit";
 import { endLoading, startLoading } from "./ui";
-import { Database, Q } from "@nozbe/watermelondb";
-import { TableName } from "@/database/schema";
-import Cattle from "@/database/models/Cattle";
 
 interface CattleState {
   selectedCattle: string | null;

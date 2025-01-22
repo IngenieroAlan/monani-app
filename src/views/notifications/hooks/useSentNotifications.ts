@@ -1,5 +1,5 @@
+import { SentNotificationsCol as Column, TableName } from '@/database/constants'
 import SentNotification from '@/database/models/SentNotification'
-import { TableName } from '@/database/schema'
 import { formatDateRelativeToYear } from '@/utils/helpers'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
@@ -34,10 +34,10 @@ const useSentNotifications = ({ take, isMarkedAsRead }: UseNotificationsProps = 
 
   let notificationsQuery = database.collections
     .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
-    .query(Q.sortBy('event_at', Q.desc))
+    .query(Q.sortBy(Column.EVENT_AT, Q.desc))
 
   if (isMarkedAsRead !== undefined) {
-    notificationsQuery = notificationsQuery.extend(Q.where('is_marked_as_read', isMarkedAsRead))
+    notificationsQuery = notificationsQuery.extend(Q.where(Column.IS_MARKED_AS_READ, isMarkedAsRead))
   }
 
   if (take) {

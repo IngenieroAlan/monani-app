@@ -3,7 +3,7 @@ import database from '..'
 import Cattle from '../models/Cattle'
 import MilkProduction from '../models/MilkProduction'
 import MilkReport from '../models/MilkReport'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const MilkReportSeeder = async (litersPerProduction: number[][]) => {
   const milkReportRecords: DirtyRaw[] = []

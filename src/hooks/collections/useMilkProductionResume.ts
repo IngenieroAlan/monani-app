@@ -1,5 +1,5 @@
+import { TableName, MonthlyMilkProductionCol as Column } from "@/database/constants";
 import MonthlyMilkProduction from "@/database/models/MonthlyMilkProduction";
-import { TableName } from "@/database/schema";
 import { useDatabase } from "@nozbe/watermelondb/react";
 import { useEffect, useState } from "react";
 

@@ -1,34 +1,34 @@
 import { Model, Q, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, lazy, readonly, writer } from '@nozbe/watermelondb/decorators'
 import { differenceInCalendarDays, format, isAfter } from 'date-fns'
-import { TableName } from '../schema'
+import { WeightReportsCol as Column, TableName } from '../constants'
 import Cattle from './Cattle'
 
 class WeightReport extends Model {
   static table = TableName.WEIGHT_REPORTS
 
   static associations = {
-    [TableName.CATTLE]: { type: 'belongs_to' as const, key: 'cattle_id' }
+    [TableName.CATTLE]: { type: 'belongs_to' as const, key: Column.CATTLE_ID }
   }
 
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @date('weighed_at') weighedAt!: Date
-  @field('weight') weight!: number
-  @field('weight_difference') weightDifference!: number
-  @field('days_passed') daysPassed!: number
-  @field('avg_daily_difference') avgDailyDifference!: number
+  @date(Column.WEIGHED_AT) weighedAt!: Date
+  @field(Column.WEIGHT) weight!: number
+  @field(Column.WEIGHT_DIFFERENCE) weightDifference!: number
+  @field(Column.DAYS_PASSED) daysPassed!: number
+  @field(Column.AVG_DAILY_DIFFERENCE) avgDailyDifference!: number
 
-  @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
+  @immutableRelation(TableName.CATTLE, Column.CATTLE_ID) cattle!: Relation<Cattle>
 
   @lazy
   previousReport = this.collections
     .get<WeightReport>(TableName.WEIGHT_REPORTS)
     .query(
-      Q.where('cattle_id', this.cattle.id),
-      Q.where('weighed_at', Q.gt(this.weighedAt.getTime())),
-      Q.sortBy('weighed_at', Q.asc),
+      Q.where(Column.CATTLE_ID, this.cattle.id),
+      Q.where(Column.WEIGHED_AT, Q.gt(this.weighedAt.getTime())),
+      Q.sortBy(Column.WEIGHED_AT, Q.asc),
       Q.take(1)
     )
 
@@ -36,9 +36,9 @@ class WeightReport extends Model {
   nextReport = this.collections
     .get<WeightReport>(TableName.WEIGHT_REPORTS)
     .query(
-      Q.where('cattle_id', this.cattle.id),
-      Q.where('weighed_at', Q.lt(this.weighedAt.getTime())),
-      Q.sortBy('weighed_at', Q.desc),
+      Q.where(Column.CATTLE_ID, this.cattle.id),
+      Q.where(Column.WEIGHED_AT, Q.lt(this.weighedAt.getTime())),
+      Q.sortBy(Column.WEIGHED_AT, Q.desc),
       Q.take(1)
     )
 
@@ -57,7 +57,7 @@ class WeightReport extends Model {
       .get<WeightReport>(TableName.WEIGHT_REPORTS)
       .query(Q.unsafeSqlQuery(
         `SELECT * FROM ${TableName.WEIGHT_REPORTS} ` +
-        `WHERE cattle_id = ? AND strftime("%Y-%m-%d", datetime(weighed_at / 1000, "unixepoch")) = ? LIMIT 1`,
+        `WHERE ${Column.CATTLE_ID} = ? AND strftime("%Y-%m-%d", datetime(${Column.WEIGHED_AT} / 1000, "unixepoch")) = ? LIMIT 1`,
         [cattle.id, weighedAtDate]
       ))
       .fetch()
@@ -68,9 +68,9 @@ class WeightReport extends Model {
       .get<WeightReport>(TableName.WEIGHT_REPORTS)
       .query(
         Q.where('id', Q.notEq(this.id)),
-        Q.where('cattle_id', cattle.id),
-        Q.where('weighed_at', Q.gt(weighedAt.getTime())),
-        Q.sortBy('weighed_at', Q.asc),
+        Q.where(Column.CATTLE_ID, cattle.id),
+        Q.where(Column.WEIGHED_AT, Q.gt(weighedAt.getTime())),
+        Q.sortBy(Column.WEIGHED_AT, Q.asc),
         Q.take(1)
       )
       .fetch())[0]
@@ -78,9 +78,9 @@ class WeightReport extends Model {
       .get<WeightReport>(TableName.WEIGHT_REPORTS)
       .query(
         Q.where('id', Q.notEq(this.id)),
-        Q.where('cattle_id', cattle.id),
-        Q.where('weighed_at', Q.lt(weighedAt.getTime())),
-        Q.sortBy('weighed_at', Q.desc),
+        Q.where(Column.CATTLE_ID, cattle.id),
+        Q.where(Column.WEIGHED_AT, Q.lt(weighedAt.getTime())),
+        Q.sortBy(Column.WEIGHED_AT, Q.desc),
         Q.take(1)
       )
       .fetch())[0]

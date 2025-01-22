@@ -1,5 +1,4 @@
 import DietFeed from '@/database/models/DietFeed'
-import { TableName } from '@/database/schema'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { withObservables } from '@nozbe/watermelondb/react'
@@ -8,7 +7,7 @@ import { IconButton, List, Menu, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { DietSnackbarId } from './DietSnackbarContainer'
 
-const withDietFeedObserver = withObservables([TableName.DIET_FEED], ({ diet_feed }: { diet_feed: DietFeed }) => ({
+const withDietFeedObserver = withObservables(['diet_feed'], ({ diet_feed }: { diet_feed: DietFeed }) => ({
   diet_feed
 }))
 

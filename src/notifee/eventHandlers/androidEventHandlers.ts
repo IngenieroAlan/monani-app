@@ -1,7 +1,7 @@
 import database from '@/database'
+import { SentNotificationsCol as Column, TableName } from '@/database/constants'
 import Cattle from '@/database/models/Cattle'
 import SentNotification from '@/database/models/SentNotification'
-import { TableName } from '@/database/schema'
 import { setCattleInfo } from '@/redux/slices/cattles'
 import { Notification as Notifeecation } from '@notifee/react-native'
 import { Q } from '@nozbe/watermelondb'
@@ -24,7 +24,7 @@ export const androidPressHandler = async (notification: Notifeecation, navigatio
 
   const appNotification = await database
     .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
-    .query(Q.where('notifee_id', notification!.id!))
+    .query(Q.where(Column.NOTIFEE_ID, notification!.id!))
     .fetch()
   await appNotification[0].markAsRead()
 }
@@ -32,7 +32,7 @@ export const androidPressHandler = async (notification: Notifeecation, navigatio
 export const androidMarkAsReadHandler = async (notification: Notifeecation) => {
   const appNotification = await database
     .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
-    .query(Q.where('notifee_id', notification.id!))
+    .query(Q.where(Column.NOTIFEE_ID, notification.id!))
     .fetch()
 
   if (appNotification.length === 0) return

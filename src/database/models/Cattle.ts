@@ -1,10 +1,28 @@
-import { createMedicationNotification, createPregnancyNotification, createQuarantineNotification } from '@/notifee/constructors'
+import {
+  createMedicationNotification,
+  createPregnancyNotification,
+  createQuarantineNotification
+} from '@/notifee/constructors'
 import notifee from '@notifee/react-native'
 import { Model, Q, Query, Relation } from '@nozbe/watermelondb'
 import { children, date, field, immutableRelation, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
 import { Associations } from '@nozbe/watermelondb/Model'
 import { addDays, differenceInCalendarDays, format, getYear, isAfter } from 'date-fns'
-import { TableName } from '../schema'
+import {
+  AnnualEarningsCol,
+  CattleArchivesCol,
+  CattleCol,
+  CattleSalesCol,
+  DietFeedCol,
+  GenealogyCol,
+  MedicationSchedulesCol,
+  MilkProductionsCol,
+  MilkReportsCol,
+  PendingNotificationsCol,
+  SentNotificationsCol,
+  TableName,
+  WeightReportsCol
+} from '../constants'
 import AnnualEarnings from './AnnualEarnings'
 import CattleArchive, { ArchiveReason } from './CattleArchive'
 import CattleSale from './CattleSale'
@@ -39,34 +57,34 @@ class Cattle extends Model {
   static table = TableName.CATTLE
 
   static associations: Associations = {
-    [TableName.DIETS]: { type: 'belongs_to', key: 'diet_id' },
-    [TableName.CATTLE_ARCHIVES]: { type: 'has_many', foreignKey: 'cattle_id' },
-    [TableName.MEDICATION_SCHEDULES]: { type: 'has_many', foreignKey: 'cattle_id' },
-    [TableName.WEIGHT_REPORTS]: { type: 'has_many', foreignKey: 'cattle_id' },
-    [TableName.MILK_REPORTS]: { type: 'has_many', foreignKey: 'cattle_id' },
-    [TableName.CATTLE_SALES]: { type: 'has_many', foreignKey: 'cattle_id' },
-    [TableName.SENT_NOTIFICATIONS]: { type: 'has_many', foreignKey: 'cattle_id' },
-    [TableName.GENEALOGY]: { type: 'has_many', foreignKey: 'offspring_id' }
+    [TableName.DIETS]: { type: 'belongs_to', key: CattleCol.DIET_ID },
+    [TableName.CATTLE_ARCHIVES]: { type: 'has_many', foreignKey: CattleArchivesCol.CATTLE_ID },
+    [TableName.MEDICATION_SCHEDULES]: { type: 'has_many', foreignKey: MedicationSchedulesCol.CATTLE_ID },
+    [TableName.WEIGHT_REPORTS]: { type: 'has_many', foreignKey: WeightReportsCol.CATTLE_ID },
+    [TableName.MILK_REPORTS]: { type: 'has_many', foreignKey: MilkReportsCol.CATTLE_ID },
+    [TableName.CATTLE_SALES]: { type: 'has_many', foreignKey: CattleSalesCol.CATTLE_ID },
+    [TableName.SENT_NOTIFICATIONS]: { type: 'has_many', foreignKey: SentNotificationsCol.CATTLE_ID },
+    [TableName.GENEALOGY]: { type: 'has_many', foreignKey: GenealogyCol.OFFSPRING_ID }
   }
 
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @text('name') name?: string
-  @text('tag_id') tagId!: string
-  @text('tag_cattle_number') tagCattleNumber!: string
-  @date('admitted_at') admittedAt!: Date
-  @date('born_at') bornAt!: Date
-  @date('pregnant_at') pregnantAt?: Date
-  @date('quarantine_ends_at') quarantineEndsAt?: Date
-  @field('weight') weight!: number
-  @field('production_type') productionType!: ProductionType
-  @field('cattle_status') cattleStatus!: CattleStatus
-  @field('is_active') isActive!: boolean
-  @field('is_archived') isArchived!: boolean
-  @field('is_sold') isSold!: boolean
+  @text(CattleCol.NAME) name?: string
+  @text(CattleCol.TAG_ID) tagId!: string
+  @text(CattleCol.TAG_CATTLE_NUMBER) tagCattleNumber!: string
+  @date(CattleCol.ADMITTED_AT) admittedAt!: Date
+  @date(CattleCol.BORN_AT) bornAt!: Date
+  @date(CattleCol.PREGNANT_AT) pregnantAt?: Date
+  @date(CattleCol.QUARANTINE_ENDS_AT) quarantineEndsAt?: Date
+  @field(CattleCol.WEIGHT) weight!: number
+  @field(CattleCol.PRODUCTION_TYPE) productionType!: ProductionType
+  @field(CattleCol.CATTLE_STATUS) cattleStatus!: CattleStatus
+  @field(CattleCol.IS_ACTIVE) isActive!: boolean
+  @field(CattleCol.IS_ARCHIVED) isArchived!: boolean
+  @field(CattleCol.IS_SOLD) isSold!: boolean
 
-  @immutableRelation(TableName.DIETS, 'diet_id') diet!: Relation<Diet>
+  @immutableRelation(TableName.DIETS, CattleCol.DIET_ID) diet!: Relation<Diet>
 
   @children(TableName.WEIGHT_REPORTS) weightReports!: Query<WeightReport>
   @children(TableName.MILK_REPORTS) milkReports!: Query<MilkReport>
@@ -76,38 +94,38 @@ class Cattle extends Model {
   @lazy
   latestWeightReport = this.weightReports
     .extend(
-      Q.sortBy('weighed_at', Q.desc),
+      Q.sortBy(WeightReportsCol.WEIGHED_AT, Q.desc),
       Q.take(1)
     )
 
   @lazy
   sale = this.collections
     .get<CattleSale>(TableName.CATTLE_SALES)
-    .query(Q.where('cattle_id', this.id), Q.take(1))
+    .query(Q.where(CattleSalesCol.CATTLE_ID, this.id), Q.take(1))
 
   @lazy
   archive = this.collections
     .get<CattleArchive>(TableName.CATTLE_ARCHIVES)
-    .query(Q.where('cattle_id', this.id), Q.take(1))
+    .query(Q.where(CattleArchivesCol.CATTLE_ID, this.id), Q.take(1))
 
   @lazy
   dietFeeds = this.collections
     .get<DietFeed>(TableName.DIET_FEED)
-    .query(Q.where('diet_id', this.diet.id))
+    .query(Q.where(DietFeedCol.DIET_ID, this.diet.id))
 
   @lazy
   motherRelation = this.collections
     .get<Genealogy>(TableName.GENEALOGY)
-    .query(Q.where('offspring_id', this.id))
+    .query(Q.where(GenealogyCol.OFFSPRING_ID, this.id))
 
   @lazy
   offsprings = this.collections
     .get<Cattle>(TableName.CATTLE)
-    .query(Q.on(TableName.GENEALOGY, 'mother_id', this.id))
+    .query(Q.on(TableName.GENEALOGY, GenealogyCol.MOTHER_ID, this.id))
 
   @lazy
   pendingMilkReports = this.milkReports
-    .extend(Q.where('is_sold', false))
+    .extend(Q.where(MilkReportsCol.IS_SOLD, false))
 
   // May not be needed.
   @writer
@@ -161,7 +179,7 @@ class Cattle extends Model {
 
     const annualEarnings = (await this.collections
       .get<AnnualEarnings>(TableName.ANNUAL_EARNINGS)
-      .query(Q.where('year', year), Q.take(1))
+      .query(Q.where(AnnualEarningsCol.YEAR, year), Q.take(1))
       .fetch())
 
     let annualEarningsBatch: AnnualEarnings
@@ -217,8 +235,8 @@ class Cattle extends Model {
     const weighedAtDate = format(weighedAt, 'yyyy/MM/dd')
     const existingReport = await this.weightReports
       .extend(
-        Q.where('cattle_id', this.id),
-        Q.unsafeSqlExpr(`strftime('%Y/%m/%d', datetime(weighed_at / 1000, 'unixepoch')) = ${weighedAtDate}`),
+        Q.where(WeightReportsCol.CATTLE_ID, this.id),
+        Q.unsafeSqlExpr(`strftime('%Y/%m/%d', datetime(${WeightReportsCol.WEIGHED_AT} / 1000, 'unixepoch')) = ${weighedAtDate}`),
         Q.take(1)
       )
       .fetch()
@@ -227,17 +245,17 @@ class Cattle extends Model {
 
     const previousReport = (await this.weightReports
       .extend(
-        Q.where('cattle_id', this.id),
-        Q.where('weighed_at', Q.gt(weighedAt.getTime())),
-        Q.sortBy('weighed_at', Q.asc),
+        Q.where(WeightReportsCol.CATTLE_ID, this.id),
+        Q.where(WeightReportsCol.WEIGHED_AT, Q.gt(weighedAt.getTime())),
+        Q.sortBy(WeightReportsCol.WEIGHED_AT, Q.asc),
         Q.take(1)
       )
       .fetch())[0]
     const nextReport = (await this.weightReports
       .extend(
-        Q.where('cattle_id', this.id),
-        Q.where('weighed_at', Q.lt(weighedAt.getTime())),
-        Q.sortBy('weighed_at', Q.desc),
+        Q.where(WeightReportsCol.CATTLE_ID, this.id),
+        Q.where(WeightReportsCol.WEIGHED_AT, Q.lt(weighedAt.getTime())),
+        Q.sortBy(WeightReportsCol.WEIGHED_AT, Q.desc),
         Q.take(1)
       )
       .fetch())[0]
@@ -277,7 +295,7 @@ class Cattle extends Model {
   async createMilkReport({ liters, reportedAt }: { liters: number, reportedAt: Date }) {
     const reportedAtDate = format(reportedAt, 'yyyy/MM/dd')
     const milkReports = await this.milkReports.extend(
-      Q.unsafeSqlExpr(`strftime("%Y/%m/%d", datetime(reported_at / 1000, "unixepoch")) = '${reportedAtDate}'`)
+      Q.unsafeSqlExpr(`strftime("%Y/%m/%d", datetime(${MilkReportsCol.REPORTED_AT} / 1000, "unixepoch")) = '${reportedAtDate}'`)
     )
 
     for (const milkReport of milkReports) {
@@ -290,8 +308,8 @@ class Cattle extends Model {
 
     const milkProductionsDate = await this.collections.get<MilkProduction>(TableName.MILK_PRODUCTIONS)
       .query(
-        Q.unsafeSqlExpr(`strftime("%Y/%m/%d", datetime(produced_at / 1000, "unixepoch")) = '${reportedAtDate}'`),
-        Q.sortBy('production_number', Q.asc)
+        Q.unsafeSqlExpr(`strftime("%Y/%m/%d", datetime(${MilkProductionsCol.PRODUCED_AT} / 1000, "unixepoch")) = '${reportedAtDate}'`),
+        Q.sortBy(MilkProductionsCol.PRODUCTION_NUMBER, Q.asc)
       )
       .fetch()
 
@@ -327,7 +345,7 @@ class Cattle extends Model {
   @writer
   async setMother(mother: Cattle) {
     const genealogyRecord = await this.collections.get<Genealogy>(TableName.GENEALOGY)
-      .query(Q.where('offspring_id', this.id))
+      .query(Q.where(GenealogyCol.OFFSPRING_ID, this.id))
       .fetch()
 
     if (genealogyRecord.length) throw new Error('This cattle already has a mother set.')
@@ -343,13 +361,13 @@ class Cattle extends Model {
   async removeMother() {
     const genealogyRecord = await this.collections.get<Genealogy>(TableName.GENEALOGY)
       .query(
-        Q.where('offspring_id', this.id),
+        Q.where(GenealogyCol.OFFSPRING_ID, this.id),
         Q.take(1)
       )
       .fetch()
 
     if (!genealogyRecord.length) {
-      throw new Error('Cannot delete a mother that doesn\'t exists.')
+      throw new Error("Cannot delete a mother that doesn't exists.")
     }
 
     await genealogyRecord[0].destroyPermanently()
@@ -358,7 +376,7 @@ class Cattle extends Model {
   @writer
   async setOffsprings(offsprings: Cattle[]) {
     this.collections.get<Genealogy>(TableName.GENEALOGY)
-      .query(Q.where('mother_id', this.id))
+      .query(Q.where(GenealogyCol.MOTHER_ID, this.id))
       .destroyAllPermanently()
 
     await this.batch(
@@ -379,8 +397,8 @@ class Cattle extends Model {
     const medicationSchedule = await this.collections
       .get<MedicationSchedule>(TableName.MEDICATION_SCHEDULES)
       .query(
-        Q.where('cattle_id', this.id),
-        Q.where('medication_id', medication.id),
+        Q.where(MedicationSchedulesCol.CATTLE_ID, this.id),
+        Q.where(MedicationSchedulesCol.MEDICATION_ID, medication.id),
         Q.take(1)
       )
       .fetch()
@@ -424,7 +442,7 @@ class Cattle extends Model {
     if (weight) {
       const weightReports = await this.collections
         .get<WeightReport>(TableName.WEIGHT_REPORTS)
-        .query(Q.where('cattle_id', this.id))
+        .query(Q.where(WeightReportsCol.CATTLE_ID, this.id))
         .count
 
       if (weightReports > 0) {
@@ -459,8 +477,8 @@ class Cattle extends Model {
       await this.collections
         .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
         .query(
-          Q.where('cattle_id', this.id),
-          Q.where('type', 'birth')
+          Q.where(PendingNotificationsCol.CATTLE_ID, this.id),
+          Q.where(PendingNotificationsCol.TYPE, 'birth')
         )
     )[0]
 
@@ -476,8 +494,8 @@ class Cattle extends Model {
       await this.collections
         .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
         .query(
-          Q.where('cattle_id', this.id),
-          Q.where('type', 'quarantine')
+          Q.where(PendingNotificationsCol.CATTLE_ID, this.id),
+          Q.where(PendingNotificationsCol.TYPE, 'quarantine')
         )
     )[0]
 
@@ -504,8 +522,8 @@ class Cattle extends Model {
       .get<Genealogy>(TableName.GENEALOGY)
       .query(
         Q.or(
-          Q.where('mother_id', this.id),
-          Q.where('offspring_id', this.id)
+          Q.where(GenealogyCol.MOTHER_ID, this.id),
+          Q.where(GenealogyCol.OFFSPRING_ID, this.id)
         )
       )
       .destroyAllPermanently()
@@ -517,7 +535,7 @@ class Cattle extends Model {
 
     const pendingNotificationsIdsQuery = this.collections
       .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
-      .query(Q.where('cattle_id', this.id))
+      .query(Q.where(PendingNotificationsCol.CATTLE_ID, this.id))
 
     await notifee.cancelTriggerNotifications(await pendingNotificationsIdsQuery.fetchIds())
     await pendingNotificationsIdsQuery.destroyAllPermanently()

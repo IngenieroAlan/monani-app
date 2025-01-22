@@ -3,7 +3,7 @@ import database from '..'
 import CattleArchiveFactory from '../factories/CattleArchiveFactory'
 import Cattle from '../models/Cattle'
 import CattleArchive from '../models/CattleArchive'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const NUM_OF_RECORDS = 5
 

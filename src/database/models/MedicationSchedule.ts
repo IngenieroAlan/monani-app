@@ -1,29 +1,29 @@
 import { createMedicationNotification } from '@/notifee/constructors'
+import notifee from '@notifee/react-native'
 import { Model, Q, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, readonly, relation, writer } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../schema'
+import { MedicationSchedulesCol, PendingNotificationsCol, TableName } from '../constants'
 import Cattle from './Cattle'
 import Medication from './Medication'
 import PendingNotification from './PendingNotification'
-import notifee from '@notifee/react-native'
 
 class MedicationSchedule extends Model {
   static table = TableName.MEDICATION_SCHEDULES
 
   static associations = {
-    [TableName.CATTLE]: { type: 'belongs_to' as const, key: 'cattle_id' },
-    [TableName.MEDICATIONS]: { type: 'belongs_to' as const, key: 'medication_id' }
+    [TableName.CATTLE]: { type: 'belongs_to' as const, key: MedicationSchedulesCol.CATTLE_ID },
+    [TableName.MEDICATIONS]: { type: 'belongs_to' as const, key: MedicationSchedulesCol.MEDICATION_ID }
   }
 
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @date('next_dose_at') nextDoseAt!: Date
-  @field('doses_per_year') dosesPerYear!: number
+  @date(MedicationSchedulesCol.NEXT_DOSE_AT) nextDoseAt!: Date
+  @field(MedicationSchedulesCol.DOSES_PER_YEAR) dosesPerYear!: number
 
-  @relation(TableName.MEDICATIONS, 'medication_id') medication!: Relation<Medication>
+  @relation(TableName.MEDICATIONS, MedicationSchedulesCol.MEDICATION_ID) medication!: Relation<Medication>
 
-  @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
+  @immutableRelation(TableName.CATTLE, MedicationSchedulesCol.CATTLE_ID) cattle!: Relation<Cattle>
 
   @writer
   async updateMedicationSchedule({
@@ -47,9 +47,9 @@ class MedicationSchedule extends Model {
       await this.collections
         .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
         .query(
-          Q.where('cattle_id', cattle.id),
-          Q.where('type', 'medication'),
-          Q.where('foreign_id', this.id)
+          Q.where(PendingNotificationsCol.CATTLE_ID, cattle.id),
+          Q.where(PendingNotificationsCol.TYPE, 'medication'),
+          Q.where(PendingNotificationsCol.FOREIGN_ID, this.id)
         )
     )[0]
 
@@ -70,8 +70,8 @@ class MedicationSchedule extends Model {
     const pendingNotification = await this.collections
       .get<PendingNotification>(TableName.PENDING_NOTIFICATIONS)
       .query(
-        Q.where('type', 'medication'),
-        Q.where('foreign_id', this.id)
+        Q.where(PendingNotificationsCol.TYPE, 'medication'),
+        Q.where(PendingNotificationsCol.FOREIGN_ID, this.id)
       )
       .fetchIds()
 

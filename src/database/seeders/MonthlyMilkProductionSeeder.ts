@@ -3,7 +3,7 @@ import { getMonth, getYear } from 'date-fns'
 import database from '..'
 import MilkProductionSummary from '../models/MilkProductionSummary'
 import MonthlyMilkProduction from '../models/MonthlyMilkProduction'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const MonthlyMilkProductionSeeeder = async (milkProductionRecords: DirtyRaw[]) => {
   let totalProduction = 0

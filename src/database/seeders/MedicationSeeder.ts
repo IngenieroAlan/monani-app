@@ -1,7 +1,7 @@
 import database from '..'
 import medications from '../factories/MedicationFactory'
 import Medication from '../models/Medication'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const MedicationSeeder = async () => {
   await database.write(async () => {

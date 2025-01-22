@@ -1,5 +1,5 @@
+import { MedicationsCol as Column, TableName } from '@/database/constants'
 import Medication from '@/database/models/Medication'
-import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useEffect, useState } from 'react'
@@ -14,7 +14,7 @@ const useMedications = ({ take }: UseMedicationsProps = {}) => {
   const [medicationsRecords, setMedicationsRecords] = useState<Medication[]>([])
   const [isPending, setIsPending] = useState(true)
 
-  let medicationsQuery = database.get<Medication>(TableName.MEDICATIONS).query(Q.sortBy('name', Q.asc))
+  let medicationsQuery = database.get<Medication>(TableName.MEDICATIONS).query(Q.sortBy(Column.NAME, Q.asc))
 
   if (take) {
     medicationsQuery = medicationsQuery.extend(Q.take(take))

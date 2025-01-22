@@ -1,5 +1,5 @@
+import { MilkProductionsCol as Column, TableName } from '@/database/constants'
 import MilkProduction from '@/database/models/MilkProduction'
-import { TableName } from '@/database/schema'
 import { Database, Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { format, set } from 'date-fns'
@@ -14,9 +14,9 @@ type Props = {
 
 const getRawQuery = (take: number) =>
   Q.unsafeSqlQuery(`
-      SELECT produced_at FROM ${TableName.MILK_PRODUCTIONS}
-      GROUP BY strftime('%d/%m/%Y', produced_at / 1000, 'unixepoch')
-      ORDER BY produced_at DESC
+      SELECT ${Column.PRODUCED_AT} FROM ${TableName.MILK_PRODUCTIONS}
+      GROUP BY strftime('%d/%m/%Y', ${Column.PRODUCED_AT} / 1000, 'unixepoch')
+      ORDER BY ${Column.PRODUCED_AT} DESC
       LIMIT 1 OFFSET ${take - 1}
     `)
 
@@ -30,7 +30,7 @@ const extendQueryWithTake = async (db: Database, take?: number) => {
   if (!result?.produced_at) return []
 
   const formattedDate = set(result.produced_at, { hours: 23, minutes: 59, seconds: 59, milliseconds: 999 }).getTime()
-  return [Q.where('produced_at', Q.gte(formattedDate))]
+  return [Q.where(Column.PRODUCED_AT, Q.gte(formattedDate))]
 }
 
 const groupMilkProductions = (data: MilkProduction[]) => {
@@ -51,10 +51,10 @@ export const useMilkProductions = ({ take, betweenDates }: Props = {}) => {
   const [records, setRecords] = useState<MilkProduction[][]>([])
   const [isPending, setIsPending] = useState(true)
 
-  let query = database.get<MilkProduction>(TableName.MILK_PRODUCTIONS).query(Q.sortBy('produced_at', Q.desc))
+  let query = database.get<MilkProduction>(TableName.MILK_PRODUCTIONS).query(Q.sortBy(Column.PRODUCED_AT, Q.desc))
 
   if (betweenDates?.length) {
-    query = query.extend(Q.where('produced_at', Q.between(betweenDates[0], betweenDates[1])))
+    query = query.extend(Q.where(Column.PRODUCED_AT, Q.between(betweenDates[0], betweenDates[1])))
   }
 
   useEffect(() => {

@@ -1,5 +1,5 @@
+import { MilkProductionsCol as Column, TableName } from "@/database/constants";
 import MilkProduction from "@/database/models/MilkProduction";
-import { TableName } from "@/database/schema";
 import { Q } from "@nozbe/watermelondb";
 import { useDatabase } from "@nozbe/watermelondb/react";
 import { useEffect, useState } from "react";
@@ -20,14 +20,14 @@ const useMilkProduction = ({ take, betweenDates, year, order }: Props) => {
   let milkProductionQuery = database.collections
     .get<MilkProduction>(TableName.MILK_PRODUCTIONS)
     .query(
-      Q.sortBy("produced_at",Q.desc)
+      Q.sortBy(Column.PRODUCED_AT,Q.desc)
     );
   if (take) {
     milkProductionQuery = milkProductionQuery.extend(Q.take(take));
   }
   if (betweenDates?.length) {
     milkProductionQuery = milkProductionQuery.extend(
-      Q.where("produced_at", Q.between(betweenDates[0], betweenDates[1]))
+      Q.where(Column.PRODUCED_AT, Q.between(betweenDates[0], betweenDates[1]))
     );
   }
   if (year) {
@@ -39,7 +39,7 @@ const useMilkProduction = ({ take, betweenDates, year, order }: Props) => {
   }
   useEffect(() => {
     const milkProductionSubscription = milkProductionQuery
-      .observeWithColumns(["produced_at"])
+      .observeWithColumns([Column.PRODUCED_AT])
       .subscribe((data) => {
         setMilkProductionRecords( order && order === SORT_ORDERS.desc ? data : data.toReversed());
       });

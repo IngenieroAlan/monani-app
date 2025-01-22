@@ -1,7 +1,7 @@
 import database from '..'
 import feeds from '../factories/FeedFactory'
 import Feed from '../models/Feed'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const FeedSeeder = async () => {
   await database.write(async () => {

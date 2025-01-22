@@ -1,6 +1,6 @@
 import { Model } from '@nozbe/watermelondb'
 import { date, field, readonly } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 // Deprecated. Do not use.
 // TODO: Remove table and model.

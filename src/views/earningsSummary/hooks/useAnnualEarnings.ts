@@ -1,5 +1,5 @@
+import { AnnualEarningsCol as Column, TableName } from '@/database/constants'
 import AnnualEarnings from '@/database/models/AnnualEarnings'
-import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useEffect, useState } from 'react'
@@ -10,10 +10,10 @@ const useAnnualEarnings = () => {
 
   let annualEarningsQuery = database.collections
     .get<AnnualEarnings>(TableName.ANNUAL_EARNINGS)
-    .query(Q.sortBy('year', Q.desc))
+    .query(Q.sortBy(Column.YEAR, Q.desc))
 
   useEffect(() => {
-    const subscription = annualEarningsQuery.observeWithColumns(['total_earnings']).subscribe((data) => {
+    const subscription = annualEarningsQuery.observeWithColumns([Column.TOTAL_EARNINGS]).subscribe((data) => {
       setAnnualEarningsRecords(data)
     })
 

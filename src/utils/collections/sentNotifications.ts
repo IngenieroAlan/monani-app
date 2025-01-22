@@ -1,6 +1,6 @@
 import database from '@/database'
+import { SentNotificationsCol as Column, TableName } from '@/database/constants'
 import SentNotification, { NotificationType } from '@/database/models/SentNotification'
-import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 
 type NotificationData = {
@@ -32,7 +32,7 @@ export const createNotification = async (data: NotificationData) => {
 export const markAllAsRead = async () => {
   const notifications = await database.collections
     .get<SentNotification>(TableName.SENT_NOTIFICATIONS)
-    .query(Q.where('is_marked_as_read', false))
+    .query(Q.where(Column.IS_MARKED_AS_READ, false))
     .fetch()
 
   await database.write(async () => {

@@ -1,6 +1,6 @@
 import { Model, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, nochange, readonly, writer } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../schema'
+import { TableName, MilkReportsCol as Column } from '../constants'
 import Cattle from './Cattle'
 import MilkProduction from './MilkProduction'
 
@@ -8,21 +8,21 @@ class MilkReport extends Model {
   static table = TableName.MILK_REPORTS
 
   static associations = {
-    [TableName.CATTLE]: { type: 'belongs_to' as const, key: 'cattle_id' },
-    [TableName.MILK_PRODUCTIONS]: { type: 'belongs_to' as const, key: 'milk_production_id' }
+    [TableName.CATTLE]: { type: 'belongs_to' as const, key: Column.CATTLE_ID },
+    [TableName.MILK_PRODUCTIONS]: { type: 'belongs_to' as const, key: Column.MILK_PRODUCTION_ID }
   }
 
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @nochange @date('reported_at') reportedAt!: Date
-  @nochange @field('production_number') productionNumber!: number
+  @nochange @date(Column.REPORTED_AT) reportedAt!: Date
+  @nochange @field(Column.PRODUCTION_NUMBER) productionNumber!: number
 
-  @field('liters') liters!: number
-  @field('is_sold') isSold!: boolean
+  @field(Column.LITERS) liters!: number
+  @field(Column.IS_SOLD) isSold!: boolean
 
-  @immutableRelation(TableName.CATTLE, 'cattle_id') cattle!: Relation<Cattle>
-  @immutableRelation(TableName.MILK_PRODUCTIONS, 'milk_production_id') milkProduction!: Relation<MilkProduction>
+  @immutableRelation(TableName.CATTLE, Column.CATTLE_ID) cattle!: Relation<Cattle>
+  @immutableRelation(TableName.MILK_PRODUCTIONS, Column.MILK_PRODUCTION_ID) milkProduction!: Relation<MilkProduction>
 
   @writer
   async updateMilkReport(liters: number) {

@@ -5,7 +5,7 @@ import database from '..'
 import Cattle from '../models/Cattle'
 import Medication from '../models/Medication'
 import MedicationSchedule from '../models/MedicationSchedule'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 let NUM_OF_RECORDS = 0
 const MIN_NUM_OF_MEDS = 2

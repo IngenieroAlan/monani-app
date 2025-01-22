@@ -1,6 +1,6 @@
+import { MilkReportsCol as Column, TableName } from '@/database/constants'
 import Cattle from '@/database/models/Cattle'
 import MilkReport from '@/database/models/MilkReport'
-import { TableName } from '@/database/schema'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useEffect, useState } from 'react'
@@ -15,15 +15,12 @@ const useMilkReports = (cattle: Cattle, { take }: UseMilkReportProps = {}) => {
 
   let milkReportsQuery = database
     .get<MilkReport>(TableName.MILK_REPORTS)
-    .query(
-      Q.where('cattle_id', cattle.id),
-      Q.sortBy('reported_at', Q.desc)
-    )
-  
+    .query(Q.where(Column.CATTLE_ID, cattle.id), Q.sortBy(Column.REPORTED_AT, Q.desc))
+
   if (take) milkReportsQuery = milkReportsQuery.extend(Q.take(take))
 
   useEffect(() => {
-    const subscription = milkReportsQuery.observeWithColumns(['liters']).subscribe((data) => {
+    const subscription = milkReportsQuery.observeWithColumns([Column.LITERS]).subscribe((data) => {
       setMilkReports(data)
     })
 

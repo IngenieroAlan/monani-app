@@ -1,6 +1,6 @@
+import { CattleSalesCol, MilkSalesCol, TableName } from '@/database/constants'
 import CattleSale from '@/database/models/CattleSale'
 import MilkSale from '@/database/models/MilkSale'
-import { TableName } from '@/database/schema'
 import { Model, Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { formatISO, set } from 'date-fns'
@@ -37,10 +37,10 @@ const useEarnings = ({ take, eqSalesType, betweenDates, year }: UseEarningsProps
 
   let cattleSalesQuery = database.collections
     .get<CattleSale>(TableName.CATTLE_SALES)
-    .query(Q.sortBy('sold_at', Q.desc))
+    .query(Q.sortBy(CattleSalesCol.SOLD_AT, Q.desc))
   let milkSalesQuery = database.collections
     .get<MilkSale>(TableName.MILK_SALES)
-    .query(Q.sortBy('sold_at', Q.desc))
+    .query(Q.sortBy(MilkSalesCol.SOLD_AT, Q.desc))
 
   if (take) {
     cattleSalesQuery = cattleSalesQuery.extend(Q.take(take))
@@ -49,19 +49,17 @@ const useEarnings = ({ take, eqSalesType, betweenDates, year }: UseEarningsProps
 
   if (betweenDates?.length) {
     cattleSalesQuery = cattleSalesQuery.extend(
-      Q.where('sold_at', Q.between(betweenDates[0], betweenDates[1]))
+      Q.where(CattleSalesCol.SOLD_AT, Q.between(betweenDates[0], betweenDates[1]))
     )
-    milkSalesQuery = milkSalesQuery.extend(
-      Q.where('sold_at', Q.between(betweenDates[0], betweenDates[1]))
-    )
+    milkSalesQuery = milkSalesQuery.extend(Q.where(MilkSalesCol.SOLD_AT, Q.between(betweenDates[0], betweenDates[1])))
   }
 
   if (year) {
     cattleSalesQuery = cattleSalesQuery.extend(
-      Q.unsafeSqlExpr(`strftime('%Y', datetime(sold_at / 1000, 'unixepoch')) = '${year}'`)
+      Q.unsafeSqlExpr(`strftime('%Y', datetime(${CattleSalesCol.SOLD_AT} / 1000, 'unixepoch')) = '${year}'`)
     )
     milkSalesQuery = milkSalesQuery.extend(
-      Q.unsafeSqlExpr(`strftime('%Y', datetime(sold_at / 1000, 'unixepoch')) = '${year}'`)
+      Q.unsafeSqlExpr(`strftime('%Y', datetime(${MilkSalesCol.SOLD_AT} / 1000, 'unixepoch')) = '${year}'`)
     )
   }
 
@@ -83,10 +81,10 @@ const useEarnings = ({ take, eqSalesType, betweenDates, year }: UseEarningsProps
   }
 
   useEffect(() => {
-    const cattleSalesSubscription = cattleSalesQuery.observeWithColumns(['sold_at']).subscribe((data) => {
+    const cattleSalesSubscription = cattleSalesQuery.observeWithColumns([CattleSalesCol.SOLD_AT]).subscribe((data) => {
       setCattleSales(eqSalesType === 'Ganado' || !eqSalesType ? data : [])
     })
-    const milkSalesSubscription = milkSalesQuery.observeWithColumns(['sold_at']).subscribe((data) => {
+    const milkSalesSubscription = milkSalesQuery.observeWithColumns([CattleSalesCol.SOLD_AT]).subscribe((data) => {
       setMilkSales(eqSalesType === 'Lechera' || !eqSalesType ? data : [])
     })
 

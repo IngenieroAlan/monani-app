@@ -5,7 +5,7 @@ import { ProductionType } from '../models/Cattle'
 import Diet from '../models/Diet'
 import DietFeed from '../models/DietFeed'
 import Feed from '../models/Feed'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 // Solo dios se acuerda de cómo funciona esto.
 

@@ -1,6 +1,6 @@
 import { Model, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, readonly, relation, writer } from '@nozbe/watermelondb/decorators'
-import { TableName } from '../schema'
+import { DietFeedCol as Column, TableName } from '../constants'
 import Diet from './Diet'
 import Feed from './Feed'
 
@@ -10,20 +10,20 @@ class DietFeed extends Model {
   static table = TableName.DIET_FEED
 
   static associations = {
-    [TableName.FEEDS]: { type: 'belongs_to' as const, key: 'feed_id' },
-    [TableName.DIETS]: { type: 'belongs_to' as const, key: 'diet_id' }
+    [TableName.FEEDS]: { type: 'belongs_to' as const, key: Column.FEED_ID },
+    [TableName.DIETS]: { type: 'belongs_to' as const, key: Column.DIET_ID }
   }
 
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date
 
-  @field('feed_amount') feedAmount!: number
-  @field('percentage') percentage?: number
-  @field('feed_proportion') feedProportion!: FeedProportion
+  @field(Column.FEED_AMOUNT) feedAmount!: number
+  @field(Column.PERCENTAGE) percentage?: number
+  @field(Column.FEED_PROPORTION) feedProportion!: FeedProportion
 
-  @relation(TableName.FEEDS, 'feed_id') feed!: Relation<Feed>
+  @relation(TableName.FEEDS, Column.FEED_ID) feed!: Relation<Feed>
 
-  @immutableRelation(TableName.DIETS, 'diet_id') diet!: Relation<Diet>
+  @immutableRelation(TableName.DIETS, Column.DIET_ID) diet!: Relation<Diet>
 
   @writer
   async updateDietFeed({

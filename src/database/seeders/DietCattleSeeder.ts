@@ -5,7 +5,7 @@ import CattleFactory from '../factories/CattleFactory'
 import DietFactory from '../factories/DietFactory'
 import Cattle from '../models/Cattle'
 import Diet from '../models/Diet'
-import { TableName } from '../schema'
+import { TableName } from '../constants'
 
 const NUM_OF_RECORDS = 40
 

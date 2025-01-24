@@ -1,4 +1,4 @@
-import { TableName, MonthlyMilkProductionCol as Column } from "@/database/constants";
+import { TableName } from "@/database/constants";
 import MonthlyMilkProduction from "@/database/models/MonthlyMilkProduction";
 import { useDatabase } from "@nozbe/watermelondb/react";
 import { useEffect, useState } from "react";
@@ -27,7 +27,7 @@ export const useMilkProductionResume = () => {
   ];
 
   let monthlyMilkProductionQuery = database.collections
-    .get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTION)
+    .get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTIONS)
     .query();
 
   useEffect(() => {

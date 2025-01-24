@@ -7,6 +7,7 @@ import AnnualEarnings from './models/AnnualEarnings'
 import Cattle from './models/Cattle'
 import CattleArchive from './models/CattleArchive'
 import CattleSale from './models/CattleSale'
+import DailyMilkProduction from './models/DailyMilkProduction'
 import Diet from './models/Diet'
 import DietFeed from './models/DietFeed'
 import EarningsSummary from './models/EarningsSummary'
@@ -52,6 +53,7 @@ const database = new Database({
     CattleSale,
     MilkSale,
     MilkProductionSummary,
+    DailyMilkProduction,
     MonthlyMilkProduction,
     EarningsSummary,
     AnnualEarnings,

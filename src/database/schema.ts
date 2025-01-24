@@ -4,6 +4,7 @@ import {
   CattleArchivesCol,
   CattleCol,
   CattleSalesCol,
+  DailyMilkProductionsCol,
   DietFeedCol,
   DietsCol,
   EarningsSummaryCol,
@@ -15,7 +16,7 @@ import {
   MilkProductionSummaryCol,
   MilkReportsCol,
   MilkSalesCol,
-  MonthlyMilkProductionCol,
+  MonthlyMilkProductionsCol,
   PendingNotificationsCol,
   SentNotificationsCol,
   TableName,
@@ -167,11 +168,21 @@ export default appSchema({
       ]
     }),
     tableSchema({
-      name: TableName.MONTHLY_MILK_PRODUCTION,
+      name: TableName.DAILY_MILK_PRODUCTIONS,
       columns: [
-        { name: MonthlyMilkProductionCol.YEAR, type: 'number' },
-        { name: MonthlyMilkProductionCol.MONTH, type: 'number' },
-        { name: MonthlyMilkProductionCol.LITERS, type: 'number' },
+        { name: DailyMilkProductionsCol.LITERS, type: 'number' },
+        { name: DailyMilkProductionsCol.TOTAL_PRODUCTIONS, type: 'number' },
+        { name: DailyMilkProductionsCol.PRODUCED_AT, type: 'number' },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' }
+      ]
+    }),
+    tableSchema({
+      name: TableName.MONTHLY_MILK_PRODUCTIONS,
+      columns: [
+        { name: MonthlyMilkProductionsCol.YEAR, type: 'number' },
+        { name: MonthlyMilkProductionsCol.MONTH, type: 'number' },
+        { name: MonthlyMilkProductionsCol.LITERS, type: 'number' },
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ]

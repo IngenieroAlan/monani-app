@@ -2,9 +2,10 @@ import { faker } from '@faker-js/faker'
 import { DirtyRaw, Q } from '@nozbe/watermelondb'
 import { eachDayOfInterval, subMonths } from 'date-fns'
 import database from '..'
+import { TableName } from '../constants'
 import Cattle from '../models/Cattle'
 import MilkProduction from '../models/MilkProduction'
-import { TableName } from '../constants'
+import DailyMilkProductionsSeeder from './DailyMilkProductionSeeder'
 import MilkReportSeeder from './MilkReportSeeder'
 import MonthlyMilkProductionSeeeder from './MonthlyMilkProductionSeeder'
 
@@ -83,6 +84,7 @@ const MilkProductionSeeder = async () => {
   console.log(`Milk productions table seeded with ${milkProductionRecords.length} records.`)
 
   await MilkReportSeeder(litersPerProduction)
+  await DailyMilkProductionsSeeder(milkProductionRecords)
   await MonthlyMilkProductionSeeeder(milkProductionRecords)
 }
 

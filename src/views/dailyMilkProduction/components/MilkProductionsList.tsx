@@ -22,7 +22,7 @@ export const MilkProductionsList = () => {
       emptyListComponent={
         <EmptyList
           text='No se han encontrado registros.'
-          icon='search-off'
+          icon='magnify-remove-outline'
         />
       }
       filters={<BetweenDatesFilterChip />}

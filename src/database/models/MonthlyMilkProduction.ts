@@ -1,9 +1,9 @@
 import { Model } from '@nozbe/watermelondb'
 import { date, field, nochange, readonly } from '@nozbe/watermelondb/decorators'
-import { MonthlyMilkProductionCol as Column, TableName } from '../constants'
+import { MonthlyMilkProductionsCol as Column, TableName } from '../constants'
 
 class MonthlyMilkProduction extends Model {
-  static table = TableName.MONTHLY_MILK_PRODUCTION
+  static table = TableName.MONTHLY_MILK_PRODUCTIONS
 
   @readonly @date('created_at') createdAt!: Date
   @readonly @date('updated_at') updatedAt!: Date

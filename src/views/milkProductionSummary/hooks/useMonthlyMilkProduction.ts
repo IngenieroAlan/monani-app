@@ -1,4 +1,4 @@
-import { MonthlyMilkProductionCol as Column, TableName } from '@/database/constants'
+import { MonthlyMilkProductionsCol as Column, TableName } from '@/database/constants'
 import MonthlyMilkProduction from '@/database/models/MonthlyMilkProduction'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useEffect, useState } from 'react'
@@ -9,7 +9,7 @@ export const useMonthlyMilkProduction = () => {
   const [records, setRecords] = useState<MonthlyMilkProduction[]>([])
   const [isPending, setIsPending] = useState(true)
 
-  const query = database.get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTION).query()
+  const query = database.get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTIONS).query()
 
   useEffect(() => {
     setIsPending(true)

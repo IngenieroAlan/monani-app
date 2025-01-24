@@ -1,9 +1,9 @@
 import { DirtyRaw } from '@nozbe/watermelondb'
 import { getMonth, getYear } from 'date-fns'
 import database from '..'
+import { TableName } from '../constants'
 import MilkProductionSummary from '../models/MilkProductionSummary'
 import MonthlyMilkProduction from '../models/MonthlyMilkProduction'
-import { TableName } from '../constants'
 
 const MonthlyMilkProductionSeeeder = async (milkProductionRecords: DirtyRaw[]) => {
   let totalProduction = 0
@@ -38,7 +38,7 @@ const MonthlyMilkProductionSeeeder = async (milkProductionRecords: DirtyRaw[]) =
       }),
       ...monthlyMilkProductionRecords.map((monthlyMilkProduction) => {
         return database
-          .get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTION)
+          .get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTIONS)
           .prepareCreateFromDirtyRaw(monthlyMilkProduction)
       })
     )

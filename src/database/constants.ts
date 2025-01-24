@@ -11,7 +11,8 @@ export const TableName = {
   MILK_PRODUCTIONS: 'milk_productions',
   MILK_REPORTS: 'milk_reports',
   MILK_PRODUCTION_SUMMARY: 'milk_production_summary',
-  MONTHLY_MILK_PRODUCTION: 'monthly_milk_production',
+  DAILY_MILK_PRODUCTIONS: 'daily_milk_productions',
+  MONTHLY_MILK_PRODUCTIONS: 'monthly_milk_productions',
   CATTLE_SALES: 'cattle_sales',
   MILK_SALES: 'milk_sales',
   EARNINGS_SUMMARY: 'earnings_summary',
@@ -31,7 +32,7 @@ export const DietsCol = {
   MATTER_AMOUNT: 'matter_amount',
   PERCENTAGE: 'percentage',
   IS_CONCENTRATE_EXCLUDED: 'is_concentrate_excluded'
-} as const;
+} as const
 
 export const DietFeedCol = {
   DIET_ID: 'diet_id',
@@ -39,7 +40,7 @@ export const DietFeedCol = {
   FEED_PROPORTION: 'feed_proportion',
   FEED_AMOUNT: 'feed_amount',
   PERCENTAGE: 'percentage'
-} as const;
+} as const
 
 export const CattleCol = {
   NAME: 'name',
@@ -56,31 +57,31 @@ export const CattleCol = {
   BORN_AT: 'born_at',
   ADMITTED_AT: 'admitted_at',
   QUARANTINE_ENDS_AT: 'quarantine_ends_at'
-} as const;
+} as const
 
 export const GenealogyCol = {
   MOTHER_ID: 'mother_id',
   OFFSPRING_ID: 'offspring_id'
-} as const;
+} as const
 
 export const CattleArchivesCol = {
   CATTLE_ID: 'cattle_id',
   REASON: 'reason',
   NOTES: 'notes',
   ARCHIVED_AT: 'archived_at'
-} as const;
+} as const
 
 export const MedicationsCol = {
   NAME: 'name',
   MEDICATION_TYPE: 'medication_type'
-} as const;
+} as const
 
 export const MedicationSchedulesCol = {
   CATTLE_ID: 'cattle_id',
   MEDICATION_ID: 'medication_id',
   DOSES_PER_YEAR: 'doses_per_year',
   NEXT_DOSE_AT: 'next_dose_at'
-} as const;
+} as const
 
 export const WeightReportsCol = {
   CATTLE_ID: 'cattle_id',
@@ -89,14 +90,14 @@ export const WeightReportsCol = {
   DAYS_PASSED: 'days_passed',
   AVG_DAILY_DIFFERENCE: 'avg_daily_difference',
   WEIGHED_AT: 'weighed_at'
-} as const;
+} as const
 
 export const MilkProductionsCol = {
   LITERS: 'liters',
   PRODUCTION_NUMBER: 'production_number',
   IS_SOLD: 'is_sold',
   PRODUCED_AT: 'produced_at'
-} as const;
+} as const
 
 export const MilkReportsCol = {
   CATTLE_ID: 'cattle_id',
@@ -105,17 +106,23 @@ export const MilkReportsCol = {
   PRODUCTION_NUMBER: 'production_number',
   IS_SOLD: 'is_sold',
   REPORTED_AT: 'reported_at'
-} as const;
+} as const
 
 export const MilkProductionSummaryCol = {
   TOTAL_PRODUCTION: 'total_production'
-} as const;
+} as const
 
-export const MonthlyMilkProductionCol = {
+export const MonthlyMilkProductionsCol = {
   YEAR: 'year',
   MONTH: 'month',
   LITERS: 'liters'
-} as const;
+} as const
+
+export const DailyMilkProductionsCol = {
+  LITERS: 'liters',
+  TOTAL_PRODUCTIONS: 'total_productions',
+  PRODUCED_AT: 'produced_at'
+} as const
 
 export const CattleSalesCol = {
   DETAILS: 'details',
@@ -123,7 +130,7 @@ export const CattleSalesCol = {
   SOLD_BY: 'sold_by',
   CATTLE_ID: 'cattle_id',
   SOLD_AT: 'sold_at'
-} as const;
+} as const
 
 export const MilkSalesCol = {
   DETAILS: 'details',
@@ -131,20 +138,20 @@ export const MilkSalesCol = {
   SOLD_BY: 'sold_by',
   MILK_PRODUCTION_ID: 'milk_production_id',
   SOLD_AT: 'sold_at'
-} as const;
+} as const
 
 export const EarningsSummaryCol = {
   TOTAL_EARNINGS: 'total_earnings',
   TOTAL_CATTLE_SALES: 'total_cattle_sales',
   TOTAL_MILK_SALES: 'total_milk_sales'
-} as const;
+} as const
 
 export const AnnualEarningsCol = {
   YEAR: 'year',
   TOTAL_EARNINGS: 'total_earnings',
   TOTAL_CATTLE_SALES: 'total_cattle_sales',
   TOTAL_MILK_SALES: 'total_milk_sales'
-} as const;
+} as const
 
 export const SentNotificationsCol = {
   NOTIFEE_ID: 'notifee_id',
@@ -153,11 +160,10 @@ export const SentNotificationsCol = {
   TYPE: 'type',
   EXTRA_INFO: 'extra_info',
   EVENT_AT: 'event_at'
-} as const;
+} as const
 
 export const PendingNotificationsCol = {
   TYPE: 'type',
   FOREIGN_ID: 'foreign_id',
   CATTLE_ID: 'cattle_id'
-} as const;
-
+} as const

@@ -1,6 +1,7 @@
-import { Model, Relation } from '@nozbe/watermelondb'
+import { Model, Q, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, nochange, readonly, writer } from '@nozbe/watermelondb/decorators'
-import { TableName, MilkReportsCol as Column } from '../constants'
+import dayjs from 'dayjs'
+import { MilkReportsCol as Column, MilkProductionsCol, TableName } from '../constants'
 import Cattle from './Cattle'
 import MilkProduction from './MilkProduction'
 
@@ -23,6 +24,63 @@ class MilkReport extends Model {
 
   @immutableRelation(TableName.CATTLE, Column.CATTLE_ID) cattle!: Relation<Cattle>
   @immutableRelation(TableName.MILK_PRODUCTIONS, Column.MILK_PRODUCTION_ID) milkProduction!: Relation<MilkProduction>
+
+  /**
+   * Creates a new milk report only if there are no milk reports in that same day (belonging to this specific cattle)
+   * that belongs to a milk production which hasn't been sold yet. If all milk productions related to the same day
+   * are sold, it will also create a new milk production record.
+   */
+  static async create({ cattle, liters, reportedAt }: { cattle: Cattle; liters: number; reportedAt: Date }) {
+    const db = cattle.db
+    const reportedAtDate = dayjs(reportedAt).format('YYYY-MM-DD')
+    const milkReports = await cattle.milkReports.extend(
+      Q.unsafeSqlExpr(`date(${Column.REPORTED_AT} / 1000, 'unixepoch') = '${reportedAtDate}'`)
+    )
+
+    if (!milkReports.every((record) => record.isSold)) {
+      throw new Error(
+        `Can't create a new milk report with the date ${reportedAtDate}. There is a report that belongs to a milk production that hasn't been sold yet.`
+      )
+    }
+
+    const milkProductions = await db
+      .get<MilkProduction>(TableName.MILK_PRODUCTIONS)
+      .query(
+        Q.unsafeSqlExpr(`date(${MilkProductionsCol.PRODUCED_AT} / 1000, 'unixepoch') = '${reportedAtDate}'`),
+        Q.sortBy(MilkProductionsCol.PRODUCTION_NUMBER, Q.asc)
+      )
+
+    const latestMilkProduction = milkProductions[milkProductions.length - 1]
+    let milkProductionBatch: MilkProduction
+
+    if (milkProductions.length > 0 && !latestMilkProduction.isSold) {
+      milkProductionBatch = latestMilkProduction.prepareUpdate((record) => {
+        record.liters += liters
+      })
+    } else {
+      milkProductionBatch = db.get<MilkProduction>(TableName.MILK_PRODUCTIONS).prepareCreate((record) => {
+        record.producedAt = reportedAt
+        record.liters = liters
+        record.productionNumber = milkProductions.length + 1
+        record.isSold = false
+      })
+    }
+
+    await db.write(async () => {
+      await db.batch(
+        db.get<MilkReport>(TableName.MILK_REPORTS).prepareCreate((record) => {
+          record.cattle.set(cattle)
+          record.milkProduction.set(milkProductionBatch)
+
+          record.reportedAt = reportedAt
+          record.liters = liters
+          record.productionNumber = milkProductionBatch.productionNumber
+          record.isSold = false
+        }),
+        milkProductionBatch
+      )
+    })
+  }
 
   @writer
   async updateMilkReport(liters: number) {

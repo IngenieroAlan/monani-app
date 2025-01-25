@@ -8,7 +8,6 @@ import { Model, Q, Query, Relation } from '@nozbe/watermelondb'
 import { children, date, field, immutableRelation, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
 import { Associations } from '@nozbe/watermelondb/Model'
 import { addDays, differenceInCalendarDays, format, getYear, isAfter } from 'date-fns'
-import dayjs from 'dayjs'
 import {
   AnnualEarningsCol,
   CattleArchivesCol,
@@ -17,7 +16,6 @@ import {
   DietFeedCol,
   GenealogyCol,
   MedicationSchedulesCol,
-  MilkProductionsCol,
   MilkReportsCol,
   PendingNotificationsCol,
   SentNotificationsCol,
@@ -32,7 +30,6 @@ import DietFeed from './DietFeed'
 import Genealogy from './Genealogy'
 import Medication from './Medication'
 import MedicationSchedule from './MedicationSchedule'
-import MilkProduction from './MilkProduction'
 import MilkReport from './MilkReport'
 import PendingNotification from './PendingNotification'
 import SentNotification from './SentNotification'
@@ -287,55 +284,8 @@ class Cattle extends Model {
     await this.batch(preparedPreviousReportUpdate, preapredCreate)
   }
 
-  /**
-   * Creates a new milk report only if there are no milk reports in that same day (belonging to this specific cattle)
-   * that belongs to a milk production which hasn't been sold yet. If all milk productions related to the same day
-   * are sold, it will also create a new milk production record.
-   */
-  @writer
   async createMilkReport({ liters, reportedAt }: { liters: number, reportedAt: Date }) {
-    const reportedAtDate = dayjs(reportedAt).format('YYYY-MM-DD')
-    const milkReports = await this.milkReports.extend(
-      Q.unsafeSqlExpr(`date(${MilkReportsCol.REPORTED_AT} / 1000, 'unixepoch') = '${reportedAtDate}'`),
-    )
-
-    if (!milkReports.every((record) => record.isSold)) {
-      throw new Error(`Can't create a new milk report with the date ${reportedAtDate}. There is a report that belongs to a milk production that hasn't been sold yet.`)
-    }
-
-    const milkProductions = await this.db.get<MilkProduction>(TableName.MILK_PRODUCTIONS)
-      .query(
-        Q.unsafeSqlExpr(`date(${MilkProductionsCol.PRODUCED_AT} / 1000, 'unixepoch') = '${reportedAtDate}'`),
-        Q.sortBy(MilkProductionsCol.PRODUCTION_NUMBER, Q.asc)
-      )
-    const latestMilkProduction = milkProductions[milkProductions.length - 1]
-    let milkProductionBatch: MilkProduction
-
-    if (milkProductions.length > 0 && !latestMilkProduction.isSold) {
-      milkProductionBatch = latestMilkProduction.prepareUpdate((record) => {
-        record.liters += liters
-      })
-    } else {
-      milkProductionBatch = this.db.get<MilkProduction>(TableName.MILK_PRODUCTIONS).prepareCreate((record) => {
-        record.producedAt = reportedAt
-        record.liters = liters
-        record.productionNumber = milkProductions.length + 1
-        record.isSold = false
-      })
-    }
-
-    await this.batch(
-      this.db.get<MilkReport>(TableName.MILK_REPORTS).prepareCreate((record) => {
-        record.cattle.set(this)
-        record.milkProduction.set(milkProductionBatch)
-
-        record.reportedAt = reportedAt
-        record.liters = liters
-        record.productionNumber = milkProductionBatch.productionNumber
-        record.isSold = false
-      }),
-      milkProductionBatch
-    )
+    await MilkReport.create({ cattle: this, liters, reportedAt })
   }
 
   @writer

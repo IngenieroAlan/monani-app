@@ -8,6 +8,7 @@ import { Model, Q, Query, Relation } from '@nozbe/watermelondb'
 import { children, date, field, immutableRelation, lazy, readonly, text, writer } from '@nozbe/watermelondb/decorators'
 import { Associations } from '@nozbe/watermelondb/Model'
 import { addDays, differenceInCalendarDays, format, getYear, isAfter } from 'date-fns'
+import dayjs from 'dayjs'
 import {
   AnnualEarningsCol,
   CattleArchivesCol,
@@ -293,53 +294,48 @@ class Cattle extends Model {
    */
   @writer
   async createMilkReport({ liters, reportedAt }: { liters: number, reportedAt: Date }) {
-    const reportedAtDate = format(reportedAt, 'yyyy/MM/dd')
+    const reportedAtDate = dayjs(reportedAt).format('YYYY-MM-DD')
     const milkReports = await this.milkReports.extend(
-      Q.unsafeSqlExpr(`strftime("%Y/%m/%d", datetime(${MilkReportsCol.REPORTED_AT} / 1000, "unixepoch")) = '${reportedAtDate}'`)
+      Q.unsafeSqlExpr(`date(${MilkReportsCol.REPORTED_AT} / 1000, 'unixepoch') = '${reportedAtDate}'`),
     )
 
-    for (const milkReport of milkReports) {
-      const milkProduction = await milkReport.milkProduction
-
-      if (!milkProduction.isSold) {
-        throw new Error(`Can't create a new milk report with the date ${reportedAtDate}. There is a report that belongs to a milk production that hasn't been sold yet.`)
-      }
+    if (!milkReports.every((record) => record.isSold)) {
+      throw new Error(`Can't create a new milk report with the date ${reportedAtDate}. There is a report that belongs to a milk production that hasn't been sold yet.`)
     }
 
-    const milkProductionsDate = await this.collections.get<MilkProduction>(TableName.MILK_PRODUCTIONS)
+    const milkProductions = await this.db.get<MilkProduction>(TableName.MILK_PRODUCTIONS)
       .query(
-        Q.unsafeSqlExpr(`strftime("%Y/%m/%d", datetime(${MilkProductionsCol.PRODUCED_AT} / 1000, "unixepoch")) = '${reportedAtDate}'`),
+        Q.unsafeSqlExpr(`date(${MilkProductionsCol.PRODUCED_AT} / 1000, 'unixepoch') = '${reportedAtDate}'`),
         Q.sortBy(MilkProductionsCol.PRODUCTION_NUMBER, Q.asc)
       )
-      .fetch()
+    const latestMilkProduction = milkProductions[milkProductions.length - 1]
+    let milkProductionBatch: MilkProduction
 
-    let createdMilkProduction: MilkProduction | null = null
-    if (milkProductionsDate.length > 0 && !milkProductionsDate[milkProductionsDate.length - 1].isSold) {
-      await milkProductionsDate[milkProductionsDate.length - 1].update((record) => {
+    if (milkProductions.length > 0 && !latestMilkProduction.isSold) {
+      milkProductionBatch = latestMilkProduction.prepareUpdate((record) => {
         record.liters += liters
       })
     } else {
-      createdMilkProduction = await this.collections.get<MilkProduction>(TableName.MILK_PRODUCTIONS)
-        .create((record) => {
-          record.producedAt = reportedAt
-          record.liters = liters
-          record.productionNumber = milkProductionsDate.length + 1
-          record.isSold = false
-        })
+      milkProductionBatch = this.db.get<MilkProduction>(TableName.MILK_PRODUCTIONS).prepareCreate((record) => {
+        record.producedAt = reportedAt
+        record.liters = liters
+        record.productionNumber = milkProductions.length + 1
+        record.isSold = false
+      })
     }
 
-    await this.collections.get<MilkReport>(TableName.MILK_REPORTS)
-      .create((record) => {
-        const milkProduction = createdMilkProduction ?? milkProductionsDate[milkProductionsDate.length - 1]
-
+    await this.batch(
+      this.db.get<MilkReport>(TableName.MILK_REPORTS).prepareCreate((record) => {
         record.cattle.set(this)
-        record.milkProduction.set(milkProduction)
+        record.milkProduction.set(milkProductionBatch)
 
         record.reportedAt = reportedAt
         record.liters = liters
-        record.productionNumber = milkProduction.productionNumber
+        record.productionNumber = milkProductionBatch.productionNumber
         record.isSold = false
-      })
+      }),
+      milkProductionBatch
+    )
   }
 
   @writer

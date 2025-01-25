@@ -2,7 +2,7 @@ import EmptyList from '@/components/EmptyList'
 import { RecordsList } from '@/components/RecordsList'
 import { FlashList } from '@shopify/flash-list'
 import { useMilkProductionsFilters } from '../contexts/MilkProductionsFiltersContext'
-import { useMilkProductions } from '../hooks/useMilkProductions'
+import { useDailyMilkProductions } from '../hooks/useDailyMilkProductions'
 import { BetweenDatesFilterChip } from './BetweenDatesFilterChip'
 import { MilkProductionsListItem } from './MilkProductionsListItem'
 
@@ -10,7 +10,7 @@ const ITEMS_PER_PAGINATE = 25
 
 export const MilkProductionsList = () => {
   const nextIndex = useMilkProductionsFilters('nextIndex')
-  const { milkProductionsRecords, isPending } = useMilkProductions({
+  const { milkProductionsRecords, isPending } = useDailyMilkProductions({
     betweenDates: useMilkProductionsFilters('betweenDates'),
     take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * useMilkProductionsFilters('paginateIndex')
   })
@@ -29,7 +29,7 @@ export const MilkProductionsList = () => {
     >
       <FlashList
         data={milkProductionsRecords}
-        renderItem={({ item }) => <MilkProductionsListItem productions={item} />}
+        renderItem={({ item }) => <MilkProductionsListItem milkProduction={item} />}
         estimatedItemSize={69}
         onEndReachedThreshold={2}
         onEndReached={() => {

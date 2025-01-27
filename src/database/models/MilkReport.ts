@@ -1,16 +1,19 @@
 import { Model, Q, Relation } from '@nozbe/watermelondb'
 import { date, field, immutableRelation, nochange, readonly, writer } from '@nozbe/watermelondb/decorators'
+import { Associations } from '@nozbe/watermelondb/Model'
 import dayjs from 'dayjs'
-import { MilkReportsCol as Column, MilkProductionsCol, TableName } from '../constants'
+import { MilkReportsCol as Column, TableName } from '../constants'
 import Cattle from './Cattle'
+import DailyMilkProduction from './DailyMilkProduction'
 import MilkProduction from './MilkProduction'
+import MonthlyMilkProduction from './MonthlyMilkProduction'
 
 class MilkReport extends Model {
   static table = TableName.MILK_REPORTS
 
-  static associations = {
-    [TableName.CATTLE]: { type: 'belongs_to' as const, key: Column.CATTLE_ID },
-    [TableName.MILK_PRODUCTIONS]: { type: 'belongs_to' as const, key: Column.MILK_PRODUCTION_ID }
+  static associations: Associations = {
+    [TableName.CATTLE]: { type: 'belongs_to', key: Column.CATTLE_ID },
+    [TableName.MILK_PRODUCTIONS]: { type: 'belongs_to', key: Column.MILK_PRODUCTION_ID }
   }
 
   @readonly @date('created_at') createdAt!: Date
@@ -43,28 +46,21 @@ class MilkReport extends Model {
       )
     }
 
-    const milkProductions = await db
-      .get<MilkProduction>(TableName.MILK_PRODUCTIONS)
-      .query(
-        Q.unsafeSqlExpr(`date(${MilkProductionsCol.PRODUCED_AT} / 1000, 'unixepoch') = '${reportedAtDate}'`),
-        Q.sortBy(MilkProductionsCol.PRODUCTION_NUMBER, Q.asc)
-      )
-
-    const latestMilkProduction = milkProductions[milkProductions.length - 1]
-    let milkProductionBatch: MilkProduction
-
-    if (milkProductions.length > 0 && !latestMilkProduction.isSold) {
-      milkProductionBatch = latestMilkProduction.prepareUpdate((record) => {
-        record.liters += liters
-      })
-    } else {
-      milkProductionBatch = db.get<MilkProduction>(TableName.MILK_PRODUCTIONS).prepareCreate((record) => {
-        record.producedAt = reportedAt
-        record.liters = liters
-        record.productionNumber = milkProductions.length + 1
-        record.isSold = false
-      })
-    }
+    const milkProductionBatch = await MilkProduction.prepareUpdateOrCreate(
+      db,
+      { producedAt: reportedAt },
+      { liters: liters }
+    )
+    const dailyMilkProductionBatch = await DailyMilkProduction.prepareUpdateOrCreate(
+      db,
+      { producedAt: reportedAt },
+      { liters: liters, totalProductions: milkProductionBatch.productionNumber }
+    )
+    const monthlyMilkProductionBatch = await MonthlyMilkProduction.prepareUpdateOrCreate(
+      db,
+      { producedAt: reportedAt },
+      { liters }
+    )
 
     await db.write(async () => {
       await db.batch(
@@ -77,7 +73,9 @@ class MilkReport extends Model {
           record.productionNumber = milkProductionBatch.productionNumber
           record.isSold = false
         }),
-        milkProductionBatch
+        milkProductionBatch,
+        dailyMilkProductionBatch,
+        monthlyMilkProductionBatch
       )
     })
   }

@@ -1,5 +1,6 @@
-import { Model } from '@nozbe/watermelondb'
+import { Database, Model, Q } from '@nozbe/watermelondb'
 import { date, field, nochange, readonly } from '@nozbe/watermelondb/decorators'
+import dayjs from 'dayjs'
 import { MonthlyMilkProductionsCol as Column, TableName } from '../constants'
 
 class MonthlyMilkProduction extends Model {
@@ -12,6 +13,34 @@ class MonthlyMilkProduction extends Model {
   @nochange @field(Column.MONTH) month!: number
 
   @field(Column.LITERS) liters!: number
+
+  static prepareCreate = (db: Database, { year, month, liters }: { year: number; month: number; liters: number }) =>
+    db.get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTIONS).prepareCreate((record) => {
+      record.year = year
+      record.month = month
+      record.liters = liters
+    })
+
+  static prepareUpdateOrCreate = async (
+    db: Database,
+    { producedAt }: { producedAt: Date },
+    { liters }: { liters: number }
+  ) => {
+    const year = dayjs(producedAt).year()
+    const month = dayjs(producedAt).month()
+
+    const monthlyMilkProduction = (
+      await db
+        .get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTIONS)
+        .query(Q.where(Column.YEAR, year), Q.where(Column.MONTH, month))
+    )[0]
+
+    return monthlyMilkProduction !== undefined
+      ? monthlyMilkProduction.prepareUpdate((record) => {
+          record.liters += liters
+        })
+      : MonthlyMilkProduction.prepareCreate(db, { year, month, liters })
+  }
 }
 
 export default MonthlyMilkProduction

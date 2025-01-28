@@ -1,8 +1,8 @@
 import { Model, Q, Relation } from '@nozbe/watermelondb'
-import { date, field, immutableRelation, nochange, readonly, writer } from '@nozbe/watermelondb/decorators'
+import { date, field, immutableRelation, lazy, nochange, readonly, writer } from '@nozbe/watermelondb/decorators'
 import { Associations } from '@nozbe/watermelondb/Model'
 import dayjs from 'dayjs'
-import { MilkReportsCol as Column, TableName } from '../constants'
+import { MilkReportsCol as Column, DailyMilkProductionsCol, MonthlyMilkProductionsCol, TableName } from '../constants'
 import Cattle from './Cattle'
 import DailyMilkProduction from './DailyMilkProduction'
 import MilkProduction from './MilkProduction'
@@ -27,6 +27,25 @@ class MilkReport extends Model {
 
   @immutableRelation(TableName.CATTLE, Column.CATTLE_ID) cattle!: Relation<Cattle>
   @immutableRelation(TableName.MILK_PRODUCTIONS, Column.MILK_PRODUCTION_ID) milkProduction!: Relation<MilkProduction>
+
+  @lazy
+  dailyMilkProduction = this.db
+    .get<DailyMilkProduction>(TableName.DAILY_MILK_PRODUCTIONS)
+    .query(
+      Q.unsafeSqlExpr(
+        `date(${DailyMilkProductionsCol.PRODUCED_AT} / 1000, 'unixepoch') = '${dayjs(this.reportedAt).format(
+          'YYYY-MM-DD'
+        )}'`
+      )
+    )
+
+  @lazy
+  monthlyMilkProduction = this.db
+    .get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTIONS)
+    .query(
+      Q.where(MonthlyMilkProductionsCol.YEAR, dayjs(this.reportedAt).year()),
+      Q.where(MonthlyMilkProductionsCol.MONTH, dayjs(this.reportedAt).month())
+    )
 
   /**
    * Creates a new milk report only if there are no milk reports in that same day (belonging to this specific cattle)
@@ -83,6 +102,8 @@ class MilkReport extends Model {
   @writer
   async updateMilkReport(liters: number) {
     const milkProduction = await this.milkProduction
+    const dailyMilkProduction = (await this.dailyMilkProduction)[0]
+    const monthlyMilkProduction = (await this.monthlyMilkProduction)[0]
 
     if (milkProduction.isSold) {
       throw new Error("Can't edit a report that belongs to a sold milk production.")
@@ -90,6 +111,12 @@ class MilkReport extends Model {
 
     await this.batch(
       milkProduction.prepareUpdate((record) => {
+        record.liters += liters - this.liters
+      }),
+      dailyMilkProduction.prepareUpdate((record) => {
+        record.liters += liters - this.liters
+      }),
+      monthlyMilkProduction.prepareUpdate((record) => {
         record.liters += liters - this.liters
       }),
       this.prepareUpdate((record) => {

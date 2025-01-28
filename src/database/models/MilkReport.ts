@@ -102,8 +102,8 @@ class MilkReport extends Model {
   @writer
   async updateMilkReport(liters: number) {
     const milkProduction = await this.milkProduction
-    const dailyMilkProduction = (await this.dailyMilkProduction)[0]
-    const monthlyMilkProduction = (await this.monthlyMilkProduction)[0]
+    const [dailyMilkProduction] = await this.dailyMilkProduction
+    const [monthlyMilkProduction] = await this.monthlyMilkProduction
 
     if (milkProduction.isSold) {
       throw new Error("Can't edit a report that belongs to a sold milk production.")
@@ -128,22 +128,23 @@ class MilkReport extends Model {
   @writer
   async delete() {
     const milkProduction = await this.milkProduction
+    const [dailyMilkProduction] = await this.dailyMilkProduction
+    const [monthlyMilkProduction] = await this.monthlyMilkProduction
 
     if (milkProduction.isSold) {
       throw new Error("Can't delete a report that belongs to a sold milk production.")
     }
 
-    let milkProductionBatch: MilkProduction
+    const milkProductionBatch = milkProduction.prepareUpdateOrDestroy(this.liters)
+    const dailyMilkProductionBatch = dailyMilkProduction.prepareUpdateOrDestroy(this.liters)
+    const monthluMilkProductionBatch = monthlyMilkProduction.prepareUpdateOrDestroy(this.liters)
 
-    if (milkProduction.liters - this.liters === 0) {
-      milkProductionBatch = milkProduction.prepareDestroyPermanently()
-    } else {
-      milkProductionBatch = milkProduction.prepareUpdate((record) => {
-        record.liters -= this.liters
-      })
-    }
-
-    await this.batch(this.prepareDestroyPermanently(), milkProductionBatch)
+    await this.batch(
+      milkProductionBatch,
+      dailyMilkProductionBatch,
+      monthluMilkProductionBatch,
+      this.prepareDestroyPermanently()
+    )
   }
 }
 

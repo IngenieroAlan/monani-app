@@ -27,11 +27,9 @@ class DailyMilkProduction extends Model {
     { liters, totalProductions }: { liters: number; totalProductions: number }
   ) => {
     const producedAtDate = dayjs(producedAt).format('YYYY-MM-DD')
-    const dailyMilkProduction = (
-      await db
-        .get<DailyMilkProduction>(TableName.DAILY_MILK_PRODUCTIONS)
-        .query(Q.unsafeSqlExpr(`date(${Column.PRODUCED_AT} / 1000, 'unixepoch') = '${producedAtDate}'`))
-    )[0]
+    const [dailyMilkProduction] = await db
+      .get<DailyMilkProduction>(TableName.DAILY_MILK_PRODUCTIONS)
+      .query(Q.unsafeSqlExpr(`date(${Column.PRODUCED_AT} / 1000, 'unixepoch') = '${producedAtDate}'`))
 
     return dailyMilkProduction !== undefined
       ? dailyMilkProduction.prepareUpdate((record) => {
@@ -39,6 +37,14 @@ class DailyMilkProduction extends Model {
           record.totalProductions = totalProductions
         })
       : DailyMilkProduction.prepareCreate(db, { liters, producedAt: producedAt })
+  }
+
+  prepareUpdateOrDestroy(liters: number) {
+    return this.liters - liters === 0
+      ? this.prepareDestroyPermanently()
+      : this.prepareUpdate((record) => {
+          record.liters -= liters
+        })
   }
 }
 

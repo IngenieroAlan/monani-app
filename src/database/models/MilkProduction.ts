@@ -74,6 +74,14 @@ class MilkProduction extends Model {
           producedAt: producedAt
         })
   }
+
+  prepareUpdateOrDestroy(liters: number) {
+    return this.liters - liters === 0
+      ? this.prepareDestroyPermanently()
+      : this.prepareUpdate((record) => {
+          record.liters -= liters
+        })
+  }
 }
 
 export default MilkProduction

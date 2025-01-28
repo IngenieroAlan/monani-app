@@ -28,18 +28,23 @@ class MonthlyMilkProduction extends Model {
   ) => {
     const year = dayjs(producedAt).year()
     const month = dayjs(producedAt).month()
-
-    const monthlyMilkProduction = (
-      await db
-        .get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTIONS)
-        .query(Q.where(Column.YEAR, year), Q.where(Column.MONTH, month))
-    )[0]
+    const [monthlyMilkProduction] = await db
+      .get<MonthlyMilkProduction>(TableName.MONTHLY_MILK_PRODUCTIONS)
+      .query(Q.where(Column.YEAR, year), Q.where(Column.MONTH, month))
 
     return monthlyMilkProduction !== undefined
       ? monthlyMilkProduction.prepareUpdate((record) => {
           record.liters += liters
         })
       : MonthlyMilkProduction.prepareCreate(db, { year, month, liters })
+  }
+
+  prepareUpdateOrDestroy(liters: number) {
+    return this.liters - liters === 0
+      ? this.prepareDestroyPermanently()
+      : this.prepareUpdate((record) => {
+          record.liters -= liters
+        })
   }
 }
 

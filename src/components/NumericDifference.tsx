@@ -6,22 +6,22 @@ type NumericDifferenceProps = {
   difference: number
   prefix?: string
   suffix?: string
+  fractionDigits?: number
 } & Omit<TextProps<never>, 'children'>
 
-const NumericDifference = (props: NumericDifferenceProps) => {
+const NumericDifference = ({ difference, prefix, suffix, fractionDigits, style, ...rest }: NumericDifferenceProps) => {
   const theme = useAppTheme()
-  const { difference, prefix, suffix } = props
 
   return (
     difference !== 0 && (
       <Text
         variant='labelSmall'
-        {...props}
-        style={[props.style, { color: difference < 0 ? theme.colors.error : theme.colors.success }]}
+        {...rest}
+        style={[style, { color: difference < 0 ? theme.colors.error : theme.colors.success }]}
       >
         {difference > 0 ? '+' : '-'}
         {prefix}
-        {formatNumberWithSpaces(Math.abs(difference).toFixed(2))}
+        {formatNumberWithSpaces(Math.abs(difference).toFixed(fractionDigits))}
         {suffix}
       </Text>
     )

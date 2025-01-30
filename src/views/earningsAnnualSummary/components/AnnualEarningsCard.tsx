@@ -33,6 +33,7 @@ const AnnualEarningsCard = ({
               <NumericDifference
                 difference={difference}
                 prefix='$'
+                fractionDigits={2}
               />{' '}
               comparado al año pasado.
             </Text>

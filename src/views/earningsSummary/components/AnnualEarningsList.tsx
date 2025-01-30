@@ -23,6 +23,7 @@ const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?:
               <NumericDifference
                 difference={item.totalEarnings - prevEarnings}
                 prefix='$'
+                fractionDigits={2}
               />
             )}
           </View>

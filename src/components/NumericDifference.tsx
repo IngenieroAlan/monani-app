@@ -4,11 +4,13 @@ import { Text, TextProps } from 'react-native-paper'
 
 type NumericDifferenceProps = {
   difference: number
+  prefix?: string
+  suffix?: string
 } & Omit<TextProps<never>, 'children'>
 
 const NumericDifference = (props: NumericDifferenceProps) => {
   const theme = useAppTheme()
-  const { difference } = props
+  const { difference, prefix, suffix } = props
 
   return (
     difference !== 0 && (
@@ -17,7 +19,10 @@ const NumericDifference = (props: NumericDifferenceProps) => {
         {...props}
         style={[props.style, { color: difference < 0 ? theme.colors.error : theme.colors.success }]}
       >
-        {`${difference > 0 ? '+' : '-'}$${formatNumberWithSpaces(Math.abs(difference).toFixed(2))}`}
+        {difference > 0 ? '+' : '-'}
+        {prefix}
+        {formatNumberWithSpaces(Math.abs(difference).toFixed(2))}
+        {suffix}
       </Text>
     )
   )

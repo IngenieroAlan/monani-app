@@ -19,7 +19,12 @@ const ListItem = ({ item, prevEarnings }: { item: AnnualEarnings; prevEarnings?:
         <View style={{ flexDirection: 'row', gap: 8 }}>
           <View style={{ alignItems: 'flex-end' }}>
             <Text variant='labelSmall'>{`$${formatNumberWithSpaces(item.totalEarnings.toFixed(2))}`}</Text>
-            {prevEarnings && <NumericDifference difference={item.totalEarnings - prevEarnings} />}
+            {prevEarnings && (
+              <NumericDifference
+                difference={item.totalEarnings - prevEarnings}
+                prefix='$'
+              />
+            )}
           </View>
           <Icon
             size={24}

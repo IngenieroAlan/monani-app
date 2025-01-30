@@ -30,7 +30,11 @@ const AnnualEarningsCard = ({
               style={{ color: difference < 0 ? theme.colors.error : theme.colors.success }}
               variant='labelSmall'
             >
-              <NumericDifference difference={difference} /> comparado al año pasado.
+              <NumericDifference
+                difference={difference}
+                prefix='$'
+              />{' '}
+              comparado al año pasado.
             </Text>
           )}
         </View>

@@ -5,8 +5,8 @@ import useWeightReports from "@/hooks/collections/useWeightReports"
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux"
 import { reset as resetCattle } from "@/redux/slices/addCattleSlice"
 import { show } from "@/redux/slices/uiVisibilitySlice"
+import { HomeSnackbarId } from '@/screens/home/components/HomeSnackbarContainer'
 import EditCattleInfoSchema from "@/validationSchemas/EditCattleInfoSchema"
-import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigation } from '@react-navigation/native'
 import { useCallback, useMemo } from "react"

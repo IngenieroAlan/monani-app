@@ -6,7 +6,7 @@ import { CreateCattleStackParamList, HomeTabsStackParamList } from '@/navigation
 import { reset } from '@/redux/slices/addCattleSlice'
 import { show } from '@/redux/slices/uiVisibilitySlice'
 import { RootState } from '@/redux/store/store'
-import { HomeSnackbarId } from '@/views/home/components/HomeSnackbarContainer'
+import { HomeSnackbarId } from '@/screens/home/components/HomeSnackbarContainer'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'

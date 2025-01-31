@@ -1,7 +1,7 @@
 import { SurfaceContainer } from '@/components/SurfaceContainer'
-import NotificationsAppbar from '@/views/notifications/components/NotificationsAppbar'
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import NotificationsAppbar from './components/NotificationsAppbar'
 import { NotificationsList } from './components/NotificationsList/NotificationsList'
 
 const NotificationsView = () => {

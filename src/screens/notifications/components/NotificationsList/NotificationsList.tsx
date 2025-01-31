@@ -1,6 +1,6 @@
 import EmptyList from '@/components/EmptyList'
 import { RecordsList } from '@/components/RecordsList'
-import useSentNotifications from '@/views/notifications/hooks/useSentNotifications'
+import useSentNotifications from '@/screens/notifications/hooks/useSentNotifications'
 import { FlashList } from '@shopify/flash-list'
 import { useState } from 'react'
 import { StyleSheet } from 'react-native'

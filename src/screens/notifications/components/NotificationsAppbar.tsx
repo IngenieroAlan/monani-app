@@ -1,5 +1,5 @@
 import { deleteAllNotifications, markAllAsRead } from '@/utils/collections/sentNotifications'
-import useSentNotifications from '@/views/notifications/hooks/useSentNotifications'
+import useSentNotifications from '@/screens/notifications/hooks/useSentNotifications'
 import notifee from '@notifee/react-native'
 import { useCallback } from 'react'
 import { Appbar, Tooltip } from 'react-native-paper'

@@ -10,6 +10,8 @@ import { CustomDarkTheme, CustomLightTheme } from '@/theme'
 import notifee, { AndroidImportance, AuthorizationStatus } from '@notifee/react-native'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
+import dayjs from 'dayjs'
+import localeData from 'dayjs/plugin/localeData'
 import * as SplashScreen from 'expo-splash-screen'
 import { enableMapSet } from 'immer'
 import { useCallback, useEffect, useState } from 'react'
@@ -25,6 +27,8 @@ const setup = async () => {
   await initializeDatabase()
   await seedDatabase()
 }
+
+dayjs.extend(localeData)
 
 enableMapSet()
 SplashScreen.preventAutoHideAsync()

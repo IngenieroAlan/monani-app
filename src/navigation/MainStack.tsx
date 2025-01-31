@@ -1,7 +1,7 @@
 import { SurfaceContainer } from '@/components/SurfaceContainer'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { reset } from '@/redux/slices/uiVisibilitySlice'
-import EarningsAnnualSummaryView from '@/views/earningsAnnualSummary/EarningsAnnualSummary'
+import EarningsAnnualSummaryView from '@/views/earnings/earningsAnnualSummary/EarningsAnnualSummary'
 import SearchCattleView from '@/views/searchCattle/SearchCattleView'
 import { createStackNavigator } from '@react-navigation/stack'
 import { CattleStack } from './CattleStack'

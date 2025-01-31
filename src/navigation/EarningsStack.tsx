@@ -1,10 +1,10 @@
 import { useAppDispatch } from '@/hooks/useRedux'
 import { reset } from '@/redux/slices/uiVisibilitySlice'
-import EarningsSummaryView from '@/views/earningsSummary/EarningsSummaryView'
-import EarningsTransactionsView from '@/views/earningsTransactions/EarningsTransactionsView'
+import EarningsSummaryView from '@/views/earnings/earningsSummary/EarningsSummaryView'
+import EarningsTransactionsView from '@/views/earnings/earningsTransactions/EarningsTransactionsView'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import React from 'react'
-import { Icon, Text, useTheme } from 'react-native-paper'
+import { Icon, useTheme } from 'react-native-paper'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { EarningsStackParamList } from './types'
 

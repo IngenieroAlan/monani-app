@@ -2,6 +2,7 @@ import { SurfaceContainer } from '@/components/SurfaceContainer'
 import { useAppDispatch } from '@/hooks/useRedux'
 import { reset } from '@/redux/slices/uiVisibilitySlice'
 import EarningsAnnualSummaryView from '@/screens/earnings/earningsAnnualSummary/EarningsAnnualSummaryView'
+import { DailyProductionDetailsView } from '@/screens/milkProduction/dailyProductionDetails/DailyProductionDetailsView'
 import SearchCattleView from '@/screens/searchCattle/SearchCattleView'
 import { createStackNavigator } from '@react-navigation/stack'
 import { CattleStack } from './CattleStack'
@@ -42,6 +43,10 @@ export const MainStack = () => {
         <Stack.Screen
           name='EarningsAnnualSummaryView'
           component={EarningsAnnualSummaryView}
+        />
+        <Stack.Screen
+          name='DailyProductionDetailsView'
+          component={DailyProductionDetailsView}
         />
         <Stack.Group screenOptions={{ presentation: 'modal' }}>
           <Stack.Screen

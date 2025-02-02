@@ -31,6 +31,7 @@ export type MainStackParamList = {
     totalMilkEarnings: number
     difference: number
   }
+  DailyProductionDetailsView: undefined
 }
 
 export type CattleStackParamList = {

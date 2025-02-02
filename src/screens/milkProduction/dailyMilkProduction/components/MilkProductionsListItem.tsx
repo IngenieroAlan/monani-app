@@ -1,6 +1,7 @@
 import DailyMilkProduction from '@/database/models/DailyMilkProduction'
 import { formatNumberWithSpaces } from '@/utils/helpers'
 import { withObservables } from '@nozbe/watermelondb/react'
+import { useNavigation } from '@react-navigation/native'
 import { format } from 'date-fns'
 import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -26,6 +27,8 @@ const withObserver = withObservables(
 )
 
 export const MilkProductionsListItem = withObserver(({ milkProduction }: { milkProduction: DailyMilkProduction }) => {
+  const navigation = useNavigation()
+
   return (
     <List.Item
       title={`${formatNumberWithSpaces(milkProduction.liters.toFixed(3))} L.`}
@@ -33,7 +36,7 @@ export const MilkProductionsListItem = withObserver(({ milkProduction }: { milkP
         milkProduction.totalProductions === 1 ? 'producción' : 'producciones'
       }`}
       right={() => <Right date={format(milkProduction.producedAt, 'dd/MM/yyyy')} />}
-      onPress={() => {}}
+      onPress={() => navigation.navigate('DailyProductionDetailsView')}
     />
   )
 })

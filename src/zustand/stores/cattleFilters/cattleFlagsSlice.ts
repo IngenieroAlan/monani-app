@@ -2,27 +2,21 @@ import { CattleFilterSlice, CattleFlags, CattleFlagsSlice } from './types'
 
 const createCattleFlagsSlice =
   (initialState?: CattleFlags): CattleFilterSlice<CattleFlagsSlice> =>
-  (set, get) => ({
+  (set) => ({
     flags: initialState ?? {},
-    setFlag: (flag) => {
-      get().resetIndex()
+    setFlag: (flag) =>
       set((state) => {
         state.flags[flag] = true
-      })
-    },
-    removeFlag: (flag) => {
-      get().resetIndex()
+      }),
+    removeFlag: (flag) =>
       set((state) => {
         const { [flag]: _, ...newFlags } = state.flags
         state.flags = newFlags
-      })
-    },
-    clearFlags: () => {
-      get().resetIndex()
+      }),
+    clearFlags: () =>
       set((state) => {
         state.flags = {}
       })
-    }
   })
 
 export default createCattleFlagsSlice

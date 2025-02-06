@@ -2,24 +2,18 @@ import { CattleFilterSlice, CattleStatusSlice } from './types'
 
 const createCattleStatusSlice: CattleFilterSlice<CattleStatusSlice> = (set, get) => ({
   cattleStatus: new Set(),
-  addCattleStatus: (cattleStatus) => {
-    get().resetIndex()
+  addCattleStatus: (cattleStatus) =>
     set((state) => {
       state.cattleStatus.add(cattleStatus)
-    })
-  },
-  removeCattleStatus: (cattleStatus) => {
-    get().resetIndex()
+    }),
+  removeCattleStatus: (cattleStatus) =>
     set((state) => {
       state.cattleStatus.delete(cattleStatus)
-    })
-  },
-  clearCattleStatus: () => {
-    get().resetIndex()
+    }),
+  clearCattleStatus: () =>
     set((state) => {
       state.cattleStatus = new Set()
     })
-  }
 })
 
 export default createCattleStatusSlice

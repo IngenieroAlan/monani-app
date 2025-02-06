@@ -1,6 +1,5 @@
 import createCattleFlagsSlice from '@/zustand/stores/cattleFilters/cattleFlagsSlice'
 import createCattleStatusSlice from '@/zustand/stores/cattleFilters/cattleStatusSlice'
-import createPaginateIndexSlice from '@/zustand/stores/cattleFilters/paginateIndexSlice'
 import createProductionTypeSlice from '@/zustand/stores/cattleFilters/productionTypeSlice'
 import createQuarantineSlice from '@/zustand/stores/cattleFilters/quarantineSlice'
 import createTagIdSlice from '@/zustand/stores/cattleFilters/tagIdSlice'
@@ -20,7 +19,6 @@ export const CattleFiltersProvider = ({ children, flags }: CattleFiltersProvider
   const [store] = useState(() =>
     createStore<CattleFiltersStore, [['zustand/immer', never]]>(
       immer((...a) => ({
-        ...createPaginateIndexSlice(...a),
         ...createTagIdSlice(...a),
         ...createCattleStatusSlice(...a),
         ...createProductionTypeSlice(...a),

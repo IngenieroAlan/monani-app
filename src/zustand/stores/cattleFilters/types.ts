@@ -1,6 +1,5 @@
 import { CattleStatus, ProductionType } from '@/database/models/Cattle'
 import { StateCreator } from 'zustand'
-import { PaginateIndexSlice } from '../types'
 
 export type TagIdSlice = {
   tagId: string
@@ -37,8 +36,7 @@ export type QuarantineSlice = {
   setIsInQuarantine: (isInQuarantine: boolean | undefined) => void
 }
 
-export type CattleFiltersStore = PaginateIndexSlice &
-  TagIdSlice &
+export type CattleFiltersStore = TagIdSlice &
   CattleStatusSlice &
   ProductionTypeSlice &
   CattleFlagsSlice &

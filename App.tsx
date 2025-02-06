@@ -10,6 +10,7 @@ import { CustomDarkTheme, CustomLightTheme } from '@/theme'
 import notifee, { AndroidImportance, AuthorizationStatus } from '@notifee/react-native'
 import { DatabaseProvider } from '@nozbe/watermelondb/react'
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
 import * as SplashScreen from 'expo-splash-screen'
@@ -52,21 +53,33 @@ notifee.setNotificationCategories([
   }
 ])
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      networkMode: 'always',
+      staleTime: Infinity
+    },
+    mutations: { networkMode: 'always' }
+  }
+})
+
 export default function App() {
   const scheme = useColorScheme()
 
   return (
     <Provider store={store}>
       <DatabaseProvider database={database}>
-        <NavigationContainer
-          theme={scheme === 'dark' ? DarkTheme : DefaultTheme} // To prevent white flashes while navigating.
-        >
-          <PaperProvider theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
-            <AppState>
-              <MainStack />
-            </AppState>
-          </PaperProvider>
-        </NavigationContainer>
+        <QueryClientProvider client={queryClient}>
+          <NavigationContainer
+            theme={scheme === 'dark' ? DarkTheme : DefaultTheme} // To prevent white flashes while navigating.
+          >
+            <PaperProvider theme={scheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
+              <AppState>
+                <MainStack />
+              </AppState>
+            </PaperProvider>
+          </NavigationContainer>
+        </QueryClientProvider>
       </DatabaseProvider>
     </Provider>
   )
@@ -81,7 +94,7 @@ const AppState = ({ children }: { children: JSX.Element }) => {
     async function prepare() {
       registerTranslation('es', es)
 
-      await setup()
+      // await setup()
 
       const settings = await notifee.getNotificationSettings()
       if (

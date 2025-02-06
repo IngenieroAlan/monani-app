@@ -19,13 +19,11 @@ class Feed extends Model {
   @field(FeedsCol.FEED_TYPE) feedType!: FeedType
 
   @lazy
-  diets = this.collections
-    .get<Diet>(TableName.DIETS)
-    .query(Q.on(TableName.DIET_FEED, DietFeedCol.FEED_ID, this.id))
+  diets = this.collections.get<Diet>(TableName.DIETS).query(Q.on(TableName.DIET_FEED, DietFeedCol.FEED_ID, this.id))
 
   @writer
-  async updateFeed({ name, feedType }: { name: string, feedType: FeedType }) {
-    await this.update((record) => {
+  async updateFeed({ name, feedType }: { name: string; feedType: FeedType }) {
+    return await this.update((record) => {
       record.name = name
       record.feedType = feedType
     })

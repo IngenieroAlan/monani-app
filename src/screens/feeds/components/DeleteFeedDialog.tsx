@@ -1,6 +1,8 @@
 import { useFeedContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { feedsKey } from '@/queries/feeds/queryKeyFactory'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 import { Button, Dialog, Portal, Text } from 'react-native-paper'
 import { FeedsSnackbarId } from './FeedsSnackbarContainer'
@@ -9,13 +11,28 @@ export const DELETE_FEED_DIALOG_ID = 'deleteFeedDialog'
 
 const DeleteFeedDialog = () => {
   const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
   const feedContext = useFeedContext()
   const deleteFeedVisible = useAppSelector((state) => state.uiVisibility[DELETE_FEED_DIALOG_ID])
   const [isDeleting, setIsDeleting] = useState(false)
+  const { mutateAsync } = useMutation({
+    mutationFn: () => feedContext.value?.delete() ?? Promise.resolve(undefined),
+    onSuccess: () => {
+      if (!feedContext.value) return
+
+      queryClient.invalidateQueries({
+        queryKey: feedsKey.all,
+        exact: true
+      })
+      queryClient.invalidateQueries({
+        queryKey: feedsKey.byId(feedContext.value.id)
+      })
+    }
+  })
 
   const onDelete = useCallback(async () => {
     setIsDeleting(true)
-    await feedContext.value?.delete()
+    await mutateAsync()
     setIsDeleting(false)
 
     dispatch(hide(DELETE_FEED_DIALOG_ID))

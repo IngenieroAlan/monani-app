@@ -2,10 +2,11 @@ import DismissDialog from '@/components/DismissDialog'
 import FeedForm, { FeedFields } from '@/components/forms/FeedForm'
 import { useFeedContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { feedsKey } from '@/queries/feeds/queryKeyFactory'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
-import { RootState } from '@/redux/store/store'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { memo, useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Keyboard } from 'react-native'
@@ -18,13 +19,26 @@ const DISMISS_DIALOG_ID = 'editFeedDismissDialog'
 
 const EditFeedDialog = () => {
   const dispatch = useAppDispatch()
-  const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[EDIT_FEED_DIALOG_ID])
+  const queryClient = useQueryClient()
+  const dialogVisible = useAppSelector((state) => state.uiVisibility[EDIT_FEED_DIALOG_ID])
   const feedContext = useFeedContext()
   const { control, handleSubmit, reset, clearErrors, formState } = useForm<FeedFields>({
     resolver: zodResolver(FeedSchema),
     mode: 'onTouched'
   })
   const { isDirty, isValid, isSubmitting } = formState
+  const { mutateAsync } = useMutation({
+    mutationFn: (data: FeedFields) => feedContext.value?.updateFeed(data) ?? Promise.resolve(undefined),
+    onSuccess: (data) => {
+      if (!data) return
+
+      queryClient.invalidateQueries({
+        queryKey: feedsKey.all,
+        exact: true
+      })
+      queryClient.setQueryData(feedsKey.byId(data.id), data)
+    }
+  })
 
   useEffect(() => {
     if (!feedContext.value) return
@@ -50,7 +64,7 @@ const EditFeedDialog = () => {
 
   const onSubmit = useCallback(
     async (data: FeedFields) => {
-      await feedContext.value?.updateFeed(data)
+      await mutateAsync(data)
 
       dispatch(show(FeedsSnackbarId.UPDATED_FEED))
       dismissChanges()

@@ -1,28 +1,25 @@
 import EmptyList from '@/components/EmptyList'
 import { RecordsList } from '@/components/RecordsList'
 import Feed from '@/database/models/Feed'
-import useFeeds from '@/hooks/collections/useFeeds'
+import { useInfiniteFeedsQuery } from '@/queries/feeds/useInfiniteFeedsQuery'
 import { FlashList, FlashListProps } from '@shopify/flash-list'
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { View } from 'react-native'
 import { FeedsListItem } from './FeedsListItem'
-
-const ITEMS_PER_PAGINATE = 25
 
 type FeedsListProps = {
   flashListProps?: Omit<FlashListProps<Feed>, 'data' | 'renderItem' | 'keyExtractor'>
 }
 
 export const FeedsList = ({ flashListProps }: FeedsListProps) => {
-  const [index, setIndex] = useState(0)
-  const { feedsRecords, isPending } = useFeeds({
-    take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * index
-  })
+  const { data, isFetchingNextPage, hasNextPage, isFetching, isRefetching, fetchNextPage } = useInfiniteFeedsQuery()
+
+  const results = useMemo(() => data?.pages.flatMap((page) => page.results) ?? [], [data])
 
   return (
     <RecordsList
-      isPending={isPending}
-      isListEmpty={feedsRecords.length === 0 && !isPending}
+      isPending={isFetching && !isFetchingNextPage && !isRefetching}
+      isListEmpty={results.length === 0 && !isFetching}
       emptyListComponent={
         <EmptyList
           icon='silverware'
@@ -32,13 +29,11 @@ export const FeedsList = ({ flashListProps }: FeedsListProps) => {
     >
       <FlashList
         estimatedItemSize={81}
-        data={feedsRecords}
+        data={results}
         renderItem={({ item }) => <FeedsListItem feed={item} />}
         ListFooterComponent={() => <View style={{ height: 88 }} />}
         onEndReachedThreshold={1.5}
-        onEndReached={() => {
-          if (feedsRecords.length > 0) setIndex(index + 1)
-        }}
+        onEndReached={() => !isFetchingNextPage && hasNextPage && fetchNextPage()}
         {...flashListProps}
       />
     </RecordsList>

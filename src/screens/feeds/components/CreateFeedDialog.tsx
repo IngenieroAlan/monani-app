@@ -1,11 +1,12 @@
 import DismissDialog from '@/components/DismissDialog'
 import FeedForm, { FeedFields } from '@/components/forms/FeedForm'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { feedsKey } from '@/queries/feeds/queryKeyFactory'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
-import { RootState } from '@/redux/store/store'
 import { createFeed } from '@/utils/collections/feeds'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { Keyboard } from 'react-native'
@@ -18,7 +19,8 @@ const DISMISS_DIALOG_ID = 'createFeedDismissDialog'
 
 const CreateFeedDialog = () => {
   const dispatch = useAppDispatch()
-  const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[CREATE_FEED_DIALOG_ID])
+  const queryClient = useQueryClient()
+  const dialogVisible = useAppSelector((state) => state.uiVisibility[CREATE_FEED_DIALOG_ID])
   const { control, handleSubmit, reset, formState } = useForm<FeedFields>({
     defaultValues: {
       name: '',
@@ -28,6 +30,16 @@ const CreateFeedDialog = () => {
     mode: 'onChange'
   })
   const { isDirty, isValid, isSubmitting } = formState
+  const { mutateAsync } = useMutation({
+    mutationFn: (data: FeedFields) => createFeed(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: feedsKey.all,
+        exact: true
+      })
+      queryClient.setQueryData(feedsKey.byId(data.id), data)
+    }
+  })
 
   const dismissChanges = useCallback(() => {
     Keyboard.dismiss()
@@ -42,7 +54,7 @@ const CreateFeedDialog = () => {
   }, [])
 
   const onSubmit = useCallback(async (data: FeedFields) => {
-    await createFeed(data)
+    await mutateAsync(data)
 
     dispatch(show(FeedsSnackbarId.STORED_FEED))
     dismissChanges()

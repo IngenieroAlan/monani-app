@@ -1,15 +1,14 @@
 import { useCattleFilters } from '@/contexts/CattleFiltersContext'
 import Cattle from '@/database/models/Cattle'
-import useCattle from '@/hooks/collections/useCattle'
+import { useInfiniteCattleQuery } from '@/hooks/collections/useInfiniteCattleQuery'
 import { FlashList, FlashListProps } from '@shopify/flash-list'
+import { useMemo } from 'react'
 import EmptyList from '../EmptyList'
 import { RecordsList } from '../RecordsList'
 import CattleListFlagFilterChip from './CattleListFlagFilterChip'
 import CattleListProductionFilterChip from './CattleListProductionFilterChip'
 import CattleListQuarantineFilterChip from './CattleListQuarantineFilterChip'
 import CattleListStatusFilterChip from './CattleListStatusFilterChip'
-
-const ITEMS_PER_PAGINATE = 25
 
 type CattleListProps = {
   filters: JSX.Element
@@ -20,21 +19,20 @@ type CattleListProps = {
 const keyExtractor = (item: Cattle) => item.id
 
 const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
-  const nextIndex = useCattleFilters('nextIndex')
-
-  const { cattleRecords, isPending } = useCattle({
+  const { data, isFetchingNextPage, hasNextPage, fetchNextPage, isFetching } = useInfiniteCattleQuery({
     tagId: useCattleFilters('tagId'),
     cattleStatus: useCattleFilters('cattleStatus'),
     productionType: useCattleFilters('productionType'),
     isInQuarantine: useCattleFilters('isInQuarantine'),
-    ...useCattleFilters('flags'),
-    take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * useCattleFilters('paginateIndex')
+    ...useCattleFilters('flags')
   })
+
+  const results = useMemo(() => data?.pages.flatMap((page) => page.results) ?? [], [data])
 
   return (
     <RecordsList
-      isPending={isPending}
-      isListEmpty={cattleRecords.length === 0 && !isPending}
+      isPending={isFetching && !isFetchingNextPage}
+      isListEmpty={results.length === 0 && !isFetching}
       filters={filters}
       emptyListComponent={
         <EmptyList
@@ -44,13 +42,11 @@ const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
       }
     >
       <FlashList
-        data={cattleRecords}
-        renderItem={children}
-        keyExtractor={keyExtractor}
-        onEndReached={() => {
-          if (cattleRecords.length > 0) nextIndex()
-        }}
         {...flashListProps}
+        data={results}
+        renderItem={({ item }) => children({ item })}
+        keyExtractor={keyExtractor}
+        onEndReached={() => !isFetchingNextPage && hasNextPage && fetchNextPage()}
       />
     </RecordsList>
   )

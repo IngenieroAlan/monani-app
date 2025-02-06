@@ -34,7 +34,7 @@ export default appSchema({
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ],
-      unsafeSql: (sql) => sql.replace(`'${FeedsCol.NAME}',`, `'${FeedsCol.NAME}' collate nocase,`)
+      unsafeSql: (sql) => sql.replace(`"${FeedsCol.NAME}",`, `"${FeedsCol.NAME}" collate nocase,`)
     }),
     tableSchema({
       name: TableName.DIETS,
@@ -109,7 +109,7 @@ export default appSchema({
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ],
-      unsafeSql: (sql) => sql.replace(`'${MedicationsCol.NAME}',`, `'${MedicationsCol.NAME}' collate nocase,`)
+      unsafeSql: (sql) => sql.replace(`"${MedicationsCol.NAME}",`, `"${MedicationsCol.NAME}" collate nocase,`)
     }),
     tableSchema({
       name: TableName.MEDICATION_SCHEDULES,

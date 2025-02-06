@@ -1,6 +1,6 @@
 import { useCattleFilters } from '@/contexts/CattleFiltersContext'
 import Cattle from '@/database/models/Cattle'
-import { useInfiniteCattleQuery } from '@/hooks/collections/useInfiniteCattleQuery'
+import { useInfiniteCattleQuery } from '@/queries/cattle/useInfiniteCattleQuery'
 import { FlashList, FlashListProps } from '@shopify/flash-list'
 import { useMemo } from 'react'
 import EmptyList from '../EmptyList'

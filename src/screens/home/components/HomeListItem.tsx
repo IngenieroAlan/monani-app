@@ -1,8 +1,8 @@
-import { TableName } from '@/database/constants'
 import Cattle from '@/database/models/Cattle'
 import { useAppDispatch } from '@/hooks/useRedux'
+import { cattleKeys } from '@/queries/cattle/queryKeyFactory'
 import { setCattleInfo } from '@/redux/slices/cattles'
-import { useDatabase, withObservables } from '@nozbe/watermelondb/react'
+import { withObservables } from '@nozbe/watermelondb/react'
 import { useNavigation } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 import { memo, useEffect } from 'react'
@@ -36,18 +36,12 @@ const withCattleObserver = withObservables(['cattle'], ({ cattle }: { cattle: Ca
 }))
 
 const HomeListItem = ({ cattle }: { cattle: Cattle }) => {
-  const db = useDatabase()
   const dispatch = useAppDispatch()
   const navigation = useNavigation()
   const queryClient = useQueryClient()
 
   useEffect(() => {
-    queryClient.prefetchQuery({
-      queryKey: ['cattle', cattle.id],
-      queryFn: () => db.get<Cattle>(TableName.CATTLE).find(cattle.id),
-      initialData: cattle,
-      initialDataUpdatedAt: () => queryClient.getQueryState(['cattle'])?.dataUpdatedAt
-    })
+    queryClient.setQueryData<Cattle>(cattleKeys.byId(cattle.id), cattle)
   }, [cattle.id])
 
   return (

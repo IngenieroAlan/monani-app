@@ -91,10 +91,10 @@ const AppState = ({ children }: { children: JSX.Element }) => {
   useOnForegroundEvent()
 
   useEffect(() => {
-    async function prepare() {
+    ;(async () => {
       registerTranslation('es', es)
 
-      // await setup()
+      await setup()
 
       const settings = await notifee.getNotificationSettings()
       if (
@@ -105,9 +105,7 @@ const AppState = ({ children }: { children: JSX.Element }) => {
       }
 
       setAppIsReady(true)
-    }
-
-    prepare()
+    })()
   }, [])
 
   const onLayoutRootView = useCallback(async () => {

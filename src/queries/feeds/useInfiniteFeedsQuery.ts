@@ -1,10 +1,10 @@
 import { FeedsCol as Column, TableName } from '@/database/constants'
 import Feed from '@/database/models/Feed'
-import { paginateQuery } from '@/utils/paginateQuery'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { feedsKeys } from './queryKeyFactory'
+import { paginateQuery } from '../paginateQuery'
 
 export const useInfiniteFeedsQuery = () => {
   const db = useDatabase()

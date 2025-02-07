@@ -1,11 +1,11 @@
 import { CattleCol as Column, TableName } from '@/database/constants'
 import Cattle, { CattleStatus, ProductionType } from '@/database/models/Cattle'
-import { paginateQuery } from '@/utils/paginateQuery'
 import { Q } from '@nozbe/watermelondb'
 import { sanitizeLikeString } from '@nozbe/watermelondb/QueryDescription'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { cattleKeys } from './queryKeyFactory'
+import { paginateQuery } from '../paginateQuery'
 
 type Props = Partial<{
   tagId: string

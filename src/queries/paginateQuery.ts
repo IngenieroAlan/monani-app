@@ -10,10 +10,10 @@ export const paginateQuery = async <T extends Model>(query: Query<T>, page: numb
   ])
 
   if (results.status === 'rejected') {
-    console.error(`🍉 ${results.reason}`)
+    console.error(`[🍉] ${results.reason}`)
   }
   if (nextPagePreview.status === 'rejected') {
-    console.error(`🍉 ${nextPagePreview.reason}`)
+    console.error(`[🍉] ${nextPagePreview.reason}`)
   }
 
   return new Promise<{ results: T[]; nextPage: number | null }>((resolve) => {

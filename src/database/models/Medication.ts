@@ -24,8 +24,8 @@ class Medication extends Model {
     .query(Q.on(TableName.MEDICATION_SCHEDULES, MedicationSchedulesCol.MEDICATION_ID, this.id))
 
   @writer
-  async updateMedication({ name, medicationType }: { name: string, medicationType: MedicationType }) {
-    await this.update((record) => {
+  async updateMedication({ name, medicationType }: { name: string; medicationType: MedicationType }) {
+    return await this.update((record) => {
       record.name = name
       record.medicationType = medicationType
     })

@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
 import { feedsKeys } from '@/queries/feeds/queryKeyFactory'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
 import { Button, Dialog, Portal, Text } from 'react-native-paper'
 import { FeedsSnackbarId } from './FeedsSnackbarContainer'
 
@@ -14,30 +13,22 @@ const DeleteFeedDialog = () => {
   const queryClient = useQueryClient()
   const feedContext = useFeedContext()
   const deleteFeedVisible = useAppSelector((state) => state.uiVisibility[DELETE_FEED_DIALOG_ID])
-  const [isDeleting, setIsDeleting] = useState(false)
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: () => feedContext.value?.delete() ?? Promise.resolve(undefined),
     onSuccess: () => {
       if (!feedContext.value) return
 
-      queryClient.invalidateQueries({
-        queryKey: feedsKeys.all,
-        exact: true
-      })
-      queryClient.invalidateQueries({
-        queryKey: feedsKeys.byId(feedContext.value.id)
-      })
+      queryClient.invalidateQueries({ queryKey: feedsKeys.all, exact: true })
+      queryClient.removeQueries({ queryKey: feedsKeys.byId(feedContext.value.id) })
     }
   })
 
-  const onDelete = useCallback(async () => {
-    setIsDeleting(true)
+  const onDelete = async () => {
     await mutateAsync()
-    setIsDeleting(false)
 
     dispatch(hide(DELETE_FEED_DIALOG_ID))
     dispatch(show(FeedsSnackbarId.DELETED_FEED))
-  }, [feedContext.value])
+  }
 
   return (
     <Portal>
@@ -57,8 +48,8 @@ const DeleteFeedDialog = () => {
         <Dialog.Actions>
           <Button onPress={() => dispatch(hide(DELETE_FEED_DIALOG_ID))}>Cancelar</Button>
           <Button
-            loading={isDeleting}
-            disabled={isDeleting}
+            loading={isPending}
+            disabled={isPending}
             onPress={onDelete}
           >
             Eliminar

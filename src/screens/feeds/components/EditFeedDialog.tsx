@@ -2,7 +2,7 @@ import DismissDialog from '@/components/DismissDialog'
 import FeedForm, { FeedFields } from '@/components/forms/FeedForm'
 import { useFeedContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { feedsKey } from '@/queries/feeds/queryKeyFactory'
+import { feedsKeys } from '@/queries/feeds/queryKeyFactory'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -33,10 +33,10 @@ const EditFeedDialog = () => {
       if (!data) return
 
       queryClient.invalidateQueries({
-        queryKey: feedsKey.all,
+        queryKey: feedsKeys.all,
         exact: true
       })
-      queryClient.setQueryData(feedsKey.byId(data.id), data)
+      queryClient.setQueryData(feedsKeys.byId(data.id), data)
     }
   })
 

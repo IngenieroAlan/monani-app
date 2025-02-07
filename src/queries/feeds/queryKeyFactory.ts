@@ -1,4 +1,4 @@
-export const feedsKey = {
+export const feedsKeys = {
   all: ['feeds'] as const,
-  byId: (id: string) => [...feedsKey.all, { id }] as const
+  byId: (id: string) => [...feedsKeys.all, { id }] as const
 }

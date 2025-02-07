@@ -1,6 +1,6 @@
 import { useFeedContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
-import { feedsKey } from '@/queries/feeds/queryKeyFactory'
+import { feedsKeys } from '@/queries/feeds/queryKeyFactory'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
@@ -21,11 +21,11 @@ const DeleteFeedDialog = () => {
       if (!feedContext.value) return
 
       queryClient.invalidateQueries({
-        queryKey: feedsKey.all,
+        queryKey: feedsKeys.all,
         exact: true
       })
       queryClient.invalidateQueries({
-        queryKey: feedsKey.byId(feedContext.value.id)
+        queryKey: feedsKeys.byId(feedContext.value.id)
       })
     }
   })

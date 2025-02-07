@@ -1,7 +1,11 @@
 import { useCattleFilters } from '@/contexts/CattleFiltersContext'
+import { TableName } from '@/database/constants'
 import Cattle from '@/database/models/Cattle'
+import { cattleKeys } from '@/queries/cattle/queryKeyFactory'
 import { useInfiniteCattleQuery } from '@/queries/cattle/useInfiniteCattleQuery'
-import { FlashList, FlashListProps } from '@shopify/flash-list'
+import { useDatabase } from '@nozbe/watermelondb/react'
+import { FlashList, FlashListProps, ViewToken } from '@shopify/flash-list'
+import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import EmptyList from '../EmptyList'
 import { RecordsList } from '../RecordsList'
@@ -19,6 +23,8 @@ type CattleListProps = {
 const keyExtractor = (item: Cattle) => item.id
 
 const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
+  const db = useDatabase()
+  const queryClient = useQueryClient()
   const { data, isFetchingNextPage, hasNextPage, fetchNextPage, isFetching } = useInfiniteCattleQuery({
     tagId: useCattleFilters('tagId'),
     cattleStatus: useCattleFilters('cattleStatus'),
@@ -28,6 +34,16 @@ const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
   })
 
   const results = useMemo(() => data?.pages.flatMap((page) => page.results) ?? [], [data])
+
+  const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    viewableItems.forEach(({ item }: { item: Cattle }) => {
+      queryClient.prefetchQuery({
+        queryKey: cattleKeys.byId(item.id),
+        queryFn: () => db.get<Cattle>(TableName.CATTLE).find(item.id),
+        initialData: item
+      })
+    })
+  }
 
   return (
     <RecordsList
@@ -47,6 +63,8 @@ const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
         renderItem={({ item }) => children({ item })}
         keyExtractor={keyExtractor}
         onEndReached={() => !isFetchingNextPage && hasNextPage && fetchNextPage()}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={{ minimumViewTime: 250 }}
       />
     </RecordsList>
   )

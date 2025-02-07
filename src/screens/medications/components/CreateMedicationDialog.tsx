@@ -1,12 +1,13 @@
 import DismissDialog from '@/components/DismissDialog'
 import MedicationForm, { MedicationFields } from '@/components/forms/MedicationForm'
+import Medication from '@/database/models/Medication'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { medicationsKeys } from '@/queries/medications/queryKeyFactory'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
-import { RootState } from '@/redux/store/store'
 import { createMedication } from '@/utils/collections/medications'
 import MedicationSchema from '@/validationSchemas/MedicationSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useCallback } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { Keyboard } from 'react-native'
 import { Button, Dialog, Portal } from 'react-native-paper'
@@ -18,7 +19,8 @@ const DISMISS_DIALOG_ID = 'createMedicationDismissDialog'
 
 const CreateMedicationDialog = () => {
   const dispatch = useAppDispatch()
-  const dialogVisible = useAppSelector((state: RootState) => state.uiVisibility[CREATE_MEDICATION_DIALOG_ID])
+  const queryClient = useQueryClient()
+  const dialogVisible = useAppSelector((state) => state.uiVisibility[CREATE_MEDICATION_DIALOG_ID])
   const { control, handleSubmit, reset, formState } = useForm<MedicationFields>({
     defaultValues: {
       name: '',
@@ -28,25 +30,32 @@ const CreateMedicationDialog = () => {
     mode: 'onChange'
   })
   const { isDirty, isValid, isSubmitting } = formState
+  const { mutateAsync } = useMutation({
+    mutationFn: (data: MedicationFields) => createMedication(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: medicationsKeys.all, exact: true })
+      queryClient.setQueryData<Medication>(medicationsKeys.byId(data.id), data)
+    }
+  })
 
-  const dismissChanges = useCallback(() => {
+  const dismissChanges = () => {
     Keyboard.dismiss()
 
     reset()
     dispatch(hide(CREATE_MEDICATION_DIALOG_ID))
-  }, [])
+  }
 
-  const showDismissDialog = useCallback(() => {
+  const showDismissDialog = () => {
     dispatch(hide(CREATE_MEDICATION_DIALOG_ID))
     dispatch(show(DISMISS_DIALOG_ID))
-  }, [])
+  }
 
-  const onSubmit = useCallback(async (data: MedicationFields) => {
-    await createMedication(data)
+  const onSubmit = async (data: MedicationFields) => {
+    await mutateAsync(data)
 
     dispatch(show(MedicationsSnackbarId.STORED_MEDICATION))
     dismissChanges()
-  }, [])
+  }
 
   return (
     <Portal>
@@ -63,7 +72,7 @@ const CreateMedicationDialog = () => {
           />
         </Dialog.Content>
         <Dialog.Actions>
-          <Button onPress={() => (isDirty ? showDismissDialog() : dismissChanges())}>Cancelar</Button>
+          <Button onPress={isDirty ? showDismissDialog : dismissChanges}>Cancelar</Button>
           <Button
             loading={isSubmitting}
             disabled={isSubmitting || !isValid || !isDirty}

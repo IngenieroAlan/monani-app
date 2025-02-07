@@ -1,28 +1,26 @@
 import EmptyList from '@/components/EmptyList'
 import { RecordsList } from '@/components/RecordsList'
 import Medication from '@/database/models/Medication'
-import useMedications from '@/hooks/collections/useMedications'
+import { useInfiniteMedicationsQuery } from '@/queries/medications/useInfiniteMedicationsQuery'
 import { FlashList, FlashListProps } from '@shopify/flash-list'
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { View } from 'react-native'
 import { MedicationsListItem } from './MedicationsListItem'
-
-const ITEMS_PER_PAGINATE = 25
 
 type MedicationsListProps = {
   flashListProps?: Omit<FlashListProps<Medication>, 'data' | 'renderItem' | 'keyExtractor'>
 }
 
 export const MedicationsList = ({ flashListProps }: MedicationsListProps) => {
-  const [index, setIndex] = useState(0)
-  const { medicationsRecords, isPending } = useMedications({
-    take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * index
-  })
+  const { data, isFetchingNextPage, hasNextPage, isFetching, isRefetching, fetchNextPage } =
+    useInfiniteMedicationsQuery()
+
+  const results = useMemo(() => data?.pages.flatMap((page) => page.results) ?? [], [data])
 
   return (
     <RecordsList
-      isPending={isPending}
-      isListEmpty={medicationsRecords.length === 0 && !isPending}
+      isPending={isFetching && !isFetchingNextPage && !isRefetching}
+      isListEmpty={results.length === 0 && !isFetching}
       emptyListComponent={
         <EmptyList
           icon='magnify-remove-outline'
@@ -32,13 +30,11 @@ export const MedicationsList = ({ flashListProps }: MedicationsListProps) => {
     >
       <FlashList
         estimatedItemSize={81}
-        data={medicationsRecords}
+        data={results}
         renderItem={({ item }) => <MedicationsListItem medication={item} />}
         ListFooterComponent={() => <View style={{ height: 88 }} />}
         onEndReachedThreshold={1.5}
-        onEndReached={() => {
-          if (medicationsRecords.length > 0) setIndex(index + 1)
-        }}
+        onEndReached={() => !isFetchingNextPage && hasNextPage && fetchNextPage()}
         {...flashListProps}
       />
     </RecordsList>

@@ -1,8 +1,8 @@
 import { useMedicationContext } from '@/contexts'
 import { useAppDispatch, useAppSelector } from '@/hooks/useRedux'
+import { medicationsKeys } from '@/queries/medications/queryKeyFactory'
 import { hide, show } from '@/redux/slices/uiVisibilitySlice'
-import { RootState } from '@/redux/store/store'
-import { useCallback, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button, Dialog, Portal, Text } from 'react-native-paper'
 import { MedicationsSnackbarId } from './MedicationsSnackbarContainer'
 
@@ -10,19 +10,26 @@ export const DELETE_MEDICATION_DIALOG_ID = 'deleteMedicationDialog'
 
 const DeleteMedicationDialog = () => {
   const dispatch = useAppDispatch()
-  const [isDeleting, setIsDeleting] = useState(false)
+  const queryClient = useQueryClient()
   const medicationContext = useMedicationContext()
-  const visible = useAppSelector((state: RootState) => state.uiVisibility[DELETE_MEDICATION_DIALOG_ID])
+  const visible = useAppSelector((state) => state.uiVisibility[DELETE_MEDICATION_DIALOG_ID])
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: () => medicationContext.value?.delete() ?? Promise.resolve(undefined),
+    onSuccess: () => {
+      if (!medicationContext.value) return
 
-  const onDelete = useCallback(async () => {
-    setIsDeleting(true)
-    await medicationContext.value?.delete()
-    setIsDeleting(false)
+      queryClient.invalidateQueries({ queryKey: medicationsKeys.all, exact: true })
+      queryClient.removeQueries({ queryKey: medicationsKeys.byId(medicationContext.value.id) })
+    }
+  })
+
+  const onDelete = async () => {
+    await mutateAsync()
 
     dispatch(hide(DELETE_MEDICATION_DIALOG_ID))
     dispatch(show(MedicationsSnackbarId.DELETED_MEDICATION))
     medicationContext.setValue(undefined)
-  }, [medicationContext])
+  }
 
   return (
     <Portal>
@@ -42,8 +49,8 @@ const DeleteMedicationDialog = () => {
         <Dialog.Actions>
           <Button onPress={() => dispatch(hide(DELETE_MEDICATION_DIALOG_ID))}>Cancelar</Button>
           <Button
-            loading={isDeleting}
-            disabled={isDeleting}
+            loading={isPending}
+            disabled={isPending}
             onPress={onDelete}
           >
             Eliminar

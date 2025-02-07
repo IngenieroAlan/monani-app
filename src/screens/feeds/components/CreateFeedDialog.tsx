@@ -7,7 +7,7 @@ import { createFeed } from '@/utils/collections/feeds'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useForm } from 'react-hook-form'
 import { Keyboard } from 'react-native'
 import { Button, Dialog, Portal } from 'react-native-paper'
@@ -41,24 +41,24 @@ const CreateFeedDialog = () => {
     }
   })
 
-  const dismissChanges = useCallback(() => {
+  const dismissChanges = () => {
     Keyboard.dismiss()
 
     reset()
     dispatch(hide(CREATE_FEED_DIALOG_ID))
-  }, [])
+  }
 
-  const showDismissDialog = useCallback(() => {
+  const showDismissDialog = () => {
     dispatch(hide(CREATE_FEED_DIALOG_ID))
     dispatch(show(DISMISS_DIALOG_ID))
-  }, [])
+  }
 
-  const onSubmit = useCallback(async (data: FeedFields) => {
+  const onSubmit = async (data: FeedFields) => {
     await mutateAsync(data)
 
     dispatch(show(FeedsSnackbarId.STORED_FEED))
     dismissChanges()
-  }, [])
+  }
 
   return (
     <Portal>

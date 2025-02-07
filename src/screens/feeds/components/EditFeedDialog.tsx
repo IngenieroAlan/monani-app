@@ -7,7 +7,7 @@ import { hide, show } from '@/redux/slices/uiVisibilitySlice'
 import FeedSchema from '@/validationSchemas/FeedSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Keyboard } from 'react-native'
 import { Button, Dialog, Portal } from 'react-native-paper'
@@ -49,28 +49,25 @@ const EditFeedDialog = () => {
     })
   }, [feedContext])
 
-  const dismissChanges = useCallback(() => {
+  const dismissChanges = () => {
     Keyboard.dismiss()
     feedContext.setValue(undefined)
 
     clearErrors()
     dispatch(hide(EDIT_FEED_DIALOG_ID))
-  }, [feedContext])
+  }
 
-  const showDismissDialog = useCallback(() => {
+  const showDismissDialog = () => {
     dispatch(hide(EDIT_FEED_DIALOG_ID))
     dispatch(show(DISMISS_DIALOG_ID))
-  }, [])
+  }
 
-  const onSubmit = useCallback(
-    async (data: FeedFields) => {
-      await mutateAsync(data)
+  const onSubmit = async (data: FeedFields) => {
+    await mutateAsync(data)
 
-      dispatch(show(FeedsSnackbarId.UPDATED_FEED))
-      dismissChanges()
-    },
-    [feedContext]
-  )
+    dispatch(show(FeedsSnackbarId.UPDATED_FEED))
+    dismissChanges()
+  }
 
   return (
     <Portal>
@@ -87,7 +84,7 @@ const EditFeedDialog = () => {
           />
         </Dialog.Content>
         <Dialog.Actions>
-          <Button onPress={() => (isDirty ? showDismissDialog() : dismissChanges())}>Cancelar</Button>
+          <Button onPress={isDirty ? showDismissDialog : dismissChanges}>Cancelar</Button>
           <Button
             loading={isSubmitting}
             disabled={isSubmitting || !isValid || !isDirty}

@@ -7,6 +7,7 @@ import { useDatabase } from '@nozbe/watermelondb/react'
 import { FlashList, FlashListProps, ViewToken } from '@shopify/flash-list'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { View } from 'react-native'
 import EmptyList from '../EmptyList'
 import { RecordsList } from '../RecordsList'
 import CattleListFlagFilterChip from './CattleListFlagFilterChip'
@@ -65,6 +66,7 @@ const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
         onEndReached={() => !isFetchingNextPage && hasNextPage && fetchNextPage()}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={{ minimumViewTime: 250 }}
+        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
       />
     </RecordsList>
   )

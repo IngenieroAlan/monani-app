@@ -1,24 +1,48 @@
 import EmptyList from '@/components/EmptyList'
 import { RecordsList } from '@/components/RecordsList'
+import { TableName } from '@/database/constants'
+import DailyMilkProduction from '@/database/models/DailyMilkProduction'
+import MilkProduction from '@/database/models/MilkProduction'
+import { milkProductionsKeys } from '@/queries/milkProduction/queryKeyFactory'
+import { useInfiniteDailyMilkProductionsQuery } from '@/queries/milkProduction/useInfiniteDailyMilkProductionsQuery'
+import { useDatabase } from '@nozbe/watermelondb/react'
 import { FlashList } from '@shopify/flash-list'
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
+import { ViewToken } from 'react-native'
 import { useMilkProductionsFilters } from '../contexts/MilkProductionsFiltersContext'
-import { useDailyMilkProductions } from '../hooks/useDailyMilkProductions'
 import { BetweenDatesFilterChip } from './BetweenDatesFilterChip'
 import { MilkProductionsListItem } from './MilkProductionsListItem'
 
-const ITEMS_PER_PAGINATE = 25
+const keyExtractor = (item: DailyMilkProduction) => item.id
 
 export const MilkProductionsList = () => {
-  const nextIndex = useMilkProductionsFilters('nextIndex')
-  const { milkProductionsRecords, isPending } = useDailyMilkProductions({
-    betweenDates: useMilkProductionsFilters('betweenDates'),
-    take: ITEMS_PER_PAGINATE + ITEMS_PER_PAGINATE * useMilkProductionsFilters('paginateIndex')
+  const db = useDatabase()
+  const queryClient = useQueryClient()
+  const { data, isFetchingNextPage, hasNextPage, isFetching, fetchNextPage } = useInfiniteDailyMilkProductionsQuery({
+    betweenDates: useMilkProductionsFilters('betweenDates')
   })
+
+  const results = useMemo(() => data?.pages.flatMap((page) => page.results) ?? [], [data])
+
+  const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    viewableItems.forEach(async ({ item }: { item: DailyMilkProduction }) => {
+      const productions = await item.milkProductions
+
+      productions.forEach((production) => {
+        queryClient.prefetchQuery({
+          queryKey: milkProductionsKeys.byId(production.id),
+          queryFn: () => db.get<MilkProduction>(TableName.MILK_PRODUCTIONS).find(production.id),
+          initialData: production
+        })
+      })
+    })
+  }
 
   return (
     <RecordsList
-      isPending={isPending}
-      isListEmpty={milkProductionsRecords.length === 0 && !isPending}
+      isPending={isFetching && !isFetchingNextPage}
+      isListEmpty={results.length === 0 && !isFetching}
       emptyListComponent={
         <EmptyList
           text='No se han encontrado registros.'
@@ -28,13 +52,14 @@ export const MilkProductionsList = () => {
       filters={<BetweenDatesFilterChip />}
     >
       <FlashList
-        data={milkProductionsRecords}
+        data={results}
         renderItem={({ item }) => <MilkProductionsListItem milkProduction={item} />}
         estimatedItemSize={69}
         onEndReachedThreshold={2}
-        onEndReached={() => {
-          if (milkProductionsRecords.length > 0) nextIndex()
-        }}
+        keyExtractor={keyExtractor}
+        onEndReached={() => !isFetchingNextPage && hasNextPage && fetchNextPage()}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={{ minimumViewTime: 250 }}
       />
     </RecordsList>
   )

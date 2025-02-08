@@ -1,6 +1,5 @@
 import { createSelectors } from '@/zustand/createSelectors'
 import { createBetweenDatesSlice } from '@/zustand/stores/milkProductionsFilters/betweenDatesSlice'
-import { createPaginateIndexSlice } from '@/zustand/stores/milkProductionsFilters/paginateIndexSlice'
 import { MilkProductionsFiltersStore } from '@/zustand/stores/milkProductionsFilters/types'
 import { createContext, ReactNode, useContext, useState } from 'react'
 import { createStore, StoreApi } from 'zustand'
@@ -12,7 +11,6 @@ export const MilkProductionsFiltersProvider = ({ children }: { children: ReactNo
   const [store] = useState(() =>
     createStore<MilkProductionsFiltersStore, [['zustand/immer', never]]>(
       immer((...a) => ({
-        ...createPaginateIndexSlice(...a),
         ...createBetweenDatesSlice(...a)
       }))
     )

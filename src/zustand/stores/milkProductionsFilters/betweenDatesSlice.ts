@@ -3,10 +3,8 @@ import { MilkProductionsFilterSlice } from './types'
 
 export const createBetweenDatesSlice: MilkProductionsFilterSlice<BetweenDatesSlice> = (set, get) => ({
   betweenDates: null,
-  setBetweenDates: (betweenDates) => {
-    get().resetIndex()
+  setBetweenDates: (betweenDates) =>
     set((state) => {
       state.betweenDates = betweenDates
     })
-  }
 })

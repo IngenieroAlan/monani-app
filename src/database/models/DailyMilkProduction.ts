@@ -1,7 +1,8 @@
 import { Database, Model, Q } from '@nozbe/watermelondb'
-import { date, field, nochange, readonly } from '@nozbe/watermelondb/decorators'
+import { date, field, lazy, nochange, readonly } from '@nozbe/watermelondb/decorators'
 import dayjs from 'dayjs'
-import { DailyMilkProductionsCol as Column, TableName } from '../constants'
+import { DailyMilkProductionsCol as Column, MilkProductionsCol, TableName } from '../constants'
+import MilkProduction from './MilkProduction'
 
 class DailyMilkProduction extends Model {
   static table = TableName.DAILY_MILK_PRODUCTIONS
@@ -13,6 +14,15 @@ class DailyMilkProduction extends Model {
 
   @field(Column.LITERS) liters!: number
   @field(Column.TOTAL_PRODUCTIONS) totalProductions!: number
+
+  @lazy
+  milkProductions = this.db
+    .get<MilkProduction>(TableName.MILK_PRODUCTIONS)
+    .query(
+      Q.unsafeSqlExpr(
+        `date(${MilkProductionsCol.PRODUCED_AT} / 1000, 'unixepoch') = '${dayjs(this.producedAt).format('YYYY-MM-DD')}'`
+      )
+    )
 
   static prepareCreate = (db: Database, { liters, producedAt }: { liters: number; producedAt: Date }) =>
     db.get<DailyMilkProduction>(TableName.DAILY_MILK_PRODUCTIONS).prepareCreate((record) => {

@@ -9,7 +9,7 @@ import { useDatabase } from '@nozbe/watermelondb/react'
 import { FlashList } from '@shopify/flash-list'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { ViewToken } from 'react-native'
+import { View, ViewToken } from 'react-native'
 import { useMilkProductionsFilters } from '../contexts/MilkProductionsFiltersContext'
 import { BetweenDatesFilterChip } from './BetweenDatesFilterChip'
 import { MilkProductionsListItem } from './MilkProductionsListItem'
@@ -60,6 +60,8 @@ export const MilkProductionsList = () => {
         onEndReached={() => !isFetchingNextPage && hasNextPage && fetchNextPage()}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={{ minimumViewTime: 250 }}
+        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+        ListFooterComponent={() => <View style={{ height: 16 }} />}
       />
     </RecordsList>
   )

@@ -8,17 +8,6 @@ import { memo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Icon, List, Text } from 'react-native-paper'
 
-const Right = () => {
-  return (
-    <View style={{ justifyContent: 'center' }}>
-      <Icon
-        size={24}
-        source='chevron-right'
-      />
-    </View>
-  )
-}
-
 const Title = ({ cattle }: { cattle: Cattle }) => {
   const theme = useAppTheme()
   const title = cattle.name ? `No. ${cattle.tagId}: ${cattle.name}` : `No. ${cattle.tagId}`
@@ -26,15 +15,12 @@ const Title = ({ cattle }: { cattle: Cattle }) => {
   return (
     <View>
       <Text
-        variant='labelMedium'
-        style={{ color: theme.colors.onSurfaceVariant, opacity: 0.9 }}
-      >{`Producción ${cattle.productionType.toLowerCase()}`}</Text>
-      <Text
-        variant='bodyLarge'
-        style={{ fontWeight: 'bold' }}
+        variant='labelSmall'
+        style={{ color: theme.colors.onSurfaceVariant, opacity: 0.7 }}
       >
-        {title}
+        {`Producción ${cattle.productionType.toLowerCase()}`}
       </Text>
+      <Text variant='titleMedium'>{title}</Text>
     </View>
   )
 }
@@ -51,15 +37,22 @@ const HomeListItem = ({ cattle }: { cattle: Cattle }) => {
       style={[{ borderColor: theme.colors.outlineVariant }, styles.listItem]}
       borderless
       title={<Title cattle={cattle} />}
-      description={
+      description={() => (
         <Text
           variant='bodyMedium'
-          style={{ color: theme.colors.onSurfaceVariant, opacity: 0.9 }}
+          style={{ color: theme.colors.onSurfaceVariant, opacity: 0.7 }}
         >
           {cattle.cattleStatus}
         </Text>
-      }
-      right={() => <Right />}
+      )}
+      right={({ style }) => (
+        <View style={style}>
+          <Icon
+            size={24}
+            source='chevron-right'
+          />
+        </View>
+      )}
       onPress={() => {
         dispatch(setCattleInfo(cattle))
         navigation.navigate('CattleStack', {

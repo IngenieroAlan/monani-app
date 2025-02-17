@@ -8,7 +8,8 @@ module.exports = function (api) {
       production: {
         plugins: [
           'react-native-paper/babel',
-          ["@babel/plugin-proposal-decorators", { "legacy": true }]
+          ["@babel/plugin-proposal-decorators", { "legacy": true }],
+          'react-native-reanimated/plugin'
         ],
       },
     },

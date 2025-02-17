@@ -68,7 +68,7 @@ export default memo(withObserver(HomeListItem))
 
 const styles = StyleSheet.create({
   listItem: {
-    borderWidth: 0.5,
+    borderWidth: 1,
     marginHorizontal: 16,
     borderRadius: 12
   }

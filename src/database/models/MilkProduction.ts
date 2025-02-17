@@ -23,7 +23,7 @@ class MilkProduction extends Model {
   @field(Column.LITERS) liters!: number
   @field(Column.IS_SOLD) isSold!: boolean
 
-  @children(TableName.MILK_REPORTS) reports!: Query<MilkReport>
+  @children(TableName.MILK_REPORTS) milkReports!: Query<MilkReport>
   // @children(TableName.MILK_SALES) saleRelation!: Relation<MilkSale>
 
   @lazy

@@ -66,7 +66,7 @@ const CattleList = ({ filters, children, flashListProps }: CattleListProps) => {
         onEndReached={() => !isFetchingNextPage && hasNextPage && fetchNextPage()}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={{ minimumViewTime: 250 }}
-        ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+        ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
       />
     </RecordsList>
   )

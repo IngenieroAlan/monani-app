@@ -16,6 +16,9 @@ import { useMilkProductionsFilters } from '../contexts/MilkProductionsFiltersCon
 import { BetweenDatesFilterChip } from './BetweenDatesFilterChip'
 import { MilkProductionsListItem } from './milkProductionListItem/MilkProductionsListItem'
 
+const ListFooterComponent = () => <View style={{ height: 16 }} />
+const ItemSeparatorComponent = () => <View style={{ height: 12 }} />
+
 const keyExtractor = (item: DailyMilkProduction) => item.id
 
 export const MilkProductionsList = () => {
@@ -72,14 +75,14 @@ export const MilkProductionsList = () => {
       <FlashList
         data={results}
         renderItem={({ item }) => <MilkProductionsListItem dailyMilkProduction={item} />}
-        estimatedItemSize={69}
+        estimatedItemSize={80}
         onEndReachedThreshold={2}
         keyExtractor={keyExtractor}
         onEndReached={() => !isFetchingNextPage && hasNextPage && fetchNextPage()}
         onViewableItemsChanged={onViewableItemsChanged}
-        viewabilityConfig={{ minimumViewTime: 250 }}
-        ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-        ListFooterComponent={() => <View style={{ height: 16 }} />}
+        viewabilityConfig={{ minimumViewTime: 250, itemVisiblePercentThreshold: 10 }}
+        ItemSeparatorComponent={ItemSeparatorComponent}
+        ListFooterComponent={ListFooterComponent}
       />
     </RecordsList>
   )

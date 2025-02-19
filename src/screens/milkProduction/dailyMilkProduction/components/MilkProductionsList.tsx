@@ -31,7 +31,7 @@ export const MilkProductionsList = () => {
     viewableItems.forEach(async ({ item }: { item: DailyMilkProduction }) => {
       const productions = await item.milkProductions
 
-      queryClient.prefetchQuery({
+      await queryClient.prefetchQuery({
         queryKey: milkProductionsKeys.groupedByDate(item.producedAt),
         queryFn: () =>
           db
@@ -47,8 +47,8 @@ export const MilkProductionsList = () => {
         initialData: productions
       })
 
-      productions.forEach((production) => {
-        queryClient.prefetchQuery({
+      productions.forEach(async (production) => {
+        await queryClient.prefetchQuery({
           queryKey: milkProductionsKeys.byId(production.id),
           queryFn: () => db.get<MilkProduction>(TableName.MILK_PRODUCTIONS).find(production.id),
           initialData: production
@@ -71,12 +71,7 @@ export const MilkProductionsList = () => {
     >
       <FlashList
         data={results}
-        renderItem={({ item, index }) => (
-          <MilkProductionsListItem
-            dailyMilkProduction={item}
-            nextDailyMilkProduction={results[index + 1]}
-          />
-        )}
+        renderItem={({ item }) => <MilkProductionsListItem dailyMilkProduction={item} />}
         estimatedItemSize={69}
         onEndReachedThreshold={2}
         keyExtractor={keyExtractor}

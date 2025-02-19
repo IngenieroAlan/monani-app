@@ -16,18 +16,13 @@ import { AccordionTrigger } from './AccordionTrigger'
 import { DateDisplay } from './DateDisplay'
 import { InfoDisplay } from './InfoDisplay'
 
-type Props = {
-  dailyMilkProduction: DailyMilkProduction
-  nextDailyMilkProduction: DailyMilkProduction | undefined
-}
-
 const withObserver = withObservables(
   ['dailyMilkProduction'],
   ({ dailyMilkProduction }: { dailyMilkProduction: DailyMilkProduction }) => ({ dailyMilkProduction })
 )
 
 export const MilkProductionsListItem = memo(
-  withObserver(({ dailyMilkProduction, nextDailyMilkProduction }: Props) => {
+  withObserver(({ dailyMilkProduction }: { dailyMilkProduction: DailyMilkProduction }) => {
     const id = useRef(dailyMilkProduction.id)
     const theme = useAppTheme()
     const height = useSharedValue(0)
@@ -38,9 +33,7 @@ export const MilkProductionsListItem = memo(
         easing: Easing.inOut(Easing.cubic)
       })
     )
-    const bodyStyle = useAnimatedStyle(() => ({
-      height: derivedHeight.value
-    }))
+    const bodyStyle = useAnimatedStyle(() => ({ height: derivedHeight.value }))
 
     useEffect(() => {
       if (id.current === dailyMilkProduction.id) return
@@ -55,8 +48,9 @@ export const MilkProductionsListItem = memo(
         <View style={[{ borderColor: theme.colors.outlineVariant }, styles.listItemContainer]}>
           <View style={styles.headerContainer}>
             <InfoDisplay
-              milkProduction={dailyMilkProduction}
-              nextMilkProduction={nextDailyMilkProduction}
+              liters={dailyMilkProduction.liters}
+              producedAtTimestamp={dailyMilkProduction.producedAt.getTime()}
+              totalProductions={dailyMilkProduction.totalProductions}
             />
             <View style={[{ borderColor: theme.colors.outlineVariant }, styles.divider]} />
             <AccordionTrigger isExpanded={isExpanded} />

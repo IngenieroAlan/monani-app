@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { Icon, TouchableRipple } from 'react-native-paper'
 import Animated, { SharedValue, useAnimatedStyle, useDerivedValue, withTiming } from 'react-native-reanimated'
 
-export const AccordionTrigger = ({ isExpanded }: { isExpanded: SharedValue<Boolean> }) => {
+export const AccordionTrigger = memo(({ isExpanded }: { isExpanded: SharedValue<Boolean> }) => {
   const derivedRotate = useDerivedValue(() => withTiming(isExpanded.value ? 180 : 0, { duration: 250 }))
   const iconStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${derivedRotate.value}deg` }]
@@ -22,7 +22,7 @@ export const AccordionTrigger = ({ isExpanded }: { isExpanded: SharedValue<Boole
       </Animated.View>
     </TouchableRipple>
   )
-}
+})
 
 const styles = StyleSheet.create({
   expandButtonRipple: {

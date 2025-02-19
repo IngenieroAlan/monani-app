@@ -16,13 +16,16 @@ import { AccordionTrigger } from './AccordionTrigger'
 import { DateDisplay } from './DateDisplay'
 import { InfoDisplay } from './InfoDisplay'
 
-const withObserver = withObservables(
-  ['dailyMilkProduction'],
-  ({ dailyMilkProduction }: { dailyMilkProduction: DailyMilkProduction }) => ({ dailyMilkProduction })
-)
+type Props = {
+  dailyMilkProduction: DailyMilkProduction
+}
+
+const withObserver = withObservables(['dailyMilkProduction'], ({ dailyMilkProduction }: Props) => ({
+  dailyMilkProduction
+}))
 
 export const MilkProductionsListItem = memo(
-  withObserver(({ dailyMilkProduction }: { dailyMilkProduction: DailyMilkProduction }) => {
+  withObserver(({ dailyMilkProduction }: Props) => {
     const id = useRef(dailyMilkProduction.id)
     const theme = useAppTheme()
     const height = useSharedValue(0)
@@ -72,7 +75,8 @@ export const MilkProductionsListItem = memo(
         </View>
       </View>
     )
-  })
+  }),
+  (prev, next) => prev.dailyMilkProduction.id === next.dailyMilkProduction.id
 )
 
 const styles = StyleSheet.create({

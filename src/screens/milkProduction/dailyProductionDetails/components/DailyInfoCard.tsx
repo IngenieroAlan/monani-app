@@ -7,7 +7,8 @@ import { formatNumberWithSpaces } from '@/utils/helpers'
 import { Q } from '@nozbe/watermelondb'
 import { useDatabase } from '@nozbe/watermelondb/react'
 import { useQuery } from '@tanstack/react-query'
-import { View } from 'react-native'
+import { Skeleton } from 'moti/skeleton'
+import { useColorScheme, View } from 'react-native'
 import { Card, Text } from 'react-native-paper'
 
 type Props = {
@@ -18,6 +19,7 @@ type Props = {
 export const DailyInfoCard = ({ totalLiters, productionTimestamp }: Props) => {
   const db = useDatabase()
   const theme = useAppTheme()
+  const scheme = useColorScheme()
 
   const { data, isLoading } = useQuery({
     queryKey: milkProductionsKeys.dayBefore(productionTimestamp),
@@ -45,15 +47,28 @@ export const DailyInfoCard = ({ totalLiters, productionTimestamp }: Props) => {
             </Text>
             <Text variant='displayMedium'>{formatNumberWithSpaces(totalLiters.toFixed(3))} L.</Text>
           </View>
-          {isLoading && <Text>Cargando...</Text>}
-          {!isLoading && data && data?.length > 0 && (
-            <NumericDifference
-              variant='labelMedium'
-              difference={totalLiters - data[0].liters}
-              fractionDigits={3}
-              suffix=' L. comparado a la producción anterior'
-            />
-          )}
+          <Skeleton
+            show={isLoading}
+            width='100%'
+            radius={4}
+            colorMode={scheme === 'dark' ? 'dark' : 'light'}
+          >
+            {data && data.length > 0 ? (
+              <NumericDifference
+                variant='labelMedium'
+                difference={totalLiters - data[0].liters}
+                fractionDigits={3}
+                suffix=' L. comparado a la producción anterior'
+              />
+            ) : (
+              <Text
+                variant='labelMedium'
+                style={{ color: theme.colors.onSurfaceVariant, opacity: 0.7 }}
+              >
+                No se ha encontrado una producción anterior
+              </Text>
+            )}
+          </Skeleton>
         </View>
       </Card.Content>
     </Card>

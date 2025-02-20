@@ -24,12 +24,7 @@ class MilkProduction extends Model {
   @field(Column.IS_SOLD) isSold!: boolean
 
   @children(TableName.MILK_REPORTS) milkReports!: Query<MilkReport>
-  // @children(TableName.MILK_SALES) saleRelation!: Relation<MilkSale>
-
-  @lazy
-  sale = this.collections
-    .get<MilkSale>(TableName.MILK_SALES)
-    .query(Q.where(MilkSalesCol.MILK_PRODUCTION_ID, this.id), Q.take(1))
+  @children(TableName.MILK_SALES) sale!: Query<MilkSale>
 
   static prepareCreate = (
     db: Database,

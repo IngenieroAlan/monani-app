@@ -4,7 +4,7 @@ import { formatDateRelativeToYear } from '@/utils/helpers'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { View } from 'react-native'
 import { Appbar, Divider } from 'react-native-paper'
-import { DailyInfoCard } from './components/DailyInfoCard'
+import { DailyInfoCard } from './components/dailyInfoCard/DailyInfoCard'
 
 type ScreenProps = NativeStackScreenProps<MainStackParamList, 'DailyProductionDetailsView'>
 

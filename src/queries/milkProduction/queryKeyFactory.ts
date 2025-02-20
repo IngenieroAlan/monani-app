@@ -6,6 +6,7 @@ export const milkProductionsKeys = {
   byId: (id: string) => [...milkProductionsKeys.all, { id }] as const,
 
   daily: () => [...milkProductionsKeys.all, 'daily'] as const,
+  earnings: (date: dayjs.ConfigType) => [...milkProductionsKeys.daily(), 'earnings', dayjs(date).valueOf()] as const,
   dayBefore: (date: dayjs.ConfigType) => [...milkProductionsKeys.daily(), { before: dayjs(date).valueOf() }] as const,
   dailyFiltered: (filters: DailyMilkProductionsFilters) => [...milkProductionsKeys.daily(), filters] as const,
   groupedByDate: (date: dayjs.ConfigType) => {
